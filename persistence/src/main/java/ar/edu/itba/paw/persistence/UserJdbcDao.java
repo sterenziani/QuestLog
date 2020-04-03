@@ -19,7 +19,7 @@ public class UserJdbcDao implements UserDao
 {
 	private	final SimpleJdbcInsert jdbcInsert;
 	private JdbcTemplate jdbcTemplate;
-	private	final static RowMapper<User> ROW_MAPPER = new RowMapper<User>()
+	protected static final RowMapper<User> USER_MAPPER = new RowMapper<User>()
 	{
 		@Override
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException
@@ -38,7 +38,13 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findById(final long id)
 	{
-		return jdbcTemplate.query("SELECT * FROM users WHERE id = ?", ROW_MAPPER, id).stream().findFirst();
+		return jdbcTemplate.query("SELECT * FROM users WHERE id = ?", USER_MAPPER, id).stream().findFirst();
+	}
+	
+	@Override
+	public Optional<User> findByUsername(String username)
+	{
+		return jdbcTemplate.query("SELECT * FROM users WHERE username = ?", USER_MAPPER, username).stream().findFirst();
 	}
 
 	@Override

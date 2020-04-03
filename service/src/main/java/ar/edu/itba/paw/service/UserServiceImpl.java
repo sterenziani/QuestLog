@@ -18,10 +18,18 @@ public class UserServiceImpl implements UserService{
 	{
 		return userDao.findById(id);
 	}
+	
+	@Override
+	public Optional<User> findByUsername(String username)
+	{
+		return userDao.findByUsername(username);
+	}
 
 	@Override
 	public User register(String username)
 	{
+		if(findByUsername(username).isPresent())
+			return null;
 		return userDao.create(username);
 	}
 

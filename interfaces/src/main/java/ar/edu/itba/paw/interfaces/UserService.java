@@ -12,7 +12,14 @@ public interface UserService
 	 */
 	Optional<User> findById(long id);
 	
-	/*
+	/**
+	 * Finds a user given its usernme
+	 * @param username The unique username for the user.
+	 * @return The matched user, or null otherwise.
+	 */
+	Optional<User> findByUsername(String username);
+	
+	/**
 	 * Create a new user.
 	 * @param username The name of the user.
 	 * @return The created user.
