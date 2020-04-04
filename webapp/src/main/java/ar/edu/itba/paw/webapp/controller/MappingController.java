@@ -9,19 +9,43 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.interfaces.GameService;
+import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Controller
-public class HelloWorldController
+public class MappingController
 {
 	@Autowired
+	private GameService gs;
+	
+	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private PlatformService ps;
 	
 	@ExceptionHandler(UserNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NotSuchUser()
+	{
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler(GameNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView NotSuchGame()
+	{
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler(PlatformNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView NotSuchPlatform()
 	{
 		return new ModelAndView("404");
 	}
@@ -46,5 +70,37 @@ public class HelloWorldController
 	{
 		final User user = us.register(username);
 		return new ModelAndView("redirect:/" + user.getId());
+	}
+	
+	@RequestMapping("/games")
+	public ModelAndView gamesList()
+	{
+		final ModelAndView mav = new ModelAndView("gamesList");
+		mav.addObject("games", gs.getAllGames());
+		return mav;
+	}
+	
+	@RequestMapping("/games/{id}")
+	public ModelAndView gameProfile(@PathVariable("id") long id)
+	{
+		final ModelAndView mav = new ModelAndView("game");
+		mav.addObject("game", gs.findById(id).orElseThrow(() -> new GameNotFoundException()));
+		return mav;
+	}
+	
+	@RequestMapping("/platforms")
+	public ModelAndView platformsList()
+	{
+		final ModelAndView mav = new ModelAndView("platformsList");
+		mav.addObject("platforms", ps.getAllPlatforms());
+		return mav;
+	}
+	
+	@RequestMapping("/platforms/{id}")
+	public ModelAndView platformProfile(@PathVariable("id") long id)
+	{
+		final ModelAndView mav = new ModelAndView("platform");
+		mav.addObject("platform", ps.findById(id).orElseThrow(() -> new PlatformNotFoundException()));
+		return mav;
 	}
 }

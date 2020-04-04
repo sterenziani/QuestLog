@@ -2,6 +2,6 @@
 <html>
 <body>
 <h2>404</h2>
-<h5>These are not the droids you are looking for</h5>
+<h5>The requested file was not found! :(</h5>
 </body>
 </html>
