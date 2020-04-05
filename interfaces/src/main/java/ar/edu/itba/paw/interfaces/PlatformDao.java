@@ -16,7 +16,7 @@ public interface PlatformDao
 	
 	/**
 	 * Finds a platform or several platforms with a given name
-	 * @param title The name of the platform.
+	 * @param name The name of the platform.
 	 * @return List of platforms that share that name.
 	 */
 	Optional<Platform> findByName(String name);
@@ -24,7 +24,7 @@ public interface PlatformDao
 	/**
 	 * Change a platform's name
 	 * @param id		The id of the platform
-	 * @param new_title The new name for the platform.
+	 * @param new_name The new name for the platform.
 	 * @return The new, modified platform, or null if the original platform was not found.
 	 */
 	Optional<Platform> changeName(long id, String new_name);

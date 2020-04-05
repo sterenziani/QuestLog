@@ -9,12 +9,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import ar.edu.itba.paw.interfaces.DeveloperService;
 import ar.edu.itba.paw.interfaces.GameService;
+import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.interfaces.PlatformService;
+import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
+import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Controller
@@ -28,6 +35,15 @@ public class MappingController
 	
 	@Autowired
 	private PlatformService ps;
+	
+	@Autowired
+	private DeveloperService ds;
+	
+	@Autowired
+	private GenreService gens;
+	
+	@Autowired
+	private PublisherService pubs;
 	
 	@ExceptionHandler(UserNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -46,6 +62,27 @@ public class MappingController
 	@ExceptionHandler(PlatformNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NotSuchPlatform()
+	{
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler(DeveloperNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView NotSuchDeveloper()
+	{
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler(GenreNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView NotSuchGenre()
+	{
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler(PublisherNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView NotSuchPublisher()
 	{
 		return new ModelAndView("404");
 	}
@@ -101,6 +138,54 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("platform");
 		mav.addObject("platform", ps.findById(id).orElseThrow(() -> new PlatformNotFoundException()));
+		return mav;
+	}
+	
+	@RequestMapping("/developers")
+	public ModelAndView developersList()
+	{
+		final ModelAndView mav = new ModelAndView("developersList");
+		mav.addObject("developers", ds.getAllDevelopers());
+		return mav;
+	}
+	
+	@RequestMapping("/developers/{id}")
+	public ModelAndView developerProfile(@PathVariable("id") long id)
+	{
+		final ModelAndView mav = new ModelAndView("developer");
+		mav.addObject("developer", ds.findById(id).orElseThrow(() -> new DeveloperNotFoundException()));
+		return mav;
+	}
+	
+	@RequestMapping("/publishers")
+	public ModelAndView publishersList()
+	{
+		final ModelAndView mav = new ModelAndView("publishersList");
+		mav.addObject("publishers", pubs.getAllPublishers());
+		return mav;
+	}
+	
+	@RequestMapping("/publishers/{id}")
+	public ModelAndView publisherProfile(@PathVariable("id") long id)
+	{
+		final ModelAndView mav = new ModelAndView("publisher");
+		mav.addObject("publisher", pubs.findById(id).orElseThrow(() -> new PublisherNotFoundException()));
+		return mav;
+	}
+	
+	@RequestMapping("/genres")
+	public ModelAndView genresList()
+	{
+		final ModelAndView mav = new ModelAndView("genresList");
+		mav.addObject("genres", gens.getAllGenres());
+		return mav;
+	}
+	
+	@RequestMapping("/genres/{id}")
+	public ModelAndView genreProfile(@PathVariable("id") long id)
+	{
+		final ModelAndView mav = new ModelAndView("genre");
+		mav.addObject("genre", gens.findById(id).orElseThrow(() -> new GenreNotFoundException()));
 		return mav;
 	}
 }
