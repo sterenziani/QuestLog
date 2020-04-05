@@ -33,11 +33,17 @@ public class GenreServiceImpl implements GenreService {
 	{
 		return genreDao.changeName(id, new_name);
 	}
+	
+	@Override
+	public Optional<Genre> changeLogo(long id, String new_logo) {
+		return genreDao.changeLogo(id, new_logo);
+	}
+
 
 	@Override
-	public Genre register(String title)
+	public Genre register(String title, String logo)
 	{
-		return genreDao.register(title);
+		return genreDao.register(title, logo);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.GenreDao;
+import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Genre;
 
 @Repository
@@ -28,7 +29,7 @@ public class GenreJdbcDao implements GenreDao{
 		@Override
 		public Genre mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
-			return new Genre(rs.getInt("genre"), rs.getString("genre_name"));
+			return new Genre(rs.getInt("genre"), rs.getString("genre_name"),rs.getString("genre_logo"));
 		}
 	};
 	
@@ -56,14 +57,21 @@ public class GenreJdbcDao implements GenreDao{
 	{
 		return jdbcTemplate.query("UPDATE TABLE genres SET genre_name LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_name).stream().findFirst();
 	}
+	
+	@Override
+	public Optional<Genre> changeLogo(long id, String new_logo)
+	{
+		return jdbcTemplate.query("UPDATE TABLE genres SET genre_logo LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_logo).stream().findFirst();
+	}
 
 	@Override
-	public Genre register(String name)
+	public Genre register(String name, String logo)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("name", name); 
+		args.put("logo", logo);
 		final Number genreId = jdbcInsert.executeAndReturnKey(args);
-		return new Genre(genreId.longValue(), name);
+		return new Genre(genreId.longValue(), name, logo);
 	}
 
 	@Override

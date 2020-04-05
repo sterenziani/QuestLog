@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS developers(
 	developer SERIAL,
 	developer_name VARCHAR(75) NOT NULL,
@@ -95,9 +96,11 @@ CREATE TABLE IF NOT EXISTS reviews(
 	FOREIGN KEY(playstyle) REFERENCES playstyles
 );
 
+
 CREATE TABLE IF NOT EXISTS genres(
 	genre SERIAL,
 	genre_name VARCHAR(15),
+	genre_logo TEXT,
 	PRIMARY KEY(genre)
 );
 
@@ -107,7 +110,9 @@ CREATE TABLE IF NOT EXISTS classifications(
 	PRIMARY KEY(game, genre),
 	FOREIGN KEY(game) REFERENCES games,
 	FOREIGN KEY(genre) REFERENCES genres
+	ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS lists(
 	list SERIAL,

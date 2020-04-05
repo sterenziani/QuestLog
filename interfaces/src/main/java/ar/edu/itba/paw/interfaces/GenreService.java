@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Platform;
 
 public interface GenreService {
 		/**
@@ -27,11 +28,20 @@ public interface GenreService {
 		Optional<Genre> changeName(long id, String new_name);
 		
 		/**
+		 * Change a genre's logo
+		 * @param id		The id of the genre
+		 * @param new_logo The new logo for the genre.
+		 * @return The new, modified genre, or null if the original genre was not found.
+		 */
+		Optional<Genre> changeLogo(long id, String new_logo);
+		
+		/**
 		 * Create a new genre.
 		 * @param name The name of the genre.
+		 * @param logo A link to logo for the genre.
 		 * @return The registered genre.
 		 */
-		Genre register(String name);
+		Genre register(String name, String logo);
 		
 		/**
 		 * Get a list of all available genres.

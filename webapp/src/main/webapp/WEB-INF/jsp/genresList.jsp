@@ -6,6 +6,7 @@
 <c:forEach items="${genres}" var="genre">
     <li>      
         [${genre.id}] ${genre.name}
+        <br><img height="100" width="100" src=${genre.logo}></img>
     </li>
     <br>
 </c:forEach>

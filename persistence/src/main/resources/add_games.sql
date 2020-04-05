@@ -11,11 +11,11 @@ INSERT INTO platforms(platform, platform_name, platform_name_short, platform_log
 INSERT INTO regions(region, region_name, region_short) VALUES(1, 'Worldwide', 'WW') ON CONFLICT DO NOTHING;
 
 -- Genres
-INSERT INTO genres(genre, genre_name) VALUES(4, 'Action')  ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre, genre_name) VALUES(83, 'Platformer') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre, genre_name) VALUES(51, 'Indie') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre, genre_name) VALUES(3, 'Adventure') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre, genre_name) VALUES(5, 'RPG') ON CONFLICT DO NOTHING;
+INSERT INTO genres(genre, genre_name, genre_logo) VALUES(4, 'Action','https://images.vexels.com/media/users/3/155801/isolated/preview/95382a27c1158603885f65feae07760e-simple-gun-icon-by-vexels.png')  ON CONFLICT DO NOTHING;
+INSERT INTO genres(genre, genre_name, genre_logo) VALUES(83, 'Platformer','http://pngimg.com/uploads/joystick/joystick_PNG83314.png') ON CONFLICT DO NOTHING;
+INSERT INTO genres(genre, genre_name, genre_logo) VALUES(51, 'Indie', 'http://icons.iconarchive.com/icons/iconsmind/outline/256/Tree-22-icon.png') ON CONFLICT DO NOTHING;
+INSERT INTO genres(genre, genre_name, genre_logo) VALUES(3, 'Adventure', 'https://freepngimg.com/download/dragon/6-2-dragon-png-3.png') ON CONFLICT DO NOTHING;
+INSERT INTO genres(genre, genre_name, genre_logo) VALUES(5, 'RPG', 'http://icons.iconarchive.com/icons/icons8/windows-8/256/Military-Sword-icon.png') ON CONFLICT DO NOTHING;
 
 -- Devs and Publishers
 INSERT INTO developers(developer, developer_name, developer_logo) VALUES(16257, 'Nintendo', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Nintendo_gray_logo.svg/1920px-Nintendo_gray_logo.svg.png') ON CONFLICT DO NOTHING;
