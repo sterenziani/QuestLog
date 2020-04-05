@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.GameDao;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Platform;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,16 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> findById(long id)
 	{
-		return jdbcTemplate.query("SELECT * FROM games WHERE game = ?", GAME_MAPPER, id).stream().findFirst();
+		Optional<Game> g = jdbcTemplate.query("SELECT * FROM games WHERE game = ?", GAME_MAPPER, id).stream().findFirst();
+		if(g.isPresent())
+		{
+			List<Platform> platforms = getAllPlatforms(g.get());
+			for(Platform p : platforms)
+			{
+				g.get().addPlatform(p);
+			}
+		}
+		return g;
 	}
 
 	@Override
@@ -80,5 +90,33 @@ public class GameJdbcDao implements GameDao
 	public List<Game> getAllGames()
 	{
 		return jdbcTemplate.query("SELECT * FROM games", GAME_MAPPER);
+	}
+
+	@Override
+	public Optional<Game> addPlatform(Game g, Platform p)
+	{
+		return jdbcTemplate.query("INSERT INTO game_versions(game, platform) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
+	}
+
+	@Override
+	public Optional<Game> removePlatform(Game g, Platform p)
+	{
+		return jdbcTemplate.query("DELETE FROM game_versions WHERE game = ? AND p = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
+	}
+
+	@Override
+	public List<Platform> getAllPlatforms(Game g)
+	{
+		List<Platform> platformList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN game_versions NATURAL JOIN platforms",
+				new Object[]{g.getId()},
+				new RowMapper<Platform>()
+				{
+					@Override
+					public Platform mapRow(ResultSet rs, int rowNum) throws SQLException
+					{
+						return new Platform(rs.getInt("platform"), rs.getString("platform_name"), rs.getString("platform_name_short"), rs.getString("platform_logo"));
+					}
+				});
+		return platformList;
 	}
 }

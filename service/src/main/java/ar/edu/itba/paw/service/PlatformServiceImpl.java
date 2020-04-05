@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.PlatformDao;
 import ar.edu.itba.paw.interfaces.PlatformService;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 
 @Service
@@ -54,5 +55,11 @@ public class PlatformServiceImpl implements PlatformService
 	public List<Platform> getAllPlatforms()
 	{
 		return platformDao.getAllPlatforms();
+	}
+
+	@Override
+	public List<Game> getAllGames(Platform p)
+	{
+		return platformDao.getAllGames(p);
 	}
 }

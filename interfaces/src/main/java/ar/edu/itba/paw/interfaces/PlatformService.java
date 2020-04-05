@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
+
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 
 public interface PlatformService
@@ -57,4 +59,11 @@ public interface PlatformService
 	 * @return The list of all platforms.
 	 */
 	List<Platform> getAllPlatforms();
+	
+	/**
+	 * Get a list of all games available on the platform
+	 * @param p		The platform
+	 * @return		The list of games
+	 */
+	List<Game> getAllGames(Platform p);
 }

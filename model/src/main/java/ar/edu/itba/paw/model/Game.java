@@ -1,4 +1,6 @@
 package ar.edu.itba.paw.model;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Game
 {
@@ -6,6 +8,7 @@ public class Game
 	private String title;
 	private String cover;
 	private String description;
+	private Set<Platform> platforms;
 	
 	public Game(long game, String title, String cover, String description)
 	{
@@ -13,6 +16,7 @@ public class Game
 		this.title = title;
 		this.cover = cover;
 		this.description = description;
+		this.platforms = new HashSet<Platform>();
 	}
 
 	public long getId()
@@ -48,5 +52,20 @@ public class Game
 	public String getDescription()
 	{
 		return description;
+	}
+	
+	public void addPlatform(Platform p)
+	{
+		platforms.add(p);
+	}
+	
+	public void removePlatform(Platform p)
+	{
+		platforms.remove(p);
+	}
+	
+	public Set<Platform> getPlatforms()
+	{
+		return platforms;
 	}
 }

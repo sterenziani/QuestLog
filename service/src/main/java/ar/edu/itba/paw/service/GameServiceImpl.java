@@ -3,10 +3,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.itba.paw.interfaces.GameDao;
 import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Platform;
 
 @Service
 public class GameServiceImpl implements GameService
@@ -54,5 +54,23 @@ public class GameServiceImpl implements GameService
 	public List<Game> getAllGames()
 	{
 		return gameDao.getAllGames();
+	}
+
+	@Override
+	public Optional<Game> addPlatform(Game g, Platform p)
+	{
+		return gameDao.addPlatform(g, p);		
+	}
+
+	@Override
+	public Optional<Game> removePlatform(Game g, Platform p)
+	{
+		return gameDao.removePlatform(g, p);
+	}
+
+	@Override
+	public List<Platform> getAllPlatforms(Game g)
+	{
+		return gameDao.getAllPlatforms(g);
 	}
 }

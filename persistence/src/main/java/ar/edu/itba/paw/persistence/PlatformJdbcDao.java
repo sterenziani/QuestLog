@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.PlatformDao;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 
 @Repository
@@ -38,7 +39,16 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public Optional<Platform> findById(long id)
 	{
-		return jdbcTemplate.query("SELECT * FROM platforms WHERE platform = ?", PLATFORM_MAPPER, id).stream().findFirst();
+		Optional<Platform> p = jdbcTemplate.query("SELECT * FROM platforms WHERE platform = ?", PLATFORM_MAPPER, id).stream().findFirst();
+		if(p.isPresent())
+		{
+			List<Game> games = getAllGames(p.get());
+			for(Game g : games)
+			{
+				p.get().addGame(g);
+			}
+		}
+		return p;
 	}
 
 	@Override
@@ -81,5 +91,20 @@ public class PlatformJdbcDao implements PlatformDao
 	{
 		return jdbcTemplate.query("SELECT * FROM platforms", PLATFORM_MAPPER);
 	}
-	
+
+	@Override
+	public List<Game> getAllGames(Platform p)
+	{
+		List<Game> gameList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM platforms WHERE platform = ?) AS p NATURAL JOIN game_versions NATURAL JOIN games",
+				new Object[]{p.getId()},
+				new RowMapper<Game>()
+				{
+					@Override
+					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
+					{
+						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
+					}
+				});
+		return gameList;
+	}
 }

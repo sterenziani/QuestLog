@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.interfaces;
-
 import java.util.List;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Platform;
 
 public interface GameDao
 {
@@ -57,4 +56,27 @@ public interface GameDao
 	 * @return 	The list of all games.
 	 */
 	List<Game> getAllGames();
+	
+	/**
+	 * Links a game to a specified platform
+	 * @param g		The game
+	 * @param p		The platform to link the game to
+	 * @return		The updated game, now linked to the platform
+	 */
+	Optional<Game> addPlatform(Game g, Platform p);
+	
+	/**
+	 * Unlinks a game to a specified platform
+	 * @param g		The game
+	 * @param p		The platform to unlink the game from
+	 * @return		The updated game, now unlinked from the platform
+	 */
+	Optional<Game> removePlatform(Game g, Platform p);
+	
+	/**
+	 * Get a list of all platforms the game is available on
+	 * @param g		The game
+	 * @return		The list of platforms
+	 */
+	List<Platform> getAllPlatforms(Game g);
 }
