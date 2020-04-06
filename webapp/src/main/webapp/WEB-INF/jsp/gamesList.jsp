@@ -10,6 +10,10 @@
 		        ---      ${genre.name}
 		</c:forEach>
 		<br>
+		<c:forEach items="${game.releaseDates}" var="release">   
+		        <li>${release.region.name}: ${release.date}</li>
+		</c:forEach>
+		<br>
 		<h5>This game is available for:</h5>
 		<c:forEach items="${game.platforms}" var="platform">
 		    <li>      

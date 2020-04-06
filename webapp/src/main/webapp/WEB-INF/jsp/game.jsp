@@ -2,11 +2,15 @@
 <html>
 <body>
 <h2>The game is ${game.title}!</h2>
+<h5>Its ID is ${game.id} and came out on:</h5>
+<c:forEach items="${game.releaseDates}" var="release">   
+        <li>${release.region.name}: ${release.date}</li>
+</c:forEach>
+<br>
 <c:forEach items="${game.genres}" var="genre">   
         ---      ${genre.name}
 </c:forEach>
 <br>
-<h5>Its ID is ${game.id}</h5>
 <h5>This game is available for:</h5>
 <c:forEach items="${game.platforms}" var="platform">
     <li>      

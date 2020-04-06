@@ -14,7 +14,8 @@ import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
-
+import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.model.Release;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,10 @@ public class GameJdbcDao implements GameDao
 			List<Genre> genres = getAllGenres(g.get());
 			for(Genre genre : genres)
 				g.get().addGenre(genre);
-
+			
+			List<Release> releases = getAllReleaseDates(g.get());
+			for(Release r: releases)
+				g.get().addReleaseDate(r);
 		}
 		return g;
 	}
@@ -87,6 +91,10 @@ public class GameJdbcDao implements GameDao
 			List<Genre> genres = getAllGenres(g);
 			for(Genre genre : genres)
 				g.addGenre(genre);
+			
+			List<Release> releases = getAllReleaseDates(g);
+			for(Release r: releases)
+				g.addReleaseDate(r);
 		}
 		return games;
 	}
@@ -150,6 +158,10 @@ public class GameJdbcDao implements GameDao
 			List<Genre> genres = getAllGenres(g);
 			for(Genre genre : genres)
 				g.addGenre(genre);
+			
+			List<Release> releases = getAllReleaseDates(g);
+			for(Release r: releases)
+				g.addReleaseDate(r);
 		}
 		return games;
 	}
@@ -284,5 +296,39 @@ public class GameJdbcDao implements GameDao
 					}
 				}, g.getId());
 		return genreList;
+	}
+
+	@Override
+	public Optional<Game> addReleaseDate(Game game, Release r)
+	{
+		Optional<Game> g = jdbcTemplate.query("INSERT INTO releases(game, region, release_date) VALUES(?, ?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, game.getId(), r.getRegion().getId(), r.getDate()).stream().findFirst();
+		if(g.isPresent())
+			g.get().addReleaseDate(r);;
+		return g;
+	}
+
+	@Override
+	public Optional<Game> removeReleaseDate(Game game, Release r)
+	{
+		Optional<Game> g = jdbcTemplate.query("DELETE FROM releases WHERE game = ? AND region = ?", GAME_MAPPER, game.getId(), r.getRegion().getId()).stream().findFirst();
+		if(g.isPresent())
+			g.get().removeReleaseDate(r);
+		return g;
+	}
+	
+	@Override
+	public List<Release> getAllReleaseDates(Game g)
+	{
+		List<Release> dates = jdbcTemplate.query("SELECT * FROM releases NATURAL JOIN regions WHERE game = ?",
+				new RowMapper<Release>()
+				{
+					@Override
+					public Release mapRow(ResultSet rs, int rowNum) throws SQLException
+					{
+						Region r = new Region(rs.getLong("region"), rs.getString("region_name"), rs.getString("region_short"));
+						return new Release(r, rs.getDate("release_date"));
+					}
+				}, g.getId());
+		return dates;
 	}
 }

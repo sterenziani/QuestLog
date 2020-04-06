@@ -10,6 +10,7 @@ import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Release;
 
 @Service
 public class GameServiceImpl implements GameService
@@ -129,5 +130,23 @@ public class GameServiceImpl implements GameService
 	public List<Genre> getAllGenres(Game g)
 	{
 		return gameDao.getAllGenres(g);
+	}
+	
+	@Override
+	public Optional<Game> addReleaseDate(Game game, Release r)
+	{
+		return gameDao.addReleaseDate(game, r);
+	}
+
+	@Override
+	public Optional<Game> removeReleaseDate(Game game, Release r)
+	{
+		return gameDao.removeReleaseDate(game, r);
+	}
+	
+	@Override
+	public List<Release> getAllReleaseDates(Game g)
+	{
+		return gameDao.getAllReleaseDates(g);
 	}
 }

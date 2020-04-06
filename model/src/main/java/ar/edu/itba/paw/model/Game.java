@@ -12,6 +12,7 @@ public class Game
 	private Set<Developer> developers;
 	private Set<Publisher> publishers;
 	private Set<Genre> genres;
+	private Set<Release> releaseDates;
 	
 	public Game(long game, String title, String cover, String description)
 	{
@@ -23,6 +24,7 @@ public class Game
 		this.developers = new HashSet<Developer>();
 		this.publishers = new HashSet<Publisher>();
 		this.genres = new HashSet<Genre>();
+		this.releaseDates = new HashSet<Release>();
 	}
 
 	public long getId()
@@ -117,5 +119,20 @@ public class Game
 	public Set<Genre> getGenres()
 	{
 		return genres;
+	}
+	
+	public void addReleaseDate(Release r)
+	{
+		releaseDates.add(r);
+	}
+	
+	public void removeReleaseDate(Release r)
+	{
+		releaseDates.remove(r);
+	}
+	
+	public Set<Release> getReleaseDates()
+	{
+		return releaseDates;
 	}
 }

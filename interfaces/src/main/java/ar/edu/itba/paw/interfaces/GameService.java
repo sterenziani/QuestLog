@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Release;
 
 public interface GameService
 {
@@ -154,4 +154,27 @@ public interface GameService
 	 * @return		The list of genres
 	 */
 	List<Genre> getAllGenres(Game g);
+	
+	/**
+	 * Adds a release (date and region) for the game
+	 * @param game	The game
+	 * @param r		The release
+	 * @return		The updated game, now updated with the new release info.
+	 */
+	Optional<Game> addReleaseDate(Game game, Release r);
+	
+	/**
+	 * Removes a release (date and region) for the game
+	 * @param game	The game
+	 * @param r		The release
+	 * @return		The updated game, now without that release listed
+	 */
+	Optional<Game> removeReleaseDate(Game game, Release r);
+	
+	/**
+	 * Get a map of the game's release date in each region.
+	 * @param g		The game
+	 * @return		A map with the regions as keys and the release date in each region as their value.
+	 */
+	List<Release> getAllReleaseDates(Game g);
 }
