@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 
 public interface GameService
@@ -81,4 +82,27 @@ public interface GameService
 	 * @return		The list of platforms
 	 */
 	List<Platform> getAllPlatforms(Game g);
+	
+	/**
+	 * Categorize a game as part of a certain genre
+	 * @param game		The game
+	 * @param genre		The genre
+	 * @return			The updated game, now marked as being of that genre
+	 */
+	Optional<Game> addGenre(Game game, Genre genre);
+	
+	/**
+	 * Stop categorizing a game as being part of a genre
+	 * @param game		The game
+	 * @param genre		The genre
+	 * @return			The updated game, now marked as not being of that genre
+	 */
+	Optional<Game> removeGenre(Game game, Genre genre);
+	
+	/**
+	 * Get a list of all genres the game is classified as
+	 * @param g		The game
+	 * @return		The list of genres
+	 */
+	List<Genre> getAllGenres(Game g);
 }

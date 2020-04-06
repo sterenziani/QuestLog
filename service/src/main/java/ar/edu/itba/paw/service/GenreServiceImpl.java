@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.GenreDao;
 import ar.edu.itba.paw.interfaces.GenreService;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 
 @Service
@@ -50,6 +51,12 @@ public class GenreServiceImpl implements GenreService {
 	public List<Genre> getAllGenres()
 	{
 		return genreDao.getAllGenres();
+	}
+
+	@Override
+	public List<Game> getAllGames(Genre g)
+	{
+		return genreDao.getAllGames(g);
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.GameDao;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,14 @@ public class GameJdbcDao implements GameDao
 			for(Platform p : platforms)
 			{
 				g.get().addPlatform(p);
+			}
+		}
+		if(g.isPresent())
+		{
+			List<Genre> genres = getAllGenres(g.get());
+			for(Genre genre : genres)
+			{
+				g.get().addGenre(genre);
 			}
 		}
 		return g;
@@ -101,7 +110,7 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> removePlatform(Game g, Platform p)
 	{
-		return jdbcTemplate.query("DELETE FROM game_versions WHERE game = ? AND p = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
+		return jdbcTemplate.query("DELETE FROM game_versions WHERE game = ? AND platform = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
 	}
 
 	@Override
@@ -118,5 +127,33 @@ public class GameJdbcDao implements GameDao
 					}
 				});
 		return platformList;
+	}
+
+	@Override
+	public Optional<Game> addGenre(Game game, Genre genre)
+	{
+		return jdbcTemplate.query("INSERT INTO classifications(game, genre) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, game.getId(), genre.getId()).stream().findFirst();
+	}
+
+	@Override
+	public Optional<Game> removeGenre(Game game, Genre genre)
+	{
+		return jdbcTemplate.query("DELETE FROM classifications WHERE game = ? AND genre = ?", GAME_MAPPER, game.getId(), genre.getId()).stream().findFirst();
+	}
+
+	@Override
+	public List<Genre> getAllGenres(Game g)
+	{
+		List<Genre> genreList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN classifications NATURAL JOIN genres",
+				new Object[]{g.getId()},
+				new RowMapper<Genre>()
+				{
+					@Override
+					public Genre mapRow(ResultSet rs, int rowNum) throws SQLException
+					{
+						return new Genre(rs.getInt("genre"), rs.getString("genre_name"), rs.getString("genre_logo"));
+					}
+				});
+		return genreList;
 	}
 }

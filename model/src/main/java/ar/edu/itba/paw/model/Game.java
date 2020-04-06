@@ -9,6 +9,7 @@ public class Game
 	private String cover;
 	private String description;
 	private Set<Platform> platforms;
+	private Set<Genre> genres;
 	
 	public Game(long game, String title, String cover, String description)
 	{
@@ -17,6 +18,7 @@ public class Game
 		this.cover = cover;
 		this.description = description;
 		this.platforms = new HashSet<Platform>();
+		this.genres = new HashSet<Genre>();
 	}
 
 	public long getId()
@@ -67,5 +69,20 @@ public class Game
 	public Set<Platform> getPlatforms()
 	{
 		return platforms;
+	}
+	
+	public void addGenre(Genre g)
+	{
+		genres.add(g);
+	}
+	
+	public void removeGenre(Genre g)
+	{
+		genres.remove(g);
+	}
+	
+	public Set<Genre> getGenres()
+	{
+		return genres;
 	}
 }
