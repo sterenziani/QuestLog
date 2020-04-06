@@ -44,9 +44,7 @@ public class PlatformJdbcDao implements PlatformDao
 		{
 			List<Game> games = getAllGames(p.get());
 			for(Game g : games)
-			{
 				p.get().addGame(g);
-			}
 		}
 		return p;
 	}
@@ -54,25 +52,41 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public Optional<Platform> findByName(String name)
 	{
-		return jdbcTemplate.query("SELECT * FROM platforms WHERE platform_name LIKE ?", PLATFORM_MAPPER, name).stream().findFirst();
+		Optional<Platform> p = jdbcTemplate.query("SELECT * FROM platforms WHERE platform_name LIKE ?", PLATFORM_MAPPER, name).stream().findFirst();
+		if(p.isPresent())
+		{
+			List<Game> games = getAllGames(p.get());
+			for(Game g : games)
+				p.get().addGame(g);
+		}
+		return p;
 	}
 
 	@Override
 	public Optional<Platform> changeName(long id, String new_name)
 	{
-		return jdbcTemplate.query("UPDATE TABLE platforms SET platform_name LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_name).stream().findFirst();
+		Optional<Platform> p = jdbcTemplate.query("UPDATE TABLE platforms SET platform_name LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_name).stream().findFirst();
+		if(p.isPresent())
+			p.get().setName(new_name);
+		return p;
 	}
 
 	@Override
 	public Optional<Platform> changeLogo(long id, String new_logo)
 	{
-		return jdbcTemplate.query("UPDATE TABLE platforms SET platform_logo LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_logo).stream().findFirst();
+		Optional<Platform> p = jdbcTemplate.query("UPDATE TABLE platforms SET platform_logo LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_logo).stream().findFirst();
+		if(p.isPresent())
+			p.get().setLogo(new_logo);
+		return p;
 	}
 
 	@Override
 	public Optional<Platform> changeShortName(long id, String new_shortName)
 	{
-		return jdbcTemplate.query("UPDATE TABLE platforms SET platform_name_short LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_shortName).stream().findFirst();
+		Optional<Platform> p = jdbcTemplate.query("UPDATE TABLE platforms SET platform_name_short LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_shortName).stream().findFirst();
+		if(p.isPresent())
+			p.get().setShortName(new_shortName);
+		return p;
 	}
 
 	@Override
@@ -89,14 +103,20 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public List<Platform> getAllPlatforms()
 	{
-		return jdbcTemplate.query("SELECT * FROM platforms", PLATFORM_MAPPER);
+		List<Platform> platforms = jdbcTemplate.query("SELECT * FROM platforms", PLATFORM_MAPPER);
+		for(Platform p : platforms)
+		{
+			List<Game> games = getAllGames(p);
+			for(Game g : games)
+				p.addGame(g);
+		}
+		return platforms;
 	}
 
 	@Override
 	public List<Game> getAllGames(Platform p)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM platforms WHERE platform = ?) AS p NATURAL JOIN game_versions NATURAL JOIN games",
-				new Object[]{p.getId()},
 				new RowMapper<Game>()
 				{
 					@Override
@@ -104,7 +124,7 @@ public class PlatformJdbcDao implements PlatformDao
 					{
 						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
 					}
-				});
+				}, p.getId());
 		return gameList;
 	}
 }

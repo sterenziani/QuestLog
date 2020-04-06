@@ -4,11 +4,15 @@
 <h1>LIST OF PLATFORMS</h1>
 <br><br>
 <c:forEach items="${platforms}" var="platform">
-    <li>      
-        [${platform.id} / ${platform.shortName}] ${platform.name}
+        <h2>[${platform.id} / ${platform.shortName}] ${platform.name}</h2>
         <br><img height="70" src=${platform.logo}></img>
-    </li>
-    <br>
+		<c:forEach items="${platform.games}" var="game">
+		    <li>      
+		        [${game.id}] ${game.title}
+		    </li>
+		    <br>
+		</c:forEach>
+    <br><br>
 </c:forEach>
 </body>
 </html>

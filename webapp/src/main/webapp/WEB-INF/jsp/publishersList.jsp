@@ -3,12 +3,17 @@
 <body>
 <h1>LIST OF PUBLISHERS</h1>
 <br><br>
-<c:forEach items="${publishers}" var="publisher">
-    <li>      
-        [${publisher.id}] ${publisher.name}
+<c:forEach items="${publishers}" var="publisher">    
+        <h2>[${publisher.id}] ${publisher.name}</h2>
         <br><img height="70" src=${publisher.logo}></img>
-    </li>
-    <br>
+        <h4>Published games:</h4>
+		<c:forEach items="${publisher.games}" var="game">
+		    <li>      
+		        [${game.id}] ${game.title}
+		    </li>
+		    <br>
+		</c:forEach>
+    	<br>
 </c:forEach>
 </body>
 </html>

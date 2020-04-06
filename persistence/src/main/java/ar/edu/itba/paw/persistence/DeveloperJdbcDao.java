@@ -52,26 +52,40 @@ public class DeveloperJdbcDao implements DeveloperDao {
 				d.get().addGame(g);
 			}
 		}
-		
 		return d;
 	}
 
 	@Override
 	public Optional<Developer> findByName(String name)
 	{
-		return jdbcTemplate.query("SELECT * FROM developers WHERE developer_name LIKE ?", DEVELOPER_MAPPER, name).stream().findFirst();
+		Optional<Developer> d =  jdbcTemplate.query("SELECT * FROM developers WHERE developer_name LIKE ?", DEVELOPER_MAPPER, name).stream().findFirst();
+		if(d.isPresent())
+		{
+			List<Game> games = getAllGames(d.get());
+			for(Game g : games)
+			{
+				d.get().addGame(g);
+			}
+		}
+		return d;
 	}
 
 	@Override
 	public Optional<Developer> changeName(long id, String new_name)
 	{
-		return jdbcTemplate.query("UPDATE TABLE developers SET developer_name LIKE ? WHERE developer = ?", DEVELOPER_MAPPER, id, new_name).stream().findFirst();
+		Optional<Developer> d = jdbcTemplate.query("UPDATE TABLE developers SET developer_name LIKE ? WHERE developer = ?", DEVELOPER_MAPPER, id, new_name).stream().findFirst();
+		if(d.isPresent())
+			d.get().setName(new_name);
+		return d;
 	}
 
 	@Override
 	public Optional<Developer> changeLogo(long id, String new_logo)
 	{
-		return jdbcTemplate.query("UPDATE TABLE developers SET developer_logo LIKE ? WHERE developer = ?", DEVELOPER_MAPPER, id, new_logo).stream().findFirst();
+		Optional<Developer> d = jdbcTemplate.query("UPDATE TABLE developers SET developer_logo LIKE ? WHERE developer = ?", DEVELOPER_MAPPER, id, new_logo).stream().findFirst();
+		if(d.isPresent())
+			d.get().setLogo(new_logo);
+		return d;
 	}
 
 	@Override
@@ -87,14 +101,20 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	@Override
 	public List<Developer> getAllDevelopers()
 	{
-		return jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
+		List<Developer> devs =  jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
+		for(Developer d : devs)
+		{
+			List<Game> games = getAllGames(d);
+			for(Game g : games)
+				d.addGame(g);
+		}
+		return devs;
 	}
 	
 	@Override
 	public List<Game> getAllGames(Developer d)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM developers WHERE developer = ?) AS d NATURAL JOIN development NATURAL JOIN games",
-				new Object[]{d.getId()},
 				new RowMapper<Game>()
 				{
 					@Override
@@ -102,8 +122,7 @@ public class DeveloperJdbcDao implements DeveloperDao {
 					{
 						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
 					}
-				});
+				}, d.getId());
 		return gameList;
 	}
-
 }

@@ -6,15 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
 import ar.edu.itba.paw.interfaces.PublisherDao;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Publisher;
@@ -47,30 +44,40 @@ public class PublisherJdbcDao implements PublisherDao {
 		{
 			List<Game> games = getAllGames(p.get());
 			for(Game g : games)
-			{
 				p.get().addGame(g);
-			}
 		}
-		
 		return p;
 	}
 
 	@Override
 	public Optional<Publisher> findByName(String name)
 	{
-		return jdbcTemplate.query("SELECT * FROM publishers WHERE publisher_name LIKE ?", PUBLISHER_MAPPER, name).stream().findFirst();
+		Optional<Publisher> p = jdbcTemplate.query("SELECT * FROM publishers WHERE publisher_name LIKE ?", PUBLISHER_MAPPER, name).stream().findFirst();
+		if(p.isPresent())
+		{
+			List<Game> games = getAllGames(p.get());
+			for(Game g : games)
+				p.get().addGame(g);
+		}
+		return p;
 	}
 
 	@Override
 	public Optional<Publisher> changeName(long id, String new_name)
 	{
-		return jdbcTemplate.query("UPDATE TABLE publishers SET publisher_name LIKE ? WHERE publisher = ?", PUBLISHER_MAPPER, id, new_name).stream().findFirst();
+		Optional<Publisher> p = jdbcTemplate.query("UPDATE TABLE publishers SET publisher_name LIKE ? WHERE publisher = ?", PUBLISHER_MAPPER, id, new_name).stream().findFirst();
+		if(p.isPresent())
+			p.get().setName(new_name);
+		return p;
 	}
 
 	@Override
 	public Optional<Publisher> changeLogo(long id, String new_logo)
 	{
-		return jdbcTemplate.query("UPDATE TABLE publishers SET publisher_logo LIKE ? WHERE publisher = ?", PUBLISHER_MAPPER, id, new_logo).stream().findFirst();
+		Optional<Publisher> p = jdbcTemplate.query("UPDATE TABLE publishers SET publisher_logo LIKE ? WHERE publisher = ?", PUBLISHER_MAPPER, id, new_logo).stream().findFirst();
+		if(p.isPresent())
+			p.get().setLogo(new_logo);
+		return p;
 	}
 
 	@Override
@@ -86,14 +93,20 @@ public class PublisherJdbcDao implements PublisherDao {
 	@Override
 	public List<Publisher> getAllPublishers()
 	{
-		return jdbcTemplate.query("SELECT * FROM publishers", PUBLISHER_MAPPER);
+		List<Publisher> publishers = jdbcTemplate.query("SELECT * FROM publishers", PUBLISHER_MAPPER);
+		for(Publisher p : publishers)
+		{
+			List<Game> games = getAllGames(p);
+			for(Game g : games)
+				p.addGame(g);
+		}
+		return publishers;
 	}
 
 	@Override
 	public List<Game> getAllGames(Publisher p)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM publishers WHERE publisher = ?) AS p NATURAL JOIN publishing NATURAL JOIN games",
-				new Object[]{p.getId()},
 				new RowMapper<Game>()
 				{
 					@Override
@@ -101,7 +114,7 @@ public class PublisherJdbcDao implements PublisherDao {
 					{
 						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
 					}
-				});
+				}, p.getId());
 		return gameList;
 	}
 

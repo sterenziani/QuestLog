@@ -44,9 +44,7 @@ public class GenreJdbcDao implements GenreDao
 		{
 			List<Game> games = getAllGames(genre.get());
 			for(Game g : games)
-			{
 				genre.get().addGame(g);
-			}
 		}
 		return genre;
 	}
@@ -54,19 +52,32 @@ public class GenreJdbcDao implements GenreDao
 	@Override
 	public Optional<Genre> findByName(String name)
 	{
-		return jdbcTemplate.query("SELECT * FROM genres WHERE genre_name LIKE ?", GENRE_MAPPER, name).stream().findFirst();
+		Optional<Genre> genre = jdbcTemplate.query("SELECT * FROM genres WHERE genre_name LIKE ?", GENRE_MAPPER, name).stream().findFirst();
+		if(genre.isPresent())
+		{
+			List<Game> games = getAllGames(genre.get());
+			for(Game g : games)
+				genre.get().addGame(g);
+		}
+		return genre;
 	}
 
 	@Override
 	public Optional<Genre> changeName(long id, String new_name)
 	{
-		return jdbcTemplate.query("UPDATE TABLE genres SET genre_name LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_name).stream().findFirst();
+		Optional<Genre> g = jdbcTemplate.query("UPDATE TABLE genres SET genre_name LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_name).stream().findFirst();
+		if(g.isPresent())
+			g.get().setName(new_name);
+		return g;
 	}
 	
 	@Override
 	public Optional<Genre> changeLogo(long id, String new_logo)
 	{
-		return jdbcTemplate.query("UPDATE TABLE genres SET genre_logo LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_logo).stream().findFirst();
+		Optional<Genre> g = jdbcTemplate.query("UPDATE TABLE genres SET genre_logo LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_logo).stream().findFirst();
+		if(g.isPresent())
+			g.get().setLogo(new_logo);
+		return g;
 	}
 
 	@Override
@@ -82,14 +93,20 @@ public class GenreJdbcDao implements GenreDao
 	@Override
 	public List<Genre> getAllGenres()
 	{
-		return jdbcTemplate.query("SELECT * FROM genres", GENRE_MAPPER);
+		List<Genre> genres = jdbcTemplate.query("SELECT * FROM genres", GENRE_MAPPER);
+		for(Genre genre : genres)
+		{
+			List<Game> games = getAllGames(genre);
+			for(Game g : games)
+				genre.addGame(g);
+		}
+		return genres;
 	}
 
 	@Override
 	public List<Game> getAllGames(Genre g)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM genres WHERE genre = ?) AS g NATURAL JOIN classifications NATURAL JOIN games",
-				new Object[]{g.getId()},
 				new RowMapper<Game>()
 				{
 					@Override
@@ -97,8 +114,7 @@ public class GenreJdbcDao implements GenreDao
 					{
 						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
 					}
-				});
+				}, g.getId());
 		return gameList;
 	}
-
 }
