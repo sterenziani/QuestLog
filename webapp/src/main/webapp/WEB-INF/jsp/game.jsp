@@ -10,6 +10,20 @@
     </li>
     <br>
 </c:forEach>
+<h5>This game was developed by:</h5>
+<c:forEach items="${game.developers}" var="developer">
+    <li>      
+        [${developer.id}] ${developer.name}
+    </li>
+    <br>
+</c:forEach>
+<h5>This game was published by:</h5>
+<c:forEach items="${game.publishers}" var="publisher">
+    <li>      
+        [${publisher.id}] ${publisher.name}
+    </li>
+    <br>
+</c:forEach>
 <br><img height="500" src=${game.cover}></img><br>
 ${game.description}
 </body>

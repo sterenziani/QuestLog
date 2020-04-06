@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
 
 public interface DeveloperDao {
 	/**
@@ -49,4 +50,11 @@ public interface DeveloperDao {
 	 * @return The list of all developers.
 	 */
 	List<Developer> getAllDevelopers();
+
+	/**
+	 * Get a list of all games available on the developer
+	 * @param d		The developer
+	 * @return		The list of games
+	 */
+	List<Game> getAllGames(Developer d);
 }

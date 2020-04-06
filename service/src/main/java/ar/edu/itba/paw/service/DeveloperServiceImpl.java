@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.DeveloperService;
 import ar.edu.itba.paw.interfaces.DeveloperDao;
 import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
 
 @Service
 public class DeveloperServiceImpl implements DeveloperService{
@@ -43,11 +44,17 @@ public class DeveloperServiceImpl implements DeveloperService{
 	{
 		return developerDao.register(title, logo);
 	}
-
+	
 	@Override
 	public List<Developer> getAllDevelopers()
 	{
 		return developerDao.getAllDevelopers();
+	}
+	
+	@Override
+	public List<Game> getAllGames(Developer d)
+	{
+		return developerDao.getAllGames(d);
 	}
 
 }

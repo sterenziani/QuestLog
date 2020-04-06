@@ -9,6 +9,9 @@ public class Game
 	private String cover;
 	private String description;
 	private Set<Platform> platforms;
+	private Set<Developer> developers;
+	private Set<Publisher> publishers;
+
 	
 	public Game(long game, String title, String cover, String description)
 	{
@@ -17,6 +20,9 @@ public class Game
 		this.cover = cover;
 		this.description = description;
 		this.platforms = new HashSet<Platform>();
+		this.developers = new HashSet<Developer>();
+		this.publishers = new HashSet<Publisher>();
+
 	}
 
 	public long getId()
@@ -67,5 +73,34 @@ public class Game
 	public Set<Platform> getPlatforms()
 	{
 		return platforms;
+	}
+	
+	public void addPublisher(Publisher pub)
+	{
+		publishers.add(pub);
+	}
+	
+	public void removePublisher(Publisher pub)
+	{
+		publishers.remove(pub);
+	}
+	
+	public Set<Publisher> getPublishers()
+	{
+		return publishers;
+	}
+	public void addDeveloper(Developer d)
+	{
+		developers.add(d);
+	}
+	
+	public void removeDeveloper(Developer d)
+	{
+		developers.remove(d);
+	}
+	
+	public Set<Developer> getDevelopers()
+	{
+		return developers;
 	}
 }

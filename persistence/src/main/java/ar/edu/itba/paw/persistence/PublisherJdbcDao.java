@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.PublisherDao;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Publisher;
 
 @Repository
@@ -41,7 +42,17 @@ public class PublisherJdbcDao implements PublisherDao {
 	@Override
 	public Optional<Publisher> findById(long id)
 	{
-		return jdbcTemplate.query("SELECT * FROM publishers WHERE publisher = ?", PUBLISHER_MAPPER, id).stream().findFirst();
+		Optional<Publisher> p = jdbcTemplate.query("SELECT * FROM publishers WHERE publisher = ?", PUBLISHER_MAPPER, id).stream().findFirst();
+		if(p.isPresent())
+		{
+			List<Game> games = getAllGames(p.get());
+			for(Game g : games)
+			{
+				p.get().addGame(g);
+			}
+		}
+		
+		return p;
 	}
 
 	@Override
@@ -78,5 +89,21 @@ public class PublisherJdbcDao implements PublisherDao {
 		return jdbcTemplate.query("SELECT * FROM publishers", PUBLISHER_MAPPER);
 	}
 
+	@Override
+	public List<Game> getAllGames(Publisher p)
+	{
+		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM publishers WHERE publisher = ?) AS p NATURAL JOIN publishing NATURAL JOIN games",
+				new Object[]{p.getId()},
+				new RowMapper<Game>()
+				{
+					@Override
+					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
+					{
+						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
+					}
+				});
+		return gameList;
+	}
 
 }
+

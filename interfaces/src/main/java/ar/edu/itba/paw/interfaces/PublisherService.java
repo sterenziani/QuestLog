@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Publisher;
 
 public interface PublisherService {
@@ -49,5 +50,12 @@ public interface PublisherService {
 	 * @return The list of all publishers.
 	 */
 	List<Publisher> getAllPublishers();
+	
+	/**
+	 * Get a list of all games available by the publisher
+	 * @param pub	The publisher
+	 * @return		The list of games
+	 */
+	List<Game> getAllGames(Publisher pub);
 
 }

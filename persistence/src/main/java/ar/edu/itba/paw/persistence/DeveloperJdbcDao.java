@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.DeveloperDao;
 import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
 
 @Repository
 public class DeveloperJdbcDao implements DeveloperDao {
@@ -42,7 +43,17 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	@Override
 	public Optional<Developer> findById(long id)
 	{
-		return jdbcTemplate.query("SELECT * FROM developers WHERE developer = ?", DEVELOPER_MAPPER, id).stream().findFirst();
+		Optional<Developer> d = jdbcTemplate.query("SELECT * FROM developers WHERE developer = ?", DEVELOPER_MAPPER, id).stream().findFirst();
+		if(d.isPresent())
+		{
+			List<Game> games = getAllGames(d.get());
+			for(Game g : games)
+			{
+				d.get().addGame(g);
+			}
+		}
+		
+		return d;
 	}
 
 	@Override
@@ -77,6 +88,22 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	public List<Developer> getAllDevelopers()
 	{
 		return jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
+	}
+	
+	@Override
+	public List<Game> getAllGames(Developer d)
+	{
+		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM developers WHERE developer = ?) AS d NATURAL JOIN development NATURAL JOIN games",
+				new Object[]{d.getId()},
+				new RowMapper<Game>()
+				{
+					@Override
+					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
+					{
+						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
+					}
+				});
+		return gameList;
 	}
 
 }

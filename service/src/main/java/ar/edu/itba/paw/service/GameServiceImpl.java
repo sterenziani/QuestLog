@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.GameDao;
 import ar.edu.itba.paw.interfaces.GameService;
+import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Publisher;
 
 @Service
 public class GameServiceImpl implements GameService
@@ -72,5 +74,41 @@ public class GameServiceImpl implements GameService
 	public List<Platform> getAllPlatforms(Game g)
 	{
 		return gameDao.getAllPlatforms(g);
+	}
+	
+	@Override
+	public Optional<Game> addDeveloper(Game g, Developer p)
+	{
+		return gameDao.addDeveloper(g, p);		
+	}
+
+	@Override
+	public Optional<Game> removeDeveloper(Game g, Developer p)
+	{
+		return gameDao.removeDeveloper(g, p);
+	}
+
+	@Override
+	public List<Developer> getAllDevelopers(Game g)
+	{
+		return gameDao.getAllDevelopers(g);
+	}
+	
+	@Override
+	public Optional<Game> addPublisher(Game g, Publisher p)
+	{
+		return gameDao.addPublisher(g, p);		
+	}
+
+	@Override
+	public Optional<Game> removePublisher(Game g, Publisher p)
+	{
+		return gameDao.removePublisher(g, p);
+	}
+
+	@Override
+	public List<Publisher> getAllPublishers(Game g)
+	{
+		return gameDao.getAllPublishers(g);
 	}
 }
