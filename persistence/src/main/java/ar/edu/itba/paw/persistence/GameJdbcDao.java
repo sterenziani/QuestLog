@@ -48,29 +48,20 @@ public class GameJdbcDao implements GameDao
 		{
 			List<Platform> platforms = getAllPlatforms(g.get());
 			for(Platform p : platforms)
-			{
 				g.get().addPlatform(p);
-			}
-			
+
 			List<Developer> developers = getAllDevelopers(g.get());
 			for(Developer d : developers)
-			{
 				g.get().addDeveloper(d);
-			}
-			
+
 			List<Publisher> publishers = getAllPublishers(g.get());
 			for(Publisher pub: publishers)
-			{
 				g.get().addPublisher(pub);
-			}
-		}
-		if(g.isPresent())
-		{
+
 			List<Genre> genres = getAllGenres(g.get());
 			for(Genre genre : genres)
-			{
 				g.get().addGenre(genre);
-			}
+
 		}
 		return g;
 	}
@@ -147,19 +138,19 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addPublisher(Game g, Publisher p)
 	{
-		return jdbcTemplate.query("INSERT INTO game_versions(game, publisher) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
+		return jdbcTemplate.query("INSERT INTO publishing(game, publisher) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
 	}
 
 	@Override
 	public Optional<Game> removePublisher(Game g, Publisher p)
 	{
-		return jdbcTemplate.query("DELETE FROM game_versions WHERE game = ? AND p = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
+		return jdbcTemplate.query("DELETE FROM publishing WHERE game = ? AND publisher = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
 	}
 
 	@Override
 	public List<Publisher> getAllPublishers(Game g)
 	{
-		List<Publisher> publisherList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN game_versions NATURAL JOIN publishers",
+		List<Publisher> publisherList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN publishing NATURAL JOIN publishers",
 				new Object[]{g.getId()},
 				new RowMapper<Publisher>()
 				{
@@ -175,19 +166,19 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addDeveloper(Game g, Developer d)
 	{
-		return jdbcTemplate.query("INSERT INTO game_versions(game, developer) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), d.getId()).stream().findFirst();
+		return jdbcTemplate.query("INSERT INTO development(game, developer) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), d.getId()).stream().findFirst();
 	}
 
 	@Override
 	public Optional<Game> removeDeveloper(Game g, Developer d)
 	{
-		return jdbcTemplate.query("DELETE FROM game_versions WHERE game = ? AND p = ?", GAME_MAPPER, g.getId(), d.getId()).stream().findFirst();
+		return jdbcTemplate.query("DELETE FROM development WHERE game = ? AND developer = ?", GAME_MAPPER, g.getId(), d.getId()).stream().findFirst();
 	}
 
 	@Override
 	public List<Developer> getAllDevelopers(Game g)
 	{
-		List<Developer> developerList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN game_versions NATURAL JOIN developers",
+		List<Developer> developerList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN development NATURAL JOIN developers",
 				new Object[]{g.getId()},
 				new RowMapper<Developer>()
 				{
