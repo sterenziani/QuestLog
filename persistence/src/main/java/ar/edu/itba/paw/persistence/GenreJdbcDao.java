@@ -11,12 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
 import ar.edu.itba.paw.interfaces.GenreDao;
-import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Platform;
 
 @Repository
 public class GenreJdbcDao implements GenreDao

@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS list_contents(
 CREATE TABLE IF NOT EXISTS development(
 	game INT NOT NULL,
 	developer INT NOT NULL,
+	PRIMARY KEY(game, developer),
 	FOREIGN KEY(game) REFERENCES games,
 	FOREIGN KEY(developer) REFERENCES developers
 );
@@ -139,6 +140,7 @@ CREATE TABLE IF NOT EXISTS development(
 CREATE TABLE IF NOT EXISTS publishing(
 	game INT NOT NULL,
 	publisher INT NOT NULL,
+	PRIMARY KEY(game, publisher),
 	FOREIGN KEY(game) REFERENCES games,
 	FOREIGN KEY(publisher) REFERENCES publishers
 );
