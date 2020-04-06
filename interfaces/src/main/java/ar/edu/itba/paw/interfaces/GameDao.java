@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 
@@ -128,4 +129,27 @@ public interface GameDao
 	 * @return		The list of publishers
 	 */
 	List<Publisher> getAllPublishers(Game g);
+
+	/**
+	 * Categorize a game as part of a certain genre
+	 * @param game		The game
+	 * @param genre		The genre
+	 * @return			The updated game, now marked as being of that genre
+	 */
+	Optional<Game> addGenre(Game game, Genre genre);
+	
+	/**
+	 * Stop categorizing a game as being part of a genre
+	 * @param game		The game
+	 * @param genre		The genre
+	 * @return			The updated game, now marked as not being of that genre
+	 */
+	Optional<Game> removeGenre(Game game, Genre genre);
+	
+	/**
+	 * Get a list of all genres the game is classified as
+	 * @param g		The game
+	 * @return		The list of genres
+	 */
+	List<Genre> getAllGenres(Game g);
 }

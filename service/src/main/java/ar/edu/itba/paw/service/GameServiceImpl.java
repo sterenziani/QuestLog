@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.GameDao;
 import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 
@@ -110,5 +111,23 @@ public class GameServiceImpl implements GameService
 	public List<Publisher> getAllPublishers(Game g)
 	{
 		return gameDao.getAllPublishers(g);
+	}
+
+	@Override
+	public Optional<Game> addGenre(Game game, Genre genre)
+	{
+		return gameDao.addGenre(game, genre);
+	}
+
+	@Override
+	public Optional<Game> removeGenre(Game game, Genre genre)
+	{
+		return gameDao.removeGenre(game, genre);
+	}
+
+	@Override
+	public List<Genre> getAllGenres(Game g)
+	{
+		return gameDao.getAllGenres(g);
 	}
 }

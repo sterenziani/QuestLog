@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
+
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 
@@ -48,4 +50,11 @@ public interface GenreService {
 		 * @return The list of all genres.
 		 */
 		List<Genre> getAllGenres();
+		
+		/**
+		 * Get a list of all games of a certain genre
+		 * @param g		The genre
+		 * @return		The list of games
+		 */
+		List<Game> getAllGames(Genre g);
 }

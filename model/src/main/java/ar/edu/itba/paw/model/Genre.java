@@ -1,15 +1,19 @@
 package ar.edu.itba.paw.model;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Genre {
 	private final long genre;
 	private String name;
 	private String logo;
+	private Set<Game> games;
 	
 	public Genre(long genre, String name, String logo)
 	{
 		this.genre = genre;
 		this.name = name;
 		this.logo = logo;
+		this.games = new HashSet<Game>();
 	}
 	
 	public long getId()
@@ -36,5 +40,19 @@ public class Genre {
 	{
 		return name;
 	}
-
+	
+	public void addGame(Game g)
+	{
+		games.add(g);
+	}
+	
+	public void removeGame(Game g)
+	{
+		games.remove(g);
+	}
+	
+	public Set<Game> getGames()
+	{
+		return games;
+	}
 }
