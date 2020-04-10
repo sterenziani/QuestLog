@@ -49,3 +49,5 @@ projectFilesBackup
 # Maven
 log/
 target/
+
+*.MF
