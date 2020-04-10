@@ -159,7 +159,7 @@ public class DeveloperJdbcDaoTest
 	}
 	
 	@Test
-	public void	testGetAllGames()
+	public void	testGetAllGamesByDeveloper()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);

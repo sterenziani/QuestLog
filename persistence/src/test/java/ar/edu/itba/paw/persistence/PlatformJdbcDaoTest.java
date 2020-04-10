@@ -189,7 +189,7 @@ public class PlatformJdbcDaoTest
 	}
 	
 	@Test
-	public void	testGetAllGames()
+	public void	testGetAllGamesByPlatform()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);

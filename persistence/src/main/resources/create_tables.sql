@@ -109,7 +109,6 @@ CREATE TABLE IF NOT EXISTS classifications(
 	PRIMARY KEY(game, genre),
 	FOREIGN KEY(game) REFERENCES games,
 	FOREIGN KEY(genre) REFERENCES genres
-	ON DELETE CASCADE
 );
 
 

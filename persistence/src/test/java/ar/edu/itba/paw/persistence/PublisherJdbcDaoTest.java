@@ -162,7 +162,7 @@ public class PublisherJdbcDaoTest
 	}
 	
 	@Test
-	public void	testGetAllGames()
+	public void	testGetAllGamesByPublisher()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
