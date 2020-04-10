@@ -21,3 +21,25 @@ CREATE TABLE IF NOT EXISTS game_versions(
 	game INT,
 	platform INT
 );
+
+CREATE TABLE IF NOT EXISTS developers(
+	developer INTEGER IDENTITY,
+	developer_name VARCHAR(75) UNIQUE,
+	developer_logo varchar(300)
+);
+
+CREATE TABLE IF NOT EXISTS publishers(
+	publisher INTEGER IDENTITY,
+	publisher_name VARCHAR(75) UNIQUE,
+	publisher_logo varchar(300)
+);
+
+CREATE TABLE IF NOT EXISTS development(
+	game INT,
+	developer INT
+);
+
+CREATE TABLE IF NOT EXISTS publishing(
+	game INT,
+	publisher INT
+);

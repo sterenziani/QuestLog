@@ -73,19 +73,15 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	@Override
 	public Optional<Developer> changeName(long id, String new_name)
 	{
-		Optional<Developer> d = jdbcTemplate.query("UPDATE TABLE developers SET developer_name LIKE ? WHERE developer = ?", DEVELOPER_MAPPER, id, new_name).stream().findFirst();
-		if(d.isPresent())
-			d.get().setName(new_name);
-		return d;
+		jdbcTemplate.update("UPDATE developers SET developer_name = ? WHERE developer = ?", new_name, id);
+		return findById(id);
 	}
 
 	@Override
 	public Optional<Developer> changeLogo(long id, String new_logo)
 	{
-		Optional<Developer> d = jdbcTemplate.query("UPDATE TABLE developers SET developer_logo LIKE ? WHERE developer = ?", DEVELOPER_MAPPER, id, new_logo).stream().findFirst();
-		if(d.isPresent())
-			d.get().setLogo(new_logo);
-		return d;
+		jdbcTemplate.update("UPDATE developers SET developer_logo = ? WHERE developer = ?", new_logo, id);
+		return findById(id);
 	}
 
 	@Override

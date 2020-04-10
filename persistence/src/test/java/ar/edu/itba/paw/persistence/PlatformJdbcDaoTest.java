@@ -25,6 +25,7 @@ import ar.edu.itba.paw.model.Platform;
 @Sql(scripts = {"classpath:schema.sql"})
 public class PlatformJdbcDaoTest
 {
+	private	static final String GAME_TABLE = "games";
 	private	static final String PLATFORM_TABLE = "platforms";
 	private	static final String PLATFORM_NAME = "PlayStation 4";
 	private	static final String PLATFORM_SHORT_NAME = "PS4";
@@ -99,7 +100,7 @@ public class PlatformJdbcDaoTest
 		args.put("platform_name", PLATFORM_NAME);
 		args.put("platform_name_short", PLATFORM_SHORT_NAME);
 		args.put("platform_logo", PLATFORM_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
+		jdbcInsert.execute(args);
 		
 		Optional<Platform> maybePlatform = platformDao.findByName(PLATFORM_NAME);
 		Assert.assertTrue(maybePlatform.isPresent());
@@ -191,13 +192,14 @@ public class PlatformJdbcDaoTest
 	public void	testGetAllGames()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		final Map<String, Object> args = new HashMap<>();
 		args.put("platform_name", PLATFORM_NAME);
 		args.put("platform_name_short", PLATFORM_SHORT_NAME);
 		args.put("platform_logo", PLATFORM_LOGO);
 		Number key = jdbcInsert.executeAndReturnKey(args);
 		Platform p = new Platform(key.longValue(), PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
-		SimpleJdbcInsert jdbcInsertGames = new SimpleJdbcInsert(ds).withTableName("games").usingGeneratedKeyColumns("game");
+		SimpleJdbcInsert jdbcInsertGames = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
 		SimpleJdbcInsert jdbcInsertVersions = new SimpleJdbcInsert(ds).withTableName("game_versions");
 		
 		// Insert Mario
@@ -228,8 +230,7 @@ public class PlatformJdbcDaoTest
 		gameArgs3.put("title", "Sonic");
 		gameArgs3.put("cover", "http://sega.com/sonic.png");
 		gameArgs3.put("description", "A game with Sonic");
-		Number gameKey3 = jdbcInsertGames.executeAndReturnKey(gameArgs3);
-		Game g3 = new Game(gameKey3.longValue(), "Sonic", "http://sega.com/sonic.png", "A game with Sonic");
+		jdbcInsertGames.execute(gameArgs3);
 		// Let's say this one is not on this platform
 		
 		List<Game> gamesList = platformDao.getAllGames(p);
