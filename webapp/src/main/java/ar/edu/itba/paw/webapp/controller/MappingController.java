@@ -98,7 +98,7 @@ public class MappingController
 	public ModelAndView userProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("user");
-		mav.addObject("user", us.findById(id).orElseThrow(() -> new UserNotFoundException()));
+		mav.addObject("user", us.findById(id).orElseThrow(UserNotFoundException::new));
 		return mav;
 	}
 	
@@ -121,7 +121,7 @@ public class MappingController
 	public ModelAndView gameProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("game");
-		mav.addObject("game", gs.findById(id).orElseThrow(() -> new GameNotFoundException()));
+		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
 		return mav;
 	}
 	
@@ -137,7 +137,7 @@ public class MappingController
 	public ModelAndView platformProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("platform");
-		mav.addObject("platform", ps.findById(id).orElseThrow(() -> new PlatformNotFoundException()));
+		mav.addObject("platform", ps.findById(id).orElseThrow(PlatformNotFoundException::new));
 		return mav;
 	}
 	
@@ -153,7 +153,7 @@ public class MappingController
 	public ModelAndView developerProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("developer");
-		mav.addObject("developer", ds.findById(id).orElseThrow(() -> new DeveloperNotFoundException()));
+		mav.addObject("developer", ds.findById(id).orElseThrow(DeveloperNotFoundException::new));
 		return mav;
 	}
 	
@@ -169,7 +169,7 @@ public class MappingController
 	public ModelAndView publisherProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("publisher");
-		mav.addObject("publisher", pubs.findById(id).orElseThrow(() -> new PublisherNotFoundException()));
+		mav.addObject("publisher", pubs.findById(id).orElseThrow(PublisherNotFoundException::new));
 		return mav;
 	}
 	
@@ -185,7 +185,7 @@ public class MappingController
 	public ModelAndView genreProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("genre");
-		mav.addObject("genre", gens.findById(id).orElseThrow(() -> new GenreNotFoundException()));
+		mav.addObject("genre", gens.findById(id).orElseThrow(GenreNotFoundException::new));
 		return mav;
 	}
 }
