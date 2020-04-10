@@ -65,19 +65,15 @@ public class GenreJdbcDao implements GenreDao
 	@Override
 	public Optional<Genre> changeName(long id, String new_name)
 	{
-		Optional<Genre> g = jdbcTemplate.query("UPDATE TABLE genres SET genre_name LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_name).stream().findFirst();
-		if(g.isPresent())
-			g.get().setName(new_name);
-		return g;
+		jdbcTemplate.update("UPDATE genres SET genre_name = ? WHERE genre = ?", new_name, id);
+		return findById(id);
 	}
 	
 	@Override
 	public Optional<Genre> changeLogo(long id, String new_logo)
 	{
-		Optional<Genre> g = jdbcTemplate.query("UPDATE TABLE genres SET genre_logo LIKE ? WHERE genre = ?", GENRE_MAPPER, id, new_logo).stream().findFirst();
-		if(g.isPresent())
-			g.get().setLogo(new_logo);
-		return g;
+		jdbcTemplate.update("UPDATE genres SET genre_logo = ? WHERE genre = ?", new_logo, id);
+		return findById(id);
 	}
 
 	@Override
