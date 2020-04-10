@@ -22,7 +22,7 @@ public interface GameService
 	 * @param title The title for the game.
 	 * @return List of games that share that title.
 	 */
-	List<Game> findByTitle(String title);
+	Optional<Game> findByTitle(String title);
 	
 	/**
 	 * Change a game's title

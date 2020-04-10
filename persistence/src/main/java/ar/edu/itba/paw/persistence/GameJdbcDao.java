@@ -71,59 +71,53 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public List<Game> findByTitle(String title)
+	public Optional<Game> findByTitle(String title)
 	{
-		List<Game> games = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE '?'", GAME_MAPPER, title);
-		for(Game g : games)
+		Optional<Game> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE '?'", GAME_MAPPER, title).parallelStream().findFirst();
+		if(game.isPresent())
 		{
-			List<Platform> platforms = getAllPlatforms(g);
+			List<Platform> platforms = getAllPlatforms(game.get());
 			for(Platform p : platforms)
-				g.addPlatform(p);
+				game.get().addPlatform(p);
 
-			List<Developer> developers = getAllDevelopers(g);
+			List<Developer> developers = getAllDevelopers(game.get());
 			for(Developer d : developers)
-				g.addDeveloper(d);
+				game.get().addDeveloper(d);
 
-			List<Publisher> publishers = getAllPublishers(g);
+			List<Publisher> publishers = getAllPublishers(game.get());
 			for(Publisher pub: publishers)
-				g.addPublisher(pub);
+				game.get().addPublisher(pub);
 
-			List<Genre> genres = getAllGenres(g);
+			List<Genre> genres = getAllGenres(game.get());
 			for(Genre genre : genres)
-				g.addGenre(genre);
+				game.get().addGenre(genre);
 			
-			List<Release> releases = getAllReleaseDates(g);
+			List<Release> releases = getAllReleaseDates(game.get());
 			for(Release r: releases)
-				g.addReleaseDate(r);
+				game.get().addReleaseDate(r);
 		}
-		return games;
+		return game;
 	}
 
 	@Override
 	public Optional<Game> changeTitle(long id, String new_title)
 	{
-		Optional<Game> g = jdbcTemplate.query("UPDATE TABLE games SET title = ? WHERE id = ?", GAME_MAPPER, id, new_title).stream().findFirst();
-		if(g.isPresent())
-			g.get().setTitle(new_title);
-		return g;
+		jdbcTemplate.update("UPDATE games SET title = ? WHERE game = ?", new_title, id);
+		return findById(id);
 	}
 
 	@Override
 	public Optional<Game> changeCover(long id, String new_cover)
 	{
-		Optional<Game> g = jdbcTemplate.query("UPDATE TABLE games SET cover = ? WHERE id = ?", GAME_MAPPER, id, new_cover).stream().findFirst();
-		if(g.isPresent())
-			g.get().setCover(new_cover);
-		return g;
+		jdbcTemplate.update("UPDATE games SET cover = ? WHERE game = ?", new_cover, id);
+		return findById(id);
 	}
 
 	@Override
 	public Optional<Game> changeDescription(long id, String new_desc)
 	{
-		Optional<Game> g = jdbcTemplate.query("UPDATE TABLE games SET description = ? WHERE id = ?", GAME_MAPPER, id, new_desc).stream().findFirst();
-		if(g.isPresent())
-			g.get().setDescription(new_desc);
-		return g;
+		jdbcTemplate.update("UPDATE games SET description = ? WHERE game = ?", new_desc, id);
+		return findById(id);
 	}
 
 	@Override

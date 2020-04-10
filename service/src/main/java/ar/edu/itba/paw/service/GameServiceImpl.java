@@ -25,7 +25,7 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public List<Game> findByTitle(String title)
+	public Optional<Game> findByTitle(String title)
 	{
 		return gameDao.findByTitle(title);
 	}
