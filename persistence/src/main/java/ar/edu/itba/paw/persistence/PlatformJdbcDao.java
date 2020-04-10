@@ -65,28 +65,22 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public Optional<Platform> changeName(long id, String new_name)
 	{
-		Optional<Platform> p = jdbcTemplate.query("UPDATE TABLE platforms SET platform_name LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_name).stream().findFirst();
-		if(p.isPresent())
-			p.get().setName(new_name);
-		return p;
+		jdbcTemplate.update("UPDATE platforms SET platform_name = ? WHERE platform = ?", new_name, id);
+		return findById(id);
+	}
+	
+	@Override
+	public Optional<Platform> changeShortName(long id, String new_shortName)
+	{
+		jdbcTemplate.update("UPDATE platforms SET platform_name_short = ? WHERE platform = ?", new_shortName, id);
+		return findById(id);
 	}
 
 	@Override
 	public Optional<Platform> changeLogo(long id, String new_logo)
 	{
-		Optional<Platform> p = jdbcTemplate.query("UPDATE TABLE platforms SET platform_logo LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_logo).stream().findFirst();
-		if(p.isPresent())
-			p.get().setLogo(new_logo);
-		return p;
-	}
-
-	@Override
-	public Optional<Platform> changeShortName(long id, String new_shortName)
-	{
-		Optional<Platform> p = jdbcTemplate.query("UPDATE TABLE platforms SET platform_name_short LIKE ? WHERE platform = ?", PLATFORM_MAPPER, id, new_shortName).stream().findFirst();
-		if(p.isPresent())
-			p.get().setShortName(new_shortName);
-		return p;
+		jdbcTemplate.update("UPDATE platforms SET platform_logo = ? WHERE platform = ?", new_logo, id);
+		return findById(id);
 	}
 
 	@Override
