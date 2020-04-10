@@ -65,19 +65,15 @@ public class PublisherJdbcDao implements PublisherDao {
 	@Override
 	public Optional<Publisher> changeName(long id, String new_name)
 	{
-		Optional<Publisher> p = jdbcTemplate.query("UPDATE TABLE publishers SET publisher_name LIKE ? WHERE publisher = ?", PUBLISHER_MAPPER, id, new_name).stream().findFirst();
-		if(p.isPresent())
-			p.get().setName(new_name);
-		return p;
+		jdbcTemplate.update("UPDATE publishers SET publisher_name = ? WHERE publisher = ?", new_name, id);
+		return findById(id);
 	}
 
 	@Override
 	public Optional<Publisher> changeLogo(long id, String new_logo)
 	{
-		Optional<Publisher> p = jdbcTemplate.query("UPDATE TABLE publishers SET publisher_logo LIKE ? WHERE publisher = ?", PUBLISHER_MAPPER, id, new_logo).stream().findFirst();
-		if(p.isPresent())
-			p.get().setLogo(new_logo);
-		return p;
+		jdbcTemplate.update("UPDATE publishers SET publisher_logo = ? WHERE publisher = ?", new_logo, id);
+		return findById(id);
 	}
 
 	@Override
