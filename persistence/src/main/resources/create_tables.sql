@@ -1,21 +1,20 @@
-
 CREATE TABLE IF NOT EXISTS developers(
 	developer SERIAL,
-	developer_name VARCHAR(75) NOT NULL,
+	developer_name VARCHAR(75) NOT NULL UNIQUE,
 	developer_logo TEXT,
 	PRIMARY KEY(developer)
 );
 
 CREATE TABLE IF NOT EXISTS publishers(
 	publisher SERIAL,
-	publisher_name VARCHAR(75) NOT NULL,
+	publisher_name VARCHAR(75) NOT NULL UNIQUE,
 	publisher_logo TEXT,
 	PRIMARY KEY(publisher)
 );
 
 CREATE TABLE IF NOT EXISTS games(
 	game SERIAL,
-	title VARCHAR(100) NOT NULL,
+	title VARCHAR(100) NOT NULL UNIQUE,
 	cover TEXT,
 	description TEXT,
 	PRIMARY KEY(game)
@@ -23,7 +22,7 @@ CREATE TABLE IF NOT EXISTS games(
 
 CREATE TABLE IF NOT EXISTS platforms(
 	platform SERIAL,
-	platform_name VARCHAR(30) NOT NULL,
+	platform_name VARCHAR(30) NOT NULL UNIQUE,
 	platform_name_short VARCHAR(6) NOT NULL UNIQUE,
 	platform_logo TEXT UNIQUE,
 	PRIMARY KEY(platform)
@@ -39,8 +38,8 @@ CREATE TABLE IF NOT EXISTS game_versions(
 
 CREATE TABLE IF NOT EXISTS regions(
 	region SERIAL,
-	region_name VARCHAR(15),
-	region_short VARCHAR(5),
+	region_name VARCHAR(15) NOT NULL UNIQUE,
+	region_short VARCHAR(5) NOT NULL UNIQUE,
 	PRIMARY KEY(region)
 );
 
@@ -75,7 +74,7 @@ CREATE TABLE IF NOT EXISTS scores(
 
 CREATE TABLE IF NOT EXISTS playstyles(
 	playstyle SERIAL,
-	playstyle_name VARCHAR(15),
+	playstyle_name VARCHAR(25) NOT NULL UNIQUE,
 	PRIMARY KEY(playstyle)
 );
 
@@ -99,7 +98,7 @@ CREATE TABLE IF NOT EXISTS reviews(
 
 CREATE TABLE IF NOT EXISTS genres(
 	genre SERIAL,
-	genre_name VARCHAR(15),
+	genre_name VARCHAR(15) NOT NULL UNIQUE,
 	genre_logo TEXT,
 	PRIMARY KEY(genre)
 );
