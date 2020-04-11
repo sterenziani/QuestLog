@@ -149,4 +149,10 @@ public class GameServiceImpl implements GameService
 	{
 		return gameDao.getAllReleaseDates(g);
 	}
+	
+	@Override
+	public List<Game> searchByTitle(String search)
+	{
+		return gameDao.searchByTitle(search);
+	}
 }
