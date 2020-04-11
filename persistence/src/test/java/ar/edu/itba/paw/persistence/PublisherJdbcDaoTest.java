@@ -1,13 +1,8 @@
 package ar.edu.itba.paw.persistence;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
 import javax.sql.DataSource;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
-
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Game;
 
@@ -39,14 +33,14 @@ public class PublisherJdbcDaoTest
 	@Autowired
 	private PublisherJdbcDao publisherDao;
 	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert jdbcInsert;
+	private SimpleJdbcInsert pubInsert;
 	
 	@Before
 	public void	setUp()
 	{
 		publisherDao = new PublisherJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(PUBLISHER_TABLE).usingGeneratedKeyColumns("publisher");
+		pubInsert = new SimpleJdbcInsert(ds).withTableName(PUBLISHER_TABLE).usingGeneratedKeyColumns("publisher");
 	}
 	
 	@Test
@@ -72,12 +66,8 @@ public class PublisherJdbcDaoTest
 	public void	testFindPublisherByIdExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", PUBLISHER_NAME);
-		args.put("publisher_logo", PUBLISHER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Publisher> maybePublisher = publisherDao.findById(key.longValue());
+		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Optional<Publisher> maybePublisher = publisherDao.findById(p.getId());
 		Assert.assertTrue(maybePublisher.isPresent());
 		Assert.assertEquals(PUBLISHER_NAME, maybePublisher.get().getName());
 		Assert.assertEquals(PUBLISHER_LOGO, maybePublisher.get().getLogo());
@@ -95,11 +85,7 @@ public class PublisherJdbcDaoTest
 	public void	testFindPublisherByNameExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", PUBLISHER_NAME);
-		args.put("publisher_logo", PUBLISHER_LOGO);
-		jdbcInsert.execute(args);
-		
+		TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
 		Optional<Publisher> maybePublisher = publisherDao.findByName(PUBLISHER_NAME);
 		Assert.assertTrue(maybePublisher.isPresent());
 		Assert.assertEquals(PUBLISHER_NAME, maybePublisher.get().getName());
@@ -110,11 +96,8 @@ public class PublisherJdbcDaoTest
 	public void	testChangePublisherName()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", PUBLISHER_NAME);
-		args.put("publisher_logo", PUBLISHER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		Optional<Publisher> maybePublisher = publisherDao.changeName(key.longValue(), "Noentiendo");
+		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Optional<Publisher> maybePublisher = publisherDao.changeName(p.getId(), "Noentiendo");
 		Assert.assertTrue(maybePublisher.isPresent());
 		Assert.assertEquals("Noentiendo", maybePublisher.get().getName());
 		Assert.assertEquals(PUBLISHER_LOGO, maybePublisher.get().getLogo());
@@ -124,12 +107,8 @@ public class PublisherJdbcDaoTest
 	public void	testChangeLogo()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", PUBLISHER_NAME);
-		args.put("publisher_logo", PUBLISHER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Publisher> maybePublisher = publisherDao.changeLogo(key.longValue(), "http://sega.com/logo.png");
+		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Optional<Publisher> maybePublisher = publisherDao.changeLogo(p.getId(), "http://sega.com/logo.png");
 		Assert.assertTrue(maybePublisher.isPresent());
 		Assert.assertEquals(PUBLISHER_NAME, maybePublisher.get().getName());
 		Assert.assertEquals("http://sega.com/logo.png", maybePublisher.get().getLogo());
@@ -139,17 +118,8 @@ public class PublisherJdbcDaoTest
 	public void	testGetAllPublishers()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		final Map<String, Object> args1 = new HashMap<>();
-		args1.put("publisher_name", PUBLISHER_NAME);
-		args1.put("publisher_logo", PUBLISHER_LOGO);
-		Number key1 = jdbcInsert.executeAndReturnKey(args1);
-		final Map<String, Object> args2 = new HashMap<>();
-		args2.put("publisher_name", "Sega");
-		args2.put("publisher_logo", "http://sega.com/logo.png");
-		Number key2 = jdbcInsert.executeAndReturnKey(args2);
-		
-		Publisher nintendo = new Publisher(key1.longValue(), PUBLISHER_NAME, PUBLISHER_LOGO);
-		Publisher sega = new Publisher(key2.longValue(), "Sega", "http://sega.com/logo.png");
+		Publisher nintendo = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Publisher sega = TestMethods.addPublisher("Sega", "http://sega.com/logo.png", pubInsert);
 		List<Publisher> myList = new ArrayList<Publisher>();
 		myList.add(nintendo);
 		myList.add(sega);
@@ -166,50 +136,19 @@ public class PublisherJdbcDaoTest
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", PUBLISHER_NAME);
-		args.put("publisher_logo", PUBLISHER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		Publisher d = new Publisher(key.longValue(), PUBLISHER_NAME, PUBLISHER_LOGO);
-		SimpleJdbcInsert jdbcInsertGames = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert jdbcInsertPublishing = new SimpleJdbcInsert(ds).withTableName("publishing");
+		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
+		SimpleJdbcInsert publishingInsert = new SimpleJdbcInsert(ds).withTableName("publishing");
+		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
+		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
+		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
+		TestMethods.connectPub(g1, p, publishingInsert);
+		TestMethods.connectPub(g2, p, publishingInsert);
 		
-		// Insert Mario
-		final Map<String, Object> gameArgs = new HashMap<>();
-		gameArgs.put("title", "Mario");
-		gameArgs.put("cover", "http://nintendo.com/mario.png");
-		gameArgs.put("description", "A game with Mario");
-		Number gameKey = jdbcInsertGames.executeAndReturnKey(gameArgs);
-		Game g1 = new Game(gameKey.longValue(), "Mario", "http://nintendo.com/mario.png", "A game with Mario");
-		// Say Mario is on the publisher
-		final Map<String, Object> publishingArgs = new HashMap<>();
-		publishingArgs.put("game", gameKey.longValue());
-		publishingArgs.put("publisher", key.longValue());
-		jdbcInsertPublishing.execute(publishingArgs);
-		
-		final Map<String, Object> gameArgs2 = new HashMap<>();
-		gameArgs2.put("title", "Zelda");
-		gameArgs2.put("cover", "http://nintendo.com/zelda.png");
-		gameArgs2.put("description", "A game with Link");
-		Number gameKey2 = jdbcInsertGames.executeAndReturnKey(gameArgs2);
-		Game g2 = new Game(gameKey2.longValue(), "Zelda", "http://nintendo.com/zelda.png", "A game with Link");
-		final Map<String, Object> publishingArgs2 = new HashMap<>();
-		publishingArgs2.put("game", gameKey2.longValue());
-		publishingArgs2.put("publisher", key.longValue());
-		jdbcInsertPublishing.execute(publishingArgs2);
-		
-		final Map<String, Object> gameArgs3 = new HashMap<>();
-		gameArgs3.put("title", "Sonic");
-		gameArgs3.put("cover", "http://sega.com/sonic.png");
-		gameArgs3.put("description", "A game with Sonic");
-		jdbcInsertGames.execute(gameArgs3);
-		// Let's say this one is not on this publisher
-		
-		List<Game> gamesList = publisherDao.getAllGames(d);
+		List<Game> gamesList = publisherDao.getAllGames(p);
 		List<Game> myList = new ArrayList<Game>();
 		myList.add(g1);
 		myList.add(g2);
-		
 		Assert.assertNotNull(gamesList);
 		Assert.assertEquals(myList.size(), gamesList.size());
 		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());

@@ -36,14 +36,14 @@ public class DeveloperJdbcDaoTest
 	@Autowired
 	private DeveloperJdbcDao developerDao;
 	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert jdbcInsert;
+	private SimpleJdbcInsert devInsert;
 	
 	@Before
 	public void	setUp()
 	{
 		developerDao = new DeveloperJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(DEVELOPER_TABLE).usingGeneratedKeyColumns("developer");
+		devInsert = new SimpleJdbcInsert(ds).withTableName(DEVELOPER_TABLE).usingGeneratedKeyColumns("developer");
 	}
 	
 	@Test
@@ -69,12 +69,8 @@ public class DeveloperJdbcDaoTest
 	public void	testFindDeveloperByIdExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("developer_name", DEVELOPER_NAME);
-		args.put("developer_logo", DEVELOPER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Developer> maybeDeveloper = developerDao.findById(key.longValue());
+		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Optional<Developer> maybeDeveloper = developerDao.findById(d.getId());
 		Assert.assertTrue(maybeDeveloper.isPresent());
 		Assert.assertEquals(DEVELOPER_NAME, maybeDeveloper.get().getName());
 		Assert.assertEquals(DEVELOPER_LOGO, maybeDeveloper.get().getLogo());
@@ -92,11 +88,7 @@ public class DeveloperJdbcDaoTest
 	public void	testFindDeveloperByNameExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("developer_name", DEVELOPER_NAME);
-		args.put("developer_logo", DEVELOPER_LOGO);
-		jdbcInsert.execute(args);
-		
+		TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
 		Optional<Developer> maybeDeveloper = developerDao.findByName(DEVELOPER_NAME);
 		Assert.assertTrue(maybeDeveloper.isPresent());
 		Assert.assertEquals(DEVELOPER_NAME, maybeDeveloper.get().getName());
@@ -107,11 +99,8 @@ public class DeveloperJdbcDaoTest
 	public void	testChangeDeveloperName()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("developer_name", DEVELOPER_NAME);
-		args.put("developer_logo", DEVELOPER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		Optional<Developer> maybeDeveloper = developerDao.changeName(key.longValue(), "Noentiendo");
+		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Optional<Developer> maybeDeveloper = developerDao.changeName(d.getId(), "Noentiendo");
 		Assert.assertTrue(maybeDeveloper.isPresent());
 		Assert.assertEquals("Noentiendo", maybeDeveloper.get().getName());
 		Assert.assertEquals(DEVELOPER_LOGO, maybeDeveloper.get().getLogo());
@@ -121,12 +110,8 @@ public class DeveloperJdbcDaoTest
 	public void	testChangeLogo()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("developer_name", DEVELOPER_NAME);
-		args.put("developer_logo", DEVELOPER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Developer> maybeDeveloper = developerDao.changeLogo(key.longValue(), "http://sega.com/logo.png");
+		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Optional<Developer> maybeDeveloper = developerDao.changeLogo(d.getId(), "http://sega.com/logo.png");
 		Assert.assertTrue(maybeDeveloper.isPresent());
 		Assert.assertEquals(DEVELOPER_NAME, maybeDeveloper.get().getName());
 		Assert.assertEquals("http://sega.com/logo.png", maybeDeveloper.get().getLogo());
@@ -136,17 +121,8 @@ public class DeveloperJdbcDaoTest
 	public void	testGetAllDevelopers()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		final Map<String, Object> args1 = new HashMap<>();
-		args1.put("developer_name", DEVELOPER_NAME);
-		args1.put("developer_logo", DEVELOPER_LOGO);
-		Number key1 = jdbcInsert.executeAndReturnKey(args1);
-		final Map<String, Object> args2 = new HashMap<>();
-		args2.put("developer_name", "Sega");
-		args2.put("developer_logo", "http://sega.com/logo.png");
-		Number key2 = jdbcInsert.executeAndReturnKey(args2);
-		
-		Developer nintendo = new Developer(key1.longValue(), DEVELOPER_NAME, DEVELOPER_LOGO);
-		Developer sega = new Developer(key2.longValue(), "Sega", "http://sega.com/logo.png");
+		Developer nintendo = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer sega = TestMethods.addDeveloper("Sega", DEVELOPER_LOGO, devInsert);
 		List<Developer> myList = new ArrayList<Developer>();
 		myList.add(nintendo);
 		myList.add(sega);
@@ -163,50 +139,20 @@ public class DeveloperJdbcDaoTest
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("developer_name", DEVELOPER_NAME);
-		args.put("developer_logo", DEVELOPER_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		Developer d = new Developer(key.longValue(), DEVELOPER_NAME, DEVELOPER_LOGO);
-		SimpleJdbcInsert jdbcInsertGames = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert jdbcInsertDevelopment = new SimpleJdbcInsert(ds).withTableName("development");
-		
-		// Insert Mario
-		final Map<String, Object> gameArgs = new HashMap<>();
-		gameArgs.put("title", "Mario");
-		gameArgs.put("cover", "http://nintendo.com/mario.png");
-		gameArgs.put("description", "A game with Mario");
-		Number gameKey = jdbcInsertGames.executeAndReturnKey(gameArgs);
-		Game g1 = new Game(gameKey.longValue(), "Mario", "http://nintendo.com/mario.png", "A game with Mario");
-		// Say Mario is on the developer
-		final Map<String, Object> developmentArgs = new HashMap<>();
-		developmentArgs.put("game", gameKey.longValue());
-		developmentArgs.put("developer", key.longValue());
-		jdbcInsertDevelopment.execute(developmentArgs);
-		
-		final Map<String, Object> gameArgs2 = new HashMap<>();
-		gameArgs2.put("title", "Zelda");
-		gameArgs2.put("cover", "http://nintendo.com/zelda.png");
-		gameArgs2.put("description", "A game with Link");
-		Number gameKey2 = jdbcInsertGames.executeAndReturnKey(gameArgs2);
-		Game g2 = new Game(gameKey2.longValue(), "Zelda", "http://nintendo.com/zelda.png", "A game with Link");
-		final Map<String, Object> developmentArgs2 = new HashMap<>();
-		developmentArgs2.put("game", gameKey2.longValue());
-		developmentArgs2.put("developer", key.longValue());
-		jdbcInsertDevelopment.execute(developmentArgs2);
-		
-		final Map<String, Object> gameArgs3 = new HashMap<>();
-		gameArgs3.put("title", "Sonic");
-		gameArgs3.put("cover", "http://sega.com/sonic.png");
-		gameArgs3.put("description", "A game with Sonic");
-		jdbcInsertGames.execute(gameArgs3);
-		// Let's say this one is not on this developer
+		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
+		SimpleJdbcInsert developmentInsert = new SimpleJdbcInsert(ds).withTableName("development");
+
+		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
+		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
+		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
+		TestMethods.connectDev(g1, d, developmentInsert);
+		TestMethods.connectDev(g2, d, developmentInsert);
 		
 		List<Game> gamesList = developerDao.getAllGames(d);
 		List<Game> myList = new ArrayList<Game>();
 		myList.add(g1);
 		myList.add(g2);
-		
 		Assert.assertNotNull(gamesList);
 		Assert.assertEquals(myList.size(), gamesList.size());
 		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());
