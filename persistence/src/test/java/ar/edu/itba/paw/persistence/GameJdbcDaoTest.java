@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.persistence;
 import java.util.ArrayList;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.junit.Assert;
@@ -62,116 +60,24 @@ public class GameJdbcDaoTest
 	@Autowired
 	private GameJdbcDao gameDao;
 	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert jdbcInsert;
-	SimpleJdbcInsert developmentInsert;
-	SimpleJdbcInsert devInsert;
-	SimpleJdbcInsert publishingInsert;
-	SimpleJdbcInsert pubInsert;
-	SimpleJdbcInsert classificationInsert;
-	SimpleJdbcInsert genreInsert;
-	SimpleJdbcInsert platformInsert;
-	SimpleJdbcInsert versionInsert;
-	SimpleJdbcInsert regionInsert;
-	SimpleJdbcInsert releaseInsert;
-	
-	
-	private Game addGame(String title, String cover, String desc)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("title", title);
-		args.put("cover", cover);
-		args.put("description", desc);
-		return new Game(jdbcInsert.executeAndReturnKey(args).longValue(), title, cover, desc);
-	}
-	
-	private Developer addDeveloper(String name, String logo)
-	{
-		final Map<String, Object> devArgs = new HashMap<>();
-		devArgs.put("developer_name", name);
-		devArgs.put("developer_logo", logo);
-		return new Developer(devInsert.executeAndReturnKey(devArgs).longValue(), name, logo);
-	}
-	
-	private Publisher addPublisher(String name, String logo)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", name);
-		args.put("publisher_logo", logo);
-		return new Publisher(pubInsert.executeAndReturnKey(args).longValue(), name, logo);
-	}
-	
-	private Genre addGenre(String name, String logo)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("genre_name", name);
-		args.put("genre_logo", logo);
-		return new Genre(genreInsert.executeAndReturnKey(args).longValue(), name, logo);
-	}
-	
-	private Platform addPlatform(String name, String shortName, String logo)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", name);
-		args.put("platform_name_short", shortName);
-		args.put("platform_logo", logo);
-		return new Platform(platformInsert.executeAndReturnKey(args).longValue(), name, shortName, logo);
-	}
-	
-	private Region addRegion(String name, String shortName)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("region_name", name);
-		args.put("region_short", shortName);
-		return new Region(regionInsert.executeAndReturnKey(args).longValue(), name, shortName);
-	}
-	
-	private void addRelease(Game g, Region r, Date d)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("region", r.getId());
-		args.put("release_date", d);
-		releaseInsert.execute(args);
-	}
-	
-	private void connectDev(Game g, Developer d)
-	{
-		final Map<String, Object> developmentArgs = new HashMap<>();
-		developmentArgs.put("game", g.getId());
-		developmentArgs.put("developer", d.getId());
-		developmentInsert.execute(developmentArgs);
-	}
-	
-	private void connectPub(Game g, Publisher p)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("publisher", p.getId());
-		publishingInsert.execute(args);
-	}
-	
-	private void connectGenre(Game g, Genre genre)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("genre", genre.getId());
-		classificationInsert.execute(args);
-	}
-	
-	private void connectPlatform(Game g, Platform p)
-	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("platform", p.getId());
-		versionInsert.execute(args);
-	}
+	private SimpleJdbcInsert gameInsert;
+	private SimpleJdbcInsert developmentInsert;
+	private SimpleJdbcInsert devInsert;
+	private SimpleJdbcInsert publishingInsert;
+	private SimpleJdbcInsert pubInsert;
+	private SimpleJdbcInsert classificationInsert;
+	private SimpleJdbcInsert genreInsert;
+	private SimpleJdbcInsert platformInsert;
+	private SimpleJdbcInsert versionInsert;
+	private SimpleJdbcInsert regionInsert;
+	private SimpleJdbcInsert releaseInsert;
 	
 	@Before
 	public void	setUp()
 	{
 		gameDao = new GameJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
+		gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
 		developmentInsert = new SimpleJdbcInsert(ds).withTableName(DEVELOPMENT_TABLE);
 		devInsert = new SimpleJdbcInsert(ds).withTableName(DEVELOPER_TABLE).usingGeneratedKeyColumns("developer");
 		pubInsert = new SimpleJdbcInsert(ds).withTableName(PUBLISHER_TABLE).usingGeneratedKeyColumns("publisher");
@@ -215,7 +121,7 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testFindGameByIdExists()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Optional<Game> maybeGame = gameDao.findById(g.getId());
 		Assert.assertTrue(maybeGame.isPresent());
 		Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
@@ -233,7 +139,7 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testFindGameByTitleExists()
 	{
-		addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
+		TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Optional<Game> maybeGame = gameDao.findByTitle(GAME_TITLE);
 		Assert.assertTrue(maybeGame.isPresent());
 		Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
@@ -244,7 +150,7 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testChangeGameTitle()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Optional<Game> maybeGame = gameDao.changeTitle(g.getId(), "Zenobureido");
 		Assert.assertTrue(maybeGame.isPresent());
 		Assert.assertEquals("Zenobureido", maybeGame.get().getTitle());
@@ -255,7 +161,7 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testChangeGameCover()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Optional<Game> maybeGame = gameDao.changeCover(g.getId(), "http://fake.com/image.png");
 		Assert.assertTrue(maybeGame.isPresent());
 		Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
@@ -266,7 +172,7 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testChangeGameDesc()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Optional<Game> maybeGame = gameDao.changeDescription(g.getId(), "This is a new description!");
 		Assert.assertTrue(maybeGame.isPresent());
 		Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
@@ -277,12 +183,12 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testGetAllGames()
 	{
-		Game xeno = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Game botw = addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC);
+		Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, gameInsert);
 		
 		List<Game> gamesList = gameDao.getAllGames();
 		List<Game> myList = new ArrayList<Game>();
-		myList.add(xeno);
+		myList.add(example);
 		myList.add(botw);
 		
 		Assert.assertFalse(gamesList.isEmpty());
@@ -294,11 +200,11 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testGetGameDevs()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Developer d1 = addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO);
-		Developer d2 = addDeveloper("Nintendo", DEVELOPER_LOGO);
-		connectDev(g, d1);
-		connectDev(g, d2);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Developer d1 = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer d2 = TestMethods.addDeveloper("Nintendo", DEVELOPER_LOGO, devInsert);
+		TestMethods.connectDev(g, d1, developmentInsert);
+		TestMethods.connectDev(g, d2, developmentInsert);
 		
 		List<Developer> devsList = gameDao.getAllDevelopers(g);
 		List<Developer> myList = new ArrayList<Developer>();
@@ -314,11 +220,11 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testGetGamePublishers()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Publisher p1 = addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO);
-		Publisher p2 = addPublisher("SquareEnix", PUBLISHER_LOGO);
-		connectPub(g, p1);
-		connectPub(g, p2);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Publisher p1 = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Publisher p2 = TestMethods.addPublisher("SquareEnix", PUBLISHER_LOGO, pubInsert);
+		TestMethods.connectPub(g, p1, publishingInsert);
+		TestMethods.connectPub(g, p2, publishingInsert);
 		
 		List<Publisher> pubsList = gameDao.getAllPublishers(g);
 		List<Publisher> myList = new ArrayList<Publisher>();
@@ -334,11 +240,11 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testGetGameGenres()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Genre g1 = addGenre(GENRE_NAME, GENRE_LOGO);
-		Genre g2 = addGenre("Adventure", GENRE_LOGO);
-		connectGenre(g, g1);
-		connectGenre(g, g2);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre g2 = TestMethods.addGenre("Adventure", GENRE_LOGO, genreInsert);
+		TestMethods.connectGenre(g, g1, classificationInsert);
+		TestMethods.connectGenre(g, g2, classificationInsert);
 		
 		List<Genre> genreList = gameDao.getAllGenres(g);
 		List<Genre> myList = new ArrayList<Genre>();
@@ -354,11 +260,11 @@ public class GameJdbcDaoTest
 	@Test
 	public void	testGetGamePlatforms()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Platform p1 = addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
-		Platform p2 = addPlatform("PlayStation 4", "PS4", PLATFORM_LOGO);
-		connectPlatform(g, p1);
-		connectPlatform(g, p2);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Platform p2 = TestMethods.addPlatform("PlayStation 4", "PS4", PLATFORM_LOGO, platformInsert);
+		TestMethods.connectPlatform(g, p1, versionInsert);
+		TestMethods.connectPlatform(g, p2, versionInsert);
 		
 		List<Platform> platformsList = gameDao.getAllPlatforms(g);
 		List<Platform> myList = new ArrayList<Platform>();
@@ -374,10 +280,10 @@ public class GameJdbcDaoTest
 	@Test
 	public void testAddDeveloper()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Developer d1 = addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO);
-		Developer d2 = addDeveloper("Nintendo", DEVELOPER_LOGO);
-		connectDev(g, d1);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Developer d1 = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer d2 = TestMethods.addDeveloper("Nintendo", DEVELOPER_LOGO, devInsert);
+		TestMethods.connectDev(g, d1, developmentInsert);
 		Optional<Game> maybeGame = gameDao.addDeveloper(g, d2);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -388,8 +294,8 @@ public class GameJdbcDaoTest
 	@Test
 	public void testAddPublisher()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Publisher p = addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
 		Optional<Game> maybeGame = gameDao.addPublisher(g, p);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -399,8 +305,8 @@ public class GameJdbcDaoTest
 	@Test
 	public void testAddGenre()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Genre g1 = addGenre(GENRE_NAME, GENRE_LOGO);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
 		Optional<Game> maybeGame = gameDao.addGenre(g, g1);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -410,8 +316,8 @@ public class GameJdbcDaoTest
 	@Test
 	public void testAddPlatform()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Platform p = addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Optional<Game> maybeGame = gameDao.addPlatform(g, p);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -421,8 +327,8 @@ public class GameJdbcDaoTest
 	@Test
 	public void testAddRelease()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Region r = addRegion(REGION_NAME, REGION_SHORT);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Region r = TestMethods.addRegion(REGION_NAME, REGION_SHORT, regionInsert);
 		Release rel = new Release(r, new Date(2017, 03, 03));
 		Optional<Game> maybeGame = gameDao.addReleaseDate(g, rel);
 		
@@ -433,11 +339,11 @@ public class GameJdbcDaoTest
 	@Test
 	public void testRemoveDeveloper()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Developer d1 = addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO);
-		Developer d2 = addDeveloper("Nintendo", DEVELOPER_LOGO);
-		connectDev(g, d1);
-		connectDev(g, d2);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Developer d1 = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer d2 = TestMethods.addDeveloper("Nintendo", DEVELOPER_LOGO, devInsert);
+		TestMethods.connectDev(g, d1, developmentInsert);
+		TestMethods.connectDev(g, d2, developmentInsert);
 		Optional<Game> maybeGame = gameDao.removeDeveloper(g, d2);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -449,11 +355,11 @@ public class GameJdbcDaoTest
 	@Test
 	public void testRemovePublisher()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Publisher p1 = addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO);
-		Publisher p2 = addPublisher("SquareEnix", PUBLISHER_LOGO);
-		connectPub(g, p1);
-		connectPub(g, p2);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Publisher p1 = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Publisher p2 = TestMethods.addPublisher("SquareEnix", PUBLISHER_LOGO, pubInsert);
+		TestMethods.connectPub(g, p1, publishingInsert);
+		TestMethods.connectPub(g, p2, publishingInsert);
 		Optional<Game> maybeGame = gameDao.removePublisher(g, p1);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -465,9 +371,9 @@ public class GameJdbcDaoTest
 	@Test
 	public void testRemoveGenre()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Genre g1 = addGenre(GENRE_NAME, GENRE_LOGO);
-		connectGenre(g, g1);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		TestMethods.connectGenre(g, g1, classificationInsert);
 		Optional<Game> maybeGame = gameDao.removeGenre(g, g1);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -477,9 +383,9 @@ public class GameJdbcDaoTest
 	@Test
 	public void testRemovePlatform()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Platform p = addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
-		connectPlatform(g, p);
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		TestMethods.connectPlatform(g, p, versionInsert);
 		Optional<Game> maybeGame = gameDao.removePlatform(g, p);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -489,13 +395,13 @@ public class GameJdbcDaoTest
 	@Test
 	public void testRemoveRelease()
 	{
-		Game g = addGame(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Region r1 = addRegion(REGION_NAME, REGION_SHORT);
-		Region r2 = addRegion("Japan", "JP");
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Region r1 = TestMethods.addRegion(REGION_NAME, REGION_SHORT, regionInsert);
+		Region r2 = TestMethods.addRegion("Japan", "JP", regionInsert);
 		Release rel1 = new Release(r1, Date.valueOf("2017-03-03"));
 		Release rel2 = new Release(r2, Date.valueOf("2017-06-20"));
-		addRelease(g, r1, rel1.getDate());
-		addRelease(g, r2, rel2.getDate());
+		TestMethods.addRelease(g, r1, rel1.getDate(), releaseInsert);
+		TestMethods.addRelease(g, r2, rel2.getDate(), releaseInsert);
 		Optional<Game> maybeGame = gameDao.removeReleaseDate(g, rel1);
 		
 		Assert.assertTrue(maybeGame.isPresent());
@@ -503,24 +409,24 @@ public class GameJdbcDaoTest
 		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel2));
 	}
 	
-	@Test
-	public void	testSearchByTitle()
-	{
-		Game raym = addGame("Rayman Legends", GAME_COVER, GAME_DESC);
-		Game mario = addGame("Super Mario 3D World", GAME_COVER, GAME_DESC);
-		Game cup = addGame("Cuphead", GAME_COVER, GAME_DESC);
-		
-		List<Game> myList = new ArrayList<Game>();
-		myList.add(raym);
-		myList.add(mario);
-		
-		List<Game> gamesList1 = gameDao.searchByTitle("mA");
-		List<Game> gamesList2 = gameDao.searchByTitle("qwerty");
-		
-		Assert.assertFalse(gamesList1.isEmpty());
-		Assert.assertEquals(2, gamesList1.size());
-		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle());
-		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle());
-		Assert.assertTrue(gamesList2.isEmpty());
+	@Test 
+	public void	testSearchByTitle() 
+	{ 
+		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
+		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
+		Game cup = TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
+		 
+		List<Game> myList = new ArrayList<Game>(); 
+		myList.add(raym); 
+		myList.add(mario); 
+		 
+		List<Game> gamesList1 = gameDao.searchByTitle("mA"); 
+		List<Game> gamesList2 = gameDao.searchByTitle("qwerty"); 
+		 
+		Assert.assertFalse(gamesList1.isEmpty()); 
+		Assert.assertEquals(2, gamesList1.size()); 
+		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle()); 
+		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
+		Assert.assertTrue(gamesList2.isEmpty()); 
 	}
 }
