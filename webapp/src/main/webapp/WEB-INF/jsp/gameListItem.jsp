@@ -17,6 +17,6 @@
         <img src="<c:url value="${game.cover}"/>" alt="${game.title}"/>
     </div>
     <div class="game-list-item-data">
-        Title
+        <h3>Title</h3>
     </div>
 </div>
