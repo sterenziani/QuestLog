@@ -177,4 +177,11 @@ public interface GameService
 	 * @return		A map with the regions as keys and the release date in each region as their value.
 	 */
 	List<Release> getAllReleaseDates(Game g);
+	
+	/**
+	 * Get a list of all games with names that contain the searched term.
+	 * @param search The search term.
+	 * @return 	The list of matching games.
+	 */
+	List<Game> searchByTitle(String search);
 }

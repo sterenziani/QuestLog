@@ -305,4 +305,32 @@ public class GameJdbcDao implements GameDao
 				}, g.getId());
 		return dates;
 	}
+	
+	public List<Game> searchByTitle(String search){
+		List<Game> searchGames = jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
+		for(Game g : searchGames)
+		{	
+			List<Platform> platforms = getAllPlatforms(g);
+			for(Platform p : platforms)
+				g.addPlatform(p);
+
+			List<Developer> developers = getAllDevelopers(g);
+			for(Developer d : developers)
+				g.addDeveloper(d);
+
+			List<Publisher> publishers = getAllPublishers(g);
+			for(Publisher pub: publishers)
+				g.addPublisher(pub);
+
+			List<Genre> genres = getAllGenres(g);
+			for(Genre genre : genres)
+				g.addGenre(genre);
+			
+			List<Release> releases = getAllReleaseDates(g);
+			for(Release r: releases)
+				g.addReleaseDate(r);
+		}
+		return searchGames;
+		
+	}
 }

@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.itba.paw.interfaces.DeveloperService;
 import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreService;
@@ -88,9 +90,10 @@ public class MappingController
 	}
 	
 	@RequestMapping("/")
-	public ModelAndView helloWorld()
+	public ModelAndView helloWorld(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("index");
+		mav.addObject("backlog", backlog);
 		return mav;
 	}
 	
@@ -118,7 +121,7 @@ public class MappingController
 	}
 	
 	@RequestMapping("/games/{id}")
-	public ModelAndView gameProfile(@PathVariable("id") long id)
+	public ModelAndView gameProfile(@PathVariable("id") long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("game");
 		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
@@ -187,5 +190,20 @@ public class MappingController
 		final ModelAndView mav = new ModelAndView("genre");
 		mav.addObject("genre", gens.findById(id).orElseThrow(GenreNotFoundException::new));
 		return mav;
+	}
+	
+	private boolean gameNotInBacklog(long id, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		return !(backlog.contains(id +" ") || backlog.contains(" " +id +" "));
+	}
+	
+	private void addGameToBacklog(long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		if(gameNotInBacklog(id, backlog))
+		{
+			Cookie cookie = new Cookie("backlog", backlog +id +" ");
+			cookie.setPath("/");
+			response.addCookie(cookie);	
+		}
 	}
 }
