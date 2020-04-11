@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS platforms(
 	platform INTEGER IDENTITY,
 	platform_name VARCHAR(30) UNIQUE,
 	platform_name_short VARCHAR(6) UNIQUE,
-	platform_logo VARCHAR(300) UNIQUE
+	platform_logo VARCHAR(300)
 );
 
 CREATE TABLE IF NOT EXISTS games(
@@ -53,4 +53,16 @@ CREATE TABLE IF NOT EXISTS genres(
 CREATE TABLE IF NOT EXISTS classifications(
 	game INT,
 	genre INT
+);
+
+CREATE TABLE IF NOT EXISTS regions(
+	region INTEGER IDENTITY,
+	region_name VARCHAR(15) UNIQUE,
+	region_short VARCHAR(5) UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS releases(
+	game INT,
+	region INT,
+	release_date DATE
 );

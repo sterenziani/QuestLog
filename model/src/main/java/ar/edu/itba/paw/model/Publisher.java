@@ -57,5 +57,22 @@ public class Publisher {
 	{
 		return games;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+	    return getName().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Publisher)
+		{
+			Publisher toCompare = (Publisher) o;
+			return this.getName().equals(toCompare.getName());
+		}
+		return false;
+	}
 
 }

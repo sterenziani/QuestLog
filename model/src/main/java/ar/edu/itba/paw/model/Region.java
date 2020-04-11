@@ -37,4 +37,24 @@ public class Region
 	{
 		return shortName;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		int hashCode = 1;
+		hashCode = (int) (31 * hashCode + region);
+		hashCode = 31 * hashCode + name.hashCode();
+		return hashCode;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Region)
+		{
+			Region toCompare = (Region) o;
+			return this.region == toCompare.getId() && this.getName().equals(toCompare.getName());
+		}
+		return false;
+	}
 }

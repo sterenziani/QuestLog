@@ -68,4 +68,21 @@ public class Platform
 	{
 		return games;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+	    return getName().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Platform)
+		{
+			Platform toCompare = (Platform) o;
+			return this.getName().equals(toCompare.getName());
+		}
+		return false;
+	}
 }

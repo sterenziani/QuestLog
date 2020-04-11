@@ -56,5 +56,22 @@ public class Developer {
 	{
 		return games;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+	    return getName().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Developer)
+		{
+			Developer toCompare = (Developer) o;
+			return this.getName().equals(toCompare.getName());
+		}
+		return false;
+	}
 
 }

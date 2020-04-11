@@ -135,4 +135,24 @@ public class Game
 	{
 		return releaseDates;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		int hashCode = 1;
+		hashCode = (int) (31 * hashCode + game);
+		hashCode = 31 * hashCode + title.hashCode();
+		return hashCode;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Game)
+		{
+			Game toCompare = (Game) o;
+			return this.game == toCompare.getId() && this.title.equals(toCompare.getTitle());
+		}
+		return false;
+	}
 }

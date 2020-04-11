@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS platforms(
 	platform SERIAL,
 	platform_name VARCHAR(30) NOT NULL UNIQUE,
 	platform_name_short VARCHAR(6) NOT NULL UNIQUE,
-	platform_logo TEXT UNIQUE,
+	platform_logo TEXT,
 	PRIMARY KEY(platform)
 );
 

@@ -73,7 +73,7 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> findByTitle(String title)
 	{
-		Optional<Game> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE '?'", GAME_MAPPER, title).parallelStream().findFirst();
+		Optional<Game> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE ?", GAME_MAPPER, title).parallelStream().findFirst();
 		if(game.isPresent())
 		{
 			List<Platform> platforms = getAllPlatforms(game.get());
@@ -163,19 +163,15 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addPlatform(Game g, Platform p)
 	{
-		Optional<Game> game = jdbcTemplate.query("INSERT INTO game_versions(game, platform) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
-		if(game.isPresent())
-			game.get().addPlatform(p);
-		return game;
+		jdbcTemplate.update("INSERT INTO game_versions(game, platform) VALUES(?, ?)", g.getId(), p.getId());
+		return findById(g.getId());
 	}
 
 	@Override
 	public Optional<Game> removePlatform(Game g, Platform p)
 	{
-		Optional<Game> game = jdbcTemplate.query("DELETE FROM game_versions WHERE game = ? AND platform = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
-		if(game.isPresent())
-			game.get().removePlatform(p);
-		return game;
+		jdbcTemplate.update("DELETE FROM game_versions WHERE game = ? AND platform = ?", g.getId(), p.getId());
+		return findById(g.getId());
 	}
 
 	@Override
@@ -196,19 +192,15 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addPublisher(Game g, Publisher p)
 	{
-		Optional<Game> game = jdbcTemplate.query("INSERT INTO publishing(game, publisher) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
-		if(game.isPresent())
-			game.get().addPublisher(p);
-		return game;
+		jdbcTemplate.update("INSERT INTO publishing(game, publisher) VALUES(?, ?)", g.getId(), p.getId());
+		return findById(g.getId());
 	}
 
 	@Override
 	public Optional<Game> removePublisher(Game g, Publisher p)
 	{
-		Optional<Game> game = jdbcTemplate.query("DELETE FROM publishing WHERE game = ? AND publisher = ?", GAME_MAPPER, g.getId(), p.getId()).stream().findFirst();
-		if(game.isPresent())
-			game.get().removePublisher(p);
-		return game;
+		jdbcTemplate.update("DELETE FROM publishing WHERE game = ? AND publisher = ?", g.getId(), p.getId());
+		return findById(g.getId());
 	}
 
 	@Override
@@ -229,19 +221,15 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addDeveloper(Game g, Developer d)
 	{
-		Optional<Game> game = jdbcTemplate.query("INSERT INTO development(game, developer) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, g.getId(), d.getId()).stream().findFirst();
-		if(game.isPresent())
-			game.get().addDeveloper(d);
-		return game;
+		jdbcTemplate.update("INSERT INTO development(game, developer) VALUES(?, ?)", g.getId(), d.getId());
+		return findById(g.getId());
 	}
 
 	@Override
 	public Optional<Game> removeDeveloper(Game g, Developer d)
 	{
-		Optional<Game> game = jdbcTemplate.query("DELETE FROM development WHERE game = ? AND developer = ?", GAME_MAPPER, g.getId(), d.getId()).stream().findFirst();
-		if(game.isPresent())
-			game.get().removeDeveloper(d);
-		return game;
+		jdbcTemplate.update("DELETE FROM development WHERE game = ? AND developer = ?", g.getId(), d.getId());
+		return findById(g.getId());
 	}
 
 	@Override
@@ -262,19 +250,15 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addGenre(Game game, Genre genre)
 	{
-		Optional<Game> g = jdbcTemplate.query("INSERT INTO classifications(game, genre) VALUES(?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, game.getId(), genre.getId()).stream().findFirst();
-		if(g.isPresent())
-			g.get().addGenre(genre);
-		return g;
+		jdbcTemplate.update("INSERT INTO classifications(game, genre) VALUES(?, ?)", game.getId(), genre.getId());
+		return findById(game.getId());
 	}
 
 	@Override
 	public Optional<Game> removeGenre(Game game, Genre genre)
 	{
-		Optional<Game> g = jdbcTemplate.query("DELETE FROM classifications WHERE game = ? AND genre = ?", GAME_MAPPER, game.getId(), genre.getId()).stream().findFirst();
-		if(g.isPresent())
-			g.get().removeGenre(genre);
-		return g;
+		jdbcTemplate.update("DELETE FROM classifications WHERE game = ? AND genre = ?", game.getId(), genre.getId());
+		return findById(game.getId());
 	}
 
 	@Override
@@ -295,19 +279,15 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Optional<Game> addReleaseDate(Game game, Release r)
 	{
-		Optional<Game> g = jdbcTemplate.query("INSERT INTO releases(game, region, release_date) VALUES(?, ?, ?) ON CONFLICT DO NOTHING", GAME_MAPPER, game.getId(), r.getRegion().getId(), r.getDate()).stream().findFirst();
-		if(g.isPresent())
-			g.get().addReleaseDate(r);;
-		return g;
+		jdbcTemplate.update("INSERT INTO releases(game, region, release_date) VALUES(?, ?, ?)", game.getId(), r.getRegion().getId(), r.getDate());
+		return findById(game.getId());
 	}
 
 	@Override
 	public Optional<Game> removeReleaseDate(Game game, Release r)
 	{
-		Optional<Game> g = jdbcTemplate.query("DELETE FROM releases WHERE game = ? AND region = ?", GAME_MAPPER, game.getId(), r.getRegion().getId()).stream().findFirst();
-		if(g.isPresent())
-			g.get().removeReleaseDate(r);
-		return g;
+		jdbcTemplate.update("DELETE FROM releases WHERE game = ? AND region = ?", game.getId(), r.getRegion().getId());
+		return findById(game.getId());
 	}
 	
 	@Override

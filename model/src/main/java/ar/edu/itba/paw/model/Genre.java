@@ -55,4 +55,21 @@ public class Genre {
 	{
 		return games;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+	    return getName().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Genre)
+		{
+			Genre toCompare = (Genre) o;
+			return this.getName().equals(toCompare.getName());
+		}
+		return false;
+	}
 }
