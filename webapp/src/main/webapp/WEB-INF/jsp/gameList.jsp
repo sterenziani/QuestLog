@@ -7,8 +7,15 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
 </head>
 <body>
-    <c:forEach var="game" items="${games}">
-        <%@ include file="gameListItem.jsp"%>
-    </c:forEach>
+    <div class="game-list">
+        <div class="game-list-header">
+            <h2>List Name Placeholder</h2>
+        </div>
+        <div class="game-list-games">
+            <c:forEach var="game" items="${games}">
+                <%@ include file="gameListItem.jsp"%>
+            </c:forEach>
+        </div>
+    </div>
 </body>
 </html>
