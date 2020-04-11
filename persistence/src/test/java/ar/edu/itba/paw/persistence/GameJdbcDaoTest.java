@@ -502,4 +502,25 @@ public class GameJdbcDaoTest
 		Assert.assertFalse(maybeGame.get().getReleaseDates().contains(rel1));
 		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel2));
 	}
+	
+	@Test
+	public void	testSearchByTitle()
+	{
+		Game raym = addGame("Rayman Legends", GAME_COVER, GAME_DESC);
+		Game mario = addGame("Super Mario 3D World", GAME_COVER, GAME_DESC);
+		Game cup = addGame("Cuphead", GAME_COVER, GAME_DESC);
+		
+		List<Game> myList = new ArrayList<Game>();
+		myList.add(raym);
+		myList.add(mario);
+		
+		List<Game> gamesList1 = gameDao.searchByTitle("mA");
+		List<Game> gamesList2 = gameDao.searchByTitle("qwerty");
+		
+		Assert.assertFalse(gamesList1.isEmpty());
+		Assert.assertEquals(2, gamesList1.size());
+		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle());
+		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle());
+		Assert.assertTrue(gamesList2.isEmpty());
+	}
 }
