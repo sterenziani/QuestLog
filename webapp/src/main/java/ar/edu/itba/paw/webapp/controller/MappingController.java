@@ -92,8 +92,12 @@ public class MappingController
 	@RequestMapping("/")
 	public ModelAndView helloWorld(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
+		/* To be used for final version of the view
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("backlog", backlog);
+		*/
+		final ModelAndView mav = new ModelAndView("gameList");
+		mav.addObject("games", gs.getAllGames());
 		return mav;
 	}
 	
