@@ -14,7 +14,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="game-list-item">
     <div class="game-list-item-cover">
-        <img src="<c:url value="${game.cover}"/>" alt="${game.title}"/>
+        <a href="<c:url value="/games/${game.id}"/>"><img src="<c:url value="${game.cover}"/>" alt="${game.title}"/></a>
     </div>
     <div class="game-list-item-data">
         <h3>Title</h3>
