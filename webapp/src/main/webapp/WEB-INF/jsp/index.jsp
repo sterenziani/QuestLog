@@ -8,6 +8,9 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
 </head>
 <body>
-    <%@include file="mainGameLists.jsp"%>
+    <%@include file="navigation.jsp"%>
+    <div class="content">
+        <%@include file="mainGameLists.jsp"%>
+    </div>
 </body>
 </html>
