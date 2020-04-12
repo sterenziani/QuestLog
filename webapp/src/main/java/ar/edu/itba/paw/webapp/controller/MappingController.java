@@ -1,4 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
@@ -129,6 +133,13 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("game");
 		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
+		
+		if(gameNotInBacklog(id, backlog))
+			addToBacklog(id, response, backlog);
+		else
+		{
+			removeFromBacklog(id, response, backlog);
+		}
 		return mav;
 	}
 	
@@ -198,16 +209,44 @@ public class MappingController
 	
 	private boolean gameNotInBacklog(long id, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		return !(backlog.contains(id +" ") || backlog.contains(" " +id +" "));
+		return !(backlog.contains("-" +id +"-"));
 	}
 	
-	private void addGameToBacklog(long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	
+	private List<Game> getBacklog(@CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		List<Game> list = new ArrayList<Game>();
+		String[] ids = backlog.split("-");
+		for(String id : ids)
+		{
+			if(!id.isEmpty())
+			{
+				Optional<Game> g = gs.findById(Long.parseLong(id));
+				if(g.isPresent())
+					list.add(g.get());
+			}
+		}
+		return list;
+	}
+	
+	private void addToBacklog(long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		if(gameNotInBacklog(id, backlog))
 		{
-			Cookie cookie = new Cookie("backlog", backlog +id +" ");
+			Cookie cookie = new Cookie("backlog", backlog +"-" +id +"-");
 			cookie.setPath("/");
 			response.addCookie(cookie);	
+		}
+	}
+	
+	private void removeFromBacklog(long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue=" ") String backlog)
+	{
+		if(!gameNotInBacklog(id, backlog))
+		{
+			String newBacklog = backlog.replaceAll("-"+id+"-", "");
+			Cookie cookie = new Cookie("backlog", newBacklog);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 	}
 }
