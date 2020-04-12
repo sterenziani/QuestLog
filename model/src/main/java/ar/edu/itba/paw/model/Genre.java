@@ -72,4 +72,10 @@ public class Genre {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 }

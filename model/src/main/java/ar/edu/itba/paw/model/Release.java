@@ -41,4 +41,10 @@ public class Release
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return region.getShortName() +": " +date;
+	}
 }

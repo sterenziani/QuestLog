@@ -85,4 +85,10 @@ public class Platform
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return shortName;
+	}
 }

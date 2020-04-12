@@ -155,4 +155,10 @@ public class Game
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return title;
+	}
 }
