@@ -131,7 +131,7 @@ public class MappingController
 	@RequestMapping("/games/{id}")
 	public ModelAndView gameProfile(@PathVariable("id") long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		final ModelAndView mav = new ModelAndView("game");
+		final ModelAndView mav = new ModelAndView("gameDetails");
 		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
 		
 		if(gameNotInBacklog(id, backlog))
