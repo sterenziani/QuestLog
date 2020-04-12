@@ -1,38 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
+<head>
+    <title>${game.title}</title>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetailsInfoItem.css"/>">
+</head>
 <body>
-<h2>The game is ${game.title}!</h2>
-<h5>Its ID is ${game.id} and came out on:</h5>
-<c:forEach items="${game.releaseDates}" var="release">   
-        <li>${release.region.name}: ${release.date}</li>
-</c:forEach>
-<br>
-<c:forEach items="${game.genres}" var="genre">   
-        ---      ${genre.name}
-</c:forEach>
-<br>
-<h5>This game is available for:</h5>
-<c:forEach items="${game.platforms}" var="platform">
-    <li>      
-        [${platform.id}] ${platform.name}
-    </li>
-    <br>
-</c:forEach>
-<h5>This game was developed by:</h5>
-<c:forEach items="${game.developers}" var="developer">
-    <li>      
-        [${developer.id}] ${developer.name}
-    </li>
-    <br>
-</c:forEach>
-<h5>This game was published by:</h5>
-<c:forEach items="${game.publishers}" var="publisher">
-    <li>      
-        [${publisher.id}] ${publisher.name}
-    </li>
-    <br>
-</c:forEach>
-<br><img height="500" src=${game.cover}></img><br>
-${game.description}
+    <%@include file="gameDetails.jsp"%>
 </body>
 </html>
