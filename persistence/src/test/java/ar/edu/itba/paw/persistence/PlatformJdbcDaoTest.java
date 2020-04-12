@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.persistence;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.junit.Assert;
@@ -37,14 +35,14 @@ public class PlatformJdbcDaoTest
 	@Autowired
 	private PlatformJdbcDao platformDao;
 	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert jdbcInsert;
+	private SimpleJdbcInsert platformInsert;
 	
 	@Before
 	public void	setUp()
 	{
 		platformDao = new PlatformJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(PLATFORM_TABLE).usingGeneratedKeyColumns("platform");
+		platformInsert = new SimpleJdbcInsert(ds).withTableName(PLATFORM_TABLE).usingGeneratedKeyColumns("platform");
 	}
 	
 	@Test
@@ -71,13 +69,8 @@ public class PlatformJdbcDaoTest
 	public void	testFindPlatformByIdExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", PLATFORM_NAME);
-		args.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args.put("platform_logo", PLATFORM_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Platform> maybePlatform = platformDao.findById(key.longValue());
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Optional<Platform> maybePlatform = platformDao.findById(p.getId());
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
@@ -96,12 +89,7 @@ public class PlatformJdbcDaoTest
 	public void	testFindPlatformByNameExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", PLATFORM_NAME);
-		args.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args.put("platform_logo", PLATFORM_LOGO);
-		jdbcInsert.execute(args);
-		
+		TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Optional<Platform> maybePlatform = platformDao.findByName(PLATFORM_NAME);
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
@@ -113,13 +101,8 @@ public class PlatformJdbcDaoTest
 	public void	testChangePlatformName()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", PLATFORM_NAME);
-		args.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args.put("platform_logo", PLATFORM_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Platform> maybePlatform = platformDao.changeName(key.longValue(), "La Plei Cuatro");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Optional<Platform> maybePlatform = platformDao.changeName(p.getId(), "La Plei Cuatro");
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals("La Plei Cuatro", maybePlatform.get().getName());
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
@@ -130,13 +113,8 @@ public class PlatformJdbcDaoTest
 	public void	testChangePlatformShortName()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", PLATFORM_NAME);
-		args.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args.put("platform_logo", PLATFORM_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Platform> maybePlatform = platformDao.changeShortName(key.longValue(), "Play4");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Optional<Platform> maybePlatform = platformDao.changeShortName(p.getId(), "Play4");
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
 		Assert.assertEquals("Play4", maybePlatform.get().getShortName());
@@ -147,13 +125,8 @@ public class PlatformJdbcDaoTest
 	public void	testChangeLogo()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", PLATFORM_NAME);
-		args.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args.put("platform_logo", PLATFORM_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		
-		Optional<Platform> maybePlatform = platformDao.changeLogo(key.longValue(), "http://ps4.com/logo.png");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Optional<Platform> maybePlatform = platformDao.changeLogo(p.getId(), "http://ps4.com/logo.png");
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
@@ -164,19 +137,8 @@ public class PlatformJdbcDaoTest
 	public void	testGetAllPlatforms()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		final Map<String, Object> args1 = new HashMap<>();
-		args1.put("platform_name", PLATFORM_NAME);
-		args1.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args1.put("platform_logo", PLATFORM_LOGO);
-		Number key1 = jdbcInsert.executeAndReturnKey(args1);
-		final Map<String, Object> args2 = new HashMap<>();
-		args2.put("platform_name", "Nintendo Switch");
-		args2.put("platform_name_short", "NS");
-		args2.put("platform_logo", "http://nintendo.com/switch.png");
-		Number key2 = jdbcInsert.executeAndReturnKey(args2);
-		
-		Platform ps4 = new Platform(key1.longValue(), PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
-		Platform ns = new Platform(key2.longValue(), "Nintendo Switch", "NS", "http://nintendo.com/switch.png");
+		Platform ps4 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Platform ns = TestMethods.addPlatform("Nintendo Switch", "NS", "http://nintendo.com/switch.png", platformInsert);
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ps4);
 		myList.add(ns);
@@ -193,51 +155,19 @@ public class PlatformJdbcDaoTest
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", PLATFORM_NAME);
-		args.put("platform_name_short", PLATFORM_SHORT_NAME);
-		args.put("platform_logo", PLATFORM_LOGO);
-		Number key = jdbcInsert.executeAndReturnKey(args);
-		Platform p = new Platform(key.longValue(), PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
-		SimpleJdbcInsert jdbcInsertGames = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert jdbcInsertVersions = new SimpleJdbcInsert(ds).withTableName("game_versions");
-		
-		// Insert Mario
-		final Map<String, Object> gameArgs = new HashMap<>();
-		gameArgs.put("title", "Mario");
-		gameArgs.put("cover", "http://nintendo.com/mario.png");
-		gameArgs.put("description", "A game with Mario");
-		Number gameKey = jdbcInsertGames.executeAndReturnKey(gameArgs);
-		Game g1 = new Game(gameKey.longValue(), "Mario", "http://nintendo.com/mario.png", "A game with Mario");
-		// Say Mario is on the platform
-		final Map<String, Object> versionArgs = new HashMap<>();
-		versionArgs.put("game", gameKey.longValue());
-		versionArgs.put("platform", key.longValue());
-		jdbcInsertVersions.execute(versionArgs);
-		
-		final Map<String, Object> gameArgs2 = new HashMap<>();
-		gameArgs2.put("title", "Zelda");
-		gameArgs2.put("cover", "http://nintendo.com/zelda.png");
-		gameArgs2.put("description", "A game with Link");
-		Number gameKey2 = jdbcInsertGames.executeAndReturnKey(gameArgs2);
-		Game g2 = new Game(gameKey2.longValue(), "Zelda", "http://nintendo.com/zelda.png", "A game with Link");
-		final Map<String, Object> versionArgs2 = new HashMap<>();
-		versionArgs2.put("game", gameKey2.longValue());
-		versionArgs2.put("platform", key.longValue());
-		jdbcInsertVersions.execute(versionArgs2);
-		
-		final Map<String, Object> gameArgs3 = new HashMap<>();
-		gameArgs3.put("title", "Sonic");
-		gameArgs3.put("cover", "http://sega.com/sonic.png");
-		gameArgs3.put("description", "A game with Sonic");
-		jdbcInsertGames.execute(gameArgs3);
-		// Let's say this one is not on this platform
+		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
+		SimpleJdbcInsert versionInsert = new SimpleJdbcInsert(ds).withTableName("game_versions");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
+		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
+		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
+		TestMethods.connectPlatform(g1, p, versionInsert);
+		TestMethods.connectPlatform(g2, p, versionInsert);
 		
 		List<Game> gamesList = platformDao.getAllGames(p);
 		List<Game> myList = new ArrayList<Game>();
 		myList.add(g1);
 		myList.add(g2);
-		
 		Assert.assertNotNull(gamesList);
 		Assert.assertEquals(myList.size(), gamesList.size());
 		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());
