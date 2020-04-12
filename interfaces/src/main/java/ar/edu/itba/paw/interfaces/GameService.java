@@ -197,4 +197,16 @@ public interface GameService
 	 * @return 	The list of matching games.
 	 */
 	List<Game> searchByTitleSimplified(String search);
+	
+	/**
+	 * Get a list of upcoming games.
+	 * @return The list of upcoming games.
+	 */
+	List<Game> getUpcomingGames();
+
+	/**
+	 * Get a list of upcoming games without the extra information.
+	 * @return The list of upcoming games.
+	 */
+	List<Game> getUpcomingGamesSimplified();
 }

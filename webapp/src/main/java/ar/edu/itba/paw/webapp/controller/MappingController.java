@@ -102,6 +102,8 @@ public class MappingController
 		*/
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("games", gs.getAllGamesSimplified());
+		mav.addObject("backlogGames", getBacklog(backlog));
+		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified());
 		return mav;
 	}
 	
