@@ -7,6 +7,9 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetailsInfoItem.css"/>">
 </head>
 <body>
-    <%@include file="gameDetails.jsp"%>
+    <%@ include file="navigation.jsp"%>
+    <div class="content">
+        <%@include file="gameDetails.jsp"%>
+    </div>
 </body>
 </html>
