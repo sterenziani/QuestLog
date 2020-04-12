@@ -1,0 +1,7 @@
+.game-list {
+    margin: 20px;
+}
+
+.main-game-lists-backlog .game-list {
+    background-color: lightgray;
+}
