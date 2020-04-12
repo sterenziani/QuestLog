@@ -1,0 +1,12 @@
+.game-details-info-item ul {
+    list-style-type: none;
+}
+.game-details-info-item {
+    display: flex;
+    padding: 5px;
+}
+
+.game-details-info-item-spacing {
+    display: inline-block;
+    margin-right: 5px;
+}

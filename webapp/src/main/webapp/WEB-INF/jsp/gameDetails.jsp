@@ -10,11 +10,11 @@
 <body>
     <div class="game-details">
         <div class="game-details-cover">
-            <img src="<c:url value="${game.cover}"/>" alt="${game.title}">
+            <img src="<c:url value="${game.cover}"/>" alt="<c:out value="${game.title}"/>">
         </div>
         <div class="game-details-content">
             <div class="game-details-description">
-                <p>${game.description}</p>
+                <p><c:out value="${game.description}"/></p>
             </div>
             <div class="game-details-info">
                 <dl>
