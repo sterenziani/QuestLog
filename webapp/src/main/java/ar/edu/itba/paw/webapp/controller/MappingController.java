@@ -96,7 +96,7 @@ public class MappingController
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("backlog", backlog);
 		*/
-		final ModelAndView mav = new ModelAndView("gameList");
+		final ModelAndView mav = new ModelAndView("mainGameLists");
 		mav.addObject("games", gs.getAllGames());
 		return mav;
 	}
