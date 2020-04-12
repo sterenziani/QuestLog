@@ -1,0 +1,12 @@
+.game-details {
+    background-color: lavender;
+}
+
+.game-details {
+    display: flex;
+}
+
+.game-details-cover img{
+    width:  300px;
+    height: 400px;
+}

@@ -4,6 +4,7 @@
 <head>
     <title>${game.title}</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
 </head>
 <body>
     <div class="game-details">
