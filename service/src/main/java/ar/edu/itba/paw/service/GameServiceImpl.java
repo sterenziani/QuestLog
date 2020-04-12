@@ -157,13 +157,27 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override 
-	public List<Game> getAllGamesSimplified(){
+	public List<Game> getAllGamesSimplified()
+	{
 		return gameDao.getAllGamesSimplified();
 	}
 	
 	@Override 
-	public List<Game> searchByTitleSimplified(String search){
+	public List<Game> searchByTitleSimplified(String search)
+	{
 		return gameDao.searchByTitleSimplified(search);
+	}
+
+	@Override
+	public List<Game> getUpcomingGames()
+	{
+		return gameDao.getUpcomingGames();
+	}
+
+	@Override
+	public List<Game> getUpcomingGamesSimplified()
+	{
+		return gameDao.getUpcomingGamesSimplified();
 	}
 
 }
