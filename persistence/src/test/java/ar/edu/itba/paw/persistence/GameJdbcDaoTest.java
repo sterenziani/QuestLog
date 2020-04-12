@@ -414,7 +414,7 @@ public class GameJdbcDaoTest
 	{ 
 		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
 		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
-		Game cup = TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
+		TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
 		 
 		List<Game> myList = new ArrayList<Game>(); 
 		myList.add(raym); 
@@ -429,4 +429,43 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
 		Assert.assertTrue(gamesList2.isEmpty()); 
 	}
+	
+	@Test 
+	public void	testSearchByTitleSimplified() 
+	{ 
+		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
+		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
+		TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
+		 
+		List<Game> myList = new ArrayList<Game>(); 
+		myList.add(raym); 
+		myList.add(mario); 
+		 
+		List<Game> gamesList1 = gameDao.searchByTitleSimplified("mA"); 
+		List<Game> gamesList2 = gameDao.searchByTitleSimplified("qwerty"); 
+		 
+		Assert.assertFalse(gamesList1.isEmpty()); 
+		Assert.assertEquals(2, gamesList1.size()); 
+		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle()); 
+		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
+		Assert.assertTrue(gamesList2.isEmpty()); 
+	}
+	
+	@Test
+	public void	testGetAllGamesSimplified()
+	{
+		Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, gameInsert);
+		
+		List<Game> gamesList = gameDao.getAllGamesSimplified();
+		List<Game> myList = new ArrayList<Game>();
+		myList.add(example);
+		myList.add(botw);
+		
+		Assert.assertFalse(gamesList.isEmpty());
+		Assert.assertEquals(2, gamesList.size());
+		Assert.assertEquals(gamesList.get(0).getTitle(), myList.get(0).getTitle());
+		Assert.assertEquals(gamesList.get(1).getTitle(), myList.get(1).getTitle());
+	}
+	
 }

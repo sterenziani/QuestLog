@@ -184,4 +184,17 @@ public interface GameService
 	 * @return 	The list of matching games.
 	 */
 	List<Game> searchByTitle(String search);
+	
+	/**
+	 * Get a list of all available games without the extra information.
+	 * @return 	The list of all games.
+	 */
+	List<Game> getAllGamesSimplified();
+	
+	/**
+	 * Get a list of all games with names that contain the searched term without the extra information.
+	 * @param search The search term.
+	 * @return 	The list of matching games.
+	 */
+	List<Game> searchByTitleSimplified(String search);
 }

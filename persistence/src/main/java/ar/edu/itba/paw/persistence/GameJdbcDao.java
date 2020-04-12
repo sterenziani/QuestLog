@@ -159,7 +159,7 @@ public class GameJdbcDao implements GameDao
 		}
 		return games;
 	}
-
+	
 	@Override
 	public Optional<Game> addPlatform(Game g, Platform p)
 	{
@@ -331,6 +331,16 @@ public class GameJdbcDao implements GameDao
 				g.addReleaseDate(r);
 		}
 		return searchGames;
-		
 	}
+	
+	@Override 
+	public List<Game> getAllGamesSimplified(){
+		return jdbcTemplate.query("SELECT * FROM games", GAME_MAPPER);
+	}
+	
+	@Override
+	public List<Game> searchByTitleSimplified(String search){
+		return jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
+	}
+
 }

@@ -6,7 +6,7 @@
 <nav id="navigation">
     <a href="<c:url value="/"/>">
         <div class="navigation-logo">
-            <h1>QuesLog</h1>
+            <h1>QuestLog</h1>
         </div>
     </a>
 </nav>

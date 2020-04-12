@@ -155,4 +155,15 @@ public class GameServiceImpl implements GameService
 	{
 		return gameDao.searchByTitle(search);
 	}
+	
+	@Override 
+	public List<Game> getAllGamesSimplified(){
+		return gameDao.getAllGamesSimplified();
+	}
+	
+	@Override 
+	public List<Game> searchByTitleSimplified(String search){
+		return gameDao.searchByTitleSimplified(search);
+	}
+
 }
