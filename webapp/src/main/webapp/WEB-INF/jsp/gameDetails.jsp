@@ -9,7 +9,7 @@
 <body>
     <div class="game-details">
         <div class="game-details-cover">
-            <img src="<c:url value="${game.cover}"/>">
+            <img src="<c:url value="${game.cover}"/>" alt="${game.title}">
         </div>
         <div class="game-details-content">
             <div class="game-details-description">
@@ -18,54 +18,29 @@
             <div class="game-details-info">
                 <dl>
                     <div class="game-details-release-dates">
-                        <dt><strong>Release Dates</strong></dt>
-                        <dd>
-                            <ul>
-                               <c:forEach var="releaseDate" items="${game.releaseDates}">
-                                   <li>${releaseDate}</li>
-                               </c:forEach>
-                            </ul>
-                        </dd>
+                        <c:set var="title" value="Release Dates"/>
+                        <c:set var="items" value="${game.releaseDates}"/>
+                        <%@include file="gameDetailsInfoItem.jsp"%>
                     </div>
                     <div class="game-details-genres">
-                        <dt><strong>Genres</strong></dt>
-                        <dd>
-                            <ul>
-                                <c:forEach var="genre" items="${game.genres}">
-                                    <li>${genre}</li>
-                                </c:forEach>
-                            </ul>
-                        </dd>
+                        <c:set var="title" value="Genres"/>
+                        <c:set var="items" value="${game.genres}"/>
+                        <%@include file="gameDetailsInfoItem.jsp"%>
                     </div>
                     <div class="game-details-platforms">
-                        <dt><strong>Platforms</strong></dt>
-                        <dd>
-                            <ul>
-                                <c:forEach var="platform" items="${game.platforms}">
-                                    <li>${platform}</li>
-                                </c:forEach>
-                            </ul>
-                        </dd>
+                        <c:set var="title" value="Platforms"/>
+                        <c:set var="items" value="${game.platforms}"/>
+                        <%@include file="gameDetailsInfoItem.jsp"%>
                     </div>
                     <div class="game-details-developers">
-                        <dt><strong>Developers</strong></dt>
-                        <dd>
-                            <ul>
-                                <c:forEach var="developer" items="${game.developers}">
-                                    <li>${developer}</li>
-                                </c:forEach>
-                            </ul>
-                        </dd>
+                        <c:set var="title" value="Developers"/>
+                        <c:set var="items" value="${game.developers}"/>
+                        <%@include file="gameDetailsInfoItem.jsp"%>
                     </div>
                     <div class="game-details-publishers">
-                        <dt><strong>Publishers</strong></dt>
-                        <dd>
-                            <ul>
-                                <c:forEach var="publisher" items="${game.publishers}">
-                                    <li>${publisher}</li>
-                                </c:forEach>
-                            </ul>
-                        </dd>
+                        <c:set var="title" value="Publishers"/>
+                        <c:set var="items" value="${game.publishers}"/>
+                        <%@include file="gameDetailsInfoItem.jsp"%>
                     </div>
                 </dl>
             </div>
