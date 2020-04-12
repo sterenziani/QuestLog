@@ -2,6 +2,11 @@
 <html>
 <head>
     <title>QuestLog</title>
+    <div class="search-container">
+    <form action="/webapp/search">
+      <input type="text" placeholder="Search..." name="search" id="search">
+    </form>
+    </div>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/mainGameLists.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">

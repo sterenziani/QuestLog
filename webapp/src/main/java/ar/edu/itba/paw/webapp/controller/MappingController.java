@@ -105,6 +105,14 @@ public class MappingController
 		return mav;
 	}
 	
+	@RequestMapping("/search")
+	public ModelAndView search(@RequestParam String search)
+	{
+		final ModelAndView mav = new ModelAndView("index");
+		mav.addObject("games", gs.searchByTitleSimplified(search));
+		return mav;
+	}
+	
 	@RequestMapping("/{id}")
 	public ModelAndView userProfile(@PathVariable("id") long id)
 	{
