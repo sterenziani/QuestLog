@@ -33,4 +33,12 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.css</url-pattern>
 	</servlet-mapping>
+	<error-page> 
+	  	<error-code>404</error-code> 
+	  	<location>/error404</location>
+	</error-page>
+		<error-page> 
+	  	<error-code>400</error-code> 
+	  	<location>/error400</location>
+	</error-page>
 </web-app>
