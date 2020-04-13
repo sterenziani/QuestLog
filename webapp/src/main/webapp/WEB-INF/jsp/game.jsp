@@ -4,6 +4,7 @@
     <title>${game.title}</title>
     <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>" >
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/game.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
@@ -12,6 +13,9 @@
 <body>
     <%@ include file="navigation.jsp"%>
     <div class="content">
+        <div class="game-title">
+            <h2>${game.title}</h2>
+        </div>
         <%@include file="gameDetails.jsp"%>
     </div>
 </body>
