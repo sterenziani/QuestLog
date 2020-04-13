@@ -11,11 +11,6 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
 </head>
 <body class="background-primary">
-    <%--<div class="search-container">
-        <form action="<c:url value="/search"/> ">
-            <input type="text" placeholder="Search..." name="search" id="search">
-        </form>
-    </div>--%>
     <%@include file="navigation.jsp"%>
     <div class="content">
         <%@include file="mainGameLists.jsp"%>

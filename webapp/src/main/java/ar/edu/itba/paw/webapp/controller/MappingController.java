@@ -69,12 +69,7 @@ public class MappingController
 	@RequestMapping("/")
 	public ModelAndView helloWorld(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		/* To be used for final version of the view
 		final ModelAndView mav = new ModelAndView("index");
-		mav.addObject("backlog", backlog);
-		*/
-		final ModelAndView mav = new ModelAndView("index");
-		mav.addObject("games", gs.getAllGamesSimplified());
 		mav.addObject("backlogGames", getBacklog(backlog));
 		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified());
 		return mav;
@@ -84,6 +79,7 @@ public class MappingController
 	public ModelAndView search(@RequestParam String search)
 	{
 		final ModelAndView mav = new ModelAndView("games");
+		mav.addObject("searchTerm", search);
 		mav.addObject("games", gs.searchByTitleSimplified(search));
 		return mav;
 	}

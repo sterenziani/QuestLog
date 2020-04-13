@@ -14,6 +14,7 @@
 <%@include file="navigation.jsp"%>
 <div class="content">
     <div class="game-search-results">
+        <c:set var="listName">Showing Results for... '<c:out value="${searchTerm}"/>'</c:set>
         <%@ include file="gameList.jsp"%>
     </div>
 </div>

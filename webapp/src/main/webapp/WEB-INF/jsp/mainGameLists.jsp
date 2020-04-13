@@ -16,12 +16,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="main-game-lists">
     <div class="main-game-lists-backlog">
+        <c:set var="listName" value="My Backlog"/>
+        <c:set var="games" value="${backlogGames}"/>
         <%@ include file="gameList.jsp"%>
     </div>
+
+    <%-- Recommended games will be available later on
+
     <div class="main-game-lists-recommended">
         <%@ include file="gameList.jsp"%>
     </div>
-    <div class="main-game-lists-upcomming">
+    --%>
+
+    <div class="main-game-lists-upcoming">
+        <c:set var="listName" value="Upcoming"/>
+        <c:set var="games" value="${upcomingGames}"/>
         <%@ include file="gameList.jsp"%>
     </div>
 </div>

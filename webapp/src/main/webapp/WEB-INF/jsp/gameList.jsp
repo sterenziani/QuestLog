@@ -15,9 +15,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="game-list">
     <div class="game-list-header">
-        <h2>List Name Placeholder</h2>
+        <h2>${listName}</h2>
     </div>
     <div class="game-list-games">
+        <c:if test="${empty games}">
+            <p>No games here</p>
+        </c:if>
         <c:forEach var="game" items="${games}">
             <%@ include file="gameListItem.jsp"%>
         </c:forEach>
