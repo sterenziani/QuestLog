@@ -5,15 +5,12 @@ import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.DeveloperService;
 import ar.edu.itba.paw.interfaces.GameService;
@@ -50,47 +47,23 @@ public class MappingController
 	
 	@Autowired
 	private PublisherService pubs;
-	
-	@ExceptionHandler(UserNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NotSuchUser()
+
+	// This doesn't throw exception. TO DO: Find a way to put it in ErrorController
+	@RequestMapping(value="/error404", method = RequestMethod.GET)
+	public ModelAndView error_404()
 	{
-		return new ModelAndView("404");
+		ModelAndView m = new ModelAndView("error");
+		m.addObject("msg", "Error 404");
+		return m;
 	}
 	
-	@ExceptionHandler(GameNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NotSuchGame()
+	// This doesn't throw exception. TO DO: Find a way to put it in ErrorController
+	@RequestMapping(value="/error400", method = RequestMethod.GET)
+	public ModelAndView error_400()
 	{
-		return new ModelAndView("404");
-	}
-	
-	@ExceptionHandler(PlatformNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NotSuchPlatform()
-	{
-		return new ModelAndView("404");
-	}
-	
-	@ExceptionHandler(DeveloperNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NotSuchDeveloper()
-	{
-		return new ModelAndView("404");
-	}
-	
-	@ExceptionHandler(GenreNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NotSuchGenre()
-	{
-		return new ModelAndView("404");
-	}
-	
-	@ExceptionHandler(PublisherNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NotSuchPublisher()
-	{
-		return new ModelAndView("404");
+		ModelAndView m = new ModelAndView("error");
+		m.addObject("msg", "Error 400");
+		return m;
 	}
 	
 	@RequestMapping("/")
@@ -134,7 +107,7 @@ public class MappingController
 	public ModelAndView gamesList()
 	{
 		final ModelAndView mav = new ModelAndView("gamesList");
-		mav.addObject("games", gs.getAllGames());
+		mav.addObject("games", gs.getAllGamesSimplified());
 		return mav;
 	}
 	
