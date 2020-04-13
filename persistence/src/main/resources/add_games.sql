@@ -1685,8 +1685,6 @@ INSERT INTO games(title, cover, description) VALUES('Shin Megami Tensei IV', 'ht
 INSERT INTO releases(game, region, release_date) SELECT game, region, '2013-05-23' FROM (SELECT game FROM games WHERE title LIKE 'Shin Megami Tensei IV') AS a, (SELECT region FROM regions WHERE region_name LIKE 'Worldwide') AS b ON CONFLICT DO NOTHING;
 INSERT INTO publishers(publisher_name, publisher_logo) VALUES('Atlus', 'https://media.rawg.io/media/games/676/676482d81d0eccc767df49a43a1189f9.jpg') ON CONFLICT DO NOTHING;
 INSERT INTO publishing(game, publisher) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Shin Megami Tensei IV') AS a, (SELECT publisher FROM publishers WHERE publisher_name LIKE 'Atlus') AS b ON CONFLICT DO NOTHING;
-INSERT INTO publishers(publisher_name, publisher_logo) VALUES('Inc.)', 'https://media.rawg.io/media/screenshots/a16/a16e388f551bbf89052017986b6d44b2.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO publishing(game, publisher) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Shin Megami Tensei IV') AS a, (SELECT publisher FROM publishers WHERE publisher_name LIKE 'Inc.)') AS b ON CONFLICT DO NOTHING;
 INSERT INTO developers(developer_name, developer_logo) VALUES('Atlus', 'https://media.rawg.io/media/games/980/980086d012c5a27cb44010d4204578a1.jpg') ON CONFLICT DO NOTHING;
 INSERT INTO development(game, developer) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Shin Megami Tensei IV') AS a, (SELECT developer FROM developers WHERE developer_name LIKE 'Atlus') AS b ON CONFLICT DO NOTHING;
 INSERT INTO game_versions(game, platform) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Shin Megami Tensei IV') AS a, (SELECT platform FROM platforms WHERE platform_name LIKE 'Nintendo 3DS') AS b ON CONFLICT DO NOTHING;
