@@ -18,3 +18,21 @@
 .game-list-item-data {
     padding: 20px;
 }
+
+.game-list-item-action button {
+    width: 100%;
+    padding: 20px;
+    font-size: 1em;
+}
+
+.game-list-item a {
+    color: white;
+}
+
+.game-list-item:hover {
+    background-color: white;
+}
+
+.game-list-item:hover a {
+    color: black;
+}
