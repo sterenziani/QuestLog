@@ -13,8 +13,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="navigation-search-bar">
-    <input class="navigation-search-text" type="text" name="search" placeholder="Search for a game...">
-    <a class="navigation-search-button" href="#">
+    <form action="<c:url value="/search"/>">
+        <div class="navigation-search-bar-content">
+            <div class="navigation-search-bar-input">
+                <input class="navigation-search-text" type="text" name="search" placeholder="Search for a game...">
+            </div>
+            <%-- <a class="navigation-search-button" href="#">
 
-    </a>
+            </a>--%>
+            <div class="navigation-search-bar-button">
+                <input type="submit" value="Search"/>
+            </div>
+        </div>
+    </form>
 </div>
