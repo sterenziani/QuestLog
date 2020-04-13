@@ -4,7 +4,8 @@
 }
 
 .game-backlog-submit {
-    width: 100%;
+    width: 300px;
     padding: 20px;
     font-size: 1em;
+    margin-left: 20px;
 }
