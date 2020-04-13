@@ -132,13 +132,14 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("game");
 		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
-		
+		/*
 		if(gameNotInBacklog(id, backlog))
 			addToBacklog(id, response, backlog);
 		else
 		{
 			removeFromBacklog(id, response, backlog);
 		}
+		*/
 		return mav;
 	}
 	
@@ -234,6 +235,7 @@ public class MappingController
 		{
 			Cookie cookie = new Cookie("backlog", backlog +"-" +id +"-");
 			cookie.setPath("/");
+			cookie.setMaxAge(600000);
 			response.addCookie(cookie);	
 		}
 	}
@@ -245,6 +247,7 @@ public class MappingController
 			String newBacklog = backlog.replaceAll("-"+id+"-", "");
 			Cookie cookie = new Cookie("backlog", newBacklog);
 			cookie.setPath("/");
+			cookie.setMaxAge(600000);
 			response.addCookie(cookie);
 		}
 	}
