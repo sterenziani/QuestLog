@@ -2,3 +2,9 @@
     padding-left: 20px;
     padding-top: 20px;
 }
+
+.game-backlog-submit {
+    width: 100%;
+    padding: 20px;
+    font-size: 1em;
+}

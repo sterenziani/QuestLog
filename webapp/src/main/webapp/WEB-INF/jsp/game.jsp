@@ -17,6 +17,12 @@
             <h2>${game.title}</h2>
         </div>
         <%@include file="gameDetails.jsp"%>
+        <div class="game-backlog">
+            <form method="post">
+                <input type="hidden" name="id" value="${game.id}">
+                <input class="game-backlog-submit" type="submit" value="Add to Backlog"/>
+            </form>
+        </div>
     </div>
 </body>
 </html>

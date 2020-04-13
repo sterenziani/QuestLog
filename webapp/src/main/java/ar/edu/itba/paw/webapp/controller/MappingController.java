@@ -128,7 +128,7 @@ public class MappingController
 	}
 	
 	@RequestMapping("/games/{id}")
-	public ModelAndView gameProfile(@PathVariable("id") long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	public ModelAndView gameProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("game");
 		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
@@ -140,6 +140,21 @@ public class MappingController
 			removeFromBacklog(id, response, backlog);
 		}
 		*/
+		return mav;
+	}
+
+	@RequestMapping(value = "/games/{id}", method = RequestMethod.POST)
+	public ModelAndView addToBacklogAndShowGameProfile(@PathVariable("id") long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		final ModelAndView mav = new ModelAndView("game");
+		mav.addObject("game", gs.findById(id).orElseThrow(GameNotFoundException::new));
+
+		if(gameNotInBacklog(id, backlog))
+			addToBacklog(id, response, backlog);
+		else
+		{
+			removeFromBacklog(id, response, backlog);
+		}
 		return mav;
 	}
 	
