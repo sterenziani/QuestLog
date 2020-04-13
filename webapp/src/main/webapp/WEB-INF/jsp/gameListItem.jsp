@@ -16,7 +16,14 @@
     <div class="game-list-item-action">
         <form method="post">
             <input type="hidden" name="id" value="<c:out value="${game.id}"/>">
-            <input type="submit" value="Add to Backlog"/>
+            <c:choose>
+            	<c:when test="${game.inBacklog}">
+            		<input type="submit" value="Remove from Backlog"/>
+            	</c:when>
+            	<c:otherwise>
+            		<input type="submit" value="Add to Backlog"/>
+            	</c:otherwise>
+            </c:choose>
         </form>
     </div>
     <a href="<c:url value="/games/${game.id}"/>">

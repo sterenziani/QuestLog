@@ -209,4 +209,23 @@ public interface GameService
 	 * @return The list of upcoming games.
 	 */
 	List<Game> getUpcomingGamesSimplified();
+
+	
+	boolean gameInBacklog(String backlog, long gameId);
+
+	List<Game> getGamesInBacklog(String backlog);
+
+	String addToBacklog(String backlog, long gameId);
+
+	String removeFromBacklog(String backlog, long gameId);
+
+	List<Game> getAllGamesSimplified(String backlog);
+
+	List<Game> searchByTitleSimplified(String search, String backlog);
+
+	List<Game> getUpcomingGamesSimplified(String backlog);
+
+	Optional<Game> findById(long id, String backlog);
+
+	String toggleBacklog(String backlog, long gameId);
 }

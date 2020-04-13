@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,17 @@ public class GameServiceImpl implements GameService
 	public Optional<Game> findById(long id)
 	{
 		return gameDao.findById(id);
+	}
+	
+	@Override
+	public Optional<Game> findById(long id, String backlog)
+	{
+		Optional<Game> g = gameDao.findById(id);
+		if(g.isPresent())
+		{
+			g.get().setInBacklog(gameInBacklog(backlog, id));
+		}
+		return g;
 	}
 
 	@Override
@@ -163,9 +175,31 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override 
+	public List<Game> getAllGamesSimplified(String backlog)
+	{
+		List<Game> list = gameDao.getAllGamesSimplified();
+		for(Game g : list)
+		{
+			g.setInBacklog(gameInBacklog(backlog, g.getId()));
+		}
+		return list;
+	}
+	
+	@Override 
 	public List<Game> searchByTitleSimplified(String search)
 	{
 		return gameDao.searchByTitleSimplified(search);
+	}
+	
+	@Override 
+	public List<Game> searchByTitleSimplified(String search, String backlog)
+	{
+		List<Game> list = gameDao.searchByTitleSimplified(search);
+		for(Game g : list)
+		{
+			g.setInBacklog(gameInBacklog(backlog, g.getId()));
+		}
+		return list;
 	}
 
 	@Override
@@ -179,5 +213,68 @@ public class GameServiceImpl implements GameService
 	{
 		return gameDao.getUpcomingGamesSimplified();
 	}
-
+	
+	@Override
+	public List<Game> getUpcomingGamesSimplified(String backlog)
+	{
+		List<Game> list = gameDao.getUpcomingGamesSimplified();
+		for(Game g : list)
+		{
+			g.setInBacklog(gameInBacklog(backlog, g.getId()));
+		}
+		return list;
+	}
+	
+	@Override
+	public boolean gameInBacklog(String backlog, long gameId)
+	{
+		return backlog.contains("-" +gameId +"-");
+	}
+	
+	@Override
+	public List<Game> getGamesInBacklog(String backlog)
+	{
+		List<Game> list = new ArrayList<Game>();
+		String[] ids = backlog.split("-");
+		for(String id : ids)
+		{
+			if(!id.isEmpty())
+			{
+				Optional<Game> g = findById(Long.parseLong(id));
+				if(g.isPresent())
+				{
+					list.add(g.get());
+					g.get().setInBacklog(true);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public String addToBacklog(String backlog, long gameId)
+	{
+		if(!gameInBacklog(backlog, gameId))
+		{
+			findById(gameId).get().setInBacklog(true);
+			return backlog +"-" +gameId +"-";
+		}
+		return backlog;
+	}
+	
+	@Override
+	public String removeFromBacklog(String backlog, long gameId)
+	{
+		findById(gameId).get().setInBacklog(false);
+		return backlog.replaceAll("-"+gameId+"-", "");
+	}
+	
+	@Override
+	public String toggleBacklog(String backlog, long gameId)
+	{
+		if(gameInBacklog(backlog, gameId))
+			return removeFromBacklog(backlog, gameId);
+		else
+			return addToBacklog(backlog, gameId);
+	}
 }

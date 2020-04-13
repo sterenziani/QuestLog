@@ -13,6 +13,7 @@ public class Game
 	private Set<Publisher> publishers;
 	private Set<Genre> genres;
 	private Set<Release> releaseDates;
+	private boolean inBacklog;
 	
 	public Game(long game, String title, String cover, String description)
 	{
@@ -25,6 +26,7 @@ public class Game
 		this.publishers = new HashSet<Publisher>();
 		this.genres = new HashSet<Genre>();
 		this.releaseDates = new HashSet<Release>();
+		this.inBacklog = false;
 	}
 
 	public long getId()
@@ -134,6 +136,16 @@ public class Game
 	public Set<Release> getReleaseDates()
 	{
 		return releaseDates;
+	}
+	
+	public boolean getInBacklog()
+	{
+		return inBacklog;
+	}
+	
+	public void setInBacklog(boolean val)
+	{
+		inBacklog = val;
 	}
 	
 	@Override

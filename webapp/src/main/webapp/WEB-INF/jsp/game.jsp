@@ -20,7 +20,14 @@
         <div class="game-backlog">
             <form method="post">
                 <input type="hidden" name="id" value="${game.id}">
-                <input class="game-backlog-submit" type="submit" value="Add to Backlog"/>
+                <c:choose>
+	            	<c:when test="${game.inBacklog}">
+	            		<input class="game-backlog-submit" type="submit" value="Remove from Backlog"/>
+	            	</c:when>
+	            	<c:otherwise>
+	            		<input class="game-backlog-submit" type="submit" value="Add to Backlog"/>
+	            	</c:otherwise>
+            	</c:choose>
             </form>
         </div>
     </div>
