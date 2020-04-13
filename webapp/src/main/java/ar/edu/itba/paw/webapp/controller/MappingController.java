@@ -83,7 +83,7 @@ public class MappingController
 	@RequestMapping("/search")
 	public ModelAndView search(@RequestParam String search)
 	{
-		final ModelAndView mav = new ModelAndView("index");
+		final ModelAndView mav = new ModelAndView("games");
 		mav.addObject("games", gs.searchByTitleSimplified(search));
 		return mav;
 	}
