@@ -36,4 +36,8 @@
         align-items: center;
     }
 
+    .game-details-content {
+        width: 100%;
+    }
+
 }
