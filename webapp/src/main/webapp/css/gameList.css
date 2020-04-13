@@ -1,8 +1,18 @@
 .game-list {
     padding:          20px;
-    background-color: lavenderblush;
+    background-color: #F8F8F8;
 }
 
 .game-list-header {
     padding:          10px;
+}
+
+.game-list-games {
+    display:         flex;
+    flex-wrap:       wrap;
+    justify-content: center;
+}
+
+.game-list-games .game-list-item {
+    margin: 5px;
 }

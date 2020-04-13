@@ -17,6 +17,6 @@
         <a href="<c:url value="/games/${game.id}"/>"><img src="<c:url value="${game.cover}"/>" alt="${game.title}"/></a>
     </div>
     <div class="game-list-item-data">
-        <h3>Title</h3>
+        <h3><c:out value="${game.title}"/></h3>
     </div>
 </div>
