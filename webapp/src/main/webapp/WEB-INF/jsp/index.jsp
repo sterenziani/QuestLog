@@ -2,17 +2,19 @@
 <html>
 <head>
     <title>QuestLog</title>
-    <div class="search-container">
-    <form action="/webapp/search">
-      <input type="text" placeholder="Search..." name="search" id="search">
-    </form>
-    </div>
+
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/mainGameLists.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
 </head>
-<body>
+<body class="background-primary">
+    <%--<div class="search-container">
+        <form action="<c:url value="/search"/> ">
+            <input type="text" placeholder="Search..." name="search" id="search">
+        </form>
+    </div>--%>
     <%@include file="navigation.jsp"%>
     <div class="content">
         <%@include file="mainGameLists.jsp"%>
