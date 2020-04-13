@@ -74,6 +74,16 @@ public class MappingController
 		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified());
 		return mav;
 	}
+
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public ModelAndView addToBacklogAndShowIndex(@RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		addToBacklog(id, response, backlog);
+		final ModelAndView mav = new ModelAndView("index");
+		mav.addObject("backlogGames", getBacklog(backlog));
+		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified());
+		return mav;
+	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView search(@RequestParam String search)
