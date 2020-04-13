@@ -14,23 +14,21 @@ import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.PublisherService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Controller
 public class MappingController
 {
 	@Autowired
 	private GameService gs;
-	
+	/*
 	@Autowired
 	private UserService us;
-	
+	*/
 	@Autowired
 	private PlatformService ps;
 	
@@ -99,6 +97,7 @@ public class MappingController
 		return mav;
 	}
 	
+	/*
 	@RequestMapping("/{id}")
 	public ModelAndView userProfile(@PathVariable("id") long id)
 	{
@@ -107,7 +106,6 @@ public class MappingController
 		return mav;
 	}
 	
-	/*
 	@RequestMapping(value = "/create", method = { RequestMethod.POST })
 	public ModelAndView register(@RequestParam(value = "username", required = true) final String username) 
 	{
@@ -119,7 +117,7 @@ public class MappingController
 	@RequestMapping("/games")
 	public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		final ModelAndView mav = new ModelAndView("gamesList");
+		final ModelAndView mav = new ModelAndView("allGames");
 		mav.addObject("games", gs.getAllGamesSimplified(backlog));
 		return mav;
 	}
@@ -128,7 +126,7 @@ public class MappingController
 	public ModelAndView gamesList(@RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		backlog = toggleBacklog(id, response, backlog);
-		final ModelAndView mav = new ModelAndView("gamesList");
+		final ModelAndView mav = new ModelAndView("allGames");
 		mav.addObject("games", gs.getAllGamesSimplified(backlog));
 		return mav;
 	}

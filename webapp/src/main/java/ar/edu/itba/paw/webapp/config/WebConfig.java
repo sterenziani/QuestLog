@@ -20,9 +20,6 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 public class WebConfig
 {
-	@Value("classpath:schema.sql")
-	private Resource schemaSql;
-	
 	@Value("classpath:create_tables.sql")
 	private Resource createTablesSql;
 	
@@ -41,7 +38,6 @@ public class WebConfig
 	private DatabasePopulator databasePopulator()
 	{
 		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(schemaSql);
         dbp.addScript(createTablesSql);
         dbp.addScript(addGamesSql);
         return dbp;

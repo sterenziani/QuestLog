@@ -1,3 +1,6 @@
+drop schema public cascade;
+create schema public;
+
 CREATE TABLE IF NOT EXISTS developers(
 	developer SERIAL,
 	developer_name VARCHAR(75) NOT NULL UNIQUE,
@@ -43,16 +46,16 @@ CREATE TABLE IF NOT EXISTS regions(
 	PRIMARY KEY(region)
 );
 
---CREATE TABLE IF NOT EXISTS users(
---	user_id SERIAL,
---	username VARCHAR(25) UNIQUE NOT NULL,
---	password VARCHAR(50) NOT NULL,
---	email VARCHAR(100) UNIQUE NOT NULL,
---	profile_pic TEXT NOT NULL,
---	region INT NOT NULL,
---	PRIMARY KEY(user_id),
---	FOREIGN KEY(region) REFERENCES regions
---);
+CREATE TABLE IF NOT EXISTS users(
+	user_id SERIAL,
+	username VARCHAR(25) UNIQUE NOT NULL,
+	password VARCHAR(50) NOT NULL,
+	email VARCHAR(100) UNIQUE NOT NULL,
+	profile_pic TEXT NOT NULL,
+	region INT NOT NULL,
+	PRIMARY KEY(user_id),
+	FOREIGN KEY(region) REFERENCES regions
+);
 
 CREATE TABLE IF NOT EXISTS releases(
 	game INT NOT NULL,
