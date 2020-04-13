@@ -75,9 +75,19 @@ public class MappingController
 		return mav;
 	}
 	
-	@RequestMapping("/search")
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView search(@RequestParam String search)
 	{
+		final ModelAndView mav = new ModelAndView("games");
+		mav.addObject("searchTerm", search);
+		mav.addObject("games", gs.searchByTitleSimplified(search));
+		return mav;
+	}
+
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public ModelAndView addToBacklogAndContinueSearch(@RequestParam String search, @RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		addToBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("games");
 		mav.addObject("searchTerm", search);
 		mav.addObject("games", gs.searchByTitleSimplified(search));

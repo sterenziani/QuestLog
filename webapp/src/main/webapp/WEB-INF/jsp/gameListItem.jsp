@@ -14,7 +14,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="game-list-item">
     <div class="game-list-item-action">
-        <button>Add to Backlog</button>
+        <form method="post">
+            <input type="hidden" name="id" value="<c:out value="${game.id}"/>">
+            <input type="submit" value="Add to Backlog"/>
+        </form>
     </div>
     <a href="<c:url value="/games/${game.id}"/>">
         <div class="game-list-item-content">

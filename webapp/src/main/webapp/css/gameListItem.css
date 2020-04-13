@@ -19,7 +19,7 @@
     padding: 20px;
 }
 
-.game-list-item-action button {
+.game-list-item-action input {
     width: 100%;
     padding: 20px;
     font-size: 1em;
