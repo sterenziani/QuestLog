@@ -7,10 +7,6 @@
     flex-grow: 1;
 }
 
-.navigation-search input {
-    width: 100%;
-}
-
 .navigation-logo-container a {
     color: white;
     text-decoration: none;
