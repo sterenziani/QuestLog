@@ -39,7 +39,7 @@ public class WebConfig
 	{
 		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
         dbp.addScript(createTablesSql);
-        dbp.addScript(addGamesSql);
+        //dbp.addScript(addGamesSql);
         return dbp;
     }
 	
@@ -58,9 +58,16 @@ public class WebConfig
 	{
 		final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 		ds.setDriverClass(org.postgresql.Driver.class);
+		
+        ds.setUrl("jdbc:postgresql://localhost/paw-2020a-4");
+        ds.setUsername("paw-2020a-4");
+        ds.setPassword("z5xN1hSaw");
+        
+        /*
         ds.setUrl("jdbc:postgresql://localhost/paw");
         ds.setUsername("root");
         ds.setPassword("root");
+        */
         return ds;
     }
 }
