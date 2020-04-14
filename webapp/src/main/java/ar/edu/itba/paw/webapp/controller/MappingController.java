@@ -147,7 +147,7 @@ public class MappingController
 		mav.addObject("game", gs.findById(id, backlog).orElseThrow(GameNotFoundException::new));
 		return mav;
 	}
-	
+	/*
 	@RequestMapping("/platforms")
 	public ModelAndView platformsList()
 	{
@@ -211,6 +211,7 @@ public class MappingController
 		mav.addObject("genre", gens.findById(id).orElseThrow(GenreNotFoundException::new));
 		return mav;
 	}
+	*/
 	
 	private String toggleBacklog(long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue=" ") String backlog)
 	{
