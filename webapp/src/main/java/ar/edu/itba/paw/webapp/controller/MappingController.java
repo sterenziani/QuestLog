@@ -14,21 +14,18 @@ import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.PublisherService;
-import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
-import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
 
 @Controller
 public class MappingController
 {
 	@Autowired
 	private GameService gs;
-	/*
+
 	@Autowired
 	private UserService us;
-	*/
+	
 	@Autowired
 	private PlatformService ps;
 	
@@ -60,9 +57,10 @@ public class MappingController
 	}
 	
 	@RequestMapping("/")
-	public ModelAndView helloWorld(@CookieValue(value="backlog", defaultValue="") String backlog)
+	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("index");
+		mav.addObject("cookieBacklog", gs.getGamesInBacklog(backlog));
 		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog));
 		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified(backlog));
 		return mav;
@@ -97,23 +95,6 @@ public class MappingController
 		return mav;
 	}
 	
-	/*
-	@RequestMapping("/{id}")
-	public ModelAndView userProfile(@PathVariable("id") long id)
-	{
-		final ModelAndView mav = new ModelAndView("user");
-		mav.addObject("user", us.findById(id).orElseThrow(UserNotFoundException::new));
-		return mav;
-	}
-	
-	@RequestMapping(value = "/create", method = { RequestMethod.POST })
-	public ModelAndView register(@RequestParam(value = "username", required = true) final String username) 
-	{
-		final User user = us.register(username);
-		return new ModelAndView("redirect:/" + user.getId());
-	}
-	*/
-	
 	@RequestMapping("/games")
 	public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
@@ -147,6 +128,7 @@ public class MappingController
 		mav.addObject("game", gs.findById(id, backlog).orElseThrow(GameNotFoundException::new));
 		return mav;
 	}
+	
 	/*
 	@RequestMapping("/platforms")
 	public ModelAndView platformsList()
@@ -213,6 +195,14 @@ public class MappingController
 	}
 	*/
 	
+	public void clearAnonBacklog(HttpServletResponse response)
+	{
+		Cookie cookie = new Cookie("backlog", "");
+		cookie.setPath("/");
+		cookie.setMaxAge(600000);
+		response.addCookie(cookie);
+	}
+	
 	private String toggleBacklog(long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue=" ") String backlog)
 	{
 		String newBacklog = gs.toggleBacklog(backlog, gameId);
@@ -222,4 +212,16 @@ public class MappingController
 		response.addCookie(cookie);
 		return newBacklog;
 	}
+	
+	/*
+	@RequestMapping(value = "/transfer_backlog", method = RequestMethod.POST)
+	public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		User u = loggedUser();
+		if(u != null)
+			gs.addToUserBacklog(backlog, u);
+		clearAnonBacklog(response);		
+		return new ModelAndView("redirect:/");
+	}
+	*/
 }

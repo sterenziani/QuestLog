@@ -12,6 +12,7 @@ import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Release;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class GameServiceImpl implements GameService
@@ -260,6 +261,16 @@ public class GameServiceImpl implements GameService
 			return backlog +"-" +gameId +"-";
 		}
 		return backlog;
+	}
+	
+	@Override
+	public void addToUserBacklog(String backlog, User u)
+	{
+		List<Game> anonGames = getGamesInBacklog(backlog);
+		for(Game g : anonGames)
+		{
+			gameDao.addToBacklog(u, g);
+		}
 	}
 	
 	@Override

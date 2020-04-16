@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Release;
+import ar.edu.itba.paw.model.User;
 
 public interface GameDao
 {
@@ -208,4 +209,6 @@ public interface GameDao
 	 * @return The list of upcoming games.
 	 */
 	List<Game> getUpcomingGamesSimplified();
+
+	void addToBacklog(User u, Game g);
 }

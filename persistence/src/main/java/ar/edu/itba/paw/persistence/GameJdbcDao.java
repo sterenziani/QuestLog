@@ -16,6 +16,8 @@ import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Region;
 import ar.edu.itba.paw.model.Release;
+import ar.edu.itba.paw.model.User;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -378,4 +380,9 @@ public class GameJdbcDao implements GameDao
 		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);
 	}
 
+	@Override
+	public void addToBacklog(User u, Game g)
+	{
+		jdbcTemplate.update("INSERT INTO backlogs(user_id, game) VALUES(?, ?)", u.getId(), g.getId());
+	}
 }

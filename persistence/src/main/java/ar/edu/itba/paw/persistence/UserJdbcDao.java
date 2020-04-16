@@ -24,7 +24,7 @@ public class UserJdbcDao implements UserDao
 		@Override
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
-			return new User(rs.getInt("id"), rs.getString("username"));
+			return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"));
 		}
 	};
 	
@@ -32,13 +32,13 @@ public class UserJdbcDao implements UserDao
 	public UserJdbcDao(final DataSource ds)
 	{
 	    jdbcTemplate = new JdbcTemplate(ds);
-	    jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users").usingGeneratedKeyColumns("id");
+	    jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users").usingGeneratedKeyColumns("user_id");
 	}
 	
 	@Override
 	public Optional<User> findById(final long id)
 	{
-		return jdbcTemplate.query("SELECT * FROM users WHERE id = ?", USER_MAPPER, id).stream().findFirst();
+		return jdbcTemplate.query("SELECT * FROM users WHERE user_id = ?", USER_MAPPER, id).stream().findFirst();
 	}
 	
 	@Override
@@ -48,12 +48,12 @@ public class UserJdbcDao implements UserDao
 	}
 
 	@Override
-	public User create(String username)
+	public User create(String username, String password)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("username", username); 
-		// la key es el nombre de la columna
+		args.put("password", password);
 		final Number userId = jdbcInsert.executeAndReturnKey(args);
-		return new User(userId.longValue(), username);
+		return new User(userId.longValue(), username, password);
 	}
 }

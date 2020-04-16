@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Release;
+import ar.edu.itba.paw.model.User;
 
 public interface GameService
 {
@@ -228,4 +229,6 @@ public interface GameService
 	Optional<Game> findById(long id, String backlog);
 
 	String toggleBacklog(String backlog, long gameId);
+
+	void addToUserBacklog(String backlog, User u);
 }

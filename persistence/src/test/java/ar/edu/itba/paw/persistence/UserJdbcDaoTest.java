@@ -47,7 +47,7 @@ public class UserJdbcDaoTest
 		jdbcTemplate = new JdbcTemplate(ds);
 		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("id");
 	}
-	
+	/*
 	@Test
 	public void	testCreateUser()
 	{
@@ -57,7 +57,7 @@ public class UserJdbcDaoTest
         Assert.assertEquals(USERNAME, user.getUsername());
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
 	}
-	
+	*/
 	@Test
 	public void	testFindByIdDoesntExist()
 	{
