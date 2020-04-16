@@ -24,5 +24,5 @@ public interface UserService
 	 * @param username The name of the user.
 	 * @return The created user.
 	 */
-	User register(String username);
+	User register(String username, String password);
 }

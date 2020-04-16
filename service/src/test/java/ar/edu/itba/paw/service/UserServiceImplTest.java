@@ -21,7 +21,7 @@ public class UserServiceImplTest
 	
 	@Mock
 	private UserDao mockDao;
-	
+	/*
 	@Test
 	public void testCreateUser()
 	{
@@ -35,4 +35,5 @@ public class UserServiceImplTest
 		Assert.assertNotNull(user);
 		Assert.assertEquals(USERNAME, user.getUsername());
 	}
+	*/
 }

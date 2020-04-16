@@ -1,5 +1,9 @@
-.error-box{
+.error-box {
 	padding: 20%;
 	background-color:#e9b96e;
 	text-align:center;
+}
+
+.formError {
+	color:red;
 }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
@@ -14,12 +15,19 @@ import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 @ControllerAdvice
 public class ErrorController
 {
+	
+	@RequestMapping("/403")
+	public ModelAndView forbidden()
+	{
+		return new ModelAndView("403");
+	}
+	
 	@ExceptionHandler(UserNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NotSuchUser()
 	{
 		ModelAndView m = new ModelAndView("404");
-		m.addObject("msg", "That user does not exist!");
+		m.addObject("msg", "error.userNotExists");
 		return m;
 	}
 	
@@ -28,7 +36,7 @@ public class ErrorController
 	public ModelAndView NotSuchGame()
 	{
 		ModelAndView m = new ModelAndView("404");
-		m.addObject("msg", "That game does not exist!");
+		m.addObject("msg", "error.gameNotExists");
 		return m;
 	}
 	
@@ -37,7 +45,7 @@ public class ErrorController
 	public ModelAndView NotSuchPlatform()
 	{
 		ModelAndView m = new ModelAndView("404");
-		m.addObject("msg", "That platform does not exist!");
+		m.addObject("msg", "error.platformNotExists");
 		return m;
 	}
 	
@@ -46,7 +54,7 @@ public class ErrorController
 	public ModelAndView NotSuchDeveloper()
 	{
 		ModelAndView m = new ModelAndView("404");
-		m.addObject("msg", "That developer does not exist!");
+		m.addObject("msg", "error.developerNotExists");
 		return m;
 	}
 	
@@ -55,7 +63,7 @@ public class ErrorController
 	public ModelAndView NotSuchGenre()
 	{
 		ModelAndView m = new ModelAndView("404");
-		m.addObject("msg", "That genre does not exist!");
+		m.addObject("msg", "error.genreNotExists");
 		return m;
 	}
 	
@@ -64,7 +72,7 @@ public class ErrorController
 	public ModelAndView NotSuchPublisher()
 	{
 		ModelAndView m = new ModelAndView("404");
-		m.addObject("msg", "That publisher does not exist!");
+		m.addObject("msg", "error.publisherNotExists");
 		return m;
 	}
 }

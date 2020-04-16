@@ -26,11 +26,10 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User register(String username)
+	public User register(String username, String password)
 	{
 		if(findByUsername(username).isPresent())
 			return null;
-		return userDao.create(username);
+		return userDao.create(username, password);
 	}
-
 }
