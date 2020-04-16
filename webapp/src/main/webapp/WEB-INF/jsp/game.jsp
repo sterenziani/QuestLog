@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
     <title>${game.title}</title>
@@ -21,11 +22,13 @@
             <form method="post">
                 <input type="hidden" name="id" value="${game.id}">
                 <c:choose>
-	            	<c:when test="${game.inBacklog}">
-	            		<input class="game-backlog-submit" type="submit" value="Remove from Backlog"/>
+                	<c:when test="${game.inBacklog}">
+	            		<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+	            		<input class="game-backlog-submit" type="submit" value="${removeFromBacklog}"/>
 	            	</c:when>
 	            	<c:otherwise>
-	            		<input class="game-backlog-submit" type="submit" value="Add to Backlog"/>
+	            		<spring:message code="game.addToBacklog" var="addToBacklog"/>
+	            		<input class="game-backlog-submit" type="submit" value="${addToBacklog}"/>
 	            	</c:otherwise>
             	</c:choose>
             </form>

@@ -14,7 +14,7 @@
 <%@include file="navigation.jsp"%>
 <div class="content">
     <div class="game-search-results">
-        <c:set var="listName">Showing Results for... '<c:out value="${searchTerm}"/>'</c:set>
+        <c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
         <%@ include file="gameList.jsp"%>
     </div>
 </div>

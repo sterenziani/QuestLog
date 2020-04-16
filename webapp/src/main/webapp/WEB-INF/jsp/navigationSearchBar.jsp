@@ -16,13 +16,15 @@
     <form action="<c:url value="/search"/>">
         <div class="navigation-search-bar-content">
             <div class="navigation-search-bar-input">
-                <input class="navigation-search-text" type="text" name="search" placeholder="Search for a game...">
+            	<spring:message code="navigation.searchHint" var="searchHint"/>
+                <input class="navigation-search-text" type="text" name="search" placeholder="${searchHint}">
             </div>
             <%-- <a class="navigation-search-button" href="#">
 
             </a>--%>
             <div class="navigation-search-bar-button">
-                <input type="submit" value="Search"/>
+            	<spring:message code="navigation.search" var="search"/>
+                <input type="submit" value="${search}"/>
             </div>
         </div>
     </form>

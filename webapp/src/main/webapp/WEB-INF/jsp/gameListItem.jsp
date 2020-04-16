@@ -12,16 +12,19 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <div class="game-list-item">
     <div class="game-list-item-action">
         <form method="post">
             <input type="hidden" name="id" value="<c:out value="${game.id}"/>">
             <c:choose>
             	<c:when test="${game.inBacklog}">
-            		<input type="submit" value="Remove from Backlog"/>
+            		<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+            		<input type="submit" value="${removeFromBacklog}"/>
             	</c:when>
             	<c:otherwise>
-            		<input type="submit" value="Add to Backlog"/>
+            		<spring:message code="game.addToBacklog" var="addToBacklog"/>
+            		<input type="submit" value="${addToBacklog}"/>
             	</c:otherwise>
             </c:choose>
         </form>

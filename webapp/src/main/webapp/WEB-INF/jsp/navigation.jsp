@@ -9,12 +9,13 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav id="navigation">
     <div class="navigation-logo-container">
         <a href="<c:url value="/"/>">
             <div class="navigation-logo">
-                <h1>QuestLog</h1>
+                <h1><spring:message code="navigation.questLog"/></h1>
             </div>
         </a>
     </div>

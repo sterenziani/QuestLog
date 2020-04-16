@@ -19,7 +19,7 @@
     </div>
     <div class="game-list-games">
         <c:if test="${empty games}">
-            <p>No games here</p>
+            <p><spring:message code="gameList.empty"/></p>
         </c:if>
         <c:forEach var="game" items="${games}">
             <%@ include file="gameListItem.jsp"%>
