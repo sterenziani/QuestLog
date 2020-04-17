@@ -66,6 +66,12 @@ public class DeveloperServiceImpl implements DeveloperService{
 	}
 	
 	@Override
+	public List<Developer> getAllDevelopersWithGames()
+	{
+		return developerDao.getAllDevelopersWithGames();
+	}
+	
+	@Override
 	public List<Game> getAllGames(Developer d)
 	{
 		return developerDao.getAllGames(d);

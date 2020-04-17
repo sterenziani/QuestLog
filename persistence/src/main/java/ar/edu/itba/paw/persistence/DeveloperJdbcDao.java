@@ -97,6 +97,12 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	@Override
 	public List<Developer> getAllDevelopers()
 	{
+		return jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
+	}
+	
+	@Override
+	public List<Developer> getAllDevelopersWithGames()
+	{
 		List<Developer> devs =  jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
 		for(Developer d : devs)
 		{

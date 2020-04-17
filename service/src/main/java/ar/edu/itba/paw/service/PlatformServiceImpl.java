@@ -72,6 +72,12 @@ public class PlatformServiceImpl implements PlatformService
 	{
 		return platformDao.getAllPlatforms();
 	}
+	
+	@Override
+	public List<Platform> getAllPlatformsWithGames()
+	{
+		return platformDao.getAllPlatformsWithGames();
+	}
 
 	@Override
 	public List<Game> getAllGames(Platform p)

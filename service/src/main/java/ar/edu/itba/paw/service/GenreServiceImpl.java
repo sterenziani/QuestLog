@@ -67,6 +67,12 @@ public class GenreServiceImpl implements GenreService {
 	{
 		return genreDao.getAllGenres();
 	}
+	
+	@Override
+	public List<Genre> getAllGenresWithGames()
+	{
+		return genreDao.getAllGenresWithGames();
+	}
 
 	@Override
 	public List<Game> getAllGames(Genre g)

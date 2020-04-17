@@ -52,6 +52,12 @@ public interface PublisherDao {
 	List<Publisher> getAllPublishers();
 	
 	/**
+	 * Get a list of all available publishers with their lists of games filled in.
+	 * @return The list of all publishers.
+	 */
+	List<Publisher> getAllPublishersWithGames();
+	
+	/**
 	 * Get a list of all games available by the publisher
 	 * @param pub	The publisher
 	 * @return		The list of games

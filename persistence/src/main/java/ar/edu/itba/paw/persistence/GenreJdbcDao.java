@@ -89,6 +89,12 @@ public class GenreJdbcDao implements GenreDao
 	@Override
 	public List<Genre> getAllGenres()
 	{
+		return jdbcTemplate.query("SELECT * FROM genres", GENRE_MAPPER);
+	}
+	
+	@Override
+	public List<Genre> getAllGenresWithGames()
+	{
 		List<Genre> genres = jdbcTemplate.query("SELECT * FROM genres", GENRE_MAPPER);
 		for(Genre genre : genres)
 		{
