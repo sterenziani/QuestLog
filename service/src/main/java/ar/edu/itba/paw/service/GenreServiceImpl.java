@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreDao;
 import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.model.Game;
@@ -17,10 +18,24 @@ public class GenreServiceImpl implements GenreService {
 	@Autowired
 	private GenreDao genreDao;
 	
+	@Autowired
+	private GameService gs;
+	
 	@Override
 	public Optional<Genre> findById(long id)
 	{
 		return genreDao.findById(id);
+	}
+	
+	@Override
+	public Optional<Genre> findById(long id, String backlog)
+	{
+		Optional<Genre> genre = genreDao.findById(id);
+		if(genre.isPresent())
+		{
+			gs.updateBacklogDetails(genre.get().getGames(), backlog);
+		}
+		return genre;
 	}
 
 	@Override

@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.interfaces;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Developer;
@@ -231,4 +232,8 @@ public interface GameService
 	String toggleBacklog(String backlog, long gameId);
 
 	void addToUserBacklog(String backlog, User u);
+
+	List<Game> getAllGames(Publisher pub, String backlog);
+
+	void updateBacklogDetails(Collection<Game> list, String backlog);
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.PlatformDao;
 import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.model.Game;
@@ -15,10 +17,24 @@ public class PlatformServiceImpl implements PlatformService
 	@Autowired
 	private PlatformDao platformDao;
 	
+	@Autowired
+	private GameService gs;
+	
 	@Override
 	public Optional<Platform> findById(long id)
 	{
 		return platformDao.findById(id);
+	}
+	
+	@Override
+	public Optional<Platform> findById(long id, String backlog)
+	{
+		Optional<Platform> p = platformDao.findById(id);
+		if(p.isPresent())
+		{
+			gs.updateBacklogDetails(p.get().getGames(), backlog);
+		}
+		return p;
 	}
 
 	@Override

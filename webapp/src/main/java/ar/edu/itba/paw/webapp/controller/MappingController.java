@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -9,13 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import ar.edu.itba.paw.interfaces.DeveloperService;
 import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
+import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
+import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
 
 @Controller
 public class MappingController
@@ -129,7 +135,7 @@ public class MappingController
 		return mav;
 	}
 	
-	/*
+
 	@RequestMapping("/platforms")
 	public ModelAndView platformsList()
 	{
@@ -138,14 +144,24 @@ public class MappingController
 		return mav;
 	}
 	
-	@RequestMapping("/platforms/{id}")
-	public ModelAndView platformProfile(@PathVariable("id") long id)
+	@RequestMapping("/platforms/{platformId}")
+	public ModelAndView platformProfile(@PathVariable("platformId") long platformId)
 	{
 		final ModelAndView mav = new ModelAndView("platform");
-		mav.addObject("platform", ps.findById(id).orElseThrow(PlatformNotFoundException::new));
+		mav.addObject("platform", ps.findById(platformId).orElseThrow(PlatformNotFoundException::new));
 		return mav;
 	}
 	
+	@RequestMapping(value = "/platforms/{platformId}", method = RequestMethod.POST)
+	public ModelAndView platformProfile(@PathVariable("platformId") long platformId, @RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		backlog = toggleBacklog(id, response, backlog);
+		final ModelAndView mav = new ModelAndView("platform");
+		mav.addObject("platform", ps.findById(platformId, backlog).orElseThrow(PlatformNotFoundException::new));
+		return mav;
+	}
+	
+
 	@RequestMapping("/developers")
 	public ModelAndView developersList()
 	{
@@ -154,12 +170,19 @@ public class MappingController
 		return mav;
 	}
 	
-	@RequestMapping("/developers/{id}")
-	public ModelAndView developerProfile(@PathVariable("id") long id)
+	@RequestMapping("/developers/{devId}")
+	public ModelAndView developerProfile(@PathVariable("devId") long devId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("developer");
-		mav.addObject("developer", ds.findById(id).orElseThrow(DeveloperNotFoundException::new));
+		mav.addObject("developer", ds.findById(devId, backlog).orElseThrow(DeveloperNotFoundException::new));
 		return mav;
+	}
+	
+	@RequestMapping(value = "/developers/{devId}", method = RequestMethod.POST)
+	public ModelAndView developerProfile(@PathVariable("devId") long devId, @RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		backlog = toggleBacklog(id, response, backlog);
+		return new ModelAndView("redirect:/developers/{devId}");
 	}
 	
 	@RequestMapping("/publishers")
@@ -170,12 +193,19 @@ public class MappingController
 		return mav;
 	}
 	
-	@RequestMapping("/publishers/{id}")
-	public ModelAndView publisherProfile(@PathVariable("id") long id)
+	@RequestMapping("/publishers/{pubId}")
+	public ModelAndView publisherProfile(@PathVariable("pubId") long pubId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("publisher");
-		mav.addObject("publisher", pubs.findById(id).orElseThrow(PublisherNotFoundException::new));
+		mav.addObject("publisher", pubs.findById(pubId, backlog).orElseThrow(PublisherNotFoundException::new));
 		return mav;
+	}
+	
+	@RequestMapping(value = "/publishers/{pubId}", method = RequestMethod.POST)
+	public ModelAndView publisherProfile(@PathVariable("pubId") long pubId, @RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		backlog = toggleBacklog(id, response, backlog);
+		return new ModelAndView("redirect:/publishers/{pubId}");
 	}
 	
 	@RequestMapping("/genres")
@@ -193,7 +223,15 @@ public class MappingController
 		mav.addObject("genre", gens.findById(id).orElseThrow(GenreNotFoundException::new));
 		return mav;
 	}
-	*/
+	
+	@RequestMapping(value = "/genres/{genreId}", method = RequestMethod.POST)
+	public ModelAndView genreProfile(@PathVariable("genreId") long genreId, @RequestParam long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		backlog = toggleBacklog(id, response, backlog);
+		final ModelAndView mav = new ModelAndView("genre");
+		mav.addObject("genre", gens.findById(genreId, backlog).orElseThrow(GenreNotFoundException::new));
+		return mav;
+	}
 	
 	public void clearAnonBacklog(HttpServletResponse response)
 	{

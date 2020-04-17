@@ -55,4 +55,6 @@ public interface DeveloperService {
 	 */
 	List<Game> getAllGames(Developer d);
 
+	Optional<Developer> findById(long id, String backlog);
+
 }

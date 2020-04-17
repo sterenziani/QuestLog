@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.service;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.GameDao;
 import ar.edu.itba.paw.interfaces.GameService;
+import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
@@ -19,6 +21,9 @@ public class GameServiceImpl implements GameService
 {
 	@Autowired
 	private GameDao gameDao;
+	
+	@Autowired
+	private PublisherService pubService;
 	
 	@Override
 	public Optional<Game> findById(long id)
@@ -287,5 +292,22 @@ public class GameServiceImpl implements GameService
 			return removeFromBacklog(backlog, gameId);
 		else
 			return addToBacklog(backlog, gameId);
+	}
+	
+	@Override
+	public List<Game> getAllGames(Publisher pub, String backlog)
+	{
+		List<Game> games = pubService.getAllGames(pub);
+		updateBacklogDetails(games, backlog);
+		return games;
+	}
+	
+	@Override
+	public void updateBacklogDetails(Collection<Game> games, String backlog)
+	{
+		for(Game g : games)
+		{
+			g.setInBacklog(gameInBacklog(backlog, g.getId()));
+		}
 	}
 }

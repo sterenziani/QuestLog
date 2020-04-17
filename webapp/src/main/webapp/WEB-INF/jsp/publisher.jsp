@@ -1,16 +1,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<body>
-<h2>The publisher is ${publisher.name}!</h2>
-<h5>Its ID is ${publisher.id}</h5>
-<br><img height="100" src=${publisher.logo}></img><br>
-<br>
-<h4>Published games:</h4>
-<c:forEach items="${publisher.games}" var="game">
-    <li>      
-        [${game.id}] ${game.title}
-    </li>
-    <br>
-</c:forEach>
+<head>
+    <title>QuestLog</title>
+    <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>" >
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/mainGameLists.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
+</head>
+<body class="background-primary">
+    <%@include file="navigation.jsp"%>
+    <div class="content">
+    	<div class="logo"><img height="150" src="${publisher.logo}"></img></div>
+        <div>
+	        <spring:message code="publisher.gamesFromPublisher" arguments="${publisher.name}" var="gamesFromPublisher"/>
+	        <c:set var="games" value="${publisher.games}"/>
+	        <c:set var="listName" value="${gamesFromPublisher}"/>
+	        <%@ include file="gameList.jsp"%>
+    	</div>
+    </div>
 </body>
 </html>

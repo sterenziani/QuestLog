@@ -58,4 +58,5 @@ public interface PublisherService {
 	 */
 	List<Game> getAllGames(Publisher pub);
 
+	Optional<Publisher> findById(long id, String backlog);
 }

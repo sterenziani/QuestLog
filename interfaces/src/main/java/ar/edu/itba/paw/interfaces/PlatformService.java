@@ -66,4 +66,6 @@ public interface PlatformService
 	 * @return		The list of games
 	 */
 	List<Game> getAllGames(Platform p);
+
+	Optional<Platform> findById(long id, String backlog);
 }

@@ -55,4 +55,6 @@ public interface GenreService {
 		 * @return		The list of games
 		 */
 		List<Game> getAllGames(Genre g);
+
+		Optional<Genre> findById(long id, String backlog);
 }

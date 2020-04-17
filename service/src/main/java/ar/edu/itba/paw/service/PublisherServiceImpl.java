@@ -6,21 +6,38 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.PublisherDao;
 import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Game;
 
 @Service
-public class PublisherServiceImpl implements PublisherService {
+public class PublisherServiceImpl implements PublisherService
+{
 	
 	@Autowired
 	private PublisherDao publisherDao;
 	
+	@Autowired
+	private GameService gs;
+	
 	@Override
 	public Optional<Publisher> findById(long id)
 	{
-		return publisherDao.findById(id);
+		Optional<Publisher> p = publisherDao.findById(id);
+		return p;
+	}
+	
+	@Override
+	public Optional<Publisher> findById(long id, String backlog)
+	{
+		Optional<Publisher> p = publisherDao.findById(id);
+		if(p.isPresent())
+		{
+			gs.updateBacklogDetails(p.get().getGames(), backlog);
+		}
+		return p;
 	}
 
 	@Override
@@ -58,5 +75,4 @@ public class PublisherServiceImpl implements PublisherService {
 	{
 		return publisherDao.getAllGames(pub);
 	}
-
 }

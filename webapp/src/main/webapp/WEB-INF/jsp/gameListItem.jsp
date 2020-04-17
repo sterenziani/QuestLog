@@ -17,13 +17,13 @@
     <div class="game-list-item-action">
         <form method="post">
             <input type="hidden" name="id" value="<c:out value="${game.id}"/>">
+            <spring:message code="game.addToBacklog" var="addToBacklog"/>
+            <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
             <c:choose>
             	<c:when test="${game.inBacklog}">
-            		<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
             		<input type="submit" value="${removeFromBacklog}"/>
             	</c:when>
             	<c:otherwise>
-            		<spring:message code="game.addToBacklog" var="addToBacklog"/>
             		<input type="submit" value="${addToBacklog}"/>
             	</c:otherwise>
             </c:choose>
