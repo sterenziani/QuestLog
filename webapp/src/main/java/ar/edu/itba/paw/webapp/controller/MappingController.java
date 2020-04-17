@@ -233,6 +233,17 @@ public class MappingController
 		return mav;
 	}
 	
+	@RequestMapping("/explore")
+	public ModelAndView explore()
+	{
+		final ModelAndView mav = new ModelAndView("explore");
+		mav.addObject("platforms", ps.getAllPlatforms());
+		mav.addObject("developers", ds.getAllDevelopers());
+		mav.addObject("publishers", pubs.getAllPublishers());
+		mav.addObject("genres", gens.getAllGenres());
+		return mav;
+	}
+	
 	public void clearAnonBacklog(HttpServletResponse response)
 	{
 		Cookie cookie = new Cookie("backlog", "");

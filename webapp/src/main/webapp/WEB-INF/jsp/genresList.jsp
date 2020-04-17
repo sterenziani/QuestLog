@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <body>
-<h1>LIST OF GENRES</h1>
+<h2>LIST OF GENRES</h2>
 <br><br>
 <c:forEach items="${genres}" var="genre">
         <h2>[${genre.id}] ${genre.name}</h2>

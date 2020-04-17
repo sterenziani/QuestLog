@@ -22,4 +22,10 @@
     <div class="navigation-search">
         <%@include file="navigationSearchBar.jsp"%>
     </div>
+    
+
+    <div class="navigation-explore-container">
+        <a class="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
+    </div>
+        
 </nav>

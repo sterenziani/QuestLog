@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <body>
-<h1>LIST OF PLATFORMS</h1>
+<h2>LIST OF PLATFORMS</h2>
 <br><br>
 <c:forEach items="${platforms}" var="platform">
         <h2>[${platform.id} / ${platform.shortName}] ${platform.name}</h2>
