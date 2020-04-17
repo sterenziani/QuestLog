@@ -27,5 +27,18 @@
     <div class="navigation-explore-container">
         <a class="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
     </div>
+    
+    <div class="user-container">
+	    <c:choose>
+	    	<c:when test="${loggedUser == null}">
+	    		<a href="<c:url value="/login"/>"><spring:message code="navigation.login"/></a><br>
+	    		<a href="<c:url value="/create"/>"><spring:message code="navigation.signup"/></a>
+	    	</c:when>
+	    	<c:otherwise>
+	    		<p>Welcome ${loggedUser.username}</p>
+	    		<a href="<c:url value="/logout"/>"><spring:message code="navigation.logout"/></a>
+	    	</c:otherwise>
+	    </c:choose>
+    </div>
         
 </nav>

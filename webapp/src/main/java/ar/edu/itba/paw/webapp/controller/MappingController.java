@@ -1,10 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
+import java.util.Optional;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +22,7 @@ import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
@@ -66,6 +72,7 @@ public class MappingController
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("index");
+		mav.addObject("loggedUser", loggedUser());
 		mav.addObject("cookieBacklog", gs.getGamesInBacklog(backlog));
 		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog));
 		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified(backlog));
@@ -260,6 +267,28 @@ public class MappingController
 		cookie.setMaxAge(600000);
 		response.addCookie(cookie);
 		return newBacklog;
+	}
+	
+	@RequestMapping("/profile")
+	public ModelAndView visitOwnProfile()
+	{
+		final ModelAndView mav = new ModelAndView("userProfile");
+		mav.addObject("user", loggedUser());
+		return mav;
+	}
+	
+	// I think this should go in Service, but the Authentication dependencies are for webapp only. Ask about that
+	// If used as a ModelAttribute, Authentication is null and throws exception, but works just fine. See if we can change the if for a try-catch or something
+	@ModelAttribute("loggedUser")
+	public User loggedUser()
+	{
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth != null)
+		{
+			final Optional<User> user = us.findByUsername((String) auth.getName());
+			return user.orElseGet(() -> null);
+		}
+		return null;
 	}
 	
 	/*

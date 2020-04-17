@@ -34,7 +34,7 @@
 				</label>
 			</div>
 			<div>
-				<form:errors path="*" class="formError" element="p"/>
+				<form:errors class="formError" element="p"/>
 				<form:errors path="repeatPassword" class="formError" element="p"/>
 				<label>
 					<spring:message code="registerForm.repeatPassword"/>

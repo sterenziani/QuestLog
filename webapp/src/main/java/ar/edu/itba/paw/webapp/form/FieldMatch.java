@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {FieldMatchValidator.class})
 public @interface FieldMatch
 {
-    String message() default "The fields must match";
+    String message() default "Passwords must match (and this message needs to be localized)";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String baseField();

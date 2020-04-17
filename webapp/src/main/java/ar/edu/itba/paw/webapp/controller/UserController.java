@@ -56,20 +56,4 @@ public class UserController
 		mav.addObject("user", us.findById(id).orElseThrow(UserNotFoundException::new));
 		return mav;
 	}
-	
-	@RequestMapping("/profile")
-	public ModelAndView visitOwnProfile()
-	{
-		final ModelAndView mav = new ModelAndView("userProfile");
-		mav.addObject("user", loggedUser());
-		return mav;
-	}
-	
-	@ModelAttribute("loggedUser")
-	public User loggedUser()
-	{
-		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		final Optional<User> user = us.findByUsername((String) auth.getName());
-		return user.orElseGet(() -> null);
-	}
 }
