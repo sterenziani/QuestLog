@@ -63,4 +63,5 @@ public interface GenreService {
 		List<Game> getAllGames(Genre g);
 
 		Optional<Genre> findById(long id, String backlog);
+		Optional<Genre> findByName(String name, String backlog);
 }

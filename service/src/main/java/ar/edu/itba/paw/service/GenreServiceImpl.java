@@ -43,6 +43,17 @@ public class GenreServiceImpl implements GenreService {
 	{
 		return genreDao.findByName(name);
 	}
+	
+	@Override
+	public Optional<Genre> findByName(String name, String backlog)
+	{
+		Optional<Genre> genre = genreDao.findByName(name);
+		if(genre.isPresent())
+		{
+			gs.updateBacklogDetails(genre.get().getGames(), backlog);
+		}
+		return genre;
+	}
 
 	@Override
 	public Optional<Genre> changeName(long id, String new_name)

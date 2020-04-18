@@ -72,10 +72,9 @@ public class MappingController
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("index");
-		mav.addObject("loggedUser", loggedUser());
 		mav.addObject("cookieBacklog", gs.getGamesInBacklog(backlog));
 		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog));
-		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified(backlog));
+		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog));
 		return mav;
 	}
 
@@ -85,7 +84,7 @@ public class MappingController
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog));
-		mav.addObject("upcomingGames", gs.getUpcomingGamesSimplified(backlog));
+		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog));
 		return mav;
 	}
 	
@@ -94,7 +93,7 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("games");
 		mav.addObject("searchTerm", search);
-		mav.addObject("games", gs.searchByTitleSimplified(search, backlog));
+		mav.addObject("games", gs.searchByTitle(search, backlog));
 		return mav;
 	}
 
@@ -104,7 +103,7 @@ public class MappingController
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("games");
 		mav.addObject("searchTerm", search);
-		mav.addObject("games", gs.searchByTitleSimplified(search, backlog));
+		mav.addObject("games", gs.searchByTitle(search, backlog));
 		return mav;
 	}
 	
@@ -112,7 +111,7 @@ public class MappingController
 	public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("allGames");
-		mav.addObject("games", gs.getAllGamesSimplified(backlog));
+		mav.addObject("games", gs.getAllGames(backlog));
 		return mav;
 	}
 	
@@ -121,7 +120,7 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("allGames");
-		mav.addObject("games", gs.getAllGamesSimplified(backlog));
+		mav.addObject("games", gs.getAllGames(backlog));
 		return mav;
 	}
 	
@@ -129,7 +128,7 @@ public class MappingController
 	public ModelAndView gameProfile(@PathVariable("id") long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("game");
-		mav.addObject("game", gs.findById(id, backlog).orElseThrow(GameNotFoundException::new));				
+		mav.addObject("game", gs.findByIdWithDetails(id, backlog).orElseThrow(GameNotFoundException::new));				
 		return mav;
 	}
 
@@ -138,7 +137,7 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("game");
-		mav.addObject("game", gs.findById(id, backlog).orElseThrow(GameNotFoundException::new));
+		mav.addObject("game", gs.findByIdWithDetails(id, backlog).orElseThrow(GameNotFoundException::new));
 		return mav;
 	}
 	

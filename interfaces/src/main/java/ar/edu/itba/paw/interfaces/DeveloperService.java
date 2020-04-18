@@ -11,6 +11,7 @@ public interface DeveloperService {
 	 * @return The matched developer, or null otherwise.
 	 */
 	Optional<Developer> findById(long id);
+	Optional<Developer> findById(long id, String backlog);
 	
 	/**
 	 * Finds a developer or several developers with a given name
@@ -18,6 +19,7 @@ public interface DeveloperService {
 	 * @return List of developers that share that name.
 	 */
 	Optional<Developer> findByName(String name);
+	Optional<Developer> findByName(String name, String backlog);
 	
 	/**
 	 * Change a developer's name
@@ -61,7 +63,4 @@ public interface DeveloperService {
 	 * @return		The list of games
 	 */
 	List<Game> getAllGames(Developer d);
-
-	Optional<Developer> findById(long id, String backlog);
-
 }

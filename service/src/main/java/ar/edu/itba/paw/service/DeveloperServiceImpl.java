@@ -29,9 +29,7 @@ public class DeveloperServiceImpl implements DeveloperService{
 	{
 		Optional<Developer> d = developerDao.findById(id);
 		if(d.isPresent())
-		{
 			gs.updateBacklogDetails(d.get().getGames(), backlog);
-		}
 		return d;
 	}
 
@@ -39,6 +37,15 @@ public class DeveloperServiceImpl implements DeveloperService{
 	public Optional<Developer> findByName(String name)
 	{
 		return developerDao.findByName(name);
+	}
+	
+	@Override
+	public Optional<Developer> findByName(String name, String backlog)
+	{
+		Optional<Developer> d = developerDao.findByName(name);
+		if(d.isPresent())
+			gs.updateBacklogDetails(d.get().getGames(), backlog);
+		return d;
 	}
 
 	@Override

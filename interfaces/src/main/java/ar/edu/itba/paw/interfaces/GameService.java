@@ -14,17 +14,31 @@ public interface GameService
 {
 	/**
 	 * Finds a game given its ID
-	 * @param id The unique ID for the game.
-	 * @return The matched game, or null otherwise.
+	 * @param id 	The unique ID for the game.
+	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findById(long id);
+	Optional<Game> findById(long id, String backlog);
+	
+	/**
+	 * Finds a game and its details (platforms, devs, genres, etc...) given its ID
+	 * @param id 	The unique ID for the game.
+	 * @return 		The matched game, or null otherwise.
+	 */
+	Optional<Game> findByIdWithDetails(long id, String backlog);
 	
 	/**
 	 * Finds a game or several games with a given title
 	 * @param title The title for the game.
 	 * @return List of games that share that title.
 	 */
-	Optional<Game> findByTitle(String title);
+	Optional<Game> findByTitle(String title, String backlog);
+	
+	/**
+	 * Finds a game and its details (platforms, devs, genres, etc...) with a given title
+	 * @param title The title for the game.
+	 * @return 		The game with that title.
+	 */
+	Optional<Game> findByTitleWithDetails(String title, String backlog);
 	
 	/**
 	 * Change a game's title
@@ -188,31 +202,27 @@ public interface GameService
 	List<Game> searchByTitle(String search);
 	
 	/**
-	 * Get a list of all available games without the extra information.
+	 * Get a list of all available games.
 	 * @return 	The list of all games.
 	 */
-	List<Game> getAllGamesSimplified();
+	List<Game> getAllGames(String backlog);
+	List<Game> getAllGamesWithDetails();
 	
 	/**
-	 * Get a list of all games with names that contain the searched term without the extra information.
+	 * Get a list of all games with names that contain the searched term.
 	 * @param search The search term.
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitleSimplified(String search);
-	
+	List<Game> searchByTitle(String search, String backlog);
+	List<Game> searchByTitleWithDetails(String search);
+
 	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
 	List<Game> getUpcomingGames();
+	List<Game> getUpcomingGames(String backlog);
 
-	/**
-	 * Get a list of upcoming games without the extra information.
-	 * @return The list of upcoming games.
-	 */
-	List<Game> getUpcomingGamesSimplified();
-
-	
 	boolean gameInBacklog(String backlog, long gameId);
 
 	List<Game> getGamesInBacklog(String backlog);
@@ -221,19 +231,10 @@ public interface GameService
 
 	String removeFromBacklog(String backlog, long gameId);
 
-	List<Game> getAllGamesSimplified(String backlog);
-
-	List<Game> searchByTitleSimplified(String search, String backlog);
-
-	List<Game> getUpcomingGamesSimplified(String backlog);
-
-	Optional<Game> findById(long id, String backlog);
-
 	String toggleBacklog(String backlog, long gameId);
 
 	void addToUserBacklog(String backlog, User u);
 
-	List<Game> getAllGames(Publisher pub, String backlog);
-
 	void updateBacklogDetails(Collection<Game> list, String backlog);
+
 }

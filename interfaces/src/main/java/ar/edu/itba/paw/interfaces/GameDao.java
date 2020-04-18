@@ -19,11 +19,25 @@ public interface GameDao
 	Optional<Game> findById(long id);
 	
 	/**
+	 * Finds a game and its details (platforms, devs, genres, etc...) given its ID
+	 * @param id 	The unique ID for the game.
+	 * @return 		The matched game, or null otherwise.
+	 */
+	Optional<Game> findByIdWithDetails(long id);
+	
+	/**
 	 * Finds a game or several games with a given title
 	 * @param title The title for the game.
-	 * @return 		List of games that share that title.
+	 * @return 		The game with that title.
 	 */
 	Optional<Game> findByTitle(String title);
+	
+	/**
+	 * Finds a game and its details (platforms, devs, genres, etc...) with a given title
+	 * @param title The title for the game.
+	 * @return 		The game with that title.
+	 */
+	Optional<Game> findByTitleWithDetails(String title);
 	
 	/**
 	 * Change a game's title
@@ -51,8 +65,10 @@ public interface GameDao
 	
 	/**
 	 * Create a new game.
-	 * @param title 	The title of the game.
-	 * @return 			The registered game.
+	 * @param title 		The title of the game.
+	 * @param cover			The cover of the game.
+	 * @param description	The description of the game
+	 * @return 				The registered game.
 	 */
 	Game register(String title, String cover, String description);
 	
@@ -63,12 +79,17 @@ public interface GameDao
 	List<Game> getAllGames();
 	
 	/**
+	 * Get a list of all available games with the additional details of each game.
+	 * @return 	The list of all games.
+	 */
+	List<Game> getAllGamesWithDetails();
+	
+	/**
 	 * Links a game to a specified platform
 	 * @param g		The game
 	 * @param p		The platform to link the game to
 	 * @return		The updated game, now linked to the platform
 	 */
-	
 	Optional<Game> addPlatform(Game g, Platform p);
 	
 	/**
@@ -186,29 +207,28 @@ public interface GameDao
 	List<Game> searchByTitle(String search);
 	
 	/**
-	 * Get a list of all available games without the extra information.
-	 * @return 	The list of all games.
-	 */
-	List<Game> getAllGamesSimplified();
-	
-	/**
-	 * Get a list of all games with names that contain the searched term without the extra information.
+	 * Get a list of all games (and their additional details) with names that contain the searched term.
 	 * @param search The search term.
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitleSimplified(String search);
-
+	List<Game> searchByTitleWithDetails(String search);
+	
 	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
 	List<Game> getUpcomingGames();
-
+	
 	/**
-	 * Get a list of upcoming games without the extra information.
+	 * Get a list of upcoming games with extra information.
 	 * @return The list of upcoming games.
 	 */
-	List<Game> getUpcomingGamesSimplified();
+	List<Game> getUpcomingGamesWithDetails();
 
-	void addToBacklog(User u, Game g);
+	/**
+	 * Add a game to a registered user's backlog
+	 * @param u	The user adding the game to their backlog
+	 * @param g The game
+	 */
+	void addToBacklog(User u, Game g);	
 }

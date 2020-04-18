@@ -47,6 +47,13 @@ public class GameJdbcDao implements GameDao
 	public Optional<Game> findById(long id)
 	{
 		Optional<Game> g = jdbcTemplate.query("SELECT * FROM games WHERE game = ?", GAME_MAPPER, id).stream().findFirst();
+		return g;
+	}
+	
+	@Override
+	public Optional<Game> findByIdWithDetails(long id)
+	{
+		Optional<Game> g = jdbcTemplate.query("SELECT * FROM games WHERE game = ?", GAME_MAPPER, id).stream().findFirst();
 		if(g.isPresent())
 		{
 			List<Platform> platforms = getAllPlatforms(g.get());
@@ -74,6 +81,13 @@ public class GameJdbcDao implements GameDao
 
 	@Override
 	public Optional<Game> findByTitle(String title)
+	{
+		Optional<Game> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE ?", GAME_MAPPER, title).parallelStream().findFirst();
+		return game;
+	}
+	
+	@Override
+	public Optional<Game> findByTitleWithDetails(String title)
 	{
 		Optional<Game> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE ?", GAME_MAPPER, title).parallelStream().findFirst();
 		if(game.isPresent())
@@ -133,8 +147,13 @@ public class GameJdbcDao implements GameDao
 		return new Game(gameId.longValue(), title, cover, description);
 	}
 
+	@Override 
+	public List<Game> getAllGames(){
+		return jdbcTemplate.query("SELECT * FROM games", GAME_MAPPER);
+	}
+	
 	@Override
-	public List<Game> getAllGames()
+	public List<Game> getAllGamesWithDetails()
 	{
 		List<Game> games = jdbcTemplate.query("SELECT * FROM games", GAME_MAPPER);
 		for(Game g : games)
@@ -263,6 +282,7 @@ public class GameJdbcDao implements GameDao
 		return findById(game.getId());
 	}
 
+	
 	@Override
 	public List<Genre> getAllGenres(Game g)
 	{
@@ -308,7 +328,12 @@ public class GameJdbcDao implements GameDao
 		return dates;
 	}
 	
+	@Override
 	public List<Game> searchByTitle(String search){
+		return jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
+	}
+	
+	public List<Game> searchByTitleWithDetails(String search){
 		List<Game> searchGames = jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
 		for(Game g : searchGames)
 		{	
@@ -335,18 +360,14 @@ public class GameJdbcDao implements GameDao
 		return searchGames;
 	}
 	
-	@Override 
-	public List<Game> getAllGamesSimplified(){
-		return jdbcTemplate.query("SELECT * FROM games", GAME_MAPPER);
-	}
-	
-	@Override
-	public List<Game> searchByTitleSimplified(String search){
-		return jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
-	}
-	
 	@Override
 	public List<Game> getUpcomingGames()
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);
+	}
+	
+	@Override
+	public List<Game> getUpcomingGamesWithDetails()
 	{
 		List<Game> searchGames = jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);
 		for(Game g : searchGames)
@@ -372,12 +393,6 @@ public class GameJdbcDao implements GameDao
 				g.addReleaseDate(r);
 		}
 		return searchGames;
-	}
-	
-	@Override
-	public List<Game> getUpcomingGamesSimplified()
-	{
-		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);
 	}
 
 	@Override

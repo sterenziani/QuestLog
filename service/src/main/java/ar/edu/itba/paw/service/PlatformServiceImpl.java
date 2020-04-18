@@ -38,6 +38,17 @@ public class PlatformServiceImpl implements PlatformService
 	}
 
 	@Override
+	public Optional<Platform> findByName(String name, String backlog)
+	{
+		Optional<Platform> p = platformDao.findByName(name);
+		if(p.isPresent())
+		{
+			gs.updateBacklogDetails(p.get().getGames(), backlog);
+		}
+		return p;
+	}
+	
+	@Override
 	public Optional<Platform> findByName(String name)
 	{
 		return platformDao.findByName(name);

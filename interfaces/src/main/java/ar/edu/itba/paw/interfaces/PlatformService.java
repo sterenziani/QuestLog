@@ -74,4 +74,5 @@ public interface PlatformService
 	List<Game> getAllGames(Platform p);
 
 	Optional<Platform> findById(long id, String backlog);
+	Optional<Platform> findByName(String name, String backlog);
 }

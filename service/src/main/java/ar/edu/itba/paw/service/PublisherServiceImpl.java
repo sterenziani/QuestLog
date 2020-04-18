@@ -45,6 +45,17 @@ public class PublisherServiceImpl implements PublisherService
 	{
 		return publisherDao.findByName(name);
 	}
+	
+	@Override
+	public Optional<Publisher> findByName(String name, String backlog)
+	{
+		Optional<Publisher> p = publisherDao.findByName(name);
+		if(p.isPresent())
+		{
+			gs.updateBacklogDetails(p.get().getGames(), backlog);
+		}
+		return p;
+	}
 
 	@Override
 	public Optional<Publisher> changeName(long id, String new_name)
