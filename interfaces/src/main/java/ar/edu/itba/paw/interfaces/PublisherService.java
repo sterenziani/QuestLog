@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.User;
 
 public interface PublisherService {
 	/**
@@ -13,6 +14,7 @@ public interface PublisherService {
 	 * @return The matched publisher, or null otherwise.
 	 */
 	Optional<Publisher> findById(long id);
+	Optional<Publisher> findById(long id, String backlog, User u);
 	
 	/**
 	 * Finds a publisher or several publishers with a given name
@@ -20,6 +22,7 @@ public interface PublisherService {
 	 * @return List of publishers that share that name.
 	 */
 	Optional<Publisher> findByName(String name);
+	Optional<Publisher> findByName(String name, String backlog, User u);
 	
 	/**
 	 * Change a publisher's name
@@ -63,7 +66,4 @@ public interface PublisherService {
 	 * @return		The list of games
 	 */
 	List<Game> getAllGames(Publisher pub);
-
-	Optional<Publisher> findById(long id, String backlog);
-	Optional<Publisher> findByName(String name, String backlog);
 }

@@ -11,6 +11,7 @@ import ar.edu.itba.paw.interfaces.GenreDao;
 import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -28,12 +29,12 @@ public class GenreServiceImpl implements GenreService {
 	}
 	
 	@Override
-	public Optional<Genre> findById(long id, String backlog)
+	public Optional<Genre> findById(long id, String backlog, User u)
 	{
 		Optional<Genre> genre = genreDao.findById(id);
 		if(genre.isPresent())
 		{
-			gs.updateBacklogDetails(genre.get().getGames(), backlog);
+			gs.updateBacklogDetails(genre.get().getGames(), backlog, u);
 		}
 		return genre;
 	}
@@ -45,12 +46,12 @@ public class GenreServiceImpl implements GenreService {
 	}
 	
 	@Override
-	public Optional<Genre> findByName(String name, String backlog)
+	public Optional<Genre> findByName(String name, String backlog, User u)
 	{
 		Optional<Genre> genre = genreDao.findByName(name);
 		if(genre.isPresent())
 		{
-			gs.updateBacklogDetails(genre.get().getGames(), backlog);
+			gs.updateBacklogDetails(genre.get().getGames(), backlog, u);
 		}
 		return genre;
 	}

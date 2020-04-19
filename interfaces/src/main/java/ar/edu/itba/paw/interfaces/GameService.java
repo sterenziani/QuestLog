@@ -17,28 +17,28 @@ public interface GameService
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findById(long id, String backlog);
+	Optional<Game> findById(long id, String backlog, User u);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) given its ID
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findByIdWithDetails(long id, String backlog);
+	Optional<Game> findByIdWithDetails(long id, String backlog, User u);
 	
 	/**
 	 * Finds a game or several games with a given title
 	 * @param title The title for the game.
 	 * @return List of games that share that title.
 	 */
-	Optional<Game> findByTitle(String title, String backlog);
+	Optional<Game> findByTitle(String title, String backlog, User u);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) with a given title
 	 * @param title The title for the game.
 	 * @return 		The game with that title.
 	 */
-	Optional<Game> findByTitleWithDetails(String title, String backlog);
+	Optional<Game> findByTitleWithDetails(String title, String backlog, User u);
 	
 	/**
 	 * Change a game's title
@@ -75,9 +75,10 @@ public interface GameService
 	
 	/**
 	 * Get a list of all available games.
-	 * @return The list of all games.
+	 * @return 	The list of all games.
 	 */
-	List<Game> getAllGames();
+	List<Game> getAllGames(String backlog, User u);
+	List<Game> getAllGamesWithDetails(String backlog, User u);
 	
 	/**
 	 * Links a game to a specified platform
@@ -199,42 +200,27 @@ public interface GameService
 	 * @param search The search term.
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitle(String search);
-	
-	/**
-	 * Get a list of all available games.
-	 * @return 	The list of all games.
-	 */
-	List<Game> getAllGames(String backlog);
-	List<Game> getAllGamesWithDetails();
-	
-	/**
-	 * Get a list of all games with names that contain the searched term.
-	 * @param search The search term.
-	 * @return 	The list of matching games.
-	 */
-	List<Game> searchByTitle(String search, String backlog);
-	List<Game> searchByTitleWithDetails(String search);
+	List<Game> searchByTitle(String search, String backlog, User u);
+	List<Game> searchByTitleWithDetails(String search, String backlog, User u);
 
 	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
-	List<Game> getUpcomingGames();
-	List<Game> getUpcomingGames(String backlog);
+	List<Game> getUpcomingGames(String backlog, User u);
 
-	boolean gameInBacklog(String backlog, long gameId);
+	boolean gameInBacklog(long gameId, String backlog, User u);
 
-	List<Game> getGamesInBacklog(String backlog);
+	List<Game> getGamesInBacklog(String backlog, User u);
 
-	String addToBacklog(String backlog, long gameId);
+	String addToBacklog(long gameId, String backlog, User u);
 
-	String removeFromBacklog(String backlog, long gameId);
+	String removeFromBacklog(long gameId, String backlog, User u);
 
-	String toggleBacklog(String backlog, long gameId);
+	String toggleBacklog(long gameId, String backlog, User u);
 
-	void addToUserBacklog(String backlog, User u);
+	void updateBacklogDetails(Collection<Game> list, String backlog, User u);
 
-	void updateBacklogDetails(Collection<Game> list, String backlog);
+	String transferBacklog(String backlog, User u);
 
 }

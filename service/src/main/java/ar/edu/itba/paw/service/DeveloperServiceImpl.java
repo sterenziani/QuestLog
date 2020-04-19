@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.DeveloperDao;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class DeveloperServiceImpl implements DeveloperService{
@@ -25,11 +26,11 @@ public class DeveloperServiceImpl implements DeveloperService{
 	}
 	
 	@Override
-	public Optional<Developer> findById(long id, String backlog)
+	public Optional<Developer> findById(long id, String backlog, User u)
 	{
 		Optional<Developer> d = developerDao.findById(id);
 		if(d.isPresent())
-			gs.updateBacklogDetails(d.get().getGames(), backlog);
+			gs.updateBacklogDetails(d.get().getGames(), backlog, u);
 		return d;
 	}
 
@@ -40,11 +41,11 @@ public class DeveloperServiceImpl implements DeveloperService{
 	}
 	
 	@Override
-	public Optional<Developer> findByName(String name, String backlog)
+	public Optional<Developer> findByName(String name, String backlog, User u)
 	{
 		Optional<Developer> d = developerDao.findByName(name);
 		if(d.isPresent())
-			gs.updateBacklogDetails(d.get().getGames(), backlog);
+			gs.updateBacklogDetails(d.get().getGames(), backlog, u);
 		return d;
 	}
 

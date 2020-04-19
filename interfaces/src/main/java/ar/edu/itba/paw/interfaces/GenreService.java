@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.User;
 
 public interface GenreService {
 		/**
@@ -11,6 +12,7 @@ public interface GenreService {
 		 * @return The matched genre, or null otherwise.
 		 */
 		Optional<Genre> findById(long id);
+		Optional<Genre> findById(long id, String backlog, User u);
 		
 		/**
 		 * Finds a genre or several genres with a given name
@@ -18,6 +20,7 @@ public interface GenreService {
 		 * @return List of genres that share that name.
 		 */
 		Optional<Genre> findByName(String name);
+		Optional<Genre> findByName(String name, String backlog, User u);
 		
 		/**
 		 * Change a genre's name
@@ -61,7 +64,4 @@ public interface GenreService {
 		 * @return		The list of games
 		 */
 		List<Game> getAllGames(Genre g);
-
-		Optional<Genre> findById(long id, String backlog);
-		Optional<Genre> findByName(String name, String backlog);
 }

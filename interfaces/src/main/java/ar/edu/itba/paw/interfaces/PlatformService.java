@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.User;
 
 public interface PlatformService
 {
@@ -13,6 +14,7 @@ public interface PlatformService
 	 * @return The matched platform, or null otherwise.
 	 */
 	Optional<Platform> findById(long id);
+	Optional<Platform> findById(long id, String backlog, User u);
 	
 	/**
 	 * Finds a platform or several platforms with a given name
@@ -20,6 +22,7 @@ public interface PlatformService
 	 * @return List of platforms that share that name.
 	 */
 	Optional<Platform> findByName(String name);
+	Optional<Platform> findByName(String name, String backlog, User u);
 	
 	/**
 	 * Change a platform's name
@@ -72,7 +75,4 @@ public interface PlatformService
 	 * @return		The list of games
 	 */
 	List<Game> getAllGames(Platform p);
-
-	Optional<Platform> findById(long id, String backlog);
-	Optional<Platform> findByName(String name, String backlog);
 }

@@ -10,6 +10,7 @@ import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.PublisherDao;
 import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Game;
 
 @Service
@@ -30,12 +31,12 @@ public class PublisherServiceImpl implements PublisherService
 	}
 	
 	@Override
-	public Optional<Publisher> findById(long id, String backlog)
+	public Optional<Publisher> findById(long id, String backlog, User u)
 	{
 		Optional<Publisher> p = publisherDao.findById(id);
 		if(p.isPresent())
 		{
-			gs.updateBacklogDetails(p.get().getGames(), backlog);
+			gs.updateBacklogDetails(p.get().getGames(), backlog, u);
 		}
 		return p;
 	}
@@ -47,12 +48,12 @@ public class PublisherServiceImpl implements PublisherService
 	}
 	
 	@Override
-	public Optional<Publisher> findByName(String name, String backlog)
+	public Optional<Publisher> findByName(String name, String backlog, User u)
 	{
 		Optional<Publisher> p = publisherDao.findByName(name);
 		if(p.isPresent())
 		{
-			gs.updateBacklogDetails(p.get().getGames(), backlog);
+			gs.updateBacklogDetails(p.get().getGames(), backlog, u);
 		}
 		return p;
 	}

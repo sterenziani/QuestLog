@@ -72,9 +72,9 @@ public class MappingController
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("index");
-		mav.addObject("cookieBacklog", gs.getGamesInBacklog(backlog));
-		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog));
-		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog));
+		User u = loggedUser();
+		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog, u));
+		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog, u));
 		return mav;
 	}
 
@@ -83,8 +83,9 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("index");
-		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog));
-		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog));
+		User u = loggedUser();
+		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog, u));
+		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog, u));
 		return mav;
 	}
 	
@@ -92,8 +93,9 @@ public class MappingController
 	public ModelAndView search(@RequestParam String search, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("games");
+		User u = loggedUser();
 		mav.addObject("searchTerm", search);
-		mav.addObject("games", gs.searchByTitle(search, backlog));
+		mav.addObject("games", gs.searchByTitle(search, backlog, u));
 		return mav;
 	}
 
@@ -102,8 +104,9 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("games");
+		User u = loggedUser();
 		mav.addObject("searchTerm", search);
-		mav.addObject("games", gs.searchByTitle(search, backlog));
+		mav.addObject("games", gs.searchByTitle(search, backlog, u));
 		return mav;
 	}
 	
@@ -111,7 +114,8 @@ public class MappingController
 	public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("allGames");
-		mav.addObject("games", gs.getAllGames(backlog));
+		User u = loggedUser();
+		mav.addObject("games", gs.getAllGames(backlog, u));
 		return mav;
 	}
 	
@@ -120,7 +124,8 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("allGames");
-		mav.addObject("games", gs.getAllGames(backlog));
+		User u = loggedUser();
+		mav.addObject("games", gs.getAllGames(backlog, u));
 		return mav;
 	}
 	
@@ -128,7 +133,8 @@ public class MappingController
 	public ModelAndView gameProfile(@PathVariable("id") long id, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("game");
-		mav.addObject("game", gs.findByIdWithDetails(id, backlog).orElseThrow(GameNotFoundException::new));				
+		User u = loggedUser();
+		mav.addObject("game", gs.findByIdWithDetails(id, backlog, u).orElseThrow(GameNotFoundException::new));				
 		return mav;
 	}
 
@@ -137,7 +143,8 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("game");
-		mav.addObject("game", gs.findByIdWithDetails(id, backlog).orElseThrow(GameNotFoundException::new));
+		User u = loggedUser();
+		mav.addObject("game", gs.findByIdWithDetails(id, backlog, u).orElseThrow(GameNotFoundException::new));
 		return mav;
 	}
 	
@@ -163,7 +170,8 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("platform");
-		mav.addObject("platform", ps.findById(platformId, backlog).orElseThrow(PlatformNotFoundException::new));
+		User u = loggedUser();
+		mav.addObject("platform", ps.findById(platformId, backlog, u).orElseThrow(PlatformNotFoundException::new));
 		return mav;
 	}
 	
@@ -180,7 +188,8 @@ public class MappingController
 	public ModelAndView developerProfile(@PathVariable("devId") long devId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("developer");
-		mav.addObject("developer", ds.findById(devId, backlog).orElseThrow(DeveloperNotFoundException::new));
+		User u = loggedUser();
+		mav.addObject("developer", ds.findById(devId, backlog, u).orElseThrow(DeveloperNotFoundException::new));
 		return mav;
 	}
 	
@@ -203,7 +212,8 @@ public class MappingController
 	public ModelAndView publisherProfile(@PathVariable("pubId") long pubId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("publisher");
-		mav.addObject("publisher", pubs.findById(pubId, backlog).orElseThrow(PublisherNotFoundException::new));
+		User u = loggedUser();
+		mav.addObject("publisher", pubs.findById(pubId, backlog, u).orElseThrow(PublisherNotFoundException::new));
 		return mav;
 	}
 	
@@ -235,7 +245,8 @@ public class MappingController
 	{
 		backlog = toggleBacklog(id, response, backlog);
 		final ModelAndView mav = new ModelAndView("genre");
-		mav.addObject("genre", gens.findById(genreId, backlog).orElseThrow(GenreNotFoundException::new));
+		User u = loggedUser();
+		mav.addObject("genre", gens.findById(genreId, backlog, u).orElseThrow(GenreNotFoundException::new));
 		return mav;
 	}
 	
@@ -248,24 +259,6 @@ public class MappingController
 		mav.addObject("publishers", pubs.getAllPublishers());
 		mav.addObject("genres", gens.getAllGenres());
 		return mav;
-	}
-	
-	public void clearAnonBacklog(HttpServletResponse response)
-	{
-		Cookie cookie = new Cookie("backlog", "");
-		cookie.setPath("/");
-		cookie.setMaxAge(600000);
-		response.addCookie(cookie);
-	}
-	
-	private String toggleBacklog(long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue=" ") String backlog)
-	{
-		String newBacklog = gs.toggleBacklog(backlog, gameId);
-		Cookie cookie = new Cookie("backlog", newBacklog);
-		cookie.setPath("/");
-		cookie.setMaxAge(600000);
-		response.addCookie(cookie);
-		return newBacklog;
 	}
 	
 	@RequestMapping("/profile")
@@ -290,15 +283,30 @@ public class MappingController
 		return null;
 	}
 	
-	/*
 	@RequestMapping(value = "/transfer_backlog", method = RequestMethod.POST)
 	public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		User u = loggedUser();
-		if(u != null)
-			gs.addToUserBacklog(backlog, u);
-		clearAnonBacklog(response);		
+		gs.transferBacklog(backlog, loggedUser());
+		clearAnonBacklog(response);
 		return new ModelAndView("redirect:/");
 	}
-	*/
+	
+	private String toggleBacklog(long gameId, HttpServletResponse response, String backlog)
+	{
+		User u = loggedUser();
+		String newBacklog = gs.toggleBacklog(gameId, backlog, u);
+		Cookie cookie = new Cookie("backlog", newBacklog);
+		cookie.setPath("/");
+		cookie.setMaxAge(600000);
+		response.addCookie(cookie);
+		return newBacklog;
+	}
+	
+	private void clearAnonBacklog(HttpServletResponse response)
+	{
+		Cookie cookie = new Cookie("backlog", "");
+		cookie.setPath("/");
+		cookie.setMaxAge(600000);
+		response.addCookie(cookie);
+	}
 }

@@ -441,8 +441,8 @@ public class GameJdbcDaoTest
 		myList.add(raym); 
 		myList.add(mario); 
 		 
-		List<Game> gamesList1 = gameDao.searchByTitleSimplified("mA"); 
-		List<Game> gamesList2 = gameDao.searchByTitleSimplified("qwerty"); 
+		List<Game> gamesList1 = gameDao.searchByTitle("mA"); 
+		List<Game> gamesList2 = gameDao.searchByTitle("qwerty"); 
 		 
 		Assert.assertFalse(gamesList1.isEmpty()); 
 		Assert.assertEquals(2, gamesList1.size()); 
@@ -457,7 +457,7 @@ public class GameJdbcDaoTest
 		Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, gameInsert);
 		
-		List<Game> gamesList = gameDao.getAllGamesSimplified();
+		List<Game> gamesList = gameDao.getAllGames();
 		List<Game> myList = new ArrayList<Game>();
 		myList.add(example);
 		myList.add(botw);
