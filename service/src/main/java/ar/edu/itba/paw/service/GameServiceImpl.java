@@ -212,39 +212,43 @@ public class GameServiceImpl implements GameService
 		return list;
 	}
 
-	// CHANGEEEE
+	
 	@Override
 	public boolean gameInBacklog(long gameId, String backlog, User u)
 	{
 		if(u == null)
 			return backlog.contains("-" +gameId +"-");
-		return false;
+		return gameDao.isInBacklog(gameId, u);
 	}
 
-	// CHANGEEEE
+	
 	@Override
 	public List<Game> getGamesInBacklog(String backlog, User u)
 	{
 		if(u == null)
 			return getGamesInBacklog(backlog);
-		return null;
+		List<Game> games = gameDao.getGamesInBacklog(u);
+		updateBacklogDetails(games, backlog, u);
+		return games;
 	}
 	
-	// CHANGEEEE
+	
 	@Override
 	public String addToBacklog(long gameId, String backlog, User u)
 	{
 		if(u == null)
 			return addToBacklog(gameId, backlog);
+		gameDao.addToBacklog(gameId, u);
 		return backlog;
 	}
 	
-	// CHANGEEEE
+	
 	@Override
 	public String removeFromBacklog(long gameId, String backlog, User u)
 	{
 		if(u == null)
 			return removeFromBacklog(gameId, backlog);
+		gameDao.removeFromBacklog(gameId, u);
 		return backlog;
 	}
 	
@@ -253,16 +257,20 @@ public class GameServiceImpl implements GameService
 	{
 		List<Game> anonGames = getGamesInBacklog(backlog);
 		for(Game g : anonGames)
-			gameDao.addToBacklog(u, g);
+			gameDao.addToBacklog(g.getId(), u);
 		return "";
 	}
 	
-	// CHANGEEEE
+	
 	@Override
 	public String toggleBacklog(long gameId, String backlog, User u)
 	{
 		if(u == null)
 			return toggleBacklog(gameId, backlog);
+		if(gameDao.isInBacklog(gameId, u))
+			gameDao.removeFromBacklog(gameId, u);
+		else
+			gameDao.addToBacklog(gameId, u);
 		return backlog;
 	}
 	

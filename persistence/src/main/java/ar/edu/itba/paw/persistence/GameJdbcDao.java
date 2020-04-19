@@ -396,8 +396,28 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public void addToBacklog(User u, Game g)
+	public boolean isInBacklog(long gameId, User u)
 	{
-		jdbcTemplate.update("INSERT INTO backlogs(user_id, game) VALUES(?, ?)", u.getId(), g.getId());
+		Optional<Game> g = jdbcTemplate.query("SELECT * FROM (SELECT * FROM backlogs WHERE game = ? AND user_id = ?) AS g NATURAL JOIN games", GAME_MAPPER, gameId, u.getId()).stream().findFirst();
+		return g.isPresent();
 	}
+	
+	@Override
+	public void addToBacklog(long gameId, User u)
+	{
+		jdbcTemplate.update("INSERT INTO backlogs(user_id, game) VALUES(?, ?)", u.getId(), gameId);
+	}
+	
+	@Override
+	public void removeFromBacklog(long gameId, User u)
+	{
+		jdbcTemplate.update("DELETE FROM backlogs WHERE user_id = ? AND game = ?", u.getId(), gameId);
+	}
+
+	@Override
+	public List<Game> getGamesInBacklog(User u)
+	{
+		List<Game> games = jdbcTemplate.query("SELECT * FROM (SELECT * FROM backlogs WHERE user_id = ?) AS g NATURAL JOIN games", GAME_MAPPER, u.getId());
+		return games;
+	}	
 }

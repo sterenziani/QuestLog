@@ -226,9 +226,31 @@ public interface GameDao
 	List<Game> getUpcomingGamesWithDetails();
 
 	/**
+	 * Check if the game with the provided id is in the user's backlog.
+	 * @param gameId	The id of the game
+	 * @param u			The user
+	 * @return			True if the game is in their backlog, false if not.
+	 */
+	boolean isInBacklog(long gameId, User u);
+	
+	/**
 	 * Add a game to a registered user's backlog
 	 * @param u	The user adding the game to their backlog
 	 * @param g The game
 	 */
-	void addToBacklog(User u, Game g);	
+	void addToBacklog(long gameId, User u);
+	
+	/**
+	 * Remove a game from a user's backlog
+	 * @param gameId	The id of the game
+	 * @param u			The user
+	 */
+	void removeFromBacklog(long gameId, User u);
+	
+	/**
+	 * Get a list of all games saved in a user's backlog
+	 * @param u	The user
+	 * @return	The list of games
+	 */
+	List<Game> getGamesInBacklog(User u);
 }
