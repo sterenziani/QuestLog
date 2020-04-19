@@ -18,7 +18,7 @@
         <c:url value="/create" var="postPath"/>
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
 			<div>
-				<form:errors path="username" class="formError" element="p"/>
+				<form:errors path="username" class="form-error" element="p"/>
 				<label>
 					<spring:message code="registerForm.username"/>
 					<spring:message code="registerForm.username.hint" var="usernameHint"/>
@@ -26,7 +26,7 @@
 				</label>
 			</div>
 			<div>
-				<form:errors path="password" class="formError" element="p"/>
+				<form:errors path="password" class="form-error" element="p"/>
 				<label>
 					<spring:message code="registerForm.password"/>
 					<spring:message code="registerForm.password.hint" var="passwordHint"/>
@@ -34,8 +34,8 @@
 				</label>
 			</div>
 			<div>
-				<form:errors class="formError" element="p"/>
-				<form:errors path="repeatPassword" class="formError" element="p"/>
+				<form:errors class="form-error" element="p"/>
+				<form:errors path="repeatPassword" class="form-error" element="p"/>
 				<label>
 					<spring:message code="registerForm.repeatPassword"/>
 					<spring:message code="registerForm.repeatPassword.hint" var="repeatPasswordHint"/>

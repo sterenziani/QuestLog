@@ -49,6 +49,14 @@ public class UserController
 		return new ModelAndView("login");
 	}
 	
+	@RequestMapping("/login_error")
+	public ModelAndView loginError()
+	{
+		ModelAndView mav = new ModelAndView("login");
+		mav.addObject("error", true);
+		return mav;
+	}
+	
 	@RequestMapping("/users/{id}")
 	public ModelAndView userProfile(@PathVariable("id") long id)
 	{

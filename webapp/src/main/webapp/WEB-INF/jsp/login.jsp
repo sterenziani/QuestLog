@@ -14,7 +14,8 @@
     <%@include file="navigation.jsp"%>
     <div class="content">
         <h2><spring:message code="login.title"/></h2>
-        <form:form modelAttribute="registerForm" action="${postPath}" method="post">
+        <c:if test="${error}"><p class="form-error"><spring:message code="login.invalid"/></p></c:if>
+        <form:form modelAttribute="login" action="${postPath}" method="post">
 			<div>
 				<label>
 					<spring:message code="registerForm.username"/>
