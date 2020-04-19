@@ -67,12 +67,13 @@ public class MappingController
 		m.addObject("msg", "Error 400");
 		return m;
 	}
-	
+
 	@RequestMapping("/")
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("index");
 		User u = loggedUser();
+		mav.addObject("cookieBacklog", backlog);
 		mav.addObject("backlogGames", gs.getGamesInBacklog(backlog, u));
 		mav.addObject("upcomingGames", gs.getUpcomingGames(backlog, u));
 		return mav;
@@ -283,10 +284,17 @@ public class MappingController
 		return null;
 	}
 	
-	@RequestMapping(value = "/transfer_backlog", method = RequestMethod.POST)
+	@RequestMapping("/transfer_backlog")
 	public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		gs.transferBacklog(backlog, loggedUser());
+		clearAnonBacklog(response);
+		return new ModelAndView("redirect:/");
+	}
+	
+	@RequestMapping("/clear_backlog")
+	public ModelAndView clearBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
 		clearAnonBacklog(response);
 		return new ModelAndView("redirect:/");
 	}

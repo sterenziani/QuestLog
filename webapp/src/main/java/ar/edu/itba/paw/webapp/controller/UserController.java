@@ -49,7 +49,7 @@ public class UserController
 		return new ModelAndView("login");
 	}
 	
-	@RequestMapping("/{id}")
+	@RequestMapping("/users/{id}")
 	public ModelAndView userProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");

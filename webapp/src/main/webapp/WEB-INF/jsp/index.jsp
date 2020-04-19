@@ -15,6 +15,12 @@
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
     <div class="content">
+    	<c:if test="${loggedUser != null && !empty cookieBacklog}">
+    		<p><spring:message code="index.importPrompt"/></p>
+    		<a class="button" href="<c:url value="/clear_backlog"/>"><spring:message code="index.noImport"/></a><br>
+	    	<a class="button" href="<c:url value="/transfer_backlog"/>"><spring:message code="index.yesImport"/></a>
+	    	<p><spring:message code="index.ignoreImport"/></p>
+    	</c:if>
         <%@include file="mainGameLists.jsp"%>
     </div>
 </body>
