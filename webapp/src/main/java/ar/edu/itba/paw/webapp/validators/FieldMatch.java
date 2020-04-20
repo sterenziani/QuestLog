@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.form;
+package ar.edu.itba.paw.webapp.validators;
 import javax.validation.Payload;
 import javax.validation.Constraint;
 import java.lang.annotation.Documented;

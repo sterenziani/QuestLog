@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.form;
+package ar.edu.itba.paw.webapp.validators;
 import java.lang.reflect.Field;
 
 import javax.validation.ConstraintValidator;
