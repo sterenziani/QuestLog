@@ -32,7 +32,7 @@
     <a href="<c:url value="/games/${game.id}"/>">
         <div class="game-list-item-content">
             <div class="game-list-item-cover">
-                <img src="<c:url value="${game.cover}"/>" alt="${game.title}"/>
+                <img src="${game.cover}" alt="${game.title}"/>
             </div>
             <div class="game-list-item-data">
                 <h3><c:out value="${game.title}"/></h3>
