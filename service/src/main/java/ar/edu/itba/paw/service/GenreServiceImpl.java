@@ -29,12 +29,12 @@ public class GenreServiceImpl implements GenreService {
 	}
 	
 	@Override
-	public Optional<Genre> findById(long id, String backlog, User u)
+	public Optional<Genre> findById(long id, User u)
 	{
 		Optional<Genre> genre = genreDao.findById(id);
 		if(genre.isPresent())
 		{
-			gs.updateBacklogDetails(genre.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(genre.get().getGames(), u);
 		}
 		return genre;
 	}
@@ -46,12 +46,12 @@ public class GenreServiceImpl implements GenreService {
 	}
 	
 	@Override
-	public Optional<Genre> findByName(String name, String backlog, User u)
+	public Optional<Genre> findByName(String name, User u)
 	{
 		Optional<Genre> genre = genreDao.findByName(name);
 		if(genre.isPresent())
 		{
-			gs.updateBacklogDetails(genre.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(genre.get().getGames(), u);
 		}
 		return genre;
 	}

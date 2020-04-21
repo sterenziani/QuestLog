@@ -12,7 +12,7 @@ public interface DeveloperService {
 	 * @return The matched developer, or null otherwise.
 	 */
 	Optional<Developer> findById(long id);
-	Optional<Developer> findById(long id, String backlog, User u);
+	Optional<Developer> findById(long id, User u);
 	
 	/**
 	 * Finds a developer or several developers with a given name
@@ -20,7 +20,7 @@ public interface DeveloperService {
 	 * @return List of developers that share that name.
 	 */
 	Optional<Developer> findByName(String name);
-	Optional<Developer> findByName(String name, String backlog, User u);
+	Optional<Developer> findByName(String name, User u);
 	
 	/**
 	 * Change a developer's name
