@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.service;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -272,12 +271,20 @@ public class GameServiceImpl implements GameService
 	@Override
 	public List<Game> getRecommendedGames(User u)
 	{
-		return gameDao.getSimilarToBacklog(u);
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getSimilarToBacklog(u);
+		updateBacklogDetails(games, u);
+		return games;
 	}
 	
 	@Override
-	public List<Game> getPopularGames()
+	public List<Game> getPopularGames(User u)
 	{
-		return gameDao.getMostBacklogged();
+		List<Game> games = gameDao.getMostBacklogged();
+		if(u == null)
+			return games;
+		updateBacklogDetails(games, u);
+		return games;
 	}
 }

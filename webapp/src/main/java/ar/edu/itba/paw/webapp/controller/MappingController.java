@@ -85,14 +85,14 @@ public class MappingController
 		if(u == null)
 		{
 			mav.addObject("backlogGames", getGamesInBacklog(backlog));
-			mav.addObject("popularGames", gs.getPopularGames());
+			mav.addObject("popularGames", gs.getPopularGames(null));
 			mav.addObject("upcomingGames", getUpcomingGames(backlog));
 		}
 		else
 		{
 			mav.addObject("backlogGames", gs.getGamesInBacklog(u));
 			mav.addObject("recommendedGames", gs.getRecommendedGames(u));
-			mav.addObject("popularGames", gs.getPopularGames());
+			mav.addObject("popularGames", gs.getPopularGames(u));
 			mav.addObject("upcomingGames", gs.getUpcomingGames(u));
 		}
 		return mav;

@@ -223,5 +223,5 @@ public interface GameService
 
 	List<Game> getRecommendedGames(User u);
 
-	List<Game> getPopularGames();
+	List<Game> getPopularGames(User u);
 }
