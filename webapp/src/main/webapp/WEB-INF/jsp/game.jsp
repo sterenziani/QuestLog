@@ -20,7 +20,7 @@
         <%@include file="gameDetails.jsp"%>
         <div class="game-backlog">
             <form method="post">
-                <input type="hidden" name="id" value="${game.id}">
+                <input type="hidden" name="gameId" value="${game.id}">
                 <c:choose>
                 	<c:when test="${game.inBacklog}">
 	            		<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>

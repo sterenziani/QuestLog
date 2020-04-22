@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,40 +20,40 @@ public class GameServiceImpl implements GameService
 {
 	@Autowired
 	private GameDao gameDao;
-	
+
 	@Override
-	public Optional<Game> findById(long id, String backlog, User u)
+	public Optional<Game> findById(long id, User u)
 	{
 		Optional<Game> g = gameDao.findById(id);
 		if(g.isPresent())
-			g.get().setInBacklog(gameInBacklog(id, backlog, u));
+			g.get().setInBacklog(gameInBacklog(id, u));
 		return g;
 	}
 	
 	@Override
-	public Optional<Game> findByIdWithDetails(long id, String backlog, User u)
+	public Optional<Game> findByIdWithDetails(long id, User u)
 	{
 		Optional<Game> g = gameDao.findByIdWithDetails(id);
 		if(g.isPresent())
-			g.get().setInBacklog(gameInBacklog(id, backlog, u));
+			g.get().setInBacklog(gameInBacklog(id, u));
 		return g;
 	}
 
 	@Override
-	public Optional<Game> findByTitle(String title, String backlog, User u)
+	public Optional<Game> findByTitle(String title, User u)
 	{
 		Optional<Game> g = gameDao.findByTitle(title);
 		if(g.isPresent())
-			g.get().setInBacklog(gameInBacklog(g.get().getId(), backlog, u));
+			g.get().setInBacklog(gameInBacklog(g.get().getId(), u));
 		return g;
 	}
 	
 	@Override
-	public Optional<Game> findByTitleWithDetails(String title, String backlog, User u)
+	public Optional<Game> findByTitleWithDetails(String title, User u)
 	{
 		Optional<Game> g = gameDao.findByTitleWithDetails(title);
 		if(g.isPresent())
-			g.get().setInBacklog(gameInBacklog(g.get().getId(), backlog, u));
+			g.get().setInBacklog(gameInBacklog(g.get().getId(), u));
 		return g;
 	}
 
@@ -82,18 +82,18 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override 
-	public List<Game> getAllGames(String backlog, User u)
+	public List<Game> getAllGames(User u)
 	{
 		List<Game> list = gameDao.getAllGames();
-		updateBacklogDetails(list, backlog, u);
+		updateBacklogDetails(list, u);
 		return list;
 	}
 	
 	@Override 
-	public List<Game> getAllGamesWithDetails(String backlog, User u)
+	public List<Game> getAllGamesWithDetails(User u)
 	{
 		List<Game> list = gameDao.getAllGamesWithDetails();
-		updateBacklogDetails(list, backlog, u);
+		updateBacklogDetails(list, u);
 		return list;
 	}
 
@@ -188,146 +188,103 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override 
-	public List<Game> searchByTitle(String search, String backlog, User u)
+	public List<Game> searchByTitle(String search, User u)
 	{
 		List<Game> list = gameDao.searchByTitle(search);
 		for(Game g : list)
-			g.setInBacklog(gameInBacklog(g.getId(), backlog, u));
+			g.setInBacklog(gameInBacklog(g.getId(), u));
 		return list;
 	}
 	
 	@Override
-	public List<Game> searchByTitleWithDetails(String search, String backlog, User u)
+	public List<Game> searchByTitleWithDetails(String search, User u)
 	{
 		List<Game> list = gameDao.searchByTitleWithDetails(search);
-		updateBacklogDetails(list, backlog, u);
+		updateBacklogDetails(list, u);
 		return list;
 	}
 	
 	@Override
-	public List<Game> getUpcomingGames(String backlog, User u)
+	public List<Game> getUpcomingGames(User u)
 	{
 		List<Game> list = gameDao.getUpcomingGames();
-		updateBacklogDetails(list, backlog, u);
+		updateBacklogDetails(list, u);
 		return list;
 	}
 
 	
 	@Override
-	public boolean gameInBacklog(long gameId, String backlog, User u)
+	public boolean gameInBacklog(long gameId, User u)
 	{
 		if(u == null)
-			return backlog.contains("-" +gameId +"-");
+			return false;
 		return gameDao.isInBacklog(gameId, u);
 	}
 
 	
 	@Override
-	public List<Game> getGamesInBacklog(String backlog, User u)
+	public List<Game> getGamesInBacklog(User u)
 	{
 		if(u == null)
-			return getGamesInBacklog(backlog);
+			return Collections.emptyList();
 		List<Game> games = gameDao.getGamesInBacklog(u);
-		updateBacklogDetails(games, backlog, u);
+		updateBacklogDetails(games, u);
 		return games;
 	}
 	
 	
 	@Override
-	public String addToBacklog(long gameId, String backlog, User u)
+	public void addToBacklog(long gameId, User u)
 	{
-		if(u == null)
-			return addToBacklog(gameId, backlog);
-		gameDao.addToBacklog(gameId, u);
-		return backlog;
-	}
-	
-	
-	@Override
-	public String removeFromBacklog(long gameId, String backlog, User u)
-	{
-		if(u == null)
-			return removeFromBacklog(gameId, backlog);
-		gameDao.removeFromBacklog(gameId, u);
-		return backlog;
-	}
-	
-	@Override
-	public String transferBacklog(String backlog, User u)
-	{
-		List<Game> anonGames = getGamesInBacklog(backlog);
-		for(Game g : anonGames)
-			gameDao.addToBacklog(g.getId(), u);
-		return "";
-	}
-	
-	
-	@Override
-	public String toggleBacklog(long gameId, String backlog, User u)
-	{
-		if(u == null)
-			return toggleBacklog(gameId, backlog);
-		if(gameDao.isInBacklog(gameId, u))
-			gameDao.removeFromBacklog(gameId, u);
-		else
+		if(u != null)
 			gameDao.addToBacklog(gameId, u);
-		return backlog;
+	}
+	
+	
+	@Override
+	public void removeFromBacklog(long gameId, User u)
+	{
+		if(u != null)
+			gameDao.removeFromBacklog(gameId, u);
 	}
 	
 	@Override
-	public void updateBacklogDetails(Collection<Game> games, String backlog, User u)
+	public void toggleBacklog(long gameId, User u)
+	{
+		if(u != null)
+		{
+			if(gameDao.isInBacklog(gameId, u))
+				gameDao.removeFromBacklog(gameId, u);
+			else
+				gameDao.addToBacklog(gameId, u);
+		}
+		return;
+	}
+	
+	@Override
+	public void updateBacklogDetails(Collection<Game> games, User u)
 	{
 		for(Game g : games)
-			g.setInBacklog(gameInBacklog(g.getId(), backlog, u));
+			g.setInBacklog(gameInBacklog(g.getId(), u));
 	}
 	
-	///////////////////// METHODS FOR COOKIE BACKLOG ONLY
-	
-	private boolean gameInBacklog(long gameId, String backlog)
+	@Override
+	public List<Game> getRecommendedGames(User u)
 	{
-		return backlog.contains("-" +gameId +"-");
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getSimilarToBacklog(u);
+		updateBacklogDetails(games, u);
+		return games;
 	}
 	
-	private List<Game> getGamesInBacklog(String backlog)
+	@Override
+	public List<Game> getPopularGames(User u)
 	{
-		List<Game> list = new ArrayList<Game>();
-		String[] ids = backlog.split("-");
-		for(String id : ids)
-		{
-			if(!id.isEmpty())
-			{
-				Optional<Game> g = gameDao.findById(Long.parseLong(id));
-				if(g.isPresent())
-				{
-					list.add(g.get());
-					g.get().setInBacklog(true);
-				}
-			}
-		}
-		return list;
-	}
-	
-	private String addToBacklog(long gameId, String backlog)
-	{
-		if(!gameInBacklog(gameId, backlog))
-		{
-			gameDao.findById(gameId).get().setInBacklog(true);
-			return backlog +"-" +gameId +"-";
-		}
-		return backlog;
-	}
-	
-	private String removeFromBacklog(long gameId, String backlog)
-	{
-		gameDao.findById(gameId).get().setInBacklog(false);
-		return backlog.replaceAll("-"+gameId+"-", "");
-	}
-	
-	private String toggleBacklog(long gameId, String backlog)
-	{
-		if(gameInBacklog(gameId, backlog))
-			return removeFromBacklog(gameId, backlog);
-		else
-			return addToBacklog(gameId, backlog);
+		List<Game> games = gameDao.getMostBacklogged();
+		if(u == null)
+			return games;
+		updateBacklogDetails(games, u);
+		return games;
 	}
 }

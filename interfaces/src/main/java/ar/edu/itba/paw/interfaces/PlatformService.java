@@ -14,7 +14,7 @@ public interface PlatformService
 	 * @return The matched platform, or null otherwise.
 	 */
 	Optional<Platform> findById(long id);
-	Optional<Platform> findById(long id, String backlog, User u);
+	Optional<Platform> findById(long id, User u);
 	
 	/**
 	 * Finds a platform or several platforms with a given name
@@ -22,7 +22,7 @@ public interface PlatformService
 	 * @return List of platforms that share that name.
 	 */
 	Optional<Platform> findByName(String name);
-	Optional<Platform> findByName(String name, String backlog, User u);
+	Optional<Platform> findByName(String name, User u);
 	
 	/**
 	 * Change a platform's name

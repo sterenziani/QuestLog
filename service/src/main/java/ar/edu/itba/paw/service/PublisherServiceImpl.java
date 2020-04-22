@@ -31,12 +31,12 @@ public class PublisherServiceImpl implements PublisherService
 	}
 	
 	@Override
-	public Optional<Publisher> findById(long id, String backlog, User u)
+	public Optional<Publisher> findById(long id, User u)
 	{
 		Optional<Publisher> p = publisherDao.findById(id);
 		if(p.isPresent())
 		{
-			gs.updateBacklogDetails(p.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(p.get().getGames(), u);
 		}
 		return p;
 	}
@@ -48,12 +48,12 @@ public class PublisherServiceImpl implements PublisherService
 	}
 	
 	@Override
-	public Optional<Publisher> findByName(String name, String backlog, User u)
+	public Optional<Publisher> findByName(String name, User u)
 	{
 		Optional<Publisher> p = publisherDao.findByName(name);
 		if(p.isPresent())
 		{
-			gs.updateBacklogDetails(p.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(p.get().getGames(), u);
 		}
 		return p;
 	}

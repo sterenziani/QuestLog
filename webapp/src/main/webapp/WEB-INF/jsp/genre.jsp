@@ -15,7 +15,8 @@
     <div class="content">
     	<div class="logo"><img height="100" src="${genre.logo}"></img></div>
         <div>
-	        <spring:message code="genre.gamesOfGenre" arguments="${genre.name}" var="gamesOfGenre"/>
+        	<spring:message code="genres.${genre.name}" var="genreName"/>
+	        <spring:message code="genre.gamesOfGenre" arguments="${genreName}" var="gamesOfGenre"/>
 	        <c:set var="games" value="${genre.games}"/>
 	        <c:set var="listName" value="${gamesOfGenre}"/>
 	        <%@ include file="gameList.jsp"%>

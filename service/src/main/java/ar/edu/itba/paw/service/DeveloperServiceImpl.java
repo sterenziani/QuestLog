@@ -26,11 +26,11 @@ public class DeveloperServiceImpl implements DeveloperService{
 	}
 	
 	@Override
-	public Optional<Developer> findById(long id, String backlog, User u)
+	public Optional<Developer> findById(long id, User u)
 	{
 		Optional<Developer> d = developerDao.findById(id);
 		if(d.isPresent())
-			gs.updateBacklogDetails(d.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(d.get().getGames(), u);
 		return d;
 	}
 
@@ -41,11 +41,11 @@ public class DeveloperServiceImpl implements DeveloperService{
 	}
 	
 	@Override
-	public Optional<Developer> findByName(String name, String backlog, User u)
+	public Optional<Developer> findByName(String name, User u)
 	{
 		Optional<Developer> d = developerDao.findByName(name);
 		if(d.isPresent())
-			gs.updateBacklogDetails(d.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(d.get().getGames(), u);
 		return d;
 	}
 

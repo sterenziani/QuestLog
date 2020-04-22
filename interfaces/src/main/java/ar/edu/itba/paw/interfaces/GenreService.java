@@ -12,7 +12,7 @@ public interface GenreService {
 		 * @return The matched genre, or null otherwise.
 		 */
 		Optional<Genre> findById(long id);
-		Optional<Genre> findById(long id, String backlog, User u);
+		Optional<Genre> findById(long id, User u);
 		
 		/**
 		 * Finds a genre or several genres with a given name
@@ -20,7 +20,7 @@ public interface GenreService {
 		 * @return List of genres that share that name.
 		 */
 		Optional<Genre> findByName(String name);
-		Optional<Genre> findByName(String name, String backlog, User u);
+		Optional<Genre> findByName(String name, User u);
 		
 		/**
 		 * Change a genre's name

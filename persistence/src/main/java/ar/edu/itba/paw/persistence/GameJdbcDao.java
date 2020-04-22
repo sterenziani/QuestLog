@@ -27,6 +27,8 @@ public class GameJdbcDao implements GameDao
 {
 	private	final SimpleJdbcInsert jdbcInsert;
 	private JdbcTemplate jdbcTemplate;
+	private static final int MIN_AMOUNT_FOR_OVERLAP = 3;
+	private static final int MIN_AMOUNT_FOR_POPULAR = 3;
 	protected static final RowMapper<Game> GAME_MAPPER = new RowMapper<Game>()
 	{
 		@Override
@@ -419,5 +421,20 @@ public class GameJdbcDao implements GameDao
 	{
 		List<Game> games = jdbcTemplate.query("SELECT * FROM (SELECT * FROM backlogs WHERE user_id = ?) AS g NATURAL JOIN games", GAME_MAPPER, u.getId());
 		return games;
-	}	
+	}
+	
+	@Override
+	public List<Game> getSimilarToBacklog(User u)
+	{
+		long id = u.getId();
+		return jdbcTemplate.query("SELECT * FROM (SELECT t2.game AS game FROM backlogs AS t1 JOIN backlogs AS t2 ON t1.user_id = t2.user_id AND t1.user_id != ?"
+												+ "AND t1.game IN (SELECT game FROM backlogs WHERE user_id = ?) AND t2.game NOT IN (SELECT game FROM backlogs WHERE user_id = ?)"
+												+ "GROUP BY t2.game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games", GAME_MAPPER, id, id, id, MIN_AMOUNT_FOR_OVERLAP);
+	}
+	
+	@Override
+	public List<Game> getMostBacklogged()
+	{
+		return jdbcTemplate.query("SELECT * FROM (SELECT game FROM backlogs GROUP BY game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games", GAME_MAPPER, MIN_AMOUNT_FOR_POPULAR);
+	}
 }

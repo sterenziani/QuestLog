@@ -16,7 +16,7 @@
 <div class="game-list-item">
     <div class="game-list-item-action">
         <form method="post">
-            <input type="hidden" name="id" value="<c:out value="${game.id}"/>">
+            <input type="hidden" name="gameId" value="<c:out value="${game.id}"/>">
             <spring:message code="game.addToBacklog" var="addToBacklog"/>
             <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
             <c:choose>

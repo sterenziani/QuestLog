@@ -27,23 +27,23 @@ public class PlatformServiceImpl implements PlatformService
 	}
 	
 	@Override
-	public Optional<Platform> findById(long id, String backlog, User u)
+	public Optional<Platform> findById(long id, User u)
 	{
 		Optional<Platform> p = platformDao.findById(id);
 		if(p.isPresent())
 		{
-			gs.updateBacklogDetails(p.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(p.get().getGames(), u);
 		}
 		return p;
 	}
 
 	@Override
-	public Optional<Platform> findByName(String name, String backlog, User u)
+	public Optional<Platform> findByName(String name, User u)
 	{
 		Optional<Platform> p = platformDao.findByName(name);
 		if(p.isPresent())
 		{
-			gs.updateBacklogDetails(p.get().getGames(), backlog, u);
+			gs.updateBacklogDetails(p.get().getGames(), u);
 		}
 		return p;
 	}

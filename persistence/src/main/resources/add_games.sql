@@ -14,7 +14,7 @@ INSERT INTO genres(genre_name, genre_logo) VALUES('Sports', 'https://media.rawg.
 INSERT INTO genres(genre_name, genre_logo) VALUES('MMO', 'https://media.rawg.io/media/screenshots/266/26605ea274a4dcada95f3f02b30fc2ed.jpg') ON CONFLICT DO NOTHING;
 INSERT INTO genres(genre_name, genre_logo) VALUES('Family', 'https://media.rawg.io/media/screenshots/904/904809185a905c430f6c36f0ebf5353c.jpg') ON CONFLICT DO NOTHING;
 INSERT INTO genres(genre_name, genre_logo) VALUES('Fighting', 'https://media.rawg.io/media/screenshots/3e2/3e22f928180309b9f624628e71fdc447.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Board Games', 'https://media.rawg.io/media/screenshots/c25/c252e2023355e98787402c4bdd90f775.jpeg') ON CONFLICT DO NOTHING;
+INSERT INTO genres(genre_name, genre_logo) VALUES('BoardGames', 'https://media.rawg.io/media/screenshots/c25/c252e2023355e98787402c4bdd90f775.jpeg') ON CONFLICT DO NOTHING;
 INSERT INTO genres(genre_name, genre_logo) VALUES('Educational', 'https://media.rawg.io/media/screenshots/b10/b1037cefbbf94070dd4fae7ffbbd6999.jpg') ON CONFLICT DO NOTHING;
 INSERT INTO genres(genre_name, genre_logo) VALUES('Card', 'https://media.rawg.io/media/screenshots/3e7/3e728c858ebd673e099cab3558a47d42.jpg') ON CONFLICT DO NOTHING;
 

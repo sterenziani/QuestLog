@@ -253,4 +253,8 @@ public interface GameDao
 	 * @return	The list of games
 	 */
 	List<Game> getGamesInBacklog(User u);
+
+	List<Game> getSimilarToBacklog(User u);
+
+	List<Game> getMostBacklogged();
 }

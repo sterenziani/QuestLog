@@ -17,28 +17,28 @@ public interface GameService
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findById(long id, String backlog, User u);
+	Optional<Game> findById(long id, User u);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) given its ID
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findByIdWithDetails(long id, String backlog, User u);
+	Optional<Game> findByIdWithDetails(long id, User u);
 	
 	/**
 	 * Finds a game or several games with a given title
 	 * @param title The title for the game.
 	 * @return List of games that share that title.
 	 */
-	Optional<Game> findByTitle(String title, String backlog, User u);
+	Optional<Game> findByTitle(String title, User u);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) with a given title
 	 * @param title The title for the game.
 	 * @return 		The game with that title.
 	 */
-	Optional<Game> findByTitleWithDetails(String title, String backlog, User u);
+	Optional<Game> findByTitleWithDetails(String title, User u);
 	
 	/**
 	 * Change a game's title
@@ -77,8 +77,8 @@ public interface GameService
 	 * Get a list of all available games.
 	 * @return 	The list of all games.
 	 */
-	List<Game> getAllGames(String backlog, User u);
-	List<Game> getAllGamesWithDetails(String backlog, User u);
+	List<Game> getAllGames(User u);
+	List<Game> getAllGamesWithDetails(User u);
 	
 	/**
 	 * Links a game to a specified platform
@@ -200,27 +200,28 @@ public interface GameService
 	 * @param search The search term.
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitle(String search, String backlog, User u);
-	List<Game> searchByTitleWithDetails(String search, String backlog, User u);
+	List<Game> searchByTitle(String search, User u);
+	List<Game> searchByTitleWithDetails(String search, User u);
 
 	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
-	List<Game> getUpcomingGames(String backlog, User u);
+	List<Game> getUpcomingGames(User u);
 
-	boolean gameInBacklog(long gameId, String backlog, User u);
+	boolean gameInBacklog(long gameId, User u);
 
-	List<Game> getGamesInBacklog(String backlog, User u);
+	List<Game> getGamesInBacklog(User u);
 
-	String addToBacklog(long gameId, String backlog, User u);
+	void addToBacklog(long gameId, User u);
 
-	String removeFromBacklog(long gameId, String backlog, User u);
+	void removeFromBacklog(long gameId, User u);
 
-	String toggleBacklog(long gameId, String backlog, User u);
+	void toggleBacklog(long gameId, User u);
 
-	void updateBacklogDetails(Collection<Game> list, String backlog, User u);
+	void updateBacklogDetails(Collection<Game> list, User u);
 
-	String transferBacklog(String backlog, User u);
+	List<Game> getRecommendedGames(User u);
 
+	List<Game> getPopularGames(User u);
 }
