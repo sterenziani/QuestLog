@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users(
 	id INTEGER IDENTITY PRIMARY KEY,
-    username VARCHAR(100)
+    username VARCHAR(100) UNIQUE,
+    password VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS platforms(
@@ -65,4 +66,35 @@ CREATE TABLE IF NOT EXISTS releases(
 	game INT,
 	region INT,
 	release_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS scores(
+	user_id INT,
+	game INT,
+	score INT,
+);
+
+CREATE TABLE IF NOT EXISTS reviews(
+	review INTEGER IDENTITY,
+	user_id INT,
+	game INT,
+	platform INT,
+	score INT,
+	body VARCHAR(300),
+	post_date TIMESTAMP,
+
+);
+
+CREATE TABLE IF NOT EXISTS runs(
+	run INTEGER IDENTITY,
+	user_id INT,
+	game INT,
+	platform INT,
+	playstyle INT,
+	time INT,
+);
+
+CREATE TABLE IF NOT EXISTS playstyles(
+	playstyle INTEGER IDENTITY,
+	playstyle_name VARCHAR(25),
 );

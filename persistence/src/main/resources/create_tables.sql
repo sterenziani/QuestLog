@@ -46,13 +46,6 @@ CREATE TABLE IF NOT EXISTS regions(
 	PRIMARY KEY(region)
 );
 
---CREATE TABLE IF NOT EXISTS users(
---	id SERIAL,
---	username VARCHAR(100),
---	password VARCHAR(255),
---	PRIMARY KEY (id)
---);
-
 CREATE TABLE IF NOT EXISTS users(
 	user_id SERIAL,
 	username VARCHAR(100) UNIQUE NOT NULL,
@@ -105,7 +98,7 @@ CREATE TABLE IF NOT EXISTS runs(
 	game INT NOT NULL,
 	platform INT NOT NULL,
 	playstyle INT NOT NULL,
-	time INTERVAL NOT NULL,
+	time INT NOT NULL,
 	PRIMARY KEY(run),
 	FOREIGN KEY(user_id) REFERENCES users,
 	FOREIGN KEY(game) REFERENCES games,

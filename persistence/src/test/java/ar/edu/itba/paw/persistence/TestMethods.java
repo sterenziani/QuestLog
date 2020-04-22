@@ -7,8 +7,13 @@ import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.model.Review;
+import ar.edu.itba.paw.model.Run;
+import ar.edu.itba.paw.model.Score;
+import ar.edu.itba.paw.model.User;
 
 public class TestMethods
 {
@@ -69,6 +74,51 @@ public class TestMethods
 		args.put("region", r.getId());
 		args.put("release_date", d);
 		releaseInsert.execute(args);
+	}
+	
+	public static User addUser(String username, String password, SimpleJdbcInsert userInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("username", username);
+		args.put("password", password);
+		return new User(userInsert.executeAndReturnKey(args).longValue(), username, password);
+	}
+	
+	public static Score addScore(User user, Game game, int score, SimpleJdbcInsert scoreInsert) {
+		final Map<String, Object> args = new HashMap<>();
+		args.put("user_id", user.getId());
+		args.put("game", game.getId());
+		args.put("score", score);
+		scoreInsert.execute(args);
+		return new Score(user, game, score);
+	}
+	
+	public static Review addReview(User user, Game game, Platform platform, int score, String body, Date date, SimpleJdbcInsert reviewInsert) {
+		final Map<String, Object> args = new HashMap<>();
+		args.put("user_id", user.getId());
+		args.put("game", game.getId());
+		args.put("platform", platform.getId());
+		args.put("score", score);
+		args.put("body", body);
+		args.put("post_date", date);
+		return new Review(reviewInsert.executeAndReturnKey(args).longValue(), user, game, platform, score, body, date);	
+	}
+	
+	public static Run addRun(User user, Game game, Platform platform, Playstyle playstyle, long time, SimpleJdbcInsert runInsert) {
+		final Map<String, Object> args = new HashMap<>();
+		args.put("user_id", user.getId());
+		args.put("game", game.getId());
+		args.put("platform", platform.getId());
+		args.put("playstyle", playstyle.getId());
+		args.put("time", time);
+		return new Run(runInsert.executeAndReturnKey(args).longValue(), user, game, platform, playstyle, time);	
+	}
+	
+	public static Playstyle addPlaystyle(String name, SimpleJdbcInsert playstyleInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("playstyle_name", name);
+		return new Playstyle (playstyleInsert.executeAndReturnKey(args).longValue(), name);
 	}
 	
 	public static void connectDev(Game g, Developer d, SimpleJdbcInsert developmentInsert)

@@ -21,6 +21,9 @@ import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreService;
 import ar.edu.itba.paw.interfaces.PlatformService;
 import ar.edu.itba.paw.interfaces.PublisherService;
+import ar.edu.itba.paw.interfaces.ReviewService;
+import ar.edu.itba.paw.interfaces.RunService;
+import ar.edu.itba.paw.interfaces.ScoreService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
@@ -49,6 +52,15 @@ public class MappingController
 	
 	@Autowired
 	private PublisherService pubs;
+	
+	@Autowired
+	private ReviewService revs;
+	
+	@Autowired
+	private RunService runs;
+	
+	@Autowired
+	private ScoreService scors;
 
 	// This doesn't throw exception. TO DO: Find a way to put it in ErrorController
 	@RequestMapping(value="/error404", method = RequestMethod.GET)
@@ -317,4 +329,5 @@ public class MappingController
 		cookie.setMaxAge(600000);
 		response.addCookie(cookie);
 	}
+
 }

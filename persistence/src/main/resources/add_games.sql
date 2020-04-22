@@ -1724,3 +1724,8 @@ INSERT INTO development(game, developer) SELECT * FROM (SELECT game FROM games W
 INSERT INTO game_versions(game, platform) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Fire Emblem Awakening') AS a, (SELECT platform FROM platforms WHERE platform_name LIKE 'Nintendo 3DS') AS b ON CONFLICT DO NOTHING;
 INSERT INTO classifications(game, genre) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Fire Emblem Awakening') AS a, (SELECT genre FROM genres WHERE genre_name LIKE 'Strategy') AS b ON CONFLICT DO NOTHING;
 INSERT INTO classifications(game, genre) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Fire Emblem Awakening') AS a, (SELECT genre FROM genres WHERE genre_name LIKE 'RPG') AS b ON CONFLICT DO NOTHING;
+
+
+INSERT INTO users(username, password) VALUES('shmeika','1234') ON CONFLICT DO NOTHING;
+
+INSERT INTO scores(user_id, game, score) SELECT user_id, game, 87 FROM (SELECT game FROM games WHERE title LIKE 'Rayman Legends') AS a, (SELECT user_id FROM users WHERE username LIKE 'shmeika') AS b ON CONFLICT DO NOTHING;
