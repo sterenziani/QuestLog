@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
-import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,7 +36,6 @@ public class UserController
 		}
 		final User u = us.register(registerForm.getUsername(), registerForm.getPassword());
 		// TO DO: Log in as user before redirecting
-		
 		return new ModelAndView("redirect:/login");
 	}
 	
