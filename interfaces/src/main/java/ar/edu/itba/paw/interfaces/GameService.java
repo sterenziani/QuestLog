@@ -220,4 +220,8 @@ public interface GameService
 	void toggleBacklog(long gameId, User u);
 
 	void updateBacklogDetails(Collection<Game> list, User u);
+
+	List<Game> getRecommendedGames(User u);
+
+	List<Game> getPopularGames();
 }

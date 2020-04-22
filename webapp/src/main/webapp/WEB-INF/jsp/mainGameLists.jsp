@@ -28,7 +28,22 @@
         <%@ include file="gameList.jsp"%>
     </div>
     --%>
-
+    <c:if test="${loggedUser != null}">
+	    <div class="main-game-lists-recommended">
+	    	<spring:message code="index.recommended" var="recommended"/>
+	        <c:set var="listName" value="${recommended}"/>
+	        <c:set var="games" value="${recommendedGames}"/>
+	        <%@ include file="gameList.jsp"%>
+	    </div>
+   	</c:if>
+   	
+	<div class="main-game-lists-popular">
+		<spring:message code="index.popular" var="popular"/>
+		<c:set var="listName" value="${popular}"/>
+		<c:set var="games" value="${popularGames}"/>
+		<%@ include file="gameList.jsp"%>
+	</div>
+   	
     <div class="main-game-lists-upcoming">
     	<spring:message code="index.upcoming" var="upcoming"/>
         <c:set var="listName" value="${upcoming}"/>

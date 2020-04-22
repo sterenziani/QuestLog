@@ -268,4 +268,16 @@ public class GameServiceImpl implements GameService
 		for(Game g : games)
 			g.setInBacklog(gameInBacklog(g.getId(), u));
 	}
+	
+	@Override
+	public List<Game> getRecommendedGames(User u)
+	{
+		return gameDao.getSimilarToBacklog(u);
+	}
+	
+	@Override
+	public List<Game> getPopularGames()
+	{
+		return gameDao.getMostBacklogged();
+	}
 }
