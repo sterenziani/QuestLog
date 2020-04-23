@@ -3,6 +3,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +26,9 @@ public class UserController
 	@Autowired
 	private UserService us;
 	
+	@Autowired
+	AuthenticationManager authenticationManager;
+	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
 	{
@@ -36,7 +44,8 @@ public class UserController
 		}
 		final User u = us.register(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
 		// TO DO: Log in as user before redirecting
-		return new ModelAndView("redirect:/login");
+		authWithAuthManager(request, u.getUsername(), u.getPassword());
+		return new ModelAndView("redirect:/");
 	}
 	
 	@RequestMapping("/login")
@@ -60,4 +69,13 @@ public class UserController
 		mav.addObject("user", us.findById(id).orElseThrow(UserNotFoundException::new));
 		return mav;
 	}
+
+	public void authWithAuthManager(HttpServletRequest request, String username, String password)
+	{
+	    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+	    authToken.setDetails(new WebAuthenticationDetails(request));
+	    Authentication authentication = authenticationManager.authenticate(authToken);
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
 }

@@ -84,5 +84,4 @@ public class WebConfig
 		messageSource.setCacheSeconds(5);
 		return messageSource;
 	}
-
 }
