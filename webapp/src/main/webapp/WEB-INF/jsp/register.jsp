@@ -43,6 +43,14 @@
 				</label>
 			</div>
 			<div>
+				<form:errors path="email" class="form-error" element="p"/>
+				<label>
+					<spring:message code="registerForm.email"/>
+					<spring:message code="registerForm.email.hint" var="emailHint"/>
+					<form:input path="email" type="email" placeholder="${emailHint}"/>
+				</label>
+			</div>
+			<div>
 				<input type="submit" value="<spring:message code="registerForm.submit"/>"/>
 			</div>
 		</form:form>

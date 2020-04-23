@@ -24,7 +24,7 @@ public class UserJdbcDao implements UserDao
 		@Override
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
-			return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"));
+			return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"));
 		}
 	};
 	
@@ -46,14 +46,21 @@ public class UserJdbcDao implements UserDao
 	{
 		return jdbcTemplate.query("SELECT * FROM users WHERE username = ?", USER_MAPPER, username).stream().findFirst();
 	}
+	
+	@Override
+	public Optional<User> findByEmail(String email)
+	{
+		return jdbcTemplate.query("SELECT * FROM users WHERE email = ?", USER_MAPPER, email).stream().findFirst();
+	}
 
 	@Override
-	public User create(String username, String password)
+	public User create(String username, String password, String email)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("username", username); 
 		args.put("password", password);
+		args.put("email", email);
 		final Number userId = jdbcInsert.executeAndReturnKey(args);
-		return new User(userId.longValue(), username, password);
+		return new User(userId.longValue(), username, password, email);
 	}
 }

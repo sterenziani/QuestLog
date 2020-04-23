@@ -20,9 +20,16 @@ public interface UserService
 	Optional<User> findByUsername(String username);
 	
 	/**
+	 * Finds a user given its email
+	 * @param username The unique email for the user.
+	 * @return The matched user, or null otherwise.
+	 */
+	Optional<User> findByEmail(String email);
+	
+	/**
 	 * Create a new user.
 	 * @param username The name of the user.
 	 * @return The created user.
 	 */
-	User register(String username, String password);
+	User register(String username, String password, String email);
 }

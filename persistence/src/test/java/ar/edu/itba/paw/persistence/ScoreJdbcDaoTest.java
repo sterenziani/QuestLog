@@ -34,6 +34,7 @@ public class ScoreJdbcDaoTest {
 	private static final String GAME_DESC = "Explore the world!";
 	private	static final String USERNAME = "Username";
 	private	static final String PASSWORD = "password";
+	private	static final String EMAIL = "email@example.com";
 	
 	@Autowired
 	private DataSource ds;
@@ -73,7 +74,7 @@ public class ScoreJdbcDaoTest {
 	@Test
 	public void testRegisterScore()
 	{	Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User u = TestMethods.addUser(USERNAME, PASSWORD, userInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
 		final Score s = scoreDao.register(u, g, SCORE);
 		Assert.assertNotNull(s);
 		Assert.assertEquals(u.getId(), s.getUser().getId());
@@ -85,7 +86,7 @@ public class ScoreJdbcDaoTest {
 	public void	testFindRunByIdExists()
 	{
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User user = TestMethods.addUser(USERNAME, PASSWORD, userInsert);
+		User user = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
 		Score s = TestMethods.addScore(user, game, SCORE, scoreInsert);
 		Optional<Score> maybeScore = scoreDao.findScore(user, game);
 		Assert.assertTrue(maybeScore.isPresent());
@@ -98,9 +99,9 @@ public class ScoreJdbcDaoTest {
 	public void testFindAverageScore()
 	{
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User user1 = TestMethods.addUser("user 1", PASSWORD, userInsert);
-		User user2 = TestMethods.addUser("user 2", PASSWORD, userInsert);
-		User user3 = TestMethods.addUser("user 3", PASSWORD, userInsert);
+		User user1 = TestMethods.addUser("user 1", PASSWORD, EMAIL, userInsert);
+		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL, userInsert);
+		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL, userInsert);
 		Score s1 = TestMethods.addScore(user1, game, 55, scoreInsert);
 		Score s2 = TestMethods.addScore(user2, game, 23, scoreInsert);
 		Score s3 = TestMethods.addScore(user3, game, 30, scoreInsert);
@@ -113,8 +114,8 @@ public class ScoreJdbcDaoTest {
 	{
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game game2 = TestMethods.addGame("Zelda 27", GAME_COVER, GAME_DESC, gameInsert);		
-		User user2 = TestMethods.addUser("pepito", PASSWORD, userInsert);
-		User user3 = TestMethods.addUser("miguelito", PASSWORD, userInsert);
+		User user2 = TestMethods.addUser("pepito", PASSWORD, EMAIL, userInsert);
+		User user3 = TestMethods.addUser("miguelito", PASSWORD, EMAIL, userInsert);
 		Score s2 = TestMethods.addScore(user2, game, 23, scoreInsert);
 		Score s3 = TestMethods.addScore(user3, game, 30, scoreInsert);
 		Score s4 = TestMethods.addScore(user2, game2, 30, scoreInsert);

@@ -34,7 +34,7 @@ public class UserController
 		{
 			return registerForm(registerForm);
 		}
-		final User u = us.register(registerForm.getUsername(), registerForm.getPassword());
+		final User u = us.register(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
 		// TO DO: Log in as user before redirecting
 		return new ModelAndView("redirect:/login");
 	}

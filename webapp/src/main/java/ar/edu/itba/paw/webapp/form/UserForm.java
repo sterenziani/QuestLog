@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import ar.edu.itba.paw.webapp.validators.EmailUnique;
 import ar.edu.itba.paw.webapp.validators.FieldMatch;
 import ar.edu.itba.paw.webapp.validators.UserUnique;
 
@@ -18,6 +20,12 @@ public class UserForm
 	@Size(min = 6, max = 100)
 	private String repeatPassword;
 	
+	@Size(min = 3, max = 100)
+	@Pattern(regexp = "[a-zA-Z0-9.]+@[a-zA-Z0-9.]+")
+	@EmailUnique()
+	private String email;
+	
+
 	public String getUsername()
 	{
 		return username;
@@ -41,5 +49,13 @@ public class UserForm
 	public void setRepeatPassword(String repeatPassword)
 	{
 		this.repeatPassword = repeatPassword;
+	}
+	public String getEmail()
+	{
+		return email;
+	}
+	public void setEmail(String email)
+	{
+		this.email = email;
 	}
 }

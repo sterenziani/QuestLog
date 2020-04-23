@@ -20,9 +20,18 @@ public interface UserDao
 	Optional<User> findByUsername(String username);
 	
 	/**
+	 * Finds a user given its email
+	 * @param username The unique email for the user.
+	 * @return The matched user, or null otherwise.
+	 */
+	Optional<User> findByEmail(String email);
+	
+	/**
 	 * Create a new user.
-	 * @param username The name of the user.
+	 * @param username	The name of the user.
+	 * @param password	The password of the user.
+	 * @param email		The email of the user.
 	 * @return The created user.
 	 */
-	User create(String username, String password);
+	User create(String username, String password, String email);
 }

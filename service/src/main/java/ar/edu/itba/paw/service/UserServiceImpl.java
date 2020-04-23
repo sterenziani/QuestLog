@@ -24,12 +24,18 @@ public class UserServiceImpl implements UserService{
 	{
 		return userDao.findByUsername(username);
 	}
+	
+	@Override
+	public Optional<User> findByEmail(String email)
+	{
+		return userDao.findByEmail(email);
+	}
 
 	@Override
-	public User register(String username, String password)
+	public User register(String username, String password, String email)
 	{
 		if(findByUsername(username).isPresent())
 			return null;
-		return userDao.create(username, password);
+		return userDao.create(username, password, email);
 	}
 }

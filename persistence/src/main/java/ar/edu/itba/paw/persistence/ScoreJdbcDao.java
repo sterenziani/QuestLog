@@ -27,7 +27,7 @@ public class ScoreJdbcDao implements ScoreDao{
 		@Override
 		public Score mapRow(ResultSet rs, int rowNum) throws SQLException
 		{	Game game = new Game(rs.getLong("game"), null, null, null);
-			User user = new User(rs.getLong("user_id"), null, null);
+			User user = new User(rs.getLong("user_id"), null, null, null);
 			return new Score(user, game, rs.getInt("score"));
 		}
 	};
@@ -109,7 +109,7 @@ public class ScoreJdbcDao implements ScoreDao{
 					@Override
 					public User mapRow(ResultSet rs, int rowNum) throws SQLException
 					{
-						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"));
+						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"));
 					}
 				}, id).stream().findFirst();
 		return user;
