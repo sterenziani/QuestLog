@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {UserUniqueValidator.class})
 public @interface UserUnique
@@ -21,13 +21,12 @@ public @interface UserUnique
     String message() default "Username already exists (and this message needs to be localized)";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-    String username();
 
-    @Target({TYPE, ANNOTATION_TYPE})
+    @Target({ FIELD})
     @Retention(RUNTIME)
     @Documented
     @interface List
     {
-        FieldMatch[] value();
+        UserUnique[] value();
     }
 }

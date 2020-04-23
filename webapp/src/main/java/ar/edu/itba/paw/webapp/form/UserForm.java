@@ -9,7 +9,7 @@ public class UserForm
 {
 	@Size(min = 6, max = 100)
 	@Pattern(regexp = "[a-zA-Z0-9]+")
-	@UserUnique(username = "username")
+	@UserUnique()
 	private String username;
 	
 	@Size(min = 6, max = 100)
