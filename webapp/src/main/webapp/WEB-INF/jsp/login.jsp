@@ -9,13 +9,14 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/error.css"/>">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
     <div class="content">
         <h2><spring:message code="login.title"/></h2>
         <c:if test="${error}"><p class="form-error"><spring:message code="login.invalid"/></p></c:if>
-        <c:url value="/login" var="postPath"/>
+        <c:url value="login" var="postPath"/>
         <form:form modelAttribute="login" action="${postPath}" method="post">
 			<div>
 				<label>

@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetailsInfoItem.css"/>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <%@ include file="navigation.jsp"%>

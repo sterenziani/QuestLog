@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/genericListItem.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/genericList.css"/>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="background-primary">
     <%@include file="navigation.jsp"%>

@@ -60,3 +60,13 @@ h1 {
 .button:active {
 	background-color: black;
 }
+
+@media screen and (max-width: 600px) {
+	#navigation {
+		flex-direction: column;
+	}
+
+	.navigation-logo-container, .navigation-logo, .navigation-explore-container {
+		flex-direction: column;
+	}
+}
