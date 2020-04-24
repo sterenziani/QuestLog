@@ -2,15 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
-    <title>${game.title}</title>
-    <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>" >
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
+    <%@include file="commonHead.jsp"%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/game.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetailsInfoItem.css"/>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <%@ include file="navigation.jsp"%>

@@ -11,7 +11,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<nav id="navigation">
+<nav id="navigation" class="default-primary-color">
     <div class="navigation-logo-container">
         <a href="<c:url value="/"/>">
             <div class="navigation-logo">

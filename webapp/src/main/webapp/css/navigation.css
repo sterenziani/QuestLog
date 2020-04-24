@@ -1,7 +1,6 @@
 #navigation {
     display: flex;
     align-items: stretch;
-    background-color: black;
 }
 
 .navigation-search {
