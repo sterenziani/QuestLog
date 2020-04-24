@@ -31,8 +31,8 @@
     <div class="user-container">
 	    <c:choose>
 	    	<c:when test="${loggedUser == null}">
-	    		<a href="<c:url value="/users/login"/>"><spring:message code="navigation.login"/></a><br>
-	    		<a href="<c:url value="/users/create"/>"><spring:message code="navigation.signup"/></a>
+	    		<a href="<c:url value="/login"/>"><spring:message code="navigation.login"/></a><br>
+	    		<a href="<c:url value="/create"/>"><spring:message code="navigation.signup"/></a>
 	    	</c:when>
 	    	<c:otherwise>
 	    		<p>Welcome ${loggedUser.username}</p>
