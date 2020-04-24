@@ -1,7 +1,11 @@
 .error-box {
-	padding: 20%;
+	vertical-align: center;
 	background-color:#e9b96e;
 	text-align:center;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .form-error {
