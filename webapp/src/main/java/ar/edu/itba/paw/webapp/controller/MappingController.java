@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,12 +36,14 @@ import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
+import ar.edu.itba.paw.webapp.form.UserForm;
 
 @Controller
 public class MappingController
@@ -176,6 +181,28 @@ public class MappingController
 		return mav;
 	}
 	
+
+	
+	@RequestMapping(value = "/games/scores/{gameId}", method = { RequestMethod.POST })
+	public ModelAndView register(@RequestParam("score") int scoreInput, @RequestParam("game") long gameId) 
+	{	User user = loggedUser();
+		if(user == null) {
+			ModelAndView mav = new ModelAndView("/login");
+			return mav;
+		}
+		Optional <Game> game = gs.findByIdWithDetails(gameId, user);
+		Optional<Score> score = scors.findScore(user, game.get());
+		if (score.isPresent()){
+			scors.changeScore(scoreInput, user, game.get());
+		}
+		else {
+			scors.register(user, game.get(), scoreInput);
+		}
+		return new ModelAndView("redirect:/games/{gameId}");
+	}	
+	
+	
+	
 	@RequestMapping(value = "/games", method = RequestMethod.POST)
 	public ModelAndView gamesList(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
@@ -195,8 +222,14 @@ public class MappingController
 			mav.addObject("game", g);
 		}
 		else
-		{
-			mav.addObject("game", gs.findByIdWithDetails(gameId, u).orElseThrow(GameNotFoundException::new));
+		{	
+			Game g = gs.findByIdWithDetails(gameId, u).orElseThrow(GameNotFoundException::new);
+			mav.addObject("game", g);
+			Optional<Score> sc = scors.findScore(u,g);
+			if(sc.isPresent())
+				mav.addObject("user_score",sc.get());
+			else
+				mav.addObject("user_score",null);
 		}
 		return mav;
 	}

@@ -51,7 +51,7 @@ public class ScoreJdbcDao implements ScoreDao{
 
 	@Override
 	public Optional<Score> changeScore(int new_score, User user, Game game) {
-		jdbcScoreTemplate.update("UPDATE scores SET score = ? WHERE user_id = ? && game = ?", new_score, user, game);
+		jdbcScoreTemplate.update("UPDATE scores SET score = ? WHERE user_id = ? AND game = ?", new_score, user.getId(), game.getId());
 		return findScore(user, game);
 	}
 	
