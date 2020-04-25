@@ -3,11 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
-    <title>QuestLog</title>
-    <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>" >
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
+    <%@include file="commonHead.jsp"%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/error.css"/>">
 </head>
 <body class="background-primary">

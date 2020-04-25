@@ -3,11 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
-    <title>QuestLog</title>
-    <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>" >
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
+   <%@include file="commonHead.jsp"%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/error.css"/>">
 </head>
 <body class="background-primary">
@@ -15,7 +11,7 @@
     <div class="content">
         <h2><spring:message code="login.title"/></h2>
         <c:if test="${error}"><p class="form-error"><spring:message code="login.invalid"/></p></c:if>
-        <c:url value="/login" var="postPath"/>
+        <c:url value="login" var="postPath"/>
         <form:form modelAttribute="login" action="${postPath}" method="post">
 			<div>
 				<label>
