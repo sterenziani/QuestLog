@@ -97,13 +97,13 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public List<Platform> getAllPlatforms()
 	{
-		return jdbcTemplate.query("SELECT * FROM platforms", PLATFORM_MAPPER);
+		return jdbcTemplate.query("SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC", PLATFORM_MAPPER);
 	}
 	
 	@Override
 	public List<Platform> getAllPlatformsWithGames()
 	{
-		List<Platform> platforms = jdbcTemplate.query("SELECT * FROM platforms", PLATFORM_MAPPER);
+		List<Platform> platforms = getAllPlatforms();
 		for(Platform p : platforms)
 		{
 			List<Game> games = getAllGames(p);
