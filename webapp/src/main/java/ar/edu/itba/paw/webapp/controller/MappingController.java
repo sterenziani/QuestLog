@@ -187,47 +187,41 @@ public class MappingController
 	
 	@RequestMapping(value = "/games/scores/{gameId}", method = { RequestMethod.POST })
 	public ModelAndView register(@RequestParam("score") int scoreInput, @RequestParam("game") long gameId) 
-	{	User user = loggedUser();
-		if(user == null) {
-			ModelAndView mav = new ModelAndView("/login");
-			return mav;
-		}
+	{
+		User user = loggedUser();
+		if(user == null)
+			return new ModelAndView("redirect:/games/{gameId}");
 		Optional <Game> game = gs.findByIdWithDetails(gameId, user);
 		Optional<Score> score = scors.findScore(user, game.get());
-		if (score.isPresent()){
+		if (score.isPresent())
 			scors.changeScore(scoreInput, user, game.get());
-		}
-		else {
+		else
 			scors.register(user, game.get(), scoreInput);
-		}
 		return new ModelAndView("redirect:/games/{gameId}");
 	}
 	
 	@RequestMapping(value = "/createRun/run/{gameId}", method = { RequestMethod.POST })
 	public ModelAndView register(@RequestParam("hours") int hours, @RequestParam("mins") int mins, @RequestParam("secs") int secs,
 			@RequestParam("game") long gameId, @RequestParam("platforms") String platform, @RequestParam("playstyles") String playst) 
-	{	User user = loggedUser();
-		if(user == null) {
-			ModelAndView mav = new ModelAndView("/login");
-			return mav;
-		}
+	{
+		User user = loggedUser();
+		if(user == null)
+			return new ModelAndView("redirect:/games/{gameId}");
 		Optional <Game> game = gs.findByIdWithDetails(gameId, user);
 		Optional <Platform> plat = ps.findByName(platform);
 		long time = hours*3600 + mins*60 + secs;
 		Optional <Playstyle> play = runs.findPlaystyleByName(playst);
-		if(game.isPresent() && plat.isPresent() && play.isPresent()) {
+		if(game.isPresent() && plat.isPresent() && play.isPresent())
 			runs.register(user, game.get(), plat.get(), play.get(), time);
-		}
 		return new ModelAndView("redirect:/games/{gameId}");
 	}	
 	
 	@RequestMapping("/createRun/{gameId}")
-	public ModelAndView createRun(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog) {
+	public ModelAndView createRun(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
 		User u = loggedUser();
-		if(u == null) {
-			ModelAndView mav = new ModelAndView("/login");
-			return mav;
-		}
+		if(u == null)
+			return new ModelAndView("redirect:/games/{gameId}");
 		final ModelAndView mav = new ModelAndView("createRun");
 		Game g = gs.findByIdWithDetails(gameId, loggedUser()).orElseThrow(GameNotFoundException::new);
 		mav.addObject("game",g);
@@ -547,5 +541,4 @@ public class MappingController
 	{
 		return backlog.contains("-" +gameId +"-");
 	}
-
 }
