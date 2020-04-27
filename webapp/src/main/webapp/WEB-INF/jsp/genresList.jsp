@@ -4,16 +4,18 @@
 <h2>LIST OF GENRES</h2>
 <br><br>
 <c:forEach items="${genres}" var="genre">
-        <h2>[${genre.id}] <spring:message code="genres.${genre.name}"/></h2>
-        <br><img height="100" width="100" src=${genre.logo}></img>
-        <h4>Examples:</h4>
-        <c:forEach items="${genre.games}" var="game">
-		    <li>      
-		        [${game.id}] ${game.title}
-		    </li>
-		    <br>
-		</c:forEach>
-    <br><br>
+	<div class="game-list-item">
+	    <a href="<c:url value="/genres/${genre.id}"/>">
+	        <div class="game-list-item-content">
+	            <div class="game-list-item-cover">
+	                <img src="<c:url value="${genre.logo}"/>" alt="${genre.name}"/>
+	            </div>
+	            <div class="game-list-item-data">
+	                <h3><c:out value="${genre.name}"/></h3>
+	            </div>
+	        </div>
+	    </a>
+	 </div>
 </c:forEach>
 </body>
 </html>

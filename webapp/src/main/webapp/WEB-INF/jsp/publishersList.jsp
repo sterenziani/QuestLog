@@ -4,16 +4,18 @@
 <h2>LIST OF PUBLISHERS</h2>
 <br><br>
 <c:forEach items="${publishers}" var="publisher">    
-        <h2>[${publisher.id}] ${publisher.name}</h2>
-        <br><img height="70" src=${publisher.logo}></img>
-        <h4>Published games:</h4>
-		<c:forEach items="${publisher.games}" var="game">
-		    <li>      
-		        [${game.id}] ${game.title}
-		    </li>
-		    <br>
-		</c:forEach>
-    	<br>
+	<div class="game-list-item">
+	    <a href="<c:url value="/publishers/${publisher.id}"/>">
+	        <div class="game-list-item-content">
+	            <div class="game-list-item-cover">
+	                <img src="<c:url value="${publisher.logo}"/>" alt="${publisher.name}"/>
+	            </div>
+	            <div class="game-list-item-data">
+	                <h3><c:out value="${publisher.name}"/></h3>
+	            </div>
+	        </div>
+	    </a>
+	 </div>
 </c:forEach>
 </body>
 </html>
