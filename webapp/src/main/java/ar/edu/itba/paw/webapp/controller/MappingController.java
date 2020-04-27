@@ -274,7 +274,7 @@ public class MappingController
 	@RequestMapping("/platforms")
 	public ModelAndView platformsList()
 	{
-		final ModelAndView mav = new ModelAndView("platformsList");
+		final ModelAndView mav = new ModelAndView("allPlatforms");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		return mav;
 	}
@@ -307,7 +307,7 @@ public class MappingController
 	@RequestMapping("/developers")
 	public ModelAndView developersList()
 	{
-		final ModelAndView mav = new ModelAndView("developersList");
+		final ModelAndView mav = new ModelAndView("allDevelopers");
 		mav.addObject("developers", ds.getAllDevelopers());
 		return mav;
 	}
@@ -340,7 +340,7 @@ public class MappingController
 	@RequestMapping("/publishers")
 	public ModelAndView publishersList()
 	{
-		final ModelAndView mav = new ModelAndView("publishersList");
+		final ModelAndView mav = new ModelAndView("allPublishers");
 		mav.addObject("publishers", pubs.getAllPublishers());
 		return mav;
 	}
@@ -373,7 +373,7 @@ public class MappingController
 	@RequestMapping("/genres")
 	public ModelAndView genresList()
 	{
-		final ModelAndView mav = new ModelAndView("genresList");
+		final ModelAndView mav = new ModelAndView("allGenres");
 		mav.addObject("genres", gens.getAllGenres());
 		return mav;
 	}
