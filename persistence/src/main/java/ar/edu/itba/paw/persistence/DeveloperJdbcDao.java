@@ -97,13 +97,13 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	@Override
 	public List<Developer> getAllDevelopers()
 	{
-		return jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
+		return jdbcTemplate.query("SELECT developer, developer_name, developer_logo FROM (SELECT developer, count(*) AS g FROM development GROUP BY developer) AS a NATURAL JOIN developers ORDER BY g DESC", DEVELOPER_MAPPER);
 	}
 	
 	@Override
 	public List<Developer> getAllDevelopersWithGames()
 	{
-		List<Developer> devs =  jdbcTemplate.query("SELECT * FROM developers", DEVELOPER_MAPPER);
+		List<Developer> devs =  getAllDevelopers();
 		for(Developer d : devs)
 		{
 			List<Game> games = getAllGames(d);

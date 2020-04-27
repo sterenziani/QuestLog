@@ -89,13 +89,13 @@ public class PublisherJdbcDao implements PublisherDao {
 	@Override
 	public List<Publisher> getAllPublishers()
 	{
-		return jdbcTemplate.query("SELECT * FROM publishers", PUBLISHER_MAPPER);
+		return jdbcTemplate.query("SELECT publisher, publisher_name, publisher_logo FROM (SELECT publisher, count(*) AS g FROM publishing GROUP BY publisher) AS a NATURAL JOIN publishers ORDER BY g DESC", PUBLISHER_MAPPER);
 	}
 	
 	@Override
 	public List<Publisher> getAllPublishersWithGames()
 	{
-		List<Publisher> publishers = jdbcTemplate.query("SELECT * FROM publishers", PUBLISHER_MAPPER);
+		List<Publisher> publishers = getAllPublishers();
 		for(Publisher p : publishers)
 		{
 			List<Game> games = getAllGames(p);
