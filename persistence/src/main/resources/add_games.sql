@@ -1,23 +1,3 @@
-INSERT INTO genres(genre_name, genre_logo) VALUES('Action', 'https://media.rawg.io/media/games/b7b/b7b8381707152afc7d91f5d95de70e39.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Indie', 'https://media.rawg.io/media/games/0be/0bea0a08a4d954337305391b778a7f37.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Adventure', 'https://media.rawg.io/media/games/4cb/4cb855e8ef1578415a928e53c9f51867.png') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('RPG', 'https://media.rawg.io/media/games/d0f/d0f91fe1d92332147e5db74e207cfc7a.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Shooter', 'https://media.rawg.io/media/games/73e/73eecb8909e0c39fb246f457b5d6cbbe.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Strategy', 'https://media.rawg.io/media/games/f95/f95ec06eddda5c5bf206618c49cd3e68.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Casual', 'https://media.rawg.io/media/screenshots/dc2/dc2814dc50d61be1ea4fcd5d3c03ddb6.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Simulation', 'https://media.rawg.io/media/games/b4e/b4e4c73d5aa4ec66bbf75375c4847a2b.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Arcade', 'https://media.rawg.io/media/screenshots/6fe/6fe228662a253cd929cc78a103541ee0.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Puzzle', 'https://media.rawg.io/media/screenshots/42d/42d770eb49f2ba01cd4045e0d92af7a9.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Platformer', 'https://media.rawg.io/media/games/4cf/4cfc6b7f1850590a4634b08bfab308ab.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Racing', 'https://media.rawg.io/media/games/9e5/9e52a797f049e701d4eee84774a99007.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Sports', 'https://media.rawg.io/media/games/cc5/cc576aa274780702ef93463f5410031e.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('MMO', 'https://media.rawg.io/media/screenshots/266/26605ea274a4dcada95f3f02b30fc2ed.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Family', 'https://media.rawg.io/media/screenshots/904/904809185a905c430f6c36f0ebf5353c.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Fighting', 'https://media.rawg.io/media/screenshots/3e2/3e22f928180309b9f624628e71fdc447.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('BoardGames', 'https://media.rawg.io/media/screenshots/c25/c252e2023355e98787402c4bdd90f775.jpeg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Educational', 'https://media.rawg.io/media/screenshots/b10/b1037cefbbf94070dd4fae7ffbbd6999.jpg') ON CONFLICT DO NOTHING;
-INSERT INTO genres(genre_name, genre_logo) VALUES('Card', 'https://media.rawg.io/media/screenshots/3e7/3e728c858ebd673e099cab3558a47d42.jpg') ON CONFLICT DO NOTHING;
-
 INSERT INTO platforms(platform_name, platform_name_short, platform_logo) VALUES('PC', 'PC', 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/1024px-Windows_logo_-_2012.svg.png') ON CONFLICT DO NOTHING;
 INSERT INTO platforms(platform_name, platform_name_short, platform_logo) VALUES('PlayStation 4', 'PS4', 'https://i.ytimg.com/vi/56NxUWEFpL0/maxresdefault.jpg') ON CONFLICT DO NOTHING;
 INSERT INTO platforms(platform_name, platform_name_short, platform_logo) VALUES('Xbox One', 'XBONE', 'http://4.bp.blogspot.com/-UcjPVSovGlk/UZvWPYBtgGI/AAAAAAAAVmc/8dJQeuz796I/s1600/xbox+one+logo.jpg') ON CONFLICT DO NOTHING;
@@ -69,12 +49,6 @@ INSERT INTO platforms(platform_name, platform_name_short, platform_logo) VALUES(
 INSERT INTO platforms(platform_name, platform_name_short, platform_logo) VALUES('Web', 'Web', 'https://vignette1.wikia.nocookie.net/eddsworld/images/2/24/Newgrounds_Logo.png/revision/latest?cb=20140227230508') ON CONFLICT DO NOTHING;
 
 INSERT INTO regions(region_name, region_short) VALUES('Worldwide', 'WW') ON CONFLICT DO NOTHING;
-
-INSERT INTO playstyles(playstyle_name) VALUES('Main Story') ON CONFLICT DO NOTHING;
-INSERT INTO playstyles(playstyle_name) VALUES('Main Story + Extras') ON CONFLICT DO NOTHING;
-INSERT INTO playstyles(playstyle_name) VALUES('Completitionist') ON CONFLICT DO NOTHING;
-INSERT INTO playstyles(playstyle_name) VALUES('Speedrun') ON CONFLICT DO NOTHING;
-
 
 -- Game 1
 INSERT INTO games(title, cover, description) VALUES('The Legend of Zelda: Breath of the Wild', 'https://d1x7zurbps6occ.cloudfront.net/product/xlarge/635177-176831.jpg', 'The Legend of Zelda: Breath of the Wild is an adventure game developed by Nintendo. It is the nineteenth installment in the series. After awakening from a hundred year sleep, memoryless Link hears a mysterious female voice that guides him to a destroyed kingdom of Hyrule. He finds a Wiseman who says that a ruthless creature, Calamity Ganon, was imprisoned for 100 years. Even though the creature is trapped, it is still gaining power. Link sets out to kill Ganon before he frees himself and destroys the world. In contrast to the previous titles in the series, Breath of the Wild the player to explore a vast open world. At the beginning of the game, a small tutorial is given to the players and they are free to travel the world at the pace they see fit. Link can climb almost every surface in the world, search for new equipment, cook food to restore health. Fast travel to certain places in the world is also available for the players. The world is highly interactive. For example, trees can be chopped down in order to make fire, or Link can use his shield as a snowboard.') ON CONFLICT DO NOTHING;

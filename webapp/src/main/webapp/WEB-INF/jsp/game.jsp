@@ -73,10 +73,10 @@
 					<th><spring:message code="game.average"/></th>
 					</tr>
 					<c:forEach var="element" items="${playAverage}">
-					<tr>
-					<td>${element.key}</td>
-					<td>${element.value}</td>
-					</tr>
+						<tr>
+							<td>${element.key}</td>
+							<td><spring:message code="playstyle.${element.key}"/></td>
+						</tr>
 					</c:forEach>
 				</table>
 				<a class="create-run-button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>

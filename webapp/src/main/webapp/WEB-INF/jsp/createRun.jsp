@@ -32,7 +32,7 @@
 				<strong><spring:message code="game.playstyle"/></strong>
 				<select name="playstyles" id="playstyles">
                 	<c:forEach var="playstyle" items="${playstyles}">
-                    <option value="${playstyle}">${playstyle.name}</option>
+                    <option value="${playstyle}"><spring:message code="playstyle.${playstyle.name}"/></option>
                 </c:forEach>
 				</select>
 				</div>
