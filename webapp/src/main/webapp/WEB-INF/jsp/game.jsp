@@ -68,7 +68,7 @@
     					</tr>
     					<c:forEach var="element" items="${playAverage}">
   						<tr>
-   						<td>${element.key}</td>
+   						<td><spring:message code="playstyle.${element.key}"/></td>
     					<td>${element.value}</td>
     					</tr>
  						</c:forEach>
