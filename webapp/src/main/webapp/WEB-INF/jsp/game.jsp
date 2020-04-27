@@ -65,6 +65,9 @@
 					</div>
 					<div></div>
 				</form:form>
+				<div>
+					<spring:message code="game.averageUserScore"/> ${averageScore}
+				</div>
 			</div>
 			<div class="game-table-run">
 				<table class="runs-table">

@@ -245,7 +245,7 @@ public class MappingController
 		User u = loggedUser();
 		Game g = gs.findByIdWithDetails(gameId, u).orElseThrow(GameNotFoundException::new);
 		mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
-		mav.addObject("av_score", scors.findAverageScore(g));
+		mav.addObject("averageScore", scors.findAverageScore(g));
 		if(u == null)
 		{	
 			g.setInBacklog(gameInBacklog(gameId, backlog));
