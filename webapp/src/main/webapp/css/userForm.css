@@ -1,0 +1,36 @@
+.user-form {
+	padding: 30px;
+	vertical-align: center;
+	text-align: center;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+    margin: 0 auto;
+}
+
+.form-field {
+	margin: 15px;
+}
+
+.form-checkbox{
+	text-align: center;
+}
+
+label, input {
+    display: inline-block;
+}
+
+label {
+    width: 30%;
+    text-align: right;
+}
+
+label + input {
+    width: 30%;
+    margin: 0 30% 0 4%;
+}
+
+input + input {
+    float: right;
+}

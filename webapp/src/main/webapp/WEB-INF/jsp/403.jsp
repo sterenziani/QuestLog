@@ -1,9 +1,13 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-<link rel="stylesheet" href="<c:url value="/css/style.css"/>" />
+   <%@include file="commonHead.jsp"%>
 </head>
-<body>
-	<h1>You shall not pass!</h1>
+<body class="background-color">
+    <%@include file="navigation.jsp"%>
+    <div class="error-box">
+        <h2>Error 403 - Unauthorized</h2>
+		<h5><spring:message code="${msg}"/></h5>
+    </div>
 </body>
 </html>
