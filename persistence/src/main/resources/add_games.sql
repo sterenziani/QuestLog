@@ -70,6 +70,12 @@ INSERT INTO platforms(platform_name, platform_name_short, platform_logo) VALUES(
 
 INSERT INTO regions(region_name, region_short) VALUES('Worldwide', 'WW') ON CONFLICT DO NOTHING;
 
+INSERT INTO playstyles(playstyle_name) VALUES('Main Story') ON CONFLICT DO NOTHING;
+INSERT INTO playstyles(playstyle_name) VALUES('Main Story + Extras') ON CONFLICT DO NOTHING;
+INSERT INTO playstyles(playstyle_name) VALUES('Completitionist') ON CONFLICT DO NOTHING;
+INSERT INTO playstyles(playstyle_name) VALUES('Speedrun') ON CONFLICT DO NOTHING;
+
+
 -- Game 1
 INSERT INTO games(title, cover, description) VALUES('The Legend of Zelda: Breath of the Wild', 'https://d1x7zurbps6occ.cloudfront.net/product/xlarge/635177-176831.jpg', 'The Legend of Zelda: Breath of the Wild is an adventure game developed by Nintendo. It is the nineteenth installment in the series. After awakening from a hundred year sleep, memoryless Link hears a mysterious female voice that guides him to a destroyed kingdom of Hyrule. He finds a Wiseman who says that a ruthless creature, Calamity Ganon, was imprisoned for 100 years. Even though the creature is trapped, it is still gaining power. Link sets out to kill Ganon before he frees himself and destroys the world. In contrast to the previous titles in the series, Breath of the Wild the player to explore a vast open world. At the beginning of the game, a small tutorial is given to the players and they are free to travel the world at the pace they see fit. Link can climb almost every surface in the world, search for new equipment, cook food to restore health. Fast travel to certain places in the world is also available for the players. The world is highly interactive. For example, trees can be chopped down in order to make fire, or Link can use his shield as a snowboard.') ON CONFLICT DO NOTHING;
 INSERT INTO releases(game, region, release_date) SELECT game, region, '2017-03-02' FROM (SELECT game FROM games WHERE title LIKE 'The Legend of Zelda: Breath of the Wild') AS a, (SELECT region FROM regions WHERE region_name LIKE 'Worldwide') AS b ON CONFLICT DO NOTHING;
@@ -1724,8 +1730,3 @@ INSERT INTO development(game, developer) SELECT * FROM (SELECT game FROM games W
 INSERT INTO game_versions(game, platform) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Fire Emblem Awakening') AS a, (SELECT platform FROM platforms WHERE platform_name LIKE 'Nintendo 3DS') AS b ON CONFLICT DO NOTHING;
 INSERT INTO classifications(game, genre) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Fire Emblem Awakening') AS a, (SELECT genre FROM genres WHERE genre_name LIKE 'Strategy') AS b ON CONFLICT DO NOTHING;
 INSERT INTO classifications(game, genre) SELECT * FROM (SELECT game FROM games WHERE title LIKE 'Fire Emblem Awakening') AS a, (SELECT genre FROM genres WHERE genre_name LIKE 'RPG') AS b ON CONFLICT DO NOTHING;
-
-
-INSERT INTO users(username, password) VALUES('shmeika','1234') ON CONFLICT DO NOTHING;
-
-INSERT INTO scores(user_id, game, score) SELECT user_id, game, 87 FROM (SELECT game FROM games WHERE title LIKE 'Rayman Legends') AS a, (SELECT user_id FROM users WHERE username LIKE 'shmeika') AS b ON CONFLICT DO NOTHING;

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -167,5 +168,21 @@ Optional<Playstyle> findPlaystyleById(long playstyle);
  * @return	the playstyle
  */
 Playstyle register(String name);
+
+/**
+ * Get playstyle by name
+ * @param name	name of playstyle
+ * @return playstlye
+ */
+
+Optional<Playstyle> findPlaystyleByName(String name);
+
+/**
+ * Get hashmap of the average playtime of each available playstyle
+ * @param g game
+ * @return hashmap
+ */
+
+HashMap<Playstyle, String> getAverageAllPlayStyles(Game g);
 
 }

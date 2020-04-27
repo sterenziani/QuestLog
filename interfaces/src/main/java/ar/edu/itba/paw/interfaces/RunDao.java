@@ -188,4 +188,12 @@ Optional<Playstyle> findPlaystyleById(long playstyle);
  */
 Playstyle register(String name);
 
+/**
+ * Get playstyle by name
+ * @param name	name of playstyle
+ * @return playstlye
+ */
+
+Optional<Playstyle> findPlaystyleByName(String name);
+
 }

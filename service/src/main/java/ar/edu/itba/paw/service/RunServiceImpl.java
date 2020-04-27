@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,6 +104,24 @@ public class RunServiceImpl implements RunService {
 	@Override
 	public Playstyle register(String name) {
 		return runDao.register(name);
+	}
+
+	@Override
+	public Optional<Playstyle> findPlaystyleByName(String name) {
+		return runDao.findPlaystyleByName(name);
+	}
+	
+	@Override
+	public HashMap<Playstyle,String> getAverageAllPlayStyles(Game g){
+		HashMap<Playstyle,String> map = new HashMap<Playstyle,String>();
+		for(Playstyle p: runDao.getAllPlaystyles()) {
+			Long l = runDao.getAveragePlaystylePlaytime(g, p);
+			int hours = (int) (l/3600);
+			int mins = (int) (l/60 - hours*60);
+			int secs = (int) (l - hours*3600 - mins*60);
+			map.put(p, hours+":"+mins+":"+secs);
+		}
+		return map;
 	}
 
 }

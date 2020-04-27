@@ -35,9 +35,11 @@ import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
@@ -199,8 +201,40 @@ public class MappingController
 			scors.register(user, game.get(), scoreInput);
 		}
 		return new ModelAndView("redirect:/games/{gameId}");
+	}
+	
+	@RequestMapping(value = "/createRun/run/{gameId}", method = { RequestMethod.POST })
+	public ModelAndView register(@RequestParam("hours") int hours, @RequestParam("mins") int mins, @RequestParam("secs") int secs,
+			@RequestParam("game") long gameId, @RequestParam("platforms") String platform, @RequestParam("playstyles") String playst) 
+	{	User user = loggedUser();
+		if(user == null) {
+			ModelAndView mav = new ModelAndView("/login");
+			return mav;
+		}
+		Optional <Game> game = gs.findByIdWithDetails(gameId, user);
+		Optional <Platform> plat = ps.findByName(platform);
+		long time = hours*3600 + mins*60 + secs;
+		Optional <Playstyle> play = runs.findPlaystyleByName(playst);
+		if(game.isPresent() && plat.isPresent() && play.isPresent()) {
+			runs.register(user, game.get(), plat.get(), play.get(), time);
+		}
+		return new ModelAndView("redirect:/games/{gameId}");
 	}	
 	
+	@RequestMapping("/createRun/{gameId}")
+	public ModelAndView createRun(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog) {
+		User u = loggedUser();
+		if(u == null) {
+			ModelAndView mav = new ModelAndView("/login");
+			return mav;
+		}
+		final ModelAndView mav = new ModelAndView("createRun");
+		Game g = gs.findByIdWithDetails(gameId, loggedUser()).orElseThrow(GameNotFoundException::new);
+		mav.addObject("game",g);
+		mav.addObject("playstyles",runs.getAllPlaystyles());
+		return mav;
+	}
+
 	
 	
 	@RequestMapping(value = "/games", method = RequestMethod.POST)
@@ -215,15 +249,15 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("game");
 		User u = loggedUser();
+		Game g = gs.findByIdWithDetails(gameId, u).orElseThrow(GameNotFoundException::new);
+		mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
 		if(u == null)
-		{
-			Game g = gs.findByIdWithDetails(gameId, null).orElseThrow(GameNotFoundException::new);
+		{	
 			g.setInBacklog(gameInBacklog(gameId, backlog));
 			mav.addObject("game", g);
 		}
 		else
 		{	
-			Game g = gs.findByIdWithDetails(gameId, u).orElseThrow(GameNotFoundException::new);
 			mav.addObject("game", g);
 			Optional<Score> sc = scors.findScore(u,g);
 			if(sc.isPresent())

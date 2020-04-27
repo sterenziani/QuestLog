@@ -204,7 +204,10 @@ public class RunJdbcDao implements RunDao {
 
 	@Override
 	public long getAveragePlaytime(Game game) {
-		long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ?",Long.class, game.getId());
+		Long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ?",Long.class, game.getId());
+		if(average == null) {
+			return 0;
+		}
 		return average;
 	}
 
@@ -212,20 +215,29 @@ public class RunJdbcDao implements RunDao {
 
 	@Override
 	public long getAveragePlatformPlaytime(Game game, Platform platform) {
-		long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ? AND platform = ?",Long.class, game.getId(), platform.getId());
+		Long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ? AND platform = ?",Long.class, game.getId(), platform.getId());
+		if(average == null) {
+			return 0;
+		}
 		return average;
 	}
 
 
 	@Override
 	public long getAveragePlaystylePlaytime(Game game, Playstyle playstyle) {
-		long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ? AND playstyle = ?",Long.class, game.getId(), playstyle.getId());
+		Long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ? AND playstyle = ?",Long.class, game.getId(), playstyle.getId());
+		if(average == null) {
+			return 0;
+		}
 		return average;
 	}
 
 	@Override
 	public long getAverageSpecificPlaytime(Game game, Playstyle playstyle, Platform platform) {
-		long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ? AND platform = ? AND playstyle = ?",Long.class, game.getId(), platform.getId(), playstyle.getId());
+		Long average = jdbcRunTemplate.queryForObject("SELECT AVG(time) FROM runs WHERE game = ? AND platform = ? AND playstyle = ?",Long.class, game.getId(), platform.getId(), playstyle.getId());
+		if(average == null) {
+			return 0;
+		}
 		return average;
 	}
 
@@ -244,7 +256,7 @@ public class RunJdbcDao implements RunDao {
 	@Override
 	public Optional<Game> getGame(long id)
 	{
-		return jdbcRunTemplate.query("SELECT * FROM (SELECT * FROM runs WHERE game = ?) AS g NATURAL JOIN games",
+		return jdbcRunTemplate.query("SELECT * FROM (SELECT * FROM runs WHERE game = ? ORDER BY playstyle) AS g NATURAL JOIN games",
 				new RowMapper<Game>()
 				{
 					@Override
@@ -305,6 +317,11 @@ public class RunJdbcDao implements RunDao {
 	@Override
 	public Optional<Playstyle> findPlaystyleById(long playstyle) {
 		return jdbcPlaystyleTemplate.query("SELECT * FROM playstyles WHERE playstyle = ?", PLAY_MAPPER, playstyle).stream().findFirst();
+	}
+	
+	@Override
+	public Optional<Playstyle> findPlaystyleByName(String name) {
+		return jdbcPlaystyleTemplate.query("SELECT * FROM playstyles WHERE playstyle_name = ?", PLAY_MAPPER, name).stream().findFirst();
 	}
 	
 	@Override
