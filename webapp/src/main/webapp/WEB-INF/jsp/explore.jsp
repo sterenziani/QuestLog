@@ -10,12 +10,15 @@
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
     <div>
+    	<c:set var="platformEndIndex" value="17"/>
         <div>
 	        <%@ include file="platformsList.jsp"%>
     	</div>
+    	<c:set var="developerEndIndex" value="17"/>
     	<div>
 	        <%@ include file="developersList.jsp"%>
     	</div>
+    	<c:set var="publisherEndIndex" value="17"/>
     	<div>
 	        <%@ include file="publishersList.jsp"%>
     	</div>

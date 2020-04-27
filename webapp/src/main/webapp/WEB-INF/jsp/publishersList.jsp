@@ -4,9 +4,10 @@
 <div class="explore-list">
 	<div class="explore-list-header">
 		<h2><spring:message code="explore.publishers"/></h2>
+		<a href="<c:url value="/publishers"/>"><spring:message code="explore.seeAll"/></a>
 	</div>
 	<div class="explore-list-items">
-		<c:forEach items="${publishers}" var="publisher">
+		<c:forEach items="${publishers}" var="publisher" end="${publisherEndIndex}">
 			<div class="explore-list-item">
 			    <a href="<c:url value="/publishers/${publisher.id}"/>">
 			        <div>

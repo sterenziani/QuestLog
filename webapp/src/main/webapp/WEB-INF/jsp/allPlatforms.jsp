@@ -9,6 +9,7 @@
 </head>
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
+    <c:set var="platformEndIndex" value="${listSize}"/>
     <div>
 		<%@ include file="platformsList.jsp"%>
     </div>

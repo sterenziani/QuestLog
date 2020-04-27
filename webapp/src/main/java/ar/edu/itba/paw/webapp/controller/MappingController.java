@@ -275,7 +275,9 @@ public class MappingController
 	public ModelAndView platformsList()
 	{
 		final ModelAndView mav = new ModelAndView("allPlatforms");
-		mav.addObject("platforms", ps.getAllPlatforms());
+		List<Platform> list = ps.getAllPlatforms();
+		mav.addObject("platforms", list);
+		mav.addObject("listSize", list.size());
 		return mav;
 	}
 	
@@ -308,7 +310,9 @@ public class MappingController
 	public ModelAndView developersList()
 	{
 		final ModelAndView mav = new ModelAndView("allDevelopers");
-		mav.addObject("developers", ds.getAllDevelopers());
+		List<Developer> list = ds.getAllDevelopers();
+		mav.addObject("developers", list);
+		mav.addObject("listSize", list.size());
 		return mav;
 	}
 	
@@ -341,7 +345,9 @@ public class MappingController
 	public ModelAndView publishersList()
 	{
 		final ModelAndView mav = new ModelAndView("allPublishers");
-		mav.addObject("publishers", pubs.getAllPublishers());
+		List<Publisher> list = pubs.getAllPublishers();
+		mav.addObject("publishers", list);
+		mav.addObject("listSize", list.size());
 		return mav;
 	}
 	
