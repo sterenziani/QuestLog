@@ -58,32 +58,6 @@
                     <c:set var="items" value="${game.publishers}"/>
                     <%@include file="gameDetailsInfoItem.jsp"%>
                 </div>
-                
-                    <div class="game-details-score">
-                    <strong><spring:message code="game.score"/></strong>
-                	<form:form name="scores" method="POST" action="scores/${game.id}">
-                	    <spring:message code="game.score" var="score"/>
-                  		<c:choose>
-            			<c:when test="${empty user_score}">
-                 			<input type="range" min="0" max="100" id="score" class="slider-range"
-                 			oninput="scoreWrite.value = score.value" value="0" 
-                 			name="score"/>
-                 			<input type="number" id="scoreWrite" name="scoreWrite" value="NONE"
-                 			oninput="score.value = scoreWrite.value" min="0" max="100" step="1"/>
-                 		</c:when>
-            			<c:otherwise>
-                 			<input type="range" min="0" max="100" id="score" class="slider-range"
-                 			oninput="scoreWrite.value = score.value" value="${user_score.score}" 
-                 			name="score"/>
-                 			<input type="number" id="scoreWrite" name="scoreWrite" value="${user_score.score}"
-                 			oninput="score.value = scoreWrite.value" min="0" max="100" step="1"/>
-            			</c:otherwise>
-            			</c:choose>            			
-                 		<input type="hidden" value="${game.id}" name="game"/>
-                 		<input type="submit" value="<spring:message code="game.submit"/>"/>
-                 		<div></div>
-                	</form:form>
-                	</div>
 
     </div>
 </div>
