@@ -7,6 +7,15 @@
     flex-direction: column;
 }
 
+.game-details-runs {
+    grid-column: 2;
+    margin: 0 auto;
+}
+
+.submit-run-button{
+	margin-top: 20px;
+}
+
 .game-details-content {
     flex-grow: 1;
 }
