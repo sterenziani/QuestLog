@@ -20,6 +20,11 @@
     padding: 20px;
     font-size: 1em;
     cursor: pointer;
+    background-image: radial-gradient(#CFD8DC, #607D8B);
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .slider-range {

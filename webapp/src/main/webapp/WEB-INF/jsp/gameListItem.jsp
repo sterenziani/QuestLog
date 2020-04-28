@@ -21,10 +21,10 @@
             <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
             <c:choose>
             	<c:when test="${game.inBacklog}">
-            		<input type="submit" value="${removeFromBacklog}"/>
+            		<input class="game-backlog-submit" type="submit" value="${removeFromBacklog}"/>
             	</c:when>
             	<c:otherwise>
-            		<input type="submit" value="${addToBacklog}"/>
+            		<input class="game-backlog-submit" type="submit" value="${addToBacklog}"/>
             	</c:otherwise>
             </c:choose>
         </form>

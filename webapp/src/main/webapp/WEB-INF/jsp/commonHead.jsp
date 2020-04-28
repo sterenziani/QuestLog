@@ -6,4 +6,5 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/palette.css"/>">
 <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>" >
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/error.css"/>">
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/game.css"/>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
