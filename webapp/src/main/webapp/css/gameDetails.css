@@ -22,6 +22,7 @@
 
 .game-details-description {
     padding: 5px;
+    flex-direction: column;
 }
 
 .game-details-cover img{

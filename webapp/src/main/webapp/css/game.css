@@ -80,12 +80,10 @@ th {
 }
 
 .create-run-button {
-	background-color: #edd400;
     padding: 20px;
     font-size: 1em;
     cursor: pointer;
     display: block;
-    border: 2px solid black;
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: center;
@@ -99,7 +97,7 @@ th {
 
 .game-table-run {
     grid-column: 3 / 4;
-    margin: 20px;
+    margin: 5px;
 }
 
 .game-details {
@@ -112,13 +110,43 @@ th {
     align-items: center;
 }
 
+.game-details-score{
+	align-items: center;
+}
+
+.score-title{
+	padding: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
 .score-number {
     margin-left: 10px;
     margin-right: 10px;
+    align-items: center;
 }
 
-.score-slider {
-    flex-grow: 1;
+.user-avg-score{
+	display: flex;
+}
+
+.score-display{
+	color:white;
+    background-color: #8ae234;
+    padding:5%;
+    width: 35px;
+    height:30px;
+    text-align:center;
+}
+
+.score-display-avg{
+	border-radius:100%;
+	width: 35px;
+    height:35px;
+}
+
+#scoreText{
+	font-weight: bold;
 }
 
 #scoreWrite{

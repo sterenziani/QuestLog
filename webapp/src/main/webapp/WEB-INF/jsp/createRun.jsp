@@ -47,7 +47,7 @@
 							<input type="number" min="0" max="59" id="mins" name="mins" value="0"/><strong> :</strong>
 							<input type="number" min="0" max="59" id="secs" name="secs" value="0"/>
 						</div>
-						<input type="submit" class="button submit-run-button" value="Submit">
+						<input type="submit" class="button submit-run-button" value="<spring:message code="game.submit"/>">
 					</div>
 				</form:form>
 			</div>
