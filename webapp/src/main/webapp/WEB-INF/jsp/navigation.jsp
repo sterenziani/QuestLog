@@ -31,14 +31,13 @@
     <div class="user-container">
 	    <c:choose>
 	    	<c:when test="${loggedUser == null}">
-	    		<a href="<c:url value="/login"/>"><spring:message code="navigation.login"/></a><br>
-	    		<a href="<c:url value="/create"/>"><spring:message code="navigation.signup"/></a>
+	    		<div class="session-link-container"><a class="session-link" href="<c:url value="/login"/>"><spring:message code="navigation.login"/></a></div>
+	    		<div class="session-link-container"><a class="session-link" href="<c:url value="/create"/>"><spring:message code="navigation.signup"/></a></div>
 	    	</c:when>
 	    	<c:otherwise>
-	    		<p>Welcome ${loggedUser.username}</p>
-	    		<a href="<c:url value="/logout"/>"><spring:message code="navigation.logout"/></a>
+	    		<p class="username"><c:out value="${loggedUser.username}"/></p>
+	    		<div class="session-link-container"><a class="session-link" href="<c:url value="/logout"/>"><spring:message code="navigation.logout"/></a></div>
 	    	</c:otherwise>
 	    </c:choose>
     </div>
-        
 </nav>
