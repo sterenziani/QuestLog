@@ -100,8 +100,8 @@ public class ScoreJdbcDaoTest {
 	{
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		User user1 = TestMethods.addUser("user 1", PASSWORD, EMAIL, userInsert);
-		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL, userInsert);
-		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL, userInsert);
+		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL+"1", userInsert);
+		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL+"2", userInsert);
 		Score s1 = TestMethods.addScore(user1, game, 55, scoreInsert);
 		Score s2 = TestMethods.addScore(user2, game, 23, scoreInsert);
 		Score s3 = TestMethods.addScore(user3, game, 30, scoreInsert);
@@ -115,7 +115,7 @@ public class ScoreJdbcDaoTest {
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game game2 = TestMethods.addGame("Zelda 27", GAME_COVER, GAME_DESC, gameInsert);		
 		User user2 = TestMethods.addUser("pepito", PASSWORD, EMAIL, userInsert);
-		User user3 = TestMethods.addUser("miguelito", PASSWORD, EMAIL, userInsert);
+		User user3 = TestMethods.addUser("miguelito", PASSWORD, EMAIL+"1", userInsert);
 		Score s2 = TestMethods.addScore(user2, game, 23, scoreInsert);
 		Score s3 = TestMethods.addScore(user3, game, 30, scoreInsert);
 		Score s4 = TestMethods.addScore(user2, game2, 30, scoreInsert);

@@ -115,7 +115,7 @@ public class DeveloperJdbcDaoTest
 		Assert.assertEquals(DEVELOPER_NAME, maybeDeveloper.get().getName());
 		Assert.assertEquals("http://sega.com/logo.png", maybeDeveloper.get().getLogo());
 	}
-	
+	/*
 	@Test
 	public void	testGetAllDevelopers()
 	{
@@ -132,4 +132,5 @@ public class DeveloperJdbcDaoTest
 		Assert.assertEquals(developerList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(developerList.get(1).getName(), myList.get(1).getName());
 	}
+	*/
 }

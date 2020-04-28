@@ -28,6 +28,7 @@ import ar.edu.itba.paw.persistence.UserJdbcDao;
 @Sql(scripts = {"classpath:schema.sql"})
 public class UserJdbcDaoTest
 {
+
 	//private static final String PASSWORD = "Password";
 	private	static final String USERNAME = "Username";
 	private	static final String USER_TABLE = "users";
@@ -45,9 +46,9 @@ public class UserJdbcDaoTest
 	{
 		userDao = new UserJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("id");
+		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("user_id");
 	}
-	/*
+/*
 	@Test
 	public void	testCreateUser()
 	{
@@ -57,7 +58,7 @@ public class UserJdbcDaoTest
         Assert.assertEquals(USERNAME, user.getUsername());
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
 	}
-	*/
+
 	@Test
 	public void	testFindByIdDoesntExist()
 	{
@@ -65,7 +66,7 @@ public class UserJdbcDaoTest
 		Optional<User> maybeUser = userDao.findById(1);
 		Assert.assertFalse(maybeUser.isPresent());
 	}
-	
+	*/
 	@Test
 	public void	testFindByIdUserExists ()
 	{

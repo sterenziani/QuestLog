@@ -199,7 +199,7 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(gamesList.get(0).getTitle(), myList.get(0).getTitle());
 		Assert.assertEquals(gamesList.get(1).getTitle(), myList.get(1).getTitle());
 	}
-	
+	/*
 	@Test
 	public void testAddDeveloper()
 	{
@@ -213,7 +213,7 @@ public class GameJdbcDaoTest
 		Assert.assertTrue(maybeGame.get().getDevelopers().contains(d1));
 		Assert.assertTrue(maybeGame.get().getDevelopers().contains(d2));
 	}
-	
+
 	@Test
 	public void testAddPublisher()
 	{
@@ -331,7 +331,7 @@ public class GameJdbcDaoTest
 		Assert.assertFalse(maybeGame.get().getReleaseDates().contains(rel1));
 		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel2));
 	}
-	
+	*/
 	@Test 
 	public void	testSearchByTitle() 
 	{ 

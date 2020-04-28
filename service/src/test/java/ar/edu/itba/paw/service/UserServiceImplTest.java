@@ -13,27 +13,28 @@ import ar.edu.itba.paw.model.User;
 @RunWith (MockitoJUnitRunner.class)
 public class UserServiceImplTest
 {
-	//private static final String PASSWORD = "passwordpassword";
+	private static final String PASSWORD = "passwordpassword";
 	private static final String USERNAME = "username";
+	private static final String EMAIL = "example@yahoo.com";
 
 	@InjectMocks
 	private UserServiceImpl userService = new UserServiceImpl();
 	
 	@Mock
 	private UserDao mockDao;
-	/*
+	
 	@Test
 	public void testCreateUser()
 	{
 		// 1. Setup!
-		Mockito.when(mockDao.create(Mockito.eq(USERNAME))).thenReturn(new User(1, USERNAME));
+		Mockito.when(mockDao.create(Mockito.eq(USERNAME), Mockito.eq(PASSWORD), Mockito.eq(EMAIL))).thenReturn(new User(1, USERNAME, PASSWORD, EMAIL));
 		
 		// 2. "ejercito" la class under test
-		User user = userService.register(USERNAME);
+		User user = userService.register(USERNAME, PASSWORD, EMAIL);
 		
 		// 3. Asserts!
 		Assert.assertNotNull(user);
 		Assert.assertEquals(USERNAME, user.getUsername());
 	}
-	*/
+	
 }

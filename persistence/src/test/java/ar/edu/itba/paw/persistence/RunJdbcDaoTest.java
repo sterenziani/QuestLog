@@ -123,7 +123,7 @@ public class RunJdbcDaoTest {
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
-		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL, userInsert);
+		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", userInsert);
 		Playstyle ps = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
 		Run r1 = TestMethods.addRun(u1, g1, p, ps, TIME, runInsert);
 		Run r2 = TestMethods.addRun(u2, g1, p, ps, TIME, runInsert);
@@ -150,8 +150,8 @@ public class RunJdbcDaoTest {
 		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Platform p2 = TestMethods.addPlatform("Nintendo Switch", "Switch", PLATFORM_LOGO, platformInsert);
 		User user1 = TestMethods.addUser("user 1", PASSWORD, EMAIL, userInsert);
-		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL, userInsert);
-		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL, userInsert);
+		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL+"1", userInsert);
+		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL+"2", userInsert);
 		Playstyle ps = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
 		
 		Run r1 = TestMethods.addRun(user1, g1, p1, ps, TIME, runInsert);

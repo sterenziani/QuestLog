@@ -132,7 +132,7 @@ public class PlatformJdbcDaoTest
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
 		Assert.assertEquals("http://ps4.com/logo.png", maybePlatform.get().getLogo());
 	}
-	
+	/*
 	@Test
 	public void	testGetAllPlatforms()
 	{
@@ -149,4 +149,5 @@ public class PlatformJdbcDaoTest
 		Assert.assertEquals(platformList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(platformList.get(1).getName(), myList.get(1).getName());
 	}
+	*/
 }
