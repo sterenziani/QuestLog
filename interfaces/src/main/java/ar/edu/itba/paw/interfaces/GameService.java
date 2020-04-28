@@ -97,13 +97,6 @@ public interface GameService
 	Optional<Game> removePlatform(Game g, Platform p);
 	
 	/**
-	 * Get a list of all platforms the game is available on
-	 * @param g		The game
-	 * @return		The list of platforms
-	 */
-	List<Platform> getAllPlatforms(Game g);
-	
-	/**
 	 * Links a game to a specified developer
 	 * @param g		The game
 	 * @param d		The developer to link the game to
@@ -120,13 +113,6 @@ public interface GameService
 	Optional<Game> removeDeveloper(Game g, Developer d);
 	
 	/**
-	 * Get a list of all developers the game is available on
-	 * @param g		The game
-	 * @return		The list of developers
-	 */
-	List<Developer> getAllDevelopers(Game g);
-	
-	/**
 	 * Links a game to a specified publisher
 	 * @param g		The game
 	 * @param pub	The publisher to link the game to
@@ -141,13 +127,6 @@ public interface GameService
 	 * @return		The updated game, now unlinked from the publisher
 	 */
 	Optional<Game> removePublisher(Game g, Publisher pub);
-	
-	/**
-	 * Get a list of all publishers the game is available on
-	 * @param g		The game
-	 * @return		The list of publishers
-	 */
-	List<Publisher> getAllPublishers(Game g);
 
 	/**
 	 * Categorize a game as part of a certain genre
@@ -166,13 +145,6 @@ public interface GameService
 	Optional<Game> removeGenre(Game game, Genre genre);
 	
 	/**
-	 * Get a list of all genres the game is classified as
-	 * @param g		The game
-	 * @return		The list of genres
-	 */
-	List<Genre> getAllGenres(Game g);
-	
-	/**
 	 * Adds a release (date and region) for the game
 	 * @param game	The game
 	 * @param r		The release
@@ -187,13 +159,6 @@ public interface GameService
 	 * @return		The updated game, now without that release listed
 	 */
 	Optional<Game> removeReleaseDate(Game game, Release r);
-	
-	/**
-	 * Get a map of the game's release date in each region.
-	 * @param g		The game
-	 * @return		A map with the regions as keys and the release date in each region as their value.
-	 */
-	List<Release> getAllReleaseDates(Game g);
 	
 	/**
 	 * Get a list of all games with names that contain the searched term.

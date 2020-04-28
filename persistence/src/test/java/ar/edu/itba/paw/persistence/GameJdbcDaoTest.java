@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.persistence;
-import java.util.ArrayList;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.sql.DataSource;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
@@ -195,86 +198,6 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(2, gamesList.size());
 		Assert.assertEquals(gamesList.get(0).getTitle(), myList.get(0).getTitle());
 		Assert.assertEquals(gamesList.get(1).getTitle(), myList.get(1).getTitle());
-	}
-	
-	@Test
-	public void	testGetGameDevs()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Developer d1 = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
-		Developer d2 = TestMethods.addDeveloper("Nintendo", DEVELOPER_LOGO, devInsert);
-		TestMethods.connectDev(g, d1, developmentInsert);
-		TestMethods.connectDev(g, d2, developmentInsert);
-		
-		List<Developer> devsList = gameDao.getAllDevelopers(g);
-		List<Developer> myList = new ArrayList<Developer>();
-		myList.add(d1);
-		myList.add(d2);
-		
-		Assert.assertFalse(devsList.isEmpty());
-		Assert.assertEquals(myList.size(), devsList.size());
-		Assert.assertEquals(myList.get(0).getName(), devsList.get(0).getName());
-		Assert.assertEquals(myList.get(1).getName(), devsList.get(1).getName());
-	}
-	
-	@Test
-	public void	testGetGamePublishers()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Publisher p1 = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
-		Publisher p2 = TestMethods.addPublisher("SquareEnix", PUBLISHER_LOGO, pubInsert);
-		TestMethods.connectPub(g, p1, publishingInsert);
-		TestMethods.connectPub(g, p2, publishingInsert);
-		
-		List<Publisher> pubsList = gameDao.getAllPublishers(g);
-		List<Publisher> myList = new ArrayList<Publisher>();
-		myList.add(p1);
-		myList.add(p2);
-		
-		Assert.assertFalse(pubsList.isEmpty());
-		Assert.assertEquals(myList.size(), pubsList.size());
-		Assert.assertEquals(myList.get(0).getName(), pubsList.get(0).getName());
-		Assert.assertEquals(myList.get(1).getName(), pubsList.get(1).getName());
-	}
-	
-	@Test
-	public void	testGetGameGenres()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		Genre g2 = TestMethods.addGenre("Adventure", GENRE_LOGO, genreInsert);
-		TestMethods.connectGenre(g, g1, classificationInsert);
-		TestMethods.connectGenre(g, g2, classificationInsert);
-		
-		List<Genre> genreList = gameDao.getAllGenres(g);
-		List<Genre> myList = new ArrayList<Genre>();
-		myList.add(g1);
-		myList.add(g2);
-		
-		Assert.assertFalse(genreList.isEmpty());
-		Assert.assertEquals(myList.size(), genreList.size());
-		Assert.assertEquals(myList.get(0).getName(), genreList.get(0).getName());
-		Assert.assertEquals(myList.get(1).getName(), genreList.get(1).getName());
-	}
-	
-	@Test
-	public void	testGetGamePlatforms()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
-		Platform p2 = TestMethods.addPlatform("PlayStation 4", "PS4", PLATFORM_LOGO, platformInsert);
-		TestMethods.connectPlatform(g, p1, versionInsert);
-		TestMethods.connectPlatform(g, p2, versionInsert);
-		
-		List<Platform> platformsList = gameDao.getAllPlatforms(g);
-		List<Platform> myList = new ArrayList<Platform>();
-		myList.add(p1);
-		myList.add(p2);
-		
-		Assert.assertFalse(platformsList.isEmpty());
-		Assert.assertEquals(myList.size(), platformsList.size());
-		Assert.assertEquals(myList.get(0).getName(), platformsList.get(0).getName());
-		Assert.assertEquals(myList.get(1).getName(), platformsList.get(1).getName());
 	}
 	
 	@Test

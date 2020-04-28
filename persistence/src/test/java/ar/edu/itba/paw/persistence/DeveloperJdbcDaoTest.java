@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
 import javax.sql.DataSource;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
-import ar.edu.itba.paw.model.Game;
+
 import ar.edu.itba.paw.model.Developer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,7 +25,6 @@ import ar.edu.itba.paw.model.Developer;
 @Sql(scripts = {"classpath:schema.sql"})
 public class DeveloperJdbcDaoTest
 {
-	private static final String GAME_TABLE = "games";
 	private	static final String DEVELOPER_TABLE = "developers";
 	private	static final String DEVELOPER_NAME = "Nintendo";
 	private	static final String DEVELOPER_LOGO = "https://nintendo/logo.jpg";
@@ -132,30 +131,5 @@ public class DeveloperJdbcDaoTest
 		Assert.assertEquals(2, developerList.size());
 		Assert.assertEquals(developerList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(developerList.get(1).getName(), myList.get(1).getName());
-	}
-	
-	@Test
-	public void	testGetAllGamesByDeveloper()
-	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
-		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert developmentInsert = new SimpleJdbcInsert(ds).withTableName("development");
-
-		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
-		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
-		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
-		TestMethods.connectDev(g1, d, developmentInsert);
-		TestMethods.connectDev(g2, d, developmentInsert);
-		
-		List<Game> gamesList = developerDao.getAllGames(d);
-		List<Game> myList = new ArrayList<Game>();
-		myList.add(g1);
-		myList.add(g2);
-		Assert.assertNotNull(gamesList);
-		Assert.assertEquals(myList.size(), gamesList.size());
-		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());
-		Assert.assertEquals(myList.get(1).getTitle(), gamesList.get(1).getTitle());
 	}
 }

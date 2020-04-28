@@ -105,8 +105,7 @@ public class GenreJdbcDao implements GenreDao
 		return genres;
 	}
 
-	@Override
-	public List<Game> getAllGames(Genre g)
+	private List<Game> getAllGames(Genre g)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM genres WHERE genre = ?) AS g NATURAL JOIN classifications NATURAL JOIN games",
 				new RowMapper<Game>()

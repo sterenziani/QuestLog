@@ -2,14 +2,15 @@ package ar.edu.itba.paw.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.PlatformDao;
 import ar.edu.itba.paw.interfaces.PlatformService;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class PlatformServiceImpl implements PlatformService
@@ -88,11 +89,5 @@ public class PlatformServiceImpl implements PlatformService
 	public List<Platform> getAllPlatformsWithGames()
 	{
 		return platformDao.getAllPlatformsWithGames();
-	}
-
-	@Override
-	public List<Game> getAllGames(Platform p)
-	{
-		return platformDao.getAllGames(p);
 	}
 }

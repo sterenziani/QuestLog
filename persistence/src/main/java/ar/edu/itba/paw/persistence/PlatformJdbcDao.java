@@ -113,8 +113,7 @@ public class PlatformJdbcDao implements PlatformDao
 		return platforms;
 	}
 
-	@Override
-	public List<Game> getAllGames(Platform p)
+	private List<Game> getAllGames(Platform p)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM platforms WHERE platform = ?) AS p NATURAL JOIN game_versions NATURAL JOIN games",
 				new RowMapper<Game>()

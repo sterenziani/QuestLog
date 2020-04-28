@@ -2,7 +2,9 @@ package ar.edu.itba.paw.persistence;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.sql.DataSource;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+
 import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Game;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -130,31 +132,5 @@ public class GenreJdbcDaoTest
 		Assert.assertEquals(2, genreList.size());
 		Assert.assertEquals(genreList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(genreList.get(1).getName(), myList.get(1).getName());
-	}
-	
-	@Test
-	public void	testGetAllGamesByGenre()
-	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert classificationInsert = new SimpleJdbcInsert(ds).withTableName("classifications");
-
-		Genre genre = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
-		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
-		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
-		TestMethods.connectGenre(g1, genre, classificationInsert);
-		TestMethods.connectGenre(g2, genre, classificationInsert);
-		
-		List<Game> gamesList = genreDao.getAllGames(genre);
-		List<Game> myList = new ArrayList<Game>();
-		myList.add(g1);
-		myList.add(g2);
-		
-		Assert.assertNotNull(gamesList);
-		Assert.assertEquals(myList.size(), gamesList.size());
-		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());
-		Assert.assertEquals(myList.get(1).getTitle(), gamesList.get(1).getTitle());
 	}
 }

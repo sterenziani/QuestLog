@@ -149,28 +149,4 @@ public class PlatformJdbcDaoTest
 		Assert.assertEquals(platformList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(platformList.get(1).getName(), myList.get(1).getName());
 	}
-	
-	@Test
-	public void	testGetAllGamesByPlatform()
-	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert versionInsert = new SimpleJdbcInsert(ds).withTableName("game_versions");
-		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
-		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
-		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
-		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
-		TestMethods.connectPlatform(g1, p, versionInsert);
-		TestMethods.connectPlatform(g2, p, versionInsert);
-		
-		List<Game> gamesList = platformDao.getAllGames(p);
-		List<Game> myList = new ArrayList<Game>();
-		myList.add(g1);
-		myList.add(g2);
-		Assert.assertNotNull(gamesList);
-		Assert.assertEquals(myList.size(), gamesList.size());
-		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());
-		Assert.assertEquals(myList.get(1).getTitle(), gamesList.get(1).getTitle());
-	}
 }

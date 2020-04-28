@@ -130,28 +130,4 @@ public class PublisherJdbcDaoTest
 		Assert.assertEquals(publisherList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(publisherList.get(1).getName(), myList.get(1).getName());
 	}
-	
-	@Test
-	public void	testGetAllGamesByPublisher()
-	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		SimpleJdbcInsert gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		SimpleJdbcInsert publishingInsert = new SimpleJdbcInsert(ds).withTableName("publishing");
-		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
-		Game g1 = TestMethods.addGame("Mario", "http://nintendo.com/mario.png", "A game with Mario", gameInsert);
-		Game g2 = TestMethods.addGame("Zelda", "http://nintendo.com/zelda.png", "A game with Link", gameInsert);
-		Game g3 = TestMethods.addGame("Sonic", "http://sega.com/sonic.png", "A game with Sonic", gameInsert);
-		TestMethods.connectPub(g1, p, publishingInsert);
-		TestMethods.connectPub(g2, p, publishingInsert);
-		
-		List<Game> gamesList = publisherDao.getAllGames(p);
-		List<Game> myList = new ArrayList<Game>();
-		myList.add(g1);
-		myList.add(g2);
-		Assert.assertNotNull(gamesList);
-		Assert.assertEquals(myList.size(), gamesList.size());
-		Assert.assertEquals(myList.get(0).getTitle(), gamesList.get(0).getTitle());
-		Assert.assertEquals(myList.get(1).getTitle(), gamesList.get(1).getTitle());
-	}
 }

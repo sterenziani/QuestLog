@@ -11,7 +11,6 @@ import ar.edu.itba.paw.interfaces.PublisherDao;
 import ar.edu.itba.paw.interfaces.PublisherService;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Game;
 
 @Service
 public class PublisherServiceImpl implements PublisherService
@@ -86,11 +85,5 @@ public class PublisherServiceImpl implements PublisherService
 	public List<Publisher> getAllPublishersWithGames()
 	{
 		return publisherDao.getAllPublishersWithGames();
-	}
-	
-	@Override
-	public List<Game> getAllGames(Publisher pub)
-	{
-		return publisherDao.getAllGames(pub);
 	}
 }

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
-import ar.edu.itba.paw.model.Game;
+
 import ar.edu.itba.paw.model.Genre;
 
 public interface GenreDao {
@@ -55,11 +55,4 @@ public interface GenreDao {
 	 * @return The list of all genres.
 	 */
 	List<Genre> getAllGenresWithGames();
-	
-	/**
-	 * Get a list of all games of a certain genre
-	 * @param g		The genre
-	 * @return		The list of games
-	 */
-	List<Game> getAllGames(Genre g);
 }

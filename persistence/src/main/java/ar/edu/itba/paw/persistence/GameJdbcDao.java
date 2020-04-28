@@ -197,8 +197,7 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	@Override
-	public List<Platform> getAllPlatforms(Game g)
+	private List<Platform> getAllPlatforms(Game g)
 	{
 		List<Platform> platformList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN game_versions NATURAL JOIN platforms",
 				new RowMapper<Platform>()
@@ -226,8 +225,7 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	@Override
-	public List<Publisher> getAllPublishers(Game g)
+	private List<Publisher> getAllPublishers(Game g)
 	{
 		List<Publisher> publisherList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN publishing NATURAL JOIN publishers",
 				new RowMapper<Publisher>()
@@ -255,8 +253,7 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	@Override
-	public List<Developer> getAllDevelopers(Game g)
+	private List<Developer> getAllDevelopers(Game g)
 	{
 		List<Developer> developerList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN development NATURAL JOIN developers",
 				new RowMapper<Developer>()
@@ -285,8 +282,7 @@ public class GameJdbcDao implements GameDao
 	}
 
 	
-	@Override
-	public List<Genre> getAllGenres(Game g)
+	private List<Genre> getAllGenres(Game g)
 	{
 		List<Genre> genreList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN classifications NATURAL JOIN genres",
 				new RowMapper<Genre>()
@@ -314,8 +310,7 @@ public class GameJdbcDao implements GameDao
 		return findById(game.getId());
 	}
 	
-	@Override
-	public List<Release> getAllReleaseDates(Game g)
+	private List<Release> getAllReleaseDates(Game g)
 	{
 		List<Release> dates = jdbcTemplate.query("SELECT * FROM releases NATURAL JOIN regions WHERE game = ?",
 				new RowMapper<Release>()

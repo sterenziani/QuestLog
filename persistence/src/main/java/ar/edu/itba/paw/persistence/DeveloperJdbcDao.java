@@ -113,8 +113,7 @@ public class DeveloperJdbcDao implements DeveloperDao {
 		return devs;
 	}
 	
-	@Override
-	public List<Game> getAllGames(Developer d)
+	private List<Game> getAllGames(Developer d)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM developers WHERE developer = ?) AS d NATURAL JOIN development NATURAL JOIN games",
 				new RowMapper<Game>()

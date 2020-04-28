@@ -105,8 +105,7 @@ public class PublisherJdbcDao implements PublisherDao {
 		return publishers;
 	}
 
-	@Override
-	public List<Game> getAllGames(Publisher p)
+	private  List<Game> getAllGames(Publisher p)
 	{
 		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM publishers WHERE publisher = ?) AS p NATURAL JOIN publishing NATURAL JOIN games",
 				new RowMapper<Game>()
@@ -119,6 +118,4 @@ public class PublisherJdbcDao implements PublisherDao {
 				}, p.getId());
 		return gameList;
 	}
-
 }
-

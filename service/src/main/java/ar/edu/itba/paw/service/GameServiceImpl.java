@@ -110,12 +110,6 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public List<Platform> getAllPlatforms(Game g)
-	{
-		return gameDao.getAllPlatforms(g);
-	}
-	
-	@Override
 	public Optional<Game> addDeveloper(Game g, Developer p)
 	{
 		return gameDao.addDeveloper(g, p);		
@@ -127,12 +121,6 @@ public class GameServiceImpl implements GameService
 		return gameDao.removeDeveloper(g, p);
 	}
 
-	@Override
-	public List<Developer> getAllDevelopers(Game g)
-	{
-		return gameDao.getAllDevelopers(g);
-	}
-	
 	@Override
 	public Optional<Game> addPublisher(Game g, Publisher p)
 	{
@@ -146,12 +134,6 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public List<Publisher> getAllPublishers(Game g)
-	{
-		return gameDao.getAllPublishers(g);
-	}
-
-	@Override
 	public Optional<Game> addGenre(Game game, Genre genre)
 	{
 		return gameDao.addGenre(game, genre);
@@ -161,12 +143,6 @@ public class GameServiceImpl implements GameService
 	public Optional<Game> removeGenre(Game game, Genre genre)
 	{
 		return gameDao.removeGenre(game, genre);
-	}
-
-	@Override
-	public List<Genre> getAllGenres(Game g)
-	{
-		return gameDao.getAllGenres(g);
 	}
 	
 	@Override
@@ -179,12 +155,6 @@ public class GameServiceImpl implements GameService
 	public Optional<Game> removeReleaseDate(Game game, Release r)
 	{
 		return gameDao.removeReleaseDate(game, r);
-	}
-	
-	@Override
-	public List<Release> getAllReleaseDates(Game g)
-	{
-		return gameDao.getAllReleaseDates(g);
 	}
 	
 	@Override 
