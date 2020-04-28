@@ -3,17 +3,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.itba.paw.interfaces.DeveloperService;
 import ar.edu.itba.paw.interfaces.GameService;
 import ar.edu.itba.paw.interfaces.GenreService;
@@ -37,15 +31,14 @@ import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
-import ar.edu.itba.paw.webapp.form.UserForm;
 
 @Controller
 public class MappingController
@@ -165,8 +158,6 @@ public class MappingController
 		return mav;
 	}
 	
-
-	
 	@RequestMapping(value = "/games/scores/{gameId}", method = { RequestMethod.POST })
 	public ModelAndView register(@RequestParam("score") int scoreInput, @RequestParam("game") long gameId) 
 	{
@@ -210,8 +201,6 @@ public class MappingController
 		mav.addObject("playstyles",runs.getAllPlaystyles());
 		return mav;
 	}
-
-	
 	
 	@RequestMapping(value = "/games", method = RequestMethod.POST)
 	public ModelAndView gamesList(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
@@ -241,6 +230,7 @@ public class MappingController
 				mav.addObject("user_score",sc.get());
 			else
 				mav.addObject("user_score",null);
+			mav.addObject("user_runs", runs.findGameRuns(g, u));
 		}
 		return mav;
 	}

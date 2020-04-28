@@ -82,6 +82,23 @@
 						</tr>
 					</c:forEach>
 				</table>
+				<br><br>
+				<c:if test="${loggedUser != null}">
+					<table class="runs-table">
+						<tr>
+						<th><spring:message code="game.platform"/></th>
+						<th><spring:message code="game.playstyle"/></th>
+						<th><spring:message code="game.time"/></th>
+						</tr>
+						<c:forEach var="element" items="${user_runs}">
+							<tr>
+								<td><c:out value="${element.platform.shortName}"/></td>
+								<td><spring:message code="playstyle.${element.playstyle.name}"/></td>
+								<td><c:out value="${element}"/></td>
+							</tr>
+						</c:forEach>
+					</table>
+				</c:if>
 				<a class="create-run-button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
 			</div>
 		</div>

@@ -90,10 +90,14 @@ public class Run {
 	public String toString() {
 		int hours = (int) time/3600;
 		int minutes = (int) time/60 - hours*60;
-		int seconds = (int) time - hours*3600 - minutes*60;
-		return Integer.toString(hours) + ":" + Integer.toString(minutes) + ":" +
-				Integer.toString(seconds);	
-	}
-	
-	
+		int seconds = (int) (time - hours*3600 - minutes*60);
+		String timestamp = Integer.toString(hours) + " : ";
+		if(minutes < 10)
+			timestamp += "0";
+		timestamp += Integer.toString(minutes) + " : ";
+		if(seconds < 10)
+			timestamp += "0";
+		timestamp += Integer.toString(seconds);
+		return timestamp;
+	}	
 }

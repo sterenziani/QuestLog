@@ -119,7 +119,14 @@ public class RunServiceImpl implements RunService {
 			int hours = (int) (l/3600);
 			int mins = (int) (l/60 - hours*60);
 			int secs = (int) (l - hours*3600 - mins*60);
-			map.put(p, hours+":"+mins+":"+secs);
+			String timestamp = Integer.toString(hours) + " : ";
+			if(mins < 10)
+				timestamp += "0";
+			timestamp += Integer.toString(mins) + " : ";
+			if(secs < 10)
+				timestamp += "0";
+			timestamp += Integer.toString(secs);
+			map.put(p, timestamp);
 		}
 		return map;
 	}
