@@ -8,7 +8,7 @@
 </head>
 <body>
     <%@ include file="navigation.jsp"%>
-    <div class="content">
+    <div class="content background-color">
 		<div class="game">
 			<div class="game-backlog">
 				<form method="post">
