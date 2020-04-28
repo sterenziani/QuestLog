@@ -30,6 +30,10 @@
 			</div>
 			<%@include file="gameDetails.jsp"%>
 		</div>
+		<div>
+		<div class="game-details-description">
+            <p><c:out value="${game.description}"/></p>
+        </div>
 		<div class="game-details-score">
 			<form:form name="scores" method="POST" action="scores/${game.id}">
 				
@@ -74,6 +78,7 @@
 					</div>
 				</strong>
 			</div>
+		</div>
 		</div>
 		<div class="game-table-run">
 			<table class="runs-table">

@@ -23,9 +23,6 @@
         <img src="<c:url value="${game.cover}"/>" alt="<c:out value="${game.title}"/>">
     </div>
     <div class="game-details-content">
-        <div class="game-details-description">
-            <p><c:out value="${game.description}"/></p>
-        </div>
         <div class="game-details-info">
             <dl>
                 <div class="game-details-release-dates">
