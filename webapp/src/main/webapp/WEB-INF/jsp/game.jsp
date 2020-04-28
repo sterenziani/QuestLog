@@ -73,9 +73,14 @@
 			<div class="user-avg-score">
 				<strong class="score-title">
 					<spring:message code="game.averageUserScore"/>
-					<div class="score-number">
-						<p class="score-display score-display-avg">${averageScore}</p>
-					</div>
+					<c:choose>
+						<c:when test="${empty averageScore}">
+							<p class="score-display score-display-avg">-</p>
+						</c:when>
+						<c:otherwise>
+							<p class="score-display score-display-avg">${averageScore}</p>
+						</c:otherwise>
+					</c:choose>
 				</strong>
 			</div>
 		</div>
