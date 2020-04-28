@@ -77,24 +77,6 @@ public class MappingController
 	@Autowired
 	private ScoreService scors;
 
-	// This doesn't throw exception. TO DO: Find a way to put it in ErrorController
-	@RequestMapping(value="/error404", method = RequestMethod.GET)
-	public ModelAndView error_404()
-	{
-		ModelAndView m = new ModelAndView("error");
-		m.addObject("msg", "Error 404");
-		return m;
-	}
-	
-	// This doesn't throw exception. TO DO: Find a way to put it in ErrorController
-	@RequestMapping(value="/error400", method = RequestMethod.GET)
-	public ModelAndView error_400()
-	{
-		ModelAndView m = new ModelAndView("error");
-		m.addObject("msg", "Error 400");
-		return m;
-	}
-
 	@RequestMapping("/")
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{

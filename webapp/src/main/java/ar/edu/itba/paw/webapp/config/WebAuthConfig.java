@@ -42,9 +42,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 			.and().authorizeRequests()
 				.antMatchers("/login", "/login_error", "/create").anonymous()
 				.antMatchers("/admin").hasRole("ADMIN")
-				//.antMatchers("/posts/vote").hasRole("VOTER")
-				//.antMatchers("/posts/edit").hasRole("EDITOR")
-				//.antMatchers("/posts/create").hasRole("USER")
 				.antMatchers("/profile", "/games/scores/**", "/createRun/**").authenticated()
 				.antMatchers("/**").permitAll()// Para cualquier otra URL
 			.and().formLogin()

@@ -6,8 +6,8 @@
 <body class="background-color">
     <%@include file="navigation.jsp"%>
     <div class="error-box">
-        <h2>Whoops!</h2>
-        <h5>${msg}</h5>
+        <h2><spring:message code="error.title"/></h2>
+        <h5><spring:message code="${msg}"/></h5>
     </div>
 </body>
 </html>

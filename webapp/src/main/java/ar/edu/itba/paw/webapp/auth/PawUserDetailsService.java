@@ -39,7 +39,6 @@ public class PawUserDetailsService implements UserDetailsService
 		
 		// Aca están hardcodeados pero Sotuyo quiere que la version final tenga lógica
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-		authorities.add(new SimpleGrantedAuthority("ROLE_VOTER"));
 		final String password;
 		if(user.getPassword() == null || !BCRYPT_PATTERN.matcher(user.getPassword()).matches())
 		{
