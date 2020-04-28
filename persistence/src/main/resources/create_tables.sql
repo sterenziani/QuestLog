@@ -92,19 +92,19 @@ BEGIN
    END IF;
 END';
 
-CREATE TABLE IF NOT EXISTS reviews(
-	review SERIAL,
-	user_id INT NOT NULL,
-	game INT NOT NULL,
-	platform INT NOT NULL,
-	score INT NOT NULL,
-	body TEXT,
-	post_date TIMESTAMP,
-	PRIMARY KEY(review),
-	FOREIGN KEY(user_id) REFERENCES users,
-	FOREIGN KEY(game) REFERENCES games,
-	FOREIGN KEY(platform) REFERENCES platforms
-);
+--CREATE TABLE IF NOT EXISTS reviews(
+--	review SERIAL,
+--	user_id INT NOT NULL,
+--	game INT NOT NULL,
+--	platform INT NOT NULL,
+--	score INT NOT NULL,
+--	body TEXT,
+--	post_date TIMESTAMP,
+--	PRIMARY KEY(review),
+--	FOREIGN KEY(user_id) REFERENCES users,
+--	FOREIGN KEY(game) REFERENCES games,
+--	FOREIGN KEY(platform) REFERENCES platforms
+--);
 
 CREATE TABLE IF NOT EXISTS runs(
 	run SERIAL,

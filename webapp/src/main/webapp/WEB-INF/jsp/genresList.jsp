@@ -14,7 +14,7 @@
 			                <img src="<c:url value="${genre.logo}"/>" alt="${genre.name}"/>
 			            </div>
 			            <div class="explore-list-item-data">
-			                <h3><c:out value="${genre.name}"/></h3>
+			                <h3><spring:message code="genres.${genre.name}"/></h3>
 			            </div>
 			        </div>
 			    </a>
