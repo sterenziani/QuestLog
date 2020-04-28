@@ -8,7 +8,7 @@
 	<div class="explore-list-items">
 		<c:forEach items="${genres}" var="genre">
 			<div class="explore-list-item">
-			    <a href="<c:url value="genres"/>">
+			    <a href="<c:url value="genres/${genre.id}"/>">
 			        <div>
 			            <div class="explore-list-item-icon">
 			                <img src="<c:url value="${genre.logo}"/>" alt="${genre.name}"/>
