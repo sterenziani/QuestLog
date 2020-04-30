@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -69,6 +72,8 @@ public class MappingController
 	
 	@Autowired
 	private ScoreService scors;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(MappingController.class);
 
 	@RequestMapping("/")
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
@@ -409,6 +414,8 @@ public class MappingController
 		if(auth != null)
 		{
 			final Optional<User> user = us.findByUsername((String) auth.getName());
+			if(user.isPresent())
+				LOGGER.debug("Logged user is {}", user.get().getUsername());
 			return user.orElseGet(() -> null);
 		}
 		return null;
