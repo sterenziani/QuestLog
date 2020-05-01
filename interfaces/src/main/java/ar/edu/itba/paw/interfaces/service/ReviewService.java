@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.service;
 
 import java.sql.Date;
 import java.util.List;

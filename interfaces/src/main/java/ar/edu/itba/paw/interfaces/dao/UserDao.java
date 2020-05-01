@@ -1,9 +1,9 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.dao;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.User;
 
-public interface UserService
+public interface UserDao
 {
 	/**
 	 * Finds a user given its ID
@@ -28,8 +28,10 @@ public interface UserService
 	
 	/**
 	 * Create a new user.
-	 * @param username The name of the user.
+	 * @param username	The name of the user.
+	 * @param password	The password of the user.
+	 * @param email		The email of the user.
 	 * @return The created user.
 	 */
-	User register(String username, String password, String email);
+	User create(String username, String password, String email);
 }

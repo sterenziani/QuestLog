@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.itba.paw.interfaces.GameService;
-import ar.edu.itba.paw.interfaces.GenreDao;
-import ar.edu.itba.paw.interfaces.GenreService;
+import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.dao.GenreDao;
+import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.User;
 

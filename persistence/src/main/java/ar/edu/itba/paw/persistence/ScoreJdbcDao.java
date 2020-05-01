@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import ar.edu.itba.paw.interfaces.ScoreDao;
+import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;

@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.validators;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 
 public class UserUniqueValidator implements ConstraintValidator<UserUnique, String>
 {

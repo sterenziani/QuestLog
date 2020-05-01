@@ -3,11 +3,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.interfaces.DeveloperService;
-import ar.edu.itba.paw.interfaces.GameService;
-import ar.edu.itba.paw.interfaces.DeveloperDao;
+import ar.edu.itba.paw.interfaces.service.DeveloperService;
+import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
 import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.User;
 
 @Service

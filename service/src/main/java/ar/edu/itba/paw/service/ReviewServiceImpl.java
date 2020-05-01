@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.itba.paw.interfaces.ReviewDao;
-import ar.edu.itba.paw.interfaces.ReviewService;
+import ar.edu.itba.paw.interfaces.dao.ReviewDao;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Review;

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.service;
 
 import java.util.HashMap;
 import java.util.List;

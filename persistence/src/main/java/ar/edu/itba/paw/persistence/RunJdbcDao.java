@@ -15,12 +15,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import ar.edu.itba.paw.interfaces.RunDao;
+import ar.edu.itba.paw.interfaces.dao.RunDao;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Run;
-import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
 
 @Repository

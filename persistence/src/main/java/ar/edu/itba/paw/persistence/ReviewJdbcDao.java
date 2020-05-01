@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import ar.edu.itba.paw.interfaces.ReviewDao;
+import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Review;

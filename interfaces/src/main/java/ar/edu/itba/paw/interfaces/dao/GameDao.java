@@ -1,5 +1,4 @@
-package ar.edu.itba.paw.interfaces;
-import java.util.Collection;
+package ar.edu.itba.paw.interfaces.dao;
 import java.util.List;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Developer;
@@ -10,41 +9,41 @@ import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Release;
 import ar.edu.itba.paw.model.User;
 
-public interface GameService
+public interface GameDao
 {
 	/**
 	 * Finds a game given its ID
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findById(long id, User u);
+	Optional<Game> findById(long id);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) given its ID
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findByIdWithDetails(long id, User u);
+	Optional<Game> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a game or several games with a given title
 	 * @param title The title for the game.
-	 * @return List of games that share that title.
+	 * @return 		The game with that title.
 	 */
-	Optional<Game> findByTitle(String title, User u);
+	Optional<Game> findByTitle(String title);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) with a given title
 	 * @param title The title for the game.
 	 * @return 		The game with that title.
 	 */
-	Optional<Game> findByTitleWithDetails(String title, User u);
+	Optional<Game> findByTitleWithDetails(String title);
 	
 	/**
 	 * Change a game's title
 	 * @param id		The id of the game
 	 * @param new_title The new title for the game.
-	 * @return The new, modified game, or null if the original game was not found.
+	 * @return 			The new, modified game, or null if the original game was not found.
 	 */
 	Optional<Game> changeTitle(long id, String new_title);
 	
@@ -52,7 +51,7 @@ public interface GameService
 	 * Change a game's cover
 	 * @param id		The id of the game
 	 * @param new_cover The new cover for the game.
-	 * @return The new, modified game, or null if the original game was not found.
+	 * @return 			The new, modified game, or null if the original game was not found.
 	 */
 	Optional<Game> changeCover(long id, String new_cover);
 	
@@ -60,16 +59,16 @@ public interface GameService
 	 * Change a game's description
 	 * @param id		The id of the game
 	 * @param new_desc 	The new description for the game.
-	 * @return The new, modified game, or null if the original game was not found.
+	 * @return 			The new, modified game, or null if the original game was not found.
 	 */
 	Optional<Game> changeDescription(long id, String new_desc);
 	
 	/**
 	 * Create a new game.
-	 * @param title The title of the game.
-	 * @param cover A link to the cover of the game
-	 * @param description A description of the game
-	 * @return The registered game.
+	 * @param title 		The title of the game.
+	 * @param cover			The cover of the game.
+	 * @param description	The description of the game
+	 * @return 				The registered game.
 	 */
 	Game register(String title, String cover, String description);
 	
@@ -77,8 +76,13 @@ public interface GameService
 	 * Get a list of all available games.
 	 * @return 	The list of all games.
 	 */
-	List<Game> getAllGames(User u);
-	List<Game> getAllGamesWithDetails(User u);
+	List<Game> getAllGames();
+	
+	/**
+	 * Get a list of all available games with the additional details of each game.
+	 * @return 	The list of all games.
+	 */
+	List<Game> getAllGamesWithDetails();
 	
 	/**
 	 * Links a game to a specified platform
@@ -165,28 +169,57 @@ public interface GameService
 	 * @param search The search term.
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitle(String search, User u);
-	List<Game> searchByTitleWithDetails(String search, User u);
-
+	List<Game> searchByTitle(String search);
+	
+	/**
+	 * Get a list of all games (and their additional details) with names that contain the searched term.
+	 * @param search The search term.
+	 * @return 	The list of matching games.
+	 */
+	List<Game> searchByTitleWithDetails(String search);
+	
 	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
-	List<Game> getUpcomingGames(User u);
+	List<Game> getUpcomingGames();
+	
+	/**
+	 * Get a list of upcoming games with extra information.
+	 * @return The list of upcoming games.
+	 */
+	List<Game> getUpcomingGamesWithDetails();
 
-	boolean gameInBacklog(long gameId, User u);
-
+	/**
+	 * Check if the game with the provided id is in the user's backlog.
+	 * @param gameId	The id of the game
+	 * @param u			The user
+	 * @return			True if the game is in their backlog, false if not.
+	 */
+	boolean isInBacklog(long gameId, User u);
+	
+	/**
+	 * Add a game to a registered user's backlog
+	 * @param u	The user adding the game to their backlog
+	 * @param g The game
+	 */
+	void addToBacklog(long gameId, User u);
+	
+	/**
+	 * Remove a game from a user's backlog
+	 * @param gameId	The id of the game
+	 * @param u			The user
+	 */
+	void removeFromBacklog(long gameId, User u);
+	
+	/**
+	 * Get a list of all games saved in a user's backlog
+	 * @param u	The user
+	 * @return	The list of games
+	 */
 	List<Game> getGamesInBacklog(User u);
 
-	void addToBacklog(long gameId, User u);
+	List<Game> getSimilarToBacklog(User u);
 
-	void removeFromBacklog(long gameId, User u);
-
-	void toggleBacklog(long gameId, User u);
-
-	void updateBacklogDetails(Collection<Game> list, User u);
-
-	List<Game> getRecommendedGames(User u);
-
-	List<Game> getPopularGames(User u);
+	List<Game> getMostBacklogged();
 }

@@ -1,18 +1,17 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.dao;
+
 import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.User;
 
-public interface DeveloperService {
+public interface DeveloperDao {
 	/**
 	 * Finds a developer given its ID
 	 * @param id The unique ID for the developer.
 	 * @return The matched developer, or null otherwise.
 	 */
 	Optional<Developer> findById(long id);
-	Optional<Developer> findById(long id, User u);
 	
 	/**
 	 * Finds a developer or several developers with a given name
@@ -20,7 +19,6 @@ public interface DeveloperService {
 	 * @return List of developers that share that name.
 	 */
 	Optional<Developer> findByName(String name);
-	Optional<Developer> findByName(String name, User u);
 	
 	/**
 	 * Change a developer's name
@@ -50,7 +48,7 @@ public interface DeveloperService {
 	 * Get a list of all available developers.
 	 * @return The list of all developers.
 	 */
-	List<Developer> getAllDevelopers();	
+	List<Developer> getAllDevelopers();
 	
 	/**
 	 * Get a list of all available developers with their list of games filled in.
