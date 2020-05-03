@@ -200,3 +200,10 @@ CREATE TABLE IF NOT EXISTS publishing(
 	FOREIGN KEY(game) REFERENCES games,
 	FOREIGN KEY(publisher) REFERENCES publishers
 );
+
+CREATE TABLE IF NOT EXISTS images(
+    image      INT NOT NULL,
+    image_name VARCHAR(60) NOT NULL,
+    image_data BYTEA,
+    PRIMARY KEY(image)
+);
