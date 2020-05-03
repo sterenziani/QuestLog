@@ -1,20 +1,25 @@
 package ar.edu.itba.paw.webapp.controller;
+import ar.edu.itba.paw.webapp.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
-import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
-import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @ControllerAdvice
 public class ExceptionHandlerController
 {
+
+	@ExceptionHandler(ImageNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView NoSuchImage()
+	{
+		ModelAndView m = new ModelAndView("error");
+		m.addObject("msg", "error.imageNotExists");
+		return m;
+	}
+
 	@ExceptionHandler(UserNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchUser()
