@@ -89,7 +89,7 @@
 			<table class="runs-table">
 				<tr>
 				<th><spring:message code="game.playstyle"/></th>
-				<th><spring:message code="game.average"/></th>
+				<th><spring:message code="game.averageTime"/></th>
 				</tr>
 				<c:forEach var="element" items="${playAverage}">
 					<tr>
@@ -99,12 +99,12 @@
 				</c:forEach>
 			</table>
 			<br><br>
-			<c:if test="${loggedUser != null}">
+			<c:if test="${loggedUser != null && !empty user_runs}">
 				<table class="runs-table">
 					<tr>
 					<th><spring:message code="game.platform"/></th>
 					<th><spring:message code="game.playstyle"/></th>
-					<th width="130px"><spring:message code="game.time"/></th>
+					<th width="130px"><spring:message code="game.yourTime"/></th>
 					</tr>
 					<c:forEach var="element" items="${user_runs}">
 						<tr>
