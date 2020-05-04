@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.webapp.controller;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,9 +22,11 @@ public class ErrorController
 		return m;
 	}
 	
-	@RequestMapping("/403")
+	@RequestMapping("/error403")
 	public ModelAndView forbidden()
 	{
-		return new ModelAndView("403");
+		ModelAndView m = new ModelAndView("error");
+		m.addObject("msg", "error.403");
+		return m;
 	}
 }

@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,7 +69,7 @@ public class MappingController
 	private ScoreService scors;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MappingController.class);
-
+	
 	@RequestMapping("/")
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
@@ -103,7 +102,7 @@ public class MappingController
 	public ModelAndView search(@RequestParam String search, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("games");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		mav.addObject("searchTerm", search);
 		if(u == null)
 		{
@@ -123,7 +122,7 @@ public class MappingController
 	{
 		backlog = toggleBacklog(gameId, response, backlog);
 		final ModelAndView mav = new ModelAndView("games");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		if(u == null)
 		{
 			List<Game> searchResults = gs.searchByTitle(search);
@@ -143,7 +142,7 @@ public class MappingController
 	public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("allGames");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		if(u == null)
 		{
 			List<Game> games = gs.getAllGames();
@@ -160,7 +159,7 @@ public class MappingController
 	@RequestMapping(value = "/games/scores/{gameId}", method = { RequestMethod.POST })
 	public ModelAndView register(@RequestParam("score") int scoreInput, @RequestParam("game") long gameId) 
 	{
-		User user = loggedUser();
+		User user = us.getLoggedUser();
 		if(user == null)
 			return new ModelAndView("redirect:/games/{gameId}");
 		Optional<Game> game = gs.findByIdWithDetails(gameId);
@@ -176,7 +175,7 @@ public class MappingController
 	public ModelAndView register(@RequestParam("hours") int hours, @RequestParam("mins") int mins, @RequestParam("secs") int secs,
 			@RequestParam("game") long gameId, @RequestParam("platforms") String platform, @RequestParam("playstyles") String playst) 
 	{
-		User user = loggedUser();
+		User user = us.getLoggedUser();
 		if(user == null)
 			return new ModelAndView("redirect:/games/{gameId}");
 		Optional <Game> game = gs.findByIdWithDetails(gameId);
@@ -191,7 +190,7 @@ public class MappingController
 	@RequestMapping("/createRun/{gameId}")
 	public ModelAndView createRun(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		if(u == null)
 			return new ModelAndView("redirect:/games/{gameId}");
 		final ModelAndView mav = new ModelAndView("createRun");
@@ -212,7 +211,7 @@ public class MappingController
 	public ModelAndView gameProfile(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("game");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
 		mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
 		mav.addObject("averageScore", scors.findAverageScore(g));
@@ -256,7 +255,7 @@ public class MappingController
 	public ModelAndView platformProfile(@PathVariable("platformId") long platformId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("platform");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		Platform p = ps.findById(platformId).orElseThrow(PlatformNotFoundException::new);
 		if(u == null)
 			updateWithBacklogDetails(p.getGames(), backlog);
@@ -286,7 +285,7 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("developer");
 		Developer d = ds.findById(devId).orElseThrow(DeveloperNotFoundException::new);
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		if(u == null)
 			updateWithBacklogDetails(d.getGames(), backlog);
 		mav.addObject("developer", d);
@@ -314,7 +313,7 @@ public class MappingController
 	public ModelAndView publisherProfile(@PathVariable("pubId") long pubId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("publisher");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		Publisher p = pubs.findById(pubId).orElseThrow(PublisherNotFoundException::new);
 		if(u == null)
 			updateWithBacklogDetails(p.getGames(), backlog);
@@ -341,7 +340,7 @@ public class MappingController
 	public ModelAndView genreProfile(@PathVariable("genreId") long genreId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("genre");
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		Genre g = gens.findById(genreId).orElseThrow(GenreNotFoundException::new);
 		if(u == null)
 			updateWithBacklogDetails(g.getGames(), backlog);
@@ -371,14 +370,14 @@ public class MappingController
 	public ModelAndView visitOwnProfile()
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
-		mav.addObject("user", loggedUser());
+		mav.addObject("user", us.getLoggedUser());
 		return mav;
 	}
 	
 	@RequestMapping("/transfer_backlog")
 	public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		transferBacklog(response, backlog, loggedUser());
+		transferBacklog(response, backlog, us.getLoggedUser());
 		clearAnonBacklog(response);
 		return new ModelAndView("redirect:/");
 	}
@@ -392,15 +391,9 @@ public class MappingController
 	
 ///////////////////////////////////////////////////////////////////////
 	
-	@ModelAttribute("loggedUser")
-	public User loggedUser()
-	{
-		return us.getLoggedUser();
-	}
-	
 	private String toggleBacklog(long gameId, HttpServletResponse response, String backlog)
 	{
-		User u = loggedUser();
+		User u = us.getLoggedUser();
 		if(u == null)
 		{
 			if(gameInBacklog(gameId, backlog))

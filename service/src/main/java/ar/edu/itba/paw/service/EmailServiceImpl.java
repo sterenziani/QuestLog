@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.service;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -11,7 +10,6 @@ import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Release;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -45,7 +43,7 @@ public class EmailServiceImpl implements EmailService
 	}
 
 	@Async
-	@Scheduled(cron = "00 15 23 * * *")
+	@Scheduled(cron = "00 00 09 * * *")
 	@Override
 	public void sendDailyEmails()
 	{
