@@ -7,7 +7,7 @@
     <%@include file="navigation.jsp"%>
     <div class="error-box">
         <h2>Error 403 - Unauthorized</h2>
-		<h5><spring:message code="${msg}"/></h5>
+		<h5><spring:message code="error.unauthorized"/></h5>
     </div>
 </body>
 </html>

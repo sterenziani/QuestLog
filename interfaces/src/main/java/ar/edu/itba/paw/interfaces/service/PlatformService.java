@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 import java.util.List;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.User;
 
 public interface PlatformService
 {
@@ -13,7 +11,6 @@ public interface PlatformService
 	 * @return The matched platform, or null otherwise.
 	 */
 	Optional<Platform> findById(long id);
-	Optional<Platform> findById(long id, User u);
 	
 	/**
 	 * Finds a platform or several platforms with a given name
@@ -21,7 +18,6 @@ public interface PlatformService
 	 * @return List of platforms that share that name.
 	 */
 	Optional<Platform> findByName(String name);
-	Optional<Platform> findByName(String name, User u);
 	
 	/**
 	 * Change a platform's name

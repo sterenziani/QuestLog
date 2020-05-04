@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
-
 import java.util.List;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.User;
 
 public interface PublisherService {
 	/**
@@ -13,7 +10,6 @@ public interface PublisherService {
 	 * @return The matched publisher, or null otherwise.
 	 */
 	Optional<Publisher> findById(long id);
-	Optional<Publisher> findById(long id, User u);
 	
 	/**
 	 * Finds a publisher or several publishers with a given name
@@ -21,7 +17,6 @@ public interface PublisherService {
 	 * @return List of publishers that share that name.
 	 */
 	Optional<Publisher> findByName(String name);
-	Optional<Publisher> findByName(String name, User u);
 	
 	/**
 	 * Change a publisher's name

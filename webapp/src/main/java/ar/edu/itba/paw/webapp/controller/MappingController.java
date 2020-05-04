@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -79,19 +76,18 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("cookieBacklog", backlog);
-		User u = loggedUser();
+		mav.addObject("popularGames", gs.getPopularGames());
+		User u = us.getLoggedUser();
 		if(u == null)
 		{
 			mav.addObject("backlogGames", getGamesInBacklog(backlog));
-			mav.addObject("popularGames", gs.getPopularGames(null));
 			mav.addObject("upcomingGames", getUpcomingGames(backlog));
 		}
 		else
 		{
-			mav.addObject("backlogGames", gs.getGamesInBacklog(u));
-			mav.addObject("recommendedGames", gs.getRecommendedGames(u));
-			mav.addObject("popularGames", gs.getPopularGames(u));
-			mav.addObject("upcomingGames", gs.getUpcomingGames(u));
+			mav.addObject("backlogGames", gs.getGamesInBacklog());
+			mav.addObject("recommendedGames", gs.getRecommendedGames());
+			mav.addObject("upcomingGames", gs.getUpcomingGames());
 		}
 		return mav;
 	}
@@ -108,17 +104,16 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("games");
 		User u = loggedUser();
+		mav.addObject("searchTerm", search);
 		if(u == null)
 		{
-			List<Game> searchResults = gs.searchByTitle(search, null);
+			List<Game> searchResults = gs.searchByTitle(search);
 			updateWithBacklogDetails(searchResults, backlog);
-			mav.addObject("searchTerm", search);
 			mav.addObject("games", searchResults);
 		}
 		else
 		{
-			mav.addObject("searchTerm", search);
-			mav.addObject("games", gs.searchByTitle(search, u));
+			mav.addObject("games", gs.searchByTitle(search));
 		}
 		return mav;
 	}
@@ -131,7 +126,7 @@ public class MappingController
 		User u = loggedUser();
 		if(u == null)
 		{
-			List<Game> searchResults = gs.searchByTitle(search, null);
+			List<Game> searchResults = gs.searchByTitle(search);
 			updateWithBacklogDetails(searchResults, backlog);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", searchResults);
@@ -139,7 +134,7 @@ public class MappingController
 		else
 		{
 			mav.addObject("searchTerm", search);
-			mav.addObject("games", gs.searchByTitle(search, u));
+			mav.addObject("games", gs.searchByTitle(search));
 		}
 		return mav;
 	}
@@ -151,13 +146,13 @@ public class MappingController
 		User u = loggedUser();
 		if(u == null)
 		{
-			List<Game> games = gs.getAllGames(null);
+			List<Game> games = gs.getAllGames();
 			updateWithBacklogDetails(games, backlog);
 			mav.addObject("games", games);
 		}
 		else
 		{
-			mav.addObject("games", gs.getAllGames(u));
+			mav.addObject("games", gs.getAllGames());
 		}
 		return mav;
 	}
@@ -168,7 +163,7 @@ public class MappingController
 		User user = loggedUser();
 		if(user == null)
 			return new ModelAndView("redirect:/games/{gameId}");
-		Optional <Game> game = gs.findByIdWithDetails(gameId, user);
+		Optional<Game> game = gs.findByIdWithDetails(gameId);
 		Optional<Score> score = scors.findScore(user, game.get());
 		if (score.isPresent())
 			scors.changeScore(scoreInput, user, game.get());
@@ -184,7 +179,7 @@ public class MappingController
 		User user = loggedUser();
 		if(user == null)
 			return new ModelAndView("redirect:/games/{gameId}");
-		Optional <Game> game = gs.findByIdWithDetails(gameId, user);
+		Optional <Game> game = gs.findByIdWithDetails(gameId);
 		Optional <Platform> plat = ps.findByName(platform);
 		long time = hours*3600 + mins*60 + secs;
 		Optional <Playstyle> play = runs.findPlaystyleByName(playst);
@@ -200,7 +195,7 @@ public class MappingController
 		if(u == null)
 			return new ModelAndView("redirect:/games/{gameId}");
 		final ModelAndView mav = new ModelAndView("createRun");
-		Game g = gs.findByIdWithDetails(gameId, loggedUser()).orElseThrow(GameNotFoundException::new);
+		Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
 		mav.addObject("game",g);
 		mav.addObject("playstyles",runs.getAllPlaystyles());
 		return mav;
@@ -218,7 +213,7 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("game");
 		User u = loggedUser();
-		Game g = gs.findByIdWithDetails(gameId, u).orElseThrow(GameNotFoundException::new);
+		Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
 		mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
 		mav.addObject("averageScore", scors.findAverageScore(g));
 		if(u == null)
@@ -262,16 +257,10 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("platform");
 		User u = loggedUser();
+		Platform p = ps.findById(platformId).orElseThrow(PlatformNotFoundException::new);
 		if(u == null)
-		{
-			Platform p = ps.findById(platformId).orElseThrow(PlatformNotFoundException::new);
 			updateWithBacklogDetails(p.getGames(), backlog);
-			mav.addObject("platform", p);
-		}
-		else
-		{
-			mav.addObject("platform", ps.findById(platformId, u).orElseThrow(PlatformNotFoundException::new));
-		}
+		mav.addObject("platform", p);
 		return mav;
 	}
 	
@@ -296,17 +285,11 @@ public class MappingController
 	public ModelAndView developerProfile(@PathVariable("devId") long devId, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("developer");
+		Developer d = ds.findById(devId).orElseThrow(DeveloperNotFoundException::new);
 		User u = loggedUser();
 		if(u == null)
-		{
-			Developer d = ds.findById(devId).orElseThrow(DeveloperNotFoundException::new);
 			updateWithBacklogDetails(d.getGames(), backlog);
-			mav.addObject("developer", d);
-		}
-		else
-		{
-			mav.addObject("developer", ds.findById(devId, u).orElseThrow(PlatformNotFoundException::new));
-		}
+		mav.addObject("developer", d);
 		return mav;
 	}
 	
@@ -332,16 +315,10 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("publisher");
 		User u = loggedUser();
+		Publisher p = pubs.findById(pubId).orElseThrow(PublisherNotFoundException::new);
 		if(u == null)
-		{
-			Publisher p = pubs.findById(pubId, u).orElseThrow(PublisherNotFoundException::new);
 			updateWithBacklogDetails(p.getGames(), backlog);
-			mav.addObject("publisher", p);
-		}
-		else
-		{
-			mav.addObject("publisher", pubs.findById(pubId, u).orElseThrow(PublisherNotFoundException::new));
-		}
+		mav.addObject("publisher", p);
 		return mav;
 	}
 	
@@ -365,16 +342,10 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("genre");
 		User u = loggedUser();
+		Genre g = gens.findById(genreId).orElseThrow(GenreNotFoundException::new);
 		if(u == null)
-		{
-			Genre g = gens.findById(genreId).orElseThrow(GenreNotFoundException::new);
 			updateWithBacklogDetails(g.getGames(), backlog);
-			mav.addObject("genre", g);
-		}
-		else
-		{
-			mav.addObject("genre", gens.findById(genreId, u).orElseThrow(GenreNotFoundException::new));
-		}
+		mav.addObject("genre", g);
 		return mav;
 	}
 	
@@ -404,22 +375,6 @@ public class MappingController
 		return mav;
 	}
 	
-	// I think this should go in Service, but the Authentication dependencies are for webapp only. Ask about that
-	// If used as a ModelAttribute, Authentication is null and throws exception, but works just fine. See if we can change the if for a try-catch or something
-	@ModelAttribute("loggedUser")
-	public User loggedUser()
-	{
-		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(auth != null)
-		{
-			final Optional<User> user = us.findByUsername((String) auth.getName());
-			if(user.isPresent())
-				LOGGER.debug("Logged user is {}", user.get().getUsername());
-			return user.orElseGet(() -> null);
-		}
-		return null;
-	}
-	
 	@RequestMapping("/transfer_backlog")
 	public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
@@ -437,6 +392,12 @@ public class MappingController
 	
 ///////////////////////////////////////////////////////////////////////
 	
+	@ModelAttribute("loggedUser")
+	public User loggedUser()
+	{
+		return us.getLoggedUser();
+	}
+	
 	private String toggleBacklog(long gameId, HttpServletResponse response, String backlog)
 	{
 		User u = loggedUser();
@@ -450,7 +411,7 @@ public class MappingController
 		}
 		else
 		{
-			gs.toggleBacklog(gameId, u);
+			gs.toggleBacklog(gameId);
 		}
 		return backlog;
 	}
@@ -477,7 +438,7 @@ public class MappingController
 		{
 			if(!id.isEmpty())
 			{
-				Optional<Game> g = gs.findById(Long.parseLong(id), null);
+				Optional<Game> g = gs.findById(Long.parseLong(id));
 				if(g.isPresent())
 				{
 					list.add(g.get());
@@ -504,13 +465,13 @@ public class MappingController
 	{
 		List<Game> anonGames = getGamesInBacklog(backlog);
 		for(Game g : anonGames)
-			gs.addToBacklog(g.getId(), u);
+			gs.addToBacklog(g.getId());
 		clearAnonBacklog(response);
 	}
 	
 	public List<Game> getUpcomingGames(String backlog)
 	{
-		List<Game> list = gs.getUpcomingGames(null);
+		List<Game> list = gs.getUpcomingGames();
 		updateWithBacklogDetails(list, backlog);
 		return list;
 	}

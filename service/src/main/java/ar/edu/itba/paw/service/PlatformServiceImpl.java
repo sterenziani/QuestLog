@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.service;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.User;
 
 @Service
 public class PlatformServiceImpl implements PlatformService
@@ -24,35 +20,19 @@ public class PlatformServiceImpl implements PlatformService
 	@Override
 	public Optional<Platform> findById(long id)
 	{
-		return platformDao.findById(id);
-	}
-	
-	@Override
-	public Optional<Platform> findById(long id, User u)
-	{
 		Optional<Platform> p = platformDao.findById(id);
 		if(p.isPresent())
-		{
-			gs.updateBacklogDetails(p.get().getGames(), u);
-		}
+			gs.updateBacklogDetails(p.get().getGames());
 		return p;
 	}
 
 	@Override
-	public Optional<Platform> findByName(String name, User u)
+	public Optional<Platform> findByName(String name)
 	{
 		Optional<Platform> p = platformDao.findByName(name);
 		if(p.isPresent())
-		{
-			gs.updateBacklogDetails(p.get().getGames(), u);
-		}
+			gs.updateBacklogDetails(p.get().getGames());
 		return p;
-	}
-	
-	@Override
-	public Optional<Platform> findByName(String name)
-	{
-		return platformDao.findByName(name);
 	}
 
 	@Override

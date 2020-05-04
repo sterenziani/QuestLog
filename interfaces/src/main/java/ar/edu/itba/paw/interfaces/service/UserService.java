@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.User;
 
 public interface UserService
@@ -32,4 +31,6 @@ public interface UserService
 	 * @return The created user.
 	 */
 	User register(String username, String password, String email);
+
+	User getLoggedUser();
 }

@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.service;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.dao.GenreDao;
 import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.User;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -24,34 +20,18 @@ public class GenreServiceImpl implements GenreService {
 	@Override
 	public Optional<Genre> findById(long id)
 	{
-		return genreDao.findById(id);
-	}
-	
-	@Override
-	public Optional<Genre> findById(long id, User u)
-	{
 		Optional<Genre> genre = genreDao.findById(id);
 		if(genre.isPresent())
-		{
-			gs.updateBacklogDetails(genre.get().getGames(), u);
-		}
+			gs.updateBacklogDetails(genre.get().getGames());
 		return genre;
 	}
 
 	@Override
 	public Optional<Genre> findByName(String name)
 	{
-		return genreDao.findByName(name);
-	}
-	
-	@Override
-	public Optional<Genre> findByName(String name, User u)
-	{
 		Optional<Genre> genre = genreDao.findByName(name);
 		if(genre.isPresent())
-		{
-			gs.updateBacklogDetails(genre.get().getGames(), u);
-		}
+			gs.updateBacklogDetails(genre.get().getGames());
 		return genre;
 	}
 
