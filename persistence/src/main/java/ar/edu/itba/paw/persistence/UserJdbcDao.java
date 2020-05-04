@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -62,5 +63,11 @@ public class UserJdbcDao implements UserDao
 		args.put("email", email);
 		final Number userId = jdbcInsert.executeAndReturnKey(args);
 		return new User(userId.longValue(), username, password, email);
+	}
+	
+	@Override
+	public List<User> getAllUsers()
+	{
+		return jdbcTemplate.query("SELECT * FROM users ORDER BY username", USER_MAPPER);
 	}
 }

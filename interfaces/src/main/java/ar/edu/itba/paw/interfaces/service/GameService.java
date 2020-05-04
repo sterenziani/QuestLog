@@ -177,6 +177,7 @@ public interface GameService
 	boolean gameInBacklog(long gameId);
 
 	List<Game> getGamesInBacklog();
+	List<Game> getGamesInBacklog(User u);
 
 	void addToBacklog(long gameId);
 
@@ -189,4 +190,6 @@ public interface GameService
 	List<Game> getRecommendedGames();
 
 	List<Game> getPopularGames();
+
+	List<Game> getGamesReleasingTomorrow();	
 }

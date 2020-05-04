@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
+import java.util.List;
 import java.util.Optional;
 import ar.edu.itba.paw.model.User;
 
@@ -33,4 +34,5 @@ public interface UserService
 	User register(String username, String password, String email);
 
 	User getLoggedUser();
+	List<User> getAllUsers();
 }

@@ -186,6 +186,13 @@ public class GameServiceImpl implements GameService
 		return list;
 	}
 
+	@Override
+	public List<Game> getGamesReleasingTomorrow()
+	{
+		List<Game> list = gameDao.getGamesReleasingTomorrow();
+		updateBacklogDetails(list);
+		return list;
+	}
 	
 	@Override
 	public boolean gameInBacklog(long gameId)
@@ -200,6 +207,16 @@ public class GameServiceImpl implements GameService
 	public List<Game> getGamesInBacklog()
 	{
 		User u = us.getLoggedUser();
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getGamesInBacklog(u);
+		updateBacklogDetails(games);
+		return games;
+	}
+	
+	@Override
+	public List<Game> getGamesInBacklog(User u)
+	{
 		if(u == null)
 			return Collections.emptyList();
 		List<Game> games = gameDao.getGamesInBacklog(u);

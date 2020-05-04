@@ -222,4 +222,6 @@ public interface GameDao
 	List<Game> getSimilarToBacklog(User u);
 
 	List<Game> getMostBacklogged();
+
+	List<Game> getGamesReleasingTomorrow();
 }

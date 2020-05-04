@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,7 +8,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.service.EmailService;
+import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Release;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -19,6 +22,9 @@ public class EmailServiceImpl implements EmailService
 	
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private GameService gs;
 	
 	private void sendEmail(String to, String subject, String text)
 	{
@@ -39,15 +45,23 @@ public class EmailServiceImpl implements EmailService
 	}
 
 	@Async
-	@Scheduled(cron = "0 0 9 * * *")
+	@Scheduled(cron = "00 15 23 * * *")
 	@Override
 	public void sendDailyEmails()
 	{
-		// TO DO: Get a list of all users
-		List<User> userList = new ArrayList<User>();
+		List<User> userList = us.getAllUsers();
+		List<Game> upcoming = gs.getGamesReleasingTomorrow();
 		for(User u : userList)
 		{
-			sendEmail(u.getEmail(), "Good morning!", "It's 9 AM. Have a nice day!");
+			List<Game> backlog = gs.getGamesInBacklog(u);
+			backlog.retainAll(upcoming);
+			if(!backlog.isEmpty())
+			{
+				String msg = "Don't forget the following games are coming out tomorrow!";
+				for(Game g : upcoming)
+					msg += "\n # " +g.getTitle();
+				sendEmail(u.getEmail(), "A Friendly Reminder from QuestLog!", msg);
+			}
 		}
 	}
 

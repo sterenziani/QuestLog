@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.interfaces.dao;
+import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.User;
@@ -34,4 +35,5 @@ public interface UserDao
 	 * @return The created user.
 	 */
 	User create(String username, String password, String email);
+	List<User> getAllUsers();
 }

@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -61,5 +62,11 @@ public class UserServiceImpl implements UserService{
 			return user.orElseGet(() -> null);
 		}
 		return null;
+	}
+	
+	@Override
+	public List<User> getAllUsers()
+	{
+		return userDao.getAllUsers();
 	}
 }
