@@ -18,7 +18,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = {UserUniqueValidator.class})
 public @interface UserUnique
 {
-    String message() default "Username already exists (and this message needs to be localized)";
+    String message() default "ar.edu.itba.paw.error.username.unique";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 

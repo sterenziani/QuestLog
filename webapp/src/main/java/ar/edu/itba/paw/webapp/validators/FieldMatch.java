@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {FieldMatchValidator.class})
 public @interface FieldMatch
 {
-    String message() default "Passwords must match (and this message needs to be localized)";
+    String message() default "ar.edu.itba.paw.error.passwords.match";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String baseField();

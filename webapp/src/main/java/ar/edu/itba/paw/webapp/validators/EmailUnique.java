@@ -12,7 +12,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = {EmailUniqueValidator.class})
 public @interface EmailUnique
 {
-    String message() default "Email already exists (and this message needs to be localized)";
+    String message() default "ar.edu.itba.paw.error.email.unique";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
