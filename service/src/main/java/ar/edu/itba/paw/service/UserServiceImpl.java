@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private EmailService emailService;
 	
-	//@Autowired
-	//private PasswordEncoder encoder;
+	@Autowired
+	private PasswordEncoder encoder;
 	
 	@Override
 	public Optional<User> findById(long id)
@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService{
 	{
 		if(findByUsername(username).isPresent())
 			return null;
-		//String encodedPassword = encoder.encode(password)
-		User u = userDao.create(username, password, email);
+		String encodedPassword = encoder.encode(password);
+		User u = userDao.create(username, encodedPassword, email);
 		emailService.sendWelcomeEmail(u);
 		return u;
 	}

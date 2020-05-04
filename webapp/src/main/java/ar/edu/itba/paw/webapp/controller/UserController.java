@@ -43,8 +43,7 @@ public class UserController
 			return registerForm(registerForm);
 		}
 		final User u = us.register(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
-		// TO DO: Log in as user before redirecting
-		authWithAuthManager(request, u.getUsername(), u.getPassword());
+		authWithAuthManager(request, u.getUsername(), registerForm.getPassword());
 		return new ModelAndView("redirect:/");
 	}
 	
@@ -77,5 +76,4 @@ public class UserController
 	    Authentication authentication = authenticationManager.authenticate(authToken);
 	    SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
-
 }
