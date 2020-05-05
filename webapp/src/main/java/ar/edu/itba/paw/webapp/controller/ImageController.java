@@ -27,7 +27,7 @@ public class ImageController {
             value = "/images/{image_name:.+}"
     )
     public @ResponseBody byte[] retrieveImage(@PathVariable("image_name") String image_name) {
-        InputStream image_data = is.findByImageName(image_name).orElseThrow(ImageNotFoundException::new).getBase64CodedImage();
+        InputStream image_data = is.findByImageName(image_name).orElseThrow(ImageNotFoundException::new).getImageData();
         try {
             return IOUtils.toByteArray(image_data);
         } catch (IOException e){

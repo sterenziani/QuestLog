@@ -6,12 +6,12 @@ public class Image {
 
     private final long      id;
     private final String    imageName;
-    private InputStream     base64CodedImage;
+    private InputStream     imageData;
 
-    public Image(long id, String imageName, InputStream base64CodedImage){
-        this.id                 = id;
-        this.imageName          = imageName;
-        this.base64CodedImage   = base64CodedImage;
+    public Image(long id, String imageName, InputStream imageData){
+        this.id         = id;
+        this.imageName  = imageName;
+        this.imageData  = imageData;
     }
 
     public long getId() {
@@ -22,11 +22,11 @@ public class Image {
         return imageName;
     }
 
-    public InputStream getBase64CodedImage() {
-        return base64CodedImage;
+    public InputStream getImageData() {
+        return imageData;
     }
 
-    public void setBase64CodedImage(InputStream base64CodedImage) {
-        this.base64CodedImage = base64CodedImage;
+    public void setImageData(InputStream base64CodedImage) {
+        this.imageData = base64CodedImage;
     }
 }

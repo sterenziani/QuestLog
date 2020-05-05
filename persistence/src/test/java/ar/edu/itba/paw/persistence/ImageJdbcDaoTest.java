@@ -55,7 +55,7 @@ public class ImageJdbcDaoTest {
         final Image image = imageJdbcDao.uploadImage(IMAGE_NAME, IMAGE_DATA);
         Assert.assertNotNull(image);
         Assert.assertEquals(image.getImageName(), IMAGE_NAME);
-        Assert.assertEquals(image.getBase64CodedImage(), IMAGE_DATA);
+        Assert.assertEquals(image.getImageData(), IMAGE_DATA);
     }
 
     @Test
