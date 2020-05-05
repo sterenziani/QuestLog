@@ -43,6 +43,10 @@ public class ScoreServiceImpl implements ScoreService{
 		return scoreDao.register(user, game, score);
 	}
 	
-
-
+	@Override
+	public List<Score> findAllUserScores(User user)
+	{
+		return scoreDao.findAllUserScores(user);
+	}
+	
 }

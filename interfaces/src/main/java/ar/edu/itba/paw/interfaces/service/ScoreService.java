@@ -47,4 +47,6 @@ public interface ScoreService {
 	 */
 	Score register(User user, Game game, int score);
 
+	List<Score> findAllUserScores(User user);
+
 }

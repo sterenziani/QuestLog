@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.persistence;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Score;
@@ -113,6 +111,22 @@ public class ScoreJdbcDao implements ScoreDao{
 					}
 				}, id).stream().findFirst();
 		return user;
+	}
+	
+	@Override
+	public List<Score> findAllUserScores(User user)
+	{
+		List<Score> scores = jdbcScoreTemplate.query("SELECT * FROM scores WHERE user_id = ?", SCORE_MAPPER, user.getId());
+		for(Score s : scores)
+		{
+			Optional <Game> game = getGame(s.getGame().getId());
+			if(game.isPresent())
+			{
+				s.setGame(game.get());
+				s.setUser(user);
+			}
+		}
+		return scores;
 	}
 
 }

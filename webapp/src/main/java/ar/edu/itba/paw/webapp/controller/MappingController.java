@@ -366,14 +366,6 @@ public class MappingController
 		return mav;
 	}
 	
-	@RequestMapping("/profile")
-	public ModelAndView visitOwnProfile()
-	{
-		final ModelAndView mav = new ModelAndView("userProfile");
-		mav.addObject("user", us.getLoggedUser());
-		return mav;
-	}
-	
 	@RequestMapping("/transfer_backlog")
 	public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{

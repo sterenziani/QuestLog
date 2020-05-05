@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -65,7 +66,17 @@ public class UserController
 	public ModelAndView userProfile(@PathVariable("id") long id)
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
-		mav.addObject("user", us.findById(id).orElseThrow(UserNotFoundException::new));
+		User u = us.findByIdWithDetails(id).orElseThrow(UserNotFoundException::new);
+		mav.addObject("user", u);
+		return mav;
+	}
+	
+	@RequestMapping("/profile")
+	public ModelAndView visitOwnProfile()
+	{
+		final ModelAndView mav = new ModelAndView("userProfile");
+		User u = us.getLoggedUser();
+		mav.addObject("user", us.findByIdWithDetails(u.getId()).get());
 		return mav;
 	}
 

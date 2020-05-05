@@ -11,6 +11,7 @@ public interface UserService
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findById(long id);
+	Optional<User> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a user given its usernme
@@ -18,6 +19,7 @@ public interface UserService
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findByUsername(String username);
+	Optional<User> findByUsernameWithDetails(String username);
 	
 	/**
 	 * Finds a user given its email
@@ -25,6 +27,7 @@ public interface UserService
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findByEmail(String email);
+	Optional<User> findByEmailWithDetails(String email);
 	
 	/**
 	 * Create a new user.
