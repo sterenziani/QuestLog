@@ -32,8 +32,11 @@ public class PawUserDetailsService implements UserDetailsService
 		final User user = us.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username +" not found"));
 		final Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		
-		// Aca están hardcodeados pero Sotuyo quiere que la version final tenga lógica
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		if(user.getAdminStatus())
+		{
+			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		}
 		final String password;
 		if(user.getPassword() == null || !BCRYPT_PATTERN.matcher(user.getPassword()).matches())
 		{

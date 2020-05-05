@@ -11,6 +11,7 @@ public class User
 	private List<Game> backlog;
 	private List<Score> scores;
 	private List<Run> runs;
+	private boolean adminStatus;
 	
 	public User(long id, String username, String password, String email)
 	{
@@ -21,6 +22,7 @@ public class User
 		this.backlog = Collections.emptyList();
 		this.scores = Collections.emptyList();
 		this.runs = Collections.emptyList();
+		this.adminStatus = false;
 	}
 
 	public long getId()
@@ -86,5 +88,15 @@ public class User
 	public void setRuns(List<Run> list)
 	{
 		runs = list;
+	}
+	
+	public boolean getAdminStatus()
+	{
+		return adminStatus;
+	}
+	
+	public void setAdminStatus(boolean value)
+	{
+		adminStatus = value;
 	}
 }

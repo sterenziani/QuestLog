@@ -6,11 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.interfaces.service.EmailService;
-import ar.edu.itba.paw.interfaces.service.GameService;
-import ar.edu.itba.paw.interfaces.service.RunService;
-import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
 
@@ -19,15 +16,6 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserDao userDao;
-	
-	@Autowired
-	private GameService gs;
-	
-	@Autowired
-	private ScoreService ss;
-	
-	@Autowired
-	private RunService rs;
 	
 	@Autowired
 	private EmailService emailService;
@@ -45,15 +33,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Optional<User> findByIdWithDetails(long id)
 	{
-		Optional<User> opt = userDao.findById(id);
-		if(opt.isPresent())
-		{
-			User u = opt.get();
-			u.setBacklog(gs.getGamesInBacklog(u));
-			u.setScores(ss.findAllUserScores(u));
-			u.setRuns(rs.findAllUserRuns(u));
-		}
-		return opt;
+		return userDao.findByIdWithDetails(id);
 	}
 	
 	@Override
@@ -66,36 +46,19 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Optional<User> findByUsernameWithDetails(String username)
 	{
-		Optional<User> opt =  userDao.findByUsername(username);
-		if(opt.isPresent())
-		{
-			User u = opt.get();
-			u.setBacklog(gs.getGamesInBacklog(u));
-			u.setScores(ss.findAllUserScores(u));
-			u.setRuns(rs.findAllUserRuns(u));
-		}
-		return opt;
+		return userDao.findByUsernameWithDetails(username);
 	}
 	
 	@Override
 	public Optional<User> findByEmail(String email)
 	{
-		Optional<User> opt =  userDao.findByEmail(email);
-		return opt;
+		return userDao.findByEmail(email);
 	}
 	
 	@Override
 	public Optional<User> findByEmailWithDetails(String email)
 	{
-		Optional<User> opt =  userDao.findByEmail(email);
-		if(opt.isPresent())
-		{
-			User u = opt.get();
-			u.setBacklog(gs.getGamesInBacklog(u));
-			u.setScores(ss.findAllUserScores(u));
-			u.setRuns(rs.findAllUserRuns(u));
-		}
-		return opt;
+		return userDao.findByEmailWithDetails(email);
 	}
 
 	@Override
