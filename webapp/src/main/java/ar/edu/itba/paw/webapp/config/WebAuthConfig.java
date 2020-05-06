@@ -38,7 +38,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception
 	{
-		http.sessionManagement().invalidSessionUrl("/login")
+		http.sessionManagement()
 			.and().authorizeRequests()
 				.antMatchers("/login", "/login_error", "/create").anonymous()
 				.antMatchers("/admin").hasRole("ADMIN")
@@ -57,7 +57,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
 			.and().logout()
 				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login")
+				.logoutSuccessUrl("/")
 			.and().exceptionHandling()
 				.accessDeniedPage("/error403")
 			.and().csrf().disable();
