@@ -47,7 +47,7 @@ public class ImageJdbcDaoTest {
     }
 
     private static final String      IMAGE_NAME      = "sample.jpg";
-    private static final InputStream IMAGE_DATA      = null;
+    private static final byte[] IMAGE_DATA      = null;
 
     @Test
     public void testUploadImage(){
