@@ -25,7 +25,7 @@ public class AdminController
 	@RequestMapping("/admin")
 	public ModelAndView admin()
 	{
-		return new ModelAndView("admin");
+		return new ModelAndView("admin/admin");
 	}
 
 	@RequestMapping(
@@ -33,7 +33,7 @@ public class AdminController
 			method = RequestMethod.GET
 	)
 	public ModelAndView gameEdit(@ModelAttribute("gameForm") final GameForm gameForm){
-		return new ModelAndView("gameForm");
+		return new ModelAndView("admin/gameForm");
 	}
 
 	@RequestMapping(
@@ -49,6 +49,6 @@ public class AdminController
 		} catch (IOException e){
 			throw new BadImageException();
 		}
-		return new ModelAndView("gameForm");
+		return new ModelAndView("admin/gameForm");
 	}
 }

@@ -3,10 +3,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <%@include file="commonHead.jsp"%>
+    <%@include file="../commonHead.jsp"%>
 </head>
 <body>
-    <%@include file="navigation.jsp"%>
+    <%@include file="../navigation.jsp"%>
     <c:url value="/admin/game" var="postPath"/>
     <div class="content">
         <form:form modelAttribute="gameForm" action="${postPath}" method="post" enctype="multipart/form-data">
