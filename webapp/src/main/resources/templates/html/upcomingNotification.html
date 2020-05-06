@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:remove="all"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <h1 th:text="#{email.upcoming.subject}"></h1>
+    <h4 th:text="#{email.upcoming.title}"></h4>
+    <div th:each="game : ${games}">
+        <a style="display: inline-block; margin: 20px; background-color:black; width:265px; cursor: pointer;" th:href="@{http://localhost:8080/webapp/games/{id}(id=${game.id})}">
+	            <div class="game-list-item-data">
+	                <h3 style="text-align:center; margin: 20px; color:white;" th:text="${game.title}"></h3>
+	            </div>
+		</a>
+	</div>
+    <p th:text="#{email.upcoming.footer}"></p>
+  </body>
+</html>

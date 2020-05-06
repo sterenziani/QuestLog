@@ -1,11 +1,19 @@
 package ar.edu.itba.paw.service;
 import java.util.List;
+import java.util.Locale;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -17,29 +25,46 @@ public class EmailServiceImpl implements EmailService
 {
 	@Autowired
     private JavaMailSender emailSender;
+
+	@Autowired
+	private TemplateEngine templateEngine;
 	
+	@Autowired
+	private MessageSource messageSource;
+
 	@Autowired
 	private UserService us;
-	
+
 	@Autowired
 	private GameService gs;
-	
-	private void sendEmail(String to, String subject, String text)
-	{
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(to);
-		message.setSubject(subject);
-		message.setText(text);
-		emailSender.send(message);
-	}
-	
+
+	@Transactional
 	@Async
 	@Override
-	public void sendCustomEmail(User u, String subject, String msg)
+	public void sendWelcomeEmail(User u)
 	{
 		if(u == null)
 			return;
-		sendEmail(u.getEmail(), subject, msg);
+		Locale locale = LocaleContextHolder.getLocale();
+		final Context ctx = new Context(locale);
+		ctx.setVariable("username", u.getUsername());
+
+	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
+	    MimeMessageHelper message;
+		try
+		{
+			message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			message.setSubject(messageSource.getMessage("email.register.title", null, locale));
+			message.setFrom("no.reply.paw.questlog@gmail.com");
+			message.setTo(u.getEmail());
+			String htmlContent = templateEngine.process("html/welcome.html", ctx);
+			message.setText(htmlContent, true);
+			emailSender.send(mimeMessage);
+		}
+		catch (MessagingException e)
+		{
+			;
+		}
 	}
 
 	@Async
@@ -48,28 +73,32 @@ public class EmailServiceImpl implements EmailService
 	public void sendDailyEmails()
 	{
 		List<User> userList = us.getAllUsers();
-		List<Game> upcoming = gs.getGamesReleasingTomorrow();
 		for(User u : userList)
 		{
-			List<Game> backlog = gs.getGamesInBacklog(u);
-			backlog.retainAll(upcoming);
+			List<Game> backlog = gs.getGamesInBacklogReleasingTomorrow(u);
 			if(!backlog.isEmpty())
 			{
-				String msg = "Don't forget the following games are coming out tomorrow!";
-				for(Game g : upcoming)
-					msg += "\n # " +g.getTitle();
-				sendEmail(u.getEmail(), "A Friendly Reminder from QuestLog!", msg);
+				final Context ctx = new Context(LocaleContextHolder.getLocale());
+				ctx.setVariable("games", backlog);
+				final MimeMessage mimeMessage = emailSender.createMimeMessage();
+				MimeMessageHelper message;
+				try
+				{
+					message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+					Locale locale = LocaleContextHolder.getLocale();
+					message.setSubject(messageSource.getMessage("email.upcoming.subject", null, locale));
+					message.setFrom("no.reply.paw.questlog@gmail.com");
+					message.setTo("santiterenziani@yahoo.com");
+					String htmlContent = templateEngine.process("html/upcomingNotification.html", ctx);
+					message.setText(htmlContent, true);
+					emailSender.send(mimeMessage);
+				}
+				catch (MessagingException e)
+				{
+					;
+				}
 			}
 		}
-	}
-
-	@Async
-	@Override
-	public void sendWelcomeEmail(User u)
-	{
-		if(u == null)
-			return;
-		sendEmail(u.getEmail(), "Welcome to QuestLog!", "Thank you so much for joining QuestLog!");
 	}
 
 	@Override
