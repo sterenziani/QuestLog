@@ -21,5 +21,5 @@ public interface ImageService {
      * @return              The uploaded image.
      */
 
-    Image           uploadImage(String image_name, InputStream image_data);
+    Image           uploadImage(String image_name, byte[] image_data);
 }

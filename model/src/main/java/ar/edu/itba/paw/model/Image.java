@@ -6,9 +6,9 @@ public class Image {
 
     private final long      id;
     private final String    imageName;
-    private InputStream     imageData;
+    private byte[]          imageData;
 
-    public Image(long id, String imageName, InputStream imageData){
+    public Image(long id, String imageName, byte[] imageData){
         this.id         = id;
         this.imageName  = imageName;
         this.imageData  = imageData;
@@ -22,11 +22,11 @@ public class Image {
         return imageName;
     }
 
-    public InputStream getImageData() {
+    public byte[] getImageData() {
         return imageData;
     }
 
-    public void setImageData(InputStream base64CodedImage) {
-        this.imageData = base64CodedImage;
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 }

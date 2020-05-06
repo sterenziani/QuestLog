@@ -21,7 +21,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image uploadImage(String image_name, InputStream image_data) {
+    public Image uploadImage(String image_name, byte[] image_data) {
         return imageDao.uploadImage(image_name, image_data);
     }
 }

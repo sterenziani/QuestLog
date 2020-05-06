@@ -25,7 +25,7 @@ public class ImageJdbcDao implements ImageDao {
     private final SimpleJdbcInsert  jdbcInsert;
     private final JdbcTemplate      jdbcTemplate;
 
-    protected static final RowMapper<Image> IMAGE_MAPPER = (rs, rowNum) -> new Image(rs.getInt(IMAGE_KEY_COLUMN), rs.getString(IMAGE_NAME_COLUMN), rs.getBinaryStream(IMAGE_DATA_COLUMN));
+    protected static final RowMapper<Image> IMAGE_MAPPER = (rs, rowNum) -> new Image(rs.getInt(IMAGE_KEY_COLUMN), rs.getString(IMAGE_NAME_COLUMN), rs.getBytes(IMAGE_DATA_COLUMN));
 
     @Autowired
     public ImageJdbcDao(final DataSource ds){
@@ -41,7 +41,7 @@ public class ImageJdbcDao implements ImageDao {
     }
 
     @Override
-    public Image uploadImage(String image_name, InputStream image_data) {
+    public Image uploadImage(String image_name, byte[] image_data) {
         final Map<String, Object> args = new HashMap<>();
         args.put(IMAGE_NAME_COLUMN, image_name);
         args.put(IMAGE_DATA_COLUMN, image_data);
