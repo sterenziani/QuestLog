@@ -372,6 +372,13 @@ public class GameJdbcDao implements GameDao
 	}
 	
 	@Override
+	public List<Game> getGamesInBacklogReleasingTomorrow(User u)
+	{
+		return jdbcTemplate.query("SELECT DISTINCT game, title, cover, description FROM games NATURAL JOIN releases WHERE release_date = CURRENT_DATE + 1 "
+									+"AND game in (SELECT game FROM backlogs WHERE user_id = ?)) AS g NATURAL JOIN games", GAME_MAPPER, u.getId());
+	}
+	
+	@Override
 	public List<Game> getUpcomingGamesWithDetails()
 	{
 		List<Game> searchGames = jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);

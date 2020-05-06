@@ -280,4 +280,10 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(games);
 		return games;
 	}
+	
+	@Override
+	public List<Game> getGamesInBacklogReleasingTomorrow(User u)
+	{
+		return gameDao.getGamesInBacklogReleasingTomorrow(u);
+	}
 }

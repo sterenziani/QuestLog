@@ -191,5 +191,7 @@ public interface GameService
 
 	List<Game> getPopularGames();
 
-	List<Game> getGamesReleasingTomorrow();	
+	List<Game> getGamesReleasingTomorrow();
+
+	List<Game> getGamesInBacklogReleasingTomorrow(User u);	
 }
