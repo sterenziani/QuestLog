@@ -215,7 +215,7 @@ ALTER TABLE publishing ADD FOREIGN KEY(game) REFERENCES games ON DELETE CASCADE;
 ALTER TABLE publishing ADD FOREIGN KEY(publisher) REFERENCES publishers ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS images(
-    image      INT NOT NULL,
+    image      SERIAL,
     image_name VARCHAR(60) NOT NULL,
     image_data BYTEA,
     PRIMARY KEY(image)
