@@ -44,7 +44,7 @@
 				<label>
 					<spring:message code="registerForm.email"/>
 					<spring:message code="registerForm.email.hint" var="emailHint"/>
-					<form:input path="email" type="email" placeholder="${emailHint}"/>
+					<form:input path="email" placeholder="${emailHint}"/>
 				</label>
 			</div>
 			<div class="form-field">
