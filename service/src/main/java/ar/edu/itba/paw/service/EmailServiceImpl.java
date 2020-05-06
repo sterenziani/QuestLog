@@ -88,7 +88,7 @@ public class EmailServiceImpl implements EmailService
 					Locale locale = LocaleContextHolder.getLocale();
 					message.setSubject(messageSource.getMessage("email.upcoming.subject", null, locale));
 					message.setFrom("no.reply.paw.questlog@gmail.com");
-					message.setTo("santiterenziani@yahoo.com");
+					message.setTo(u.getEmail());
 					String htmlContent = templateEngine.process("html/upcomingNotification.html", ctx);
 					message.setText(htmlContent, true);
 					emailSender.send(mimeMessage);
