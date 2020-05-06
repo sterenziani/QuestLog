@@ -2,9 +2,9 @@ package ar.edu.itba.paw.webapp.form;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import ar.edu.itba.paw.webapp.validators.EmailUnique;
-import ar.edu.itba.paw.webapp.validators.FieldMatch;
-import ar.edu.itba.paw.webapp.validators.UserUnique;
+import ar.edu.itba.paw.webapp.validators.anotation.EmailUnique;
+import ar.edu.itba.paw.webapp.validators.anotation.FieldMatch;
+import ar.edu.itba.paw.webapp.validators.anotation.UserUnique;
 
 @FieldMatch(baseField = "password", matchField = "repeatPassword")
 public class UserForm

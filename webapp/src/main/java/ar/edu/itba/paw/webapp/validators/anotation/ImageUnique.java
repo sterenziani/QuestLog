@@ -1,4 +1,6 @@
-package ar.edu.itba.paw.webapp.validators;
+package ar.edu.itba.paw.webapp.validators.anotation;
+
+import ar.edu.itba.paw.webapp.validators.implementation.ImageUniqueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

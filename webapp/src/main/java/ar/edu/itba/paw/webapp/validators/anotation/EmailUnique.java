@@ -1,4 +1,6 @@
-package ar.edu.itba.paw.webapp.validators;
+package ar.edu.itba.paw.webapp.validators.anotation;
+import ar.edu.itba.paw.webapp.validators.implementation.EmailUniqueValidator;
+
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Documented;
