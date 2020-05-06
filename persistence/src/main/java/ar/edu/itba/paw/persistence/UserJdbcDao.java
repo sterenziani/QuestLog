@@ -52,13 +52,15 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findById(final long id)
 	{
-		return jdbcTemplate.query("SELECT *, (SELECT (count(*) = 1) FROM role_assignments NATURAL JOIN roles WHERE user_id = ? AND role_name LIKE 'Admin') AS admin FROM users WHERE user_id = ?", USER_MAPPER, id, id).stream().findFirst();
+		return jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
+								+ "AS admin FROM users WHERE user_id = ? GROUP BY user_id", USER_MAPPER, id).stream().findFirst();
 	}
 	
 	@Override
 	public Optional<User> findByIdWithDetails(final long id)
 	{
-		Optional<User> opt = jdbcTemplate.query("SELECT *, (SELECT (count(*) = 1) FROM role_assignments NATURAL JOIN roles WHERE user_id = ? AND role_name LIKE 'Admin') AS admin FROM users WHERE user_id = ?", USER_MAPPER, id, id).stream().findFirst();
+		Optional<User> opt = jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
+												+ "AS admin FROM users WHERE user_id = ? GROUP BY user_id", USER_MAPPER, id).stream().findFirst();
 		if(opt.isPresent())
 		{
 			User u = opt.get();
@@ -72,17 +74,15 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findByUsername(String username)
 	{
-		return jdbcTemplate.query("SELECT *, (SELECT (count(*) = 1) FROM role_assignments NATURAL JOIN roles WHERE "
-									+ "user_id IN (SELECT user_id FROM users WHERE username = ?) "
-									+ "AND role_name LIKE 'Admin') AS admin FROM users WHERE username = ?", USER_MAPPER, username, username).stream().findFirst();
+		return jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
+								+ "AS admin FROM users WHERE username LIKE ? GROUP BY user_id", USER_MAPPER, username).stream().findFirst();
 	}
 	
 	@Override
 	public Optional<User> findByUsernameWithDetails(String username)
 	{
-		Optional<User> opt = jdbcTemplate.query("SELECT *, (SELECT (count(*) = 1) FROM role_assignments NATURAL JOIN roles WHERE "
-									+ "user_id IN (SELECT user_id FROM users WHERE username = ?) "
-									+ "AND role_name LIKE 'Admin') AS admin FROM users WHERE username = ?", USER_MAPPER, username, username).stream().findFirst();
+		Optional<User> opt = jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
+												+ "AS admin FROM users WHERE username LIKE ? GROUP BY user_id", USER_MAPPER, username).stream().findFirst();
 		if(opt.isPresent())
 		{
 			User u = opt.get();
@@ -96,17 +96,15 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findByEmail(String email)
 	{
-		return jdbcTemplate.query("SELECT *, (SELECT (count(*) = 1) FROM role_assignments NATURAL JOIN roles WHERE "
-									+"user_id IN (SELECT user_id FROM users WHERE email = ?) "
-									+"AND role_name LIKE 'Admin') AS admin FROM users WHERE email = ?", USER_MAPPER, email, email).stream().findFirst();
+		return jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
+								+ "AS admin FROM users WHERE email LIKE ? GROUP BY user_id", USER_MAPPER, email).stream().findFirst();
 	}
 
 	@Override
 	public Optional<User> findByEmailWithDetails(String email)
 	{
-		Optional<User> opt = jdbcTemplate.query("SELECT *, (SELECT (count(*) = 1) FROM role_assignments NATURAL JOIN roles WHERE "
-									+"user_id IN (SELECT user_id FROM users WHERE email = ?) "
-									+"AND role_name LIKE 'Admin') AS admin FROM users WHERE email = ?", USER_MAPPER, email, email).stream().findFirst();
+		Optional<User> opt = jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
+												+ "AS admin FROM users WHERE email LIKE ? GROUP BY user_id", USER_MAPPER, email).stream().findFirst();
 		if(opt.isPresent())
 		{
 			User u = opt.get();
@@ -132,6 +130,6 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public List<User> getAllUsers()
 	{
-		return jdbcTemplate.query("SELECT * FROM users ORDER BY username", USER_MAPPER);
+		return jdbcTemplate.query("SELECT *, bool_and(users.user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM users GROUP BY user_id", USER_MAPPER);
 	}
 }
