@@ -11,7 +11,7 @@
     <div class="content background-color">
 		<div class="game">
 			<div class="game-backlog">
-				<form method="post">
+				<form method="post" onsubmit="var buttons = document.getElementsByClassName('button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].disabled=true;}">
 					<input type="hidden" name="gameId" value="${game.id}">
 					<spring:message code="game.addToBacklog" var="addToBacklog"/>
 		            <spring:message code="game.addingToBacklog" var="addingToBacklog"/>
@@ -19,10 +19,10 @@
 		            <spring:message code="game.removingFromBacklog" var="removingFromBacklog"/>
 					<c:choose>
 		            	<c:when test="${game.inBacklog}">
-		            		<input class="game-backlog-submit remove-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${removingFromBacklog}';}" value="${removeFromBacklog}"/>
+		            		<input class="game-backlog-submit button-${game.id} remove-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${removingFromBacklog}';}" value="${removeFromBacklog}"/>
 		            	</c:when>
 		            	<c:otherwise>
-		            		<input class="game-backlog-submit add-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('add-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${addingToBacklog}';}" value="${addToBacklog}"/>
+		            		<input class="game-backlog-submit button-${game.id} add-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('add-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${addingToBacklog}';}" value="${addToBacklog}"/>
 		            	</c:otherwise>
 		            </c:choose>
 				</form>
