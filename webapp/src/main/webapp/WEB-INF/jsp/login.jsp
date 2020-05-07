@@ -38,6 +38,9 @@
 				<input type="submit" class="button" value="<spring:message code="loginForm.submit"/>"/>
 			</div>
 		</form:form>
+		<div class="form-field">
+			<a class="button default-primary-color" href="<c:url value="/forgotPassword"/>"><spring:message code="login.forgotPassword"/></a>
+		</div>
 	</div>
 </body>
 </html>

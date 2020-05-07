@@ -38,4 +38,8 @@ public interface UserService
 
 	User getLoggedUser();
 	List<User> getAllUsers();
+	void createPasswordResetTokenForUser(User user, String token);
+	String validatePasswordResetToken(String token);
+	Optional<User> getUserByPasswordResetToken(String token);
+	void changeUserPassword(User user, String password);
 }

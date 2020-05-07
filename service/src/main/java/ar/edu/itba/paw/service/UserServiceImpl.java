@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -88,5 +90,47 @@ public class UserServiceImpl implements UserService{
 	public List<User> getAllUsers()
 	{
 		return userDao.getAllUsers();
+	}
+	
+	@Override
+	public void createPasswordResetTokenForUser(User user, String token)
+	{
+	    PasswordResetToken myToken = new PasswordResetToken(token, user);
+	    userDao.saveToken(myToken);
+	    emailService.sendAccountRecoveryEmail(user, token);
+	}
+	
+	@Override
+	public String validatePasswordResetToken(String token)
+	{
+	    final Optional<PasswordResetToken> opt = userDao.findTokenByToken(token);
+	    if(opt.isPresent())
+	    {
+	    	PasswordResetToken passToken = opt.get();
+	    	if(isTokenExpired(passToken))
+	    		return "expired";
+	    	return null;
+	    }
+	    return "invalidToken";
+	}
+	
+	@Override
+	public Optional<User> getUserByPasswordResetToken(String token)
+	{
+		return userDao.findUserByToken(token);
+	}
+	 
+	private boolean isTokenExpired(PasswordResetToken passToken)
+	{
+	    final Calendar cal = Calendar.getInstance();
+	    return passToken.getExpiryDate().before(cal.getTime());
+	}
+
+	@Override
+	public void changeUserPassword(User user, String password)
+	{
+		String encodedPassword = encoder.encode(password);
+		userDao.changePassword(user, encodedPassword);
+		userDao.deleteTokenForUser(user);
 	}
 }

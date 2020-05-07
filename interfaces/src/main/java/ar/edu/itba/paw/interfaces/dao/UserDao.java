@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.dao;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 
 public interface UserDao
@@ -39,4 +40,9 @@ public interface UserDao
 	 */
 	User create(String username, String password, String email);
 	List<User> getAllUsers();
+	void saveToken(PasswordResetToken token);
+	Optional<PasswordResetToken> findTokenByToken(String token);
+	Optional<User> findUserByToken(String token);
+	void changePassword(User user, String password);
+	void deleteTokenForUser(User u);
 }

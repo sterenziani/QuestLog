@@ -37,6 +37,9 @@ public class EmailServiceImpl implements EmailService
 
 	@Autowired
 	private GameService gs;
+	
+	private static final String WEBSITE_PATH = "http://pawserver.it.itba.edu.ar/paw-2020a-4/";
+	//private static final String WEBSITE_PATH = "http://localhost:8080/webapp/";
 
 	@Transactional
 	@Async
@@ -72,6 +75,7 @@ public class EmailServiceImpl implements EmailService
 	@Override
 	public void sendDailyEmails()
 	{
+		String url = WEBSITE_PATH + "games/";
 		List<User> userList = us.getAllUsers();
 		for(User u : userList)
 		{
@@ -80,6 +84,7 @@ public class EmailServiceImpl implements EmailService
 			{
 				final Context ctx = new Context(LocaleContextHolder.getLocale());
 				ctx.setVariable("games", backlog);
+				ctx.setVariable("path", url);
 				final MimeMessage mimeMessage = emailSender.createMimeMessage();
 				MimeMessageHelper message;
 				try
@@ -101,9 +106,36 @@ public class EmailServiceImpl implements EmailService
 		}
 	}
 
+	@Async
 	@Override
-	public void sendAccountRecoveryEmail(User u)
+	public void sendAccountRecoveryEmail(User u, String token)
 	{
-		// TODO Auto-generated method stub
+		String url = WEBSITE_PATH + "changePassword/";
+		if(u == null)
+			return;
+		Locale locale = LocaleContextHolder.getLocale();
+		final Context ctx = new Context(locale);
+		ctx.setVariable("username", u.getUsername());
+		ctx.setVariable("path", url);
+		ctx.setVariable("token", token);
+		
+	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
+	    MimeMessageHelper message;
+		try
+		{
+			message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			message.setSubject(messageSource.getMessage("email.forgotPassword.subject", null, locale));
+			
+			message.setFrom("no.reply.paw.questlog@gmail.com");
+			message.setTo(u.getEmail());
+			
+			String htmlContent = templateEngine.process("html/changePassword.html", ctx);
+			message.setText(htmlContent, true);
+			emailSender.send(mimeMessage);
+		}
+		catch (MessagingException e)
+		{
+			;
+		}
 	}
 }

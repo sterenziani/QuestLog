@@ -15,6 +15,7 @@ import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.interfaces.dao.RunDao;
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 
 @Repository
@@ -39,6 +40,15 @@ public class UserJdbcDao implements UserDao
 			User u = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"));
 			u.setAdminStatus(rs.getBoolean("admin"));
 			return u;
+		}
+	};
+	protected static final RowMapper<PasswordResetToken> TOKEN_MAPPER = new RowMapper<PasswordResetToken>()
+	{
+		@Override
+		public PasswordResetToken mapRow(ResultSet rs, int rowNum) throws SQLException
+		{
+			PasswordResetToken t = new PasswordResetToken(rs.getString("token"), new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email")), rs.getDate("expiration"));
+			return t;
 		}
 	};
 	
@@ -131,5 +141,37 @@ public class UserJdbcDao implements UserDao
 	public List<User> getAllUsers()
 	{
 		return jdbcTemplate.query("SELECT *, bool_and(users.user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM users GROUP BY user_id", USER_MAPPER);
+	}
+
+	@Override
+	public void saveToken(PasswordResetToken token)
+	{
+		jdbcTemplate.update("DELETE FROM tokens WHERE user_id = ?", token.getUser().getId());
+		jdbcTemplate.update("INSERT INTO tokens(user_id, token, expiration) VALUES(?, ?, CURRENT_DATE + 2)", token.getUser().getId(), token.getToken());
+	}
+	
+	@Override
+	public Optional<PasswordResetToken> findTokenByToken(String token)
+	{
+		return jdbcTemplate.query("SELECT * FROM tokens NATURAL JOIN users WHERE token = ?", TOKEN_MAPPER, token).stream().findFirst();
+	}
+	
+	@Override
+	public Optional<User> findUserByToken(String token)
+	{
+		return jdbcTemplate.query("SELECT user_id, username, password, email, bool_and(user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM "
+									+"(SELECT * FROM tokens NATURAL JOIN users WHERE token = ?) AS a GROUP BY user_id, username, password, email", USER_MAPPER, token).stream().findFirst();
+	}
+
+	@Override
+	public void changePassword(User user, String password)
+	{
+		jdbcTemplate.update("UPDATE users SET password = ? WHERE user_id = ?", password, user.getId());
+	}
+	
+	@Override
+	public void deleteTokenForUser(User u)
+	{
+		jdbcTemplate.update("DELETE FROM tokens WHERE user_id = ?", u.getId());
 	}
 }

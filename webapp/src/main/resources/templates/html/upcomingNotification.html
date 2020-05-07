@@ -5,15 +5,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   </head>
   <body>
-    <h1 th:text="#{email.upcoming.subject}"></h1>
-    <h4 th:text="#{email.upcoming.title}"></h4>
-    <div th:each="game : ${games}">
-        <a style="display: inline-block; margin: 20px; background-color:black; width:265px; cursor: pointer;" th:href="@{http://localhost:8080/webapp/games/{id}(id=${game.id})}">
-	            <div class="game-list-item-data">
-	                <h3 style="text-align:center; margin: 20px; color:white;" th:text="${game.title}"></h3>
-	            </div>
-		</a>
+    <div class="title-box">
+    	<h1 th:text="#{email.upcoming.subject}"></h1>
 	</div>
-    <p th:text="#{email.upcoming.footer}"></p>
+	<div class="body-box">
+	    <h4 th:text="#{email.upcoming.title}"></h4>
+		<div th:each="game : ${games}">
+	        <a style="display: inline-block; margin: 20px; background-color:black; width:265px; cursor: pointer;" th:href="@{{path}{id}(id=${game.id}, path=${path})}">
+		            <div class="game-list-item-data">
+		                <h3 style="text-align:center; margin: 20px; color:white;" th:text="${game.title}"></h3>
+		            </div>
+			</a>
+		</div>
+    	<p th:text="#{email.upcoming.footer}"></p>
+	</div>
   </body>
 </html>
