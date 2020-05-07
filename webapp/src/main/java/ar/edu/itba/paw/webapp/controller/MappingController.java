@@ -75,17 +75,19 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("cookieBacklog", backlog);
-		mav.addObject("popularGames", gs.getPopularGames());
+		
 		User u = us.getLoggedUser();
 		if(u == null)
 		{
 			mav.addObject("backlogGames", getGamesInBacklog(backlog));
 			mav.addObject("upcomingGames", getUpcomingGames(backlog));
+			mav.addObject("popularGames", getPopularGames(backlog));
 		}
 		else
 		{
 			mav.addObject("backlogGames", gs.getGamesInBacklog());
 			mav.addObject("recommendedGames", gs.getRecommendedGames());
+			mav.addObject("popularGames", gs.getPopularGames());
 			mav.addObject("upcomingGames", gs.getUpcomingGames());
 		}
 		return mav;
@@ -457,6 +459,13 @@ public class MappingController
 	public List<Game> getUpcomingGames(String backlog)
 	{
 		List<Game> list = gs.getUpcomingGames();
+		updateWithBacklogDetails(list, backlog);
+		return list;
+	}
+	
+	public List<Game> getPopularGames(String backlog)
+	{
+		List<Game> list = gs.getPopularGames();
 		updateWithBacklogDetails(list, backlog);
 		return list;
 	}
