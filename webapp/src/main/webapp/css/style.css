@@ -1,32 +1,8 @@
 * {
     margin:  0;
     padding: 0;
+}
+
+body {
     font-family: 'Roboto', sans-serif;
-}
-
-body{
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Roboto', sans-serif;
-}
-
-a {
-    text-decoration: none;
-}
-
-.full-width {
-    width:          100%;
-}
-
-input[type=text], textarea {
-    padding: 1em;
-}
-
-textarea {
-    min-height: 3em;
-}
-
-.vertical-resize {
-    resize: vertical;
 }
