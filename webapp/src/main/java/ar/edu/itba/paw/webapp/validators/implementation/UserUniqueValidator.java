@@ -1,26 +1,25 @@
-package ar.edu.itba.paw.webapp.validators;
-
+package ar.edu.itba.paw.webapp.validators.implementation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import ar.edu.itba.paw.webapp.validators.anotation.UserUnique;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import ar.edu.itba.paw.interfaces.service.UserService;
 
-public class EmailUniqueValidator implements ConstraintValidator<EmailUnique, String>
+public class UserUniqueValidator implements ConstraintValidator<UserUnique, String>
 {
 	@Autowired
 	UserService us;
 	
     @Override
-    public void initialize(EmailUnique constraint)
+    public void initialize(UserUnique constraint)
     {}
  
     @Override
-    public boolean isValid(String email, ConstraintValidatorContext context) {
+    public boolean isValid(String username, ConstraintValidatorContext context) {
         try
         {
-            return !us.findByEmail(email).isPresent();
+            return !us.findByUsername(username).isPresent();
         }
         catch (Exception e)
         {

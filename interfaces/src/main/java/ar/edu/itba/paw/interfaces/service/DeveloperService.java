@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 import java.util.List;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.User;
 
 public interface DeveloperService {
 	/**
@@ -12,7 +10,6 @@ public interface DeveloperService {
 	 * @return The matched developer, or null otherwise.
 	 */
 	Optional<Developer> findById(long id);
-	Optional<Developer> findById(long id, User u);
 	
 	/**
 	 * Finds a developer or several developers with a given name
@@ -20,7 +17,6 @@ public interface DeveloperService {
 	 * @return List of developers that share that name.
 	 */
 	Optional<Developer> findByName(String name);
-	Optional<Developer> findByName(String name, User u);
 	
 	/**
 	 * Change a developer's name

@@ -17,28 +17,28 @@ public interface GameService
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findById(long id, User u);
+	Optional<Game> findById(long id);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) given its ID
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<Game> findByIdWithDetails(long id, User u);
+	Optional<Game> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a game or several games with a given title
 	 * @param title The title for the game.
 	 * @return List of games that share that title.
 	 */
-	Optional<Game> findByTitle(String title, User u);
+	Optional<Game> findByTitle(String title);
 	
 	/**
 	 * Finds a game and its details (platforms, devs, genres, etc...) with a given title
 	 * @param title The title for the game.
 	 * @return 		The game with that title.
 	 */
-	Optional<Game> findByTitleWithDetails(String title, User u);
+	Optional<Game> findByTitleWithDetails(String title);
 	
 	/**
 	 * Change a game's title
@@ -77,8 +77,8 @@ public interface GameService
 	 * Get a list of all available games.
 	 * @return 	The list of all games.
 	 */
-	List<Game> getAllGames(User u);
-	List<Game> getAllGamesWithDetails(User u);
+	List<Game> getAllGames();
+	List<Game> getAllGamesWithDetails();
 	
 	/**
 	 * Links a game to a specified platform
@@ -165,31 +165,30 @@ public interface GameService
 	 * @param search The search term.
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitle(String search, User u);
-	List<Game> searchByTitleWithDetails(String search, User u);
+	List<Game> searchByTitle(String search);
+	List<Game> searchByTitleWithDetails(String search);
 
 	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
-	List<Game> getUpcomingGames(User u);
+	List<Game> getUpcomingGames();
 
-	boolean gameInBacklog(long gameId, User u);
+	boolean gameInBacklog(long gameId);
 
+	List<Game> getGamesInBacklog();
 	List<Game> getGamesInBacklog(User u);
 
-	void addToBacklog(long gameId, User u);
+	void addToBacklog(long gameId);
 
-	void removeFromBacklog(long gameId, User u);
+	void removeFromBacklog(long gameId);
 
-	void toggleBacklog(long gameId, User u);
+	void toggleBacklog(long gameId);
 
-	void updateBacklogDetails(Collection<Game> list, User u);
+	void updateBacklogDetails(Collection<Game> list);
 
-	List<Game> getRecommendedGames(User u);
+	List<Game> getRecommendedGames();
 
-	List<Game> getPopularGames(User u);
-	
 	/**
 	 * Find games through a more detailed search
 	 * @param searchTerm	The term being searched
@@ -205,4 +204,10 @@ public interface GameService
 	
 	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
 			int scoreRight, int timeLeft, int timeRight, User u);
+
+	List<Game> getPopularGames();
+
+	List<Game> getGamesReleasingTomorrow();
+
+	List<Game> getGamesInBacklogReleasingTomorrow(User u);	
 }

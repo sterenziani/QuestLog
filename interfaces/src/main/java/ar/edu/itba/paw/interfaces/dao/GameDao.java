@@ -222,6 +222,7 @@ public interface GameDao
 	List<Game> getSimilarToBacklog(User u);
 
 	List<Game> getMostBacklogged();
+
 	
 	/**
 	 * Find games through a more detailed search
@@ -237,4 +238,9 @@ public interface GameDao
 	
 	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
 			int scoreRight, int timeLeft, int timeRight, User u);
+
+	List<Game> getGamesReleasingTomorrow();
+
+	List<Game> getGamesInBacklogReleasingTomorrow(User u);
+
 }

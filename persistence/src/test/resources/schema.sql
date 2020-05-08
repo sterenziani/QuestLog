@@ -99,3 +99,9 @@ CREATE TABLE IF NOT EXISTS playstyles(
 	playstyle INTEGER IDENTITY,
 	playstyle_name VARCHAR(25),
 );
+
+CREATE TABLE IF NOT EXISTS images(
+    image      INTEGER IDENTITY,
+    image_name VARCHAR(60) NOT NULL,
+    image_data BINARY
+);

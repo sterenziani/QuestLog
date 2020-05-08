@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.service;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
 import ar.edu.itba.paw.interfaces.service.PublisherService;
 import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.User;
 
 @Service
 public class PublisherServiceImpl implements PublisherService
@@ -26,34 +22,17 @@ public class PublisherServiceImpl implements PublisherService
 	public Optional<Publisher> findById(long id)
 	{
 		Optional<Publisher> p = publisherDao.findById(id);
-		return p;
-	}
-	
-	@Override
-	public Optional<Publisher> findById(long id, User u)
-	{
-		Optional<Publisher> p = publisherDao.findById(id);
 		if(p.isPresent())
-		{
-			gs.updateBacklogDetails(p.get().getGames(), u);
-		}
+			gs.updateBacklogDetails(p.get().getGames());
 		return p;
 	}
 
 	@Override
 	public Optional<Publisher> findByName(String name)
 	{
-		return publisherDao.findByName(name);
-	}
-	
-	@Override
-	public Optional<Publisher> findByName(String name, User u)
-	{
 		Optional<Publisher> p = publisherDao.findByName(name);
 		if(p.isPresent())
-		{
-			gs.updateBacklogDetails(p.get().getGames(), u);
-		}
+			gs.updateBacklogDetails(p.get().getGames());
 		return p;
 	}
 

@@ -1,24 +1,32 @@
 package ar.edu.itba.paw.model;
 
+import java.io.InputStream;
+
 public class Image {
 
+    private final long      id;
     private final String    imageName;
-    private byte[]          base64CodedImage;
+    private byte[]          imageData;
 
-    public Image(String imageName, byte[] base64CodedImage){
-        this.imageName          = imageName;
-        this.base64CodedImage   = base64CodedImage;
+    public Image(long id, String imageName, byte[] imageData){
+        this.id         = id;
+        this.imageName  = imageName;
+        this.imageData  = imageData;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String   getImageName() {
         return imageName;
     }
 
-    public byte[]   getBase64CodedImage() {
-        return base64CodedImage;
+    public byte[] getImageData() {
+        return imageData;
     }
 
-    public void     setBase64CodedImage(byte[] base64CodedImage) {
-        this.base64CodedImage = base64CodedImage;
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 }

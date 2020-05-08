@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
+import java.util.List;
 import java.util.Optional;
-
 import ar.edu.itba.paw.model.User;
 
 public interface UserService
@@ -11,6 +11,7 @@ public interface UserService
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findById(long id);
+	Optional<User> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a user given its usernme
@@ -18,6 +19,7 @@ public interface UserService
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findByUsername(String username);
+	Optional<User> findByUsernameWithDetails(String username);
 	
 	/**
 	 * Finds a user given its email
@@ -25,6 +27,7 @@ public interface UserService
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findByEmail(String email);
+	Optional<User> findByEmailWithDetails(String email);
 	
 	/**
 	 * Create a new user.
@@ -32,4 +35,11 @@ public interface UserService
 	 * @return The created user.
 	 */
 	User register(String username, String password, String email);
+
+	User getLoggedUser();
+	List<User> getAllUsers();
+	void createPasswordResetTokenForUser(User user, String token);
+	String validatePasswordResetToken(String token);
+	Optional<User> getUserByPasswordResetToken(String token);
+	void changeUserPassword(User user, String password);
 }

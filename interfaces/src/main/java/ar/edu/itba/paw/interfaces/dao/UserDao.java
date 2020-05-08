@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces.dao;
+import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 
 public interface UserDao
@@ -11,6 +13,7 @@ public interface UserDao
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findById(long id);
+	Optional<User> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a user given its usernme
@@ -18,6 +21,7 @@ public interface UserDao
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findByUsername(String username);
+	Optional<User> findByUsernameWithDetails(String username);
 	
 	/**
 	 * Finds a user given its email
@@ -25,6 +29,7 @@ public interface UserDao
 	 * @return The matched user, or null otherwise.
 	 */
 	Optional<User> findByEmail(String email);
+	Optional<User> findByEmailWithDetails(String email);
 	
 	/**
 	 * Create a new user.
@@ -34,4 +39,10 @@ public interface UserDao
 	 * @return The created user.
 	 */
 	User create(String username, String password, String email);
+	List<User> getAllUsers();
+	void saveToken(PasswordResetToken token);
+	Optional<PasswordResetToken> findTokenByToken(String token);
+	Optional<User> findUserByToken(String token);
+	void changePassword(User user, String password);
+	void deleteTokenForUser(User u);
 }

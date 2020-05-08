@@ -61,4 +61,6 @@ public interface ScoreDao {
 
 	Optional<User> getUser(long id);
 
+	List<Score> findAllUserScores(User user);
+
 }

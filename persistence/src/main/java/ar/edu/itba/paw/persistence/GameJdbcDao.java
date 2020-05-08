@@ -360,7 +360,22 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public List<Game> getUpcomingGames()
 	{
-		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);
+		return jdbcTemplate.query("SELECT game, title, cover, description, min(release_date) AS next_date\n"
+								+ "FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE AND release_date < CURRENT_DATE + 250\n"
+								+ "GROUP BY game ORDER BY next_date", GAME_MAPPER);
+	}
+	
+	@Override
+	public List<Game> getGamesReleasingTomorrow()
+	{
+		return jdbcTemplate.query("SELECT DISTINCT game, title, cover, description FROM games NATURAL JOIN releases WHERE release_date = CURRENT_DATE + 1", GAME_MAPPER);
+	}
+	
+	@Override
+	public List<Game> getGamesInBacklogReleasingTomorrow(User u)
+	{
+		return jdbcTemplate.query("SELECT DISTINCT game, title, cover, description FROM games NATURAL JOIN releases WHERE release_date = CURRENT_DATE + 1 "
+									+"AND game in (SELECT game FROM backlogs WHERE user_id = ?)) AS g NATURAL JOIN games", GAME_MAPPER, u.getId());
 	}
 	
 	@Override
@@ -454,6 +469,5 @@ public class GameJdbcDao implements GameDao
 	
 	
 		return jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter + scoreFilter + timeFilter, GAME_MAPPER, searchTerm);
-
 	}
 }
