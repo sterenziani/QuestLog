@@ -15,16 +15,18 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <div class="game-list-item">
     <div class="game-list-item-action">
-        <form method="post">
+        <form method="post" onsubmit="var buttons = document.getElementsByClassName('button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].disabled=true;}">
             <input type="hidden" name="gameId" value="<c:out value="${game.id}"/>">
             <spring:message code="game.addToBacklog" var="addToBacklog"/>
+            <spring:message code="game.addingToBacklog" var="addingToBacklog"/>
             <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+            <spring:message code="game.removingFromBacklog" var="removingFromBacklog"/>
             <c:choose>
             	<c:when test="${game.inBacklog}">
-            		<input class="game-backlog-submit" type="submit" value="${removeFromBacklog}"/>
+            		<input class="game-backlog-submit button-${game.id} remove-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${removingFromBacklog}';}" value="${removeFromBacklog}"/>
             	</c:when>
             	<c:otherwise>
-            		<input class="game-backlog-submit" type="submit" value="${addToBacklog}"/>
+            		<input class="game-backlog-submit button-${game.id} add-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('add-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${addingToBacklog}';}" value="${addToBacklog}"/>
             	</c:otherwise>
             </c:choose>
         </form>
