@@ -58,14 +58,10 @@ public class AdminController
 		return mav;
 	}
 
-	@RequestMapping(
-			value = "/admin/game/new",
-			method = RequestMethod.POST
-	)
+	@RequestMapping(value = "/admin/game/new",method = RequestMethod.POST)
 	public ModelAndView createGame(@Valid @ModelAttribute("gameForm") final GameForm gameForm, final BindingResult errors, HttpServletRequest request, HttpServletResponse response){
-		if(errors.hasErrors()){
+		if(errors.hasErrors())
 			return newGame(gameForm);
-		}
 		try {
 			final Image image = is.uploadImage(gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes());
 		} catch (IOException e){
@@ -76,10 +72,7 @@ public class AdminController
 		return mav;
 	}
 
-	@RequestMapping(
-			value = "/admin/game/{id}/edit",
-			method = RequestMethod.GET
-	)
+	@RequestMapping(value = "/admin/game/{id}/edit",method = RequestMethod.GET)
 	public ModelAndView editGame(@ModelAttribute("gameForm") final GameForm gameForm){
 		ModelAndView mav = new ModelAndView("admin/game/gameForm");
 		//mav.addObject("platforms", platforms);
