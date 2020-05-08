@@ -115,10 +115,15 @@ public class MappingController
 			List<Game> searchResults = gs.searchByTitle(search);
 			updateWithBacklogDetails(searchResults, backlog);
 			mav.addObject("games", searchResults);
+			if(searchResults.isEmpty())
+				mav.addObject("popularGames", getPopularGames(backlog));
 		}
 		else
 		{
-			mav.addObject("games", gs.searchByTitle(search));
+			List<Game> searchResults = gs.searchByTitle(search);
+			mav.addObject("games", searchResults);
+			if(searchResults.isEmpty())
+				mav.addObject("popularGames", gs.getPopularGames());
 		}
 		return mav;
 	}
@@ -137,11 +142,16 @@ public class MappingController
 			updateWithBacklogDetails(searchResults, backlog);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", searchResults);
+			if(searchResults.isEmpty())
+				mav.addObject("popularGames", getPopularGames(backlog));
 		}
 		else
 		{
 			mav.addObject("searchTerm", search);
-			mav.addObject("games", gs.searchByTitle(search));
+			List<Game> searchResults = gs.searchByTitle(search);
+			mav.addObject("games", searchResults);
+			if(searchResults.isEmpty())
+				mav.addObject("popularGames", gs.getPopularGames());
 		}
 		return mav;
 	}
@@ -168,12 +178,16 @@ public class MappingController
 			updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", filteredResults);
+			if(filteredResults.isEmpty())
+				mav.addObject("popularGames", getPopularGames(backlog));
 		}
 		else
 		{
 			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, u);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", filteredResults);
+			if(filteredResults.isEmpty())
+				mav.addObject("popularGames", gs.getPopularGames());
 		}
 		return mav;
 	}
@@ -200,12 +214,16 @@ public class MappingController
 			updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", filteredResults);
+			if(filteredResults.isEmpty())
+				mav.addObject("popularGames", getPopularGames(backlog));
 		}
 		else
 		{
 			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, u);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", filteredResults);
+			if(filteredResults.isEmpty())
+				mav.addObject("popularGames", gs.getPopularGames());
 		}
 		return mav;
 	}

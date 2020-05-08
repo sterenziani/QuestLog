@@ -50,6 +50,14 @@
         <c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
         <%@ include file="gameList.jsp"%>
     </div>
+	<c:if test="${empty games}">
+		<div class="main-game-lists-popular">
+			<spring:message code="index.popular" var="popular"/>
+			<c:set var="listName" value="${popular}"/>
+			<c:set var="games" value="${popularGames}"/>
+			<%@ include file="gameList.jsp"%>
+		</div>
+	</c:if>
 </div>
 </body>
 </html>
