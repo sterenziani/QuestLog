@@ -10,10 +10,7 @@
 		<c:forEach items="${publishers}" var="publisher" end="${publisherEndIndex}">
 			<div class="explore-list-item">
 			    <a href="<c:url value="/publishers/${publisher.id}"/>">
-			        <div>
-			            <div class="explore-list-item-icon">
-			                <img src="<c:url value="${publisher.logo}"/>" alt="${publisher.name}"/>
-			            </div>
+			        <div class="explore-list-item-dev-pub">
 			            <div class="explore-list-item-data">
 			                <h3><c:out value="${publisher.name}"/></h3>
 			            </div>

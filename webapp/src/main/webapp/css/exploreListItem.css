@@ -40,6 +40,14 @@
     align-items: center;
 }
 
+.explore-list-item-dev-pub{
+	padding: 15px;
+    height: 100px;
+    width: 150px;
+    text-align: center;
+    margin:auto;
+}
+
 .explore-list-item-icon img {
 	display: inline-block;
 	margin: auto;

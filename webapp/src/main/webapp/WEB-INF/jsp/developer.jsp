@@ -10,7 +10,6 @@
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
     <div class="content">
-    	<div class="logo"><img class="page-header-image" src="${developer.logo}"></img></div>
         <div>
 	        <spring:message code="developer.gamesFromDeveloper" arguments="${developer.name}" var="gamesFromDeveloper"/>
 	        <c:set var="games" value="${developer.games}"/>
