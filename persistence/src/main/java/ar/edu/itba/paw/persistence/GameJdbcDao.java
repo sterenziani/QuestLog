@@ -402,7 +402,7 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addToBacklog(long gameId, User u)
 	{
-		jdbcTemplate.update("INSERT INTO backlogs(user_id, game) VALUES(?, ?)", u.getId(), gameId);
+		jdbcTemplate.update("INSERT INTO backlogs(user_id, game) VALUES(?, ?) ON CONFLICT DO NOTHING", u.getId(), gameId);
 	}
 	
 	@Override
@@ -431,5 +431,29 @@ public class GameJdbcDao implements GameDao
 	public List<Game> getMostBacklogged()
 	{
 		return jdbcTemplate.query("SELECT * FROM (SELECT game FROM backlogs GROUP BY game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games", GAME_MAPPER, MIN_AMOUNT_FOR_POPULAR);
+	}
+	
+	@Override
+	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, User u)
+	{			
+		String genreFilter = "";
+		if(genres.size()>0) 
+			genreFilter =  " NATURAL JOIN (SELECT * FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS g NATURAL JOIN classifications NATURAL JOIN games) AS a";
+	
+		String platformFilter = "";
+		if(platforms.size()>0)
+			platformFilter = " NATURAL JOIN (SELECT * FROM (SELECT * FROM platforms WHERE platform IN (" + String.join(", ", platforms) + ")) AS g NATURAL JOIN game_versions NATURAL JOIN games) AS b";
+	
+		String scoreFilter = "";
+		if(scoreLeft != 0 || scoreRight != 100)
+			scoreFilter = " NATURAL JOIN (SELECT * FROM (SELECT game FROM scores GROUP BY game HAVING AVG(score) >= " + scoreLeft + " AND AVG(score) <= " + scoreRight + ") AS a NATURAL JOIN games) AS c";
+	
+		String timeFilter = "";
+		if(timeLeft != 0 || timeRight != 35999999)
+			timeFilter = " NATURAL JOIN (SELECT * FROM (SELECT game FROM runs WHERE playstyle = 1 GROUP BY game HAVING AVG(time) >= " + timeLeft + " AND AVG(time) <= " + timeRight + ") AS a NATURAL JOIN games) AS d";
+	
+	
+		return jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter + scoreFilter + timeFilter, GAME_MAPPER, searchTerm);
+
 	}
 }

@@ -257,4 +257,12 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(games, u);
 		return games;
 	}
+	
+	@Override
+	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, User u)
+	{
+		List<Game> results = gameDao.getFilteredGames(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, u);
+		updateBacklogDetails(results, u);
+		return results;
+	}
 }

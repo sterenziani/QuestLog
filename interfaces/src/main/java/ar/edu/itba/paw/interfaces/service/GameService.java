@@ -189,4 +189,20 @@ public interface GameService
 	List<Game> getRecommendedGames(User u);
 
 	List<Game> getPopularGames(User u);
+	
+	/**
+	 * Find games through a more detailed search
+	 * @param searchTerm	The term being searched
+	 * @param genres	Genres to filter by
+	 * @param platforms	Platforms to filter by
+	 * @param scoreLeft	Minimum average score
+	 * @param scoreRight	Maximum average score
+	 * @param timeLeft	Minimum average gameplay in Main Game playstyle
+	 * @param timeRight	Maximum average gameplay in Main Game playstyle
+	 * @param u			the user
+	 * @return	The games that pass said filters
+	 */
+	
+	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
+			int scoreRight, int timeLeft, int timeRight, User u);
 }
