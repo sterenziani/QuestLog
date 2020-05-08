@@ -1,14 +1,6 @@
 <%--
     Include this page:
         <%@ include file="gameDetails.jsp"%>
-
-    Including jsp should have:
-        * variable game
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetailsInfoItem.css"/>">
-
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

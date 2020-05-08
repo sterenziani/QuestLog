@@ -2,10 +2,6 @@
 <html>
 <head>
     <%@include file="commonHead.jsp"%>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/mainGameLists.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/homePage.css"/>">
 </head>
 <body class="background-primary">
     <%@include file="navigation.jsp"%>

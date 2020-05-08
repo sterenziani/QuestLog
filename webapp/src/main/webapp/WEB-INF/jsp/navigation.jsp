@@ -1,11 +1,6 @@
 <%--
     Include this page:
         <%@ include file="navigation.jsp"%>
-
-    Including jsp should have:
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
-
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

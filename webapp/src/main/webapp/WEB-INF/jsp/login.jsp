@@ -4,8 +4,6 @@
 <html>
 <head>
    <%@include file="commonHead.jsp"%>
-   <link rel="stylesheet" type="text/css" href="<c:url value="/css/error.css"/>">
-   <link rel="stylesheet" type="text/css" href="<c:url value="/css/userForm.css"/>">
 </head>
 <body class="background-color">
     <%@include file="navigation.jsp"%>

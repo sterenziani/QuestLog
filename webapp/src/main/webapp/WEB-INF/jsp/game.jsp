@@ -3,8 +3,6 @@
 <html>
 <head>
     <%@include file="commonHead.jsp"%>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/game.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
 </head>
 <body>
     <%@ include file="navigation.jsp"%>

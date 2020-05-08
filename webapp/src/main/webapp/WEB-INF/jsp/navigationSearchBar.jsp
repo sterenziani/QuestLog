@@ -1,13 +1,6 @@
 <%--
   Include this page:
         <%@ include file="navigationSearchBar.jsp"%>
-
-    Including jsp should have:
-        * variable title
-        * variable items
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

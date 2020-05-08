@@ -4,8 +4,6 @@
 <html>
 <head>
     <%@include file="../../commonHead.jsp"%>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/common/listOfCheckableOptions.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/forms.css"/>"/>
 </head>
 <body>
     <%@include file="../../navigation.jsp"%>
