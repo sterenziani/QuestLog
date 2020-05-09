@@ -17,6 +17,7 @@
                         <form:label for="title" path="title">${title}</form:label>
                     </div>
                     <div class="form-field">
+                    	<form:errors path="title" class="form-error" element="p"/>
                         <form:input cssClass="full-width" path="title" name="title" type="text" placeholder="${title}"/>
                     </div>
                 </div>
@@ -26,6 +27,7 @@
                         <form:label for="description" path="description">${description}</form:label>
                     </div>
                     <div class="form-field">
+                    	<form:errors path="description" class="form-error" element="p"/>
                         <form:textarea cssClass="full-width vertical-resize" rows="8" path="description" name="description" type="text" placeholder="${description}"/>
                     </div>
                 </div>
@@ -34,6 +36,7 @@
                         <form:label for="file" path="cover"><spring:message code="gameForm.cover"/></form:label>
                     </div>
                     <div class="form-field">
+                    	<form:errors path="cover" class="form-error" element="p"/>
                         <form:input path="cover" name="file" type="file" accept="image/png, image/jpeg"/>
                     </div>
                 </div>

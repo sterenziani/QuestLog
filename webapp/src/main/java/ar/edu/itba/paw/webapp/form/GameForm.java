@@ -1,24 +1,20 @@
 package ar.edu.itba.paw.webapp.form;
-
+import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Collection;
 
 public class GameForm {
 
     @Size(min = 1)
     private String              title;
 
-    @Size(
-            min = 1,
-            max = 1500
-    )
+    @Size(max = 15000)
     private String              description;
 
     @ImageUnique
+    @ImageSize(max=256000)
     private MultipartFile       cover;
 
     private long[]              platforms;

@@ -3,6 +3,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +35,8 @@ public class UserController
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
 	{
@@ -44,7 +48,9 @@ public class UserController
 	{
 		if (errors.hasErrors())
 			return registerForm(registerForm);
+		LOGGER.debug("Creating new user {} with email {}.", registerForm.getUsername(), registerForm.getEmail());
 		final User u = us.register(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
+		LOGGER.debug("User {} successfully created.", registerForm.getUsername());
 		authWithAuthManager(request, u.getUsername(), registerForm.getPassword());
 		return new ModelAndView("redirect:/");
 	}
@@ -94,6 +100,7 @@ public class UserController
 			return forgotPassword(forgotPasswordForm);
 		User u = us.findByEmail(forgotPasswordForm.getEmail()).orElseThrow(UserNotFoundException::new);
 		String token = UUID.randomUUID().toString();
+		LOGGER.debug("Creating Password Reset Token for {}.", u.getUsername());
 		us.createPasswordResetTokenForUser(u, token);
 		final ModelAndView mav = new ModelAndView("forgotPassword");
 		mav.addObject("emailSent", true);
@@ -105,7 +112,10 @@ public class UserController
 	{
 	    String result = us.validatePasswordResetToken(token);
 	    if(result != null)
+	    {
+	    	LOGGER.debug("Password Reset Token is invalid. Redirecting to 404 page");
 	    	return new ModelAndView("redirect:/error404");
+	    }
 	    else
 	    {
 	    	final ModelAndView mav = new ModelAndView("updatePassword");
@@ -121,9 +131,15 @@ public class UserController
 		if(errors.hasErrors())
 			return showChangePasswordPage(changePasswordForm, changePasswordForm.getToken());
 	    if(result != null)
+	    {
+	    	LOGGER.debug("Password Reset Token is invalid. Redirecting to 404 page");
 	    	return new ModelAndView("redirect:/error404");
+	    }
 	    User user = us.getUserByPasswordResetToken(changePasswordForm.getToken()).orElseThrow(UserNotFoundException::new);
+	    LOGGER.debug("Updating password for user {}.", user.getUsername());
         us.changeUserPassword(user, changePasswordForm.getPassword());
+        LOGGER.debug("Password successfully updated for user {}.", user.getUsername());
+        LOGGER.debug("Updating password for user {}.", user.getUsername());
         authWithAuthManager(request, user.getUsername(), changePasswordForm.getPassword());
         return new ModelAndView("redirect:/");
 	}
@@ -134,5 +150,6 @@ public class UserController
 	    authToken.setDetails(new WebAuthenticationDetails(request));
 	    Authentication authentication = authenticationManager.authenticate(authToken);
 	    SecurityContextHolder.getContext().setAuthentication(authentication);
+        LOGGER.debug("User {} automatically logged in.", username);
 	}
 }
