@@ -10,7 +10,7 @@ public class GameForm {
     @Size(min = 1)
     private String              title;
 
-    @Size(min = 0, max = 1500)
+    @Size(max = 15000)
     private String              description;
 
     @ImageUnique
