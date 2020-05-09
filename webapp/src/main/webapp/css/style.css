@@ -25,11 +25,11 @@ body {
 }
 
 .right-wave {
-    border-bottom-right-radius: 10em !important;
+    border-bottom-right-radius: 4em !important;
 }
 
 .left-wave {
-    border-bottom-left-radius: 10em !important;
+    border-bottom-left-radius: 4em !important;
 }
 
 .genre {
@@ -37,11 +37,11 @@ body {
 }
 
 .padding-right-wave {
-    padding-right: 10em;
+    padding-right: 4em;
 }
 
 .padding-left-wave {
-    padding-left: 10em;
+    padding-left: 4em;
 }
 
 .share-tech-mono {
