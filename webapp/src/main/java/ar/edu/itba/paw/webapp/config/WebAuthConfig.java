@@ -1,4 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
+import org.apache.commons.io.IOUtils;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,45 +25,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	@Autowired
 	private PawUserDetailsService userDetails;
 	
-	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
 		auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder());
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception
-	{
-		http.sessionManagement()
-			.and().authorizeRequests()
-				.antMatchers("/login", "/login_error", "/create").anonymous()
-				.antMatchers("/admin").hasRole("ADMIN")
-				.antMatchers("/profile", "/games/scores/**", "/createRun/**").authenticated()
-				.antMatchers("/**").permitAll()// Para cualquier otra URL
-			.and().formLogin()
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.defaultSuccessUrl("/", false)
-				.failureUrl("/login_error")
-				.loginPage("/login")
-			.and().rememberMe()
-				.rememberMeParameter("rememberme")
-				//.userDetailsService(userDetails)
-				//.key("mysupersecretketthatnobodyknowsabout") // no hacer esto, crear una aleatoria segura suficientemente grande y colocarla bajo src/main/resources
-				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-			.and().logout()
-				.logoutUrl("/logout")
-				.logoutSuccessUrl("/")
-			.and().exceptionHandling()
-				.accessDeniedPage("/error403")
-			.and().csrf().disable();
 	}
 	
 	@Override
@@ -70,9 +38,57 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	}
 	
 	@Bean
+	public PasswordEncoder passwordEncoder()
+	{
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception
 	{
 	      return super.authenticationManagerBean();
 	}
+	
+	@Override
+	protected void configure(final HttpSecurity http) throws Exception
+	{
+		http.sessionManagement().invalidSessionUrl("/")
+			.and().authorizeRequests()
+				.antMatchers("/login", "/login_error", "/create").anonymous()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/profile", "/games/scores/**", "/createRun/**").authenticated()
+				.antMatchers("/**").permitAll()
+			.and().formLogin()
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.defaultSuccessUrl("/", false)
+				.failureUrl("/login_error")
+				.loginPage("/login")
+			.and().rememberMe()
+				.rememberMeParameter("rememberme")
+				.userDetailsService(userDetails)
+				.key(getEncryptionKey())
+				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(60))
+			.and().logout()
+				.logoutUrl("/logout")
+				.deleteCookies("JSESSIONID")
+				.logoutSuccessUrl("/")
+			.and().exceptionHandling()
+				.accessDeniedPage("/error403")
+			.and().csrf().disable();
+	}
+	
+    private String getEncryptionKey()
+    {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("rememberme.key");
+        try
+        {
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException();
+        }
+    }
 }
