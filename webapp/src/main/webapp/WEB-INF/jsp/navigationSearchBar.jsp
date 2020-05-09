@@ -9,5 +9,5 @@
     <spring:message code="navigation.searchHint" var="searchHint"/>
     <input class="form-control mr-lg-2 flex-lg-grow-1" type="search" name="search" placeholder="${searchHint}" aria-label="${searchHint}">
     <spring:message code="navigation.search" var="search"/>
-    <input class="btn btn-dark my-2 my-lg-0" type="submit" value="${search}"/>
+    <button class="btn btn-dark my-2 my-lg-0" type="submit"><i class="fa fa-search mr-2"></i>${search}</button>
 </form>
