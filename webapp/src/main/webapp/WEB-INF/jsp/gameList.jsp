@@ -5,11 +5,11 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="game-list">
-    <div class="game-list-header">
+<div class="card m-5 bg-very-light">
+    <div class="card-header bg-light">
         <h2>${listName}</h2>
     </div>
-    <div class="d-flex flex-wrap">
+    <div class="card-body d-flex flex-wrap">
         <c:if test="${empty games}">
             <p><spring:message code="gameList.empty"/></p>
         </c:if>

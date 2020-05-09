@@ -11,3 +11,7 @@ body {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
+.bg-very-light {
+    background-color: rgba(0,0,0,.03);
+}

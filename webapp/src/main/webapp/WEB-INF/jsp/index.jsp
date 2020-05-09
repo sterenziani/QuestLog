@@ -3,7 +3,7 @@
 <head>
     <%@include file="commonHead.jsp"%>
 </head>
-<body class="background-primary">
+<body>
     <%@include file="navigation.jsp"%>
     <div class="content">
 	    <c:if test="${loggedUser != null && !empty cookieBacklog}">
