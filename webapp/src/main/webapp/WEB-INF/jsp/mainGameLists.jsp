@@ -11,7 +11,9 @@
 	    	<spring:message code="index.myBacklog" var="myBacklog"/>
 	        <c:set var="listName" value="${myBacklog}"/>
 	        <c:set var="games" value="${backlogGames}"/>
+			<c:set var="seeAllUrl" value="/backlog"/>
 	        <%@ include file="gameList.jsp"%>
+			<c:remove var="seeAllUrl"/>
 	    </div>
 	</c:if>
     <%-- Recommended games will be available later on
