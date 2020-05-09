@@ -45,6 +45,7 @@ public class ReviewJdbcDaoTest {
 	private	static final String USERNAME = "Username";
 	private	static final String PASSWORD = "password";
 	private	static final String EMAIL = "email@example.com";
+	private static final String LOCALE = "en";
 	private static final String BODY = "This game is pathetic, terrible";
 	private static final Date DATE_STAMP = new Date(20101003);
 	
@@ -83,7 +84,7 @@ public class ReviewJdbcDaoTest {
 	public void	testFindReviewByIdExists()
 	{
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User user = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
+		User user = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
 		Platform platform = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Review r = TestMethods.addReview(user, game, platform, SCORE, BODY, DATE_STAMP, reviewInsert);
 		Optional<Review> maybeRev = reviewDao.findReviewById(r.getId());
@@ -98,7 +99,7 @@ public class ReviewJdbcDaoTest {
 	@Test
 	public void testRegisterReview()
 	{	Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		final Review r = reviewDao.register(u, g, p, SCORE, BODY, DATE_STAMP);
 		Assert.assertNotNull(r);
@@ -115,8 +116,8 @@ public class ReviewJdbcDaoTest {
 	{
 		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
-		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
-		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", userInsert);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
+		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", LOCALE, userInsert);
 		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Platform p2 = TestMethods.addPlatform("Nintendo Switch", "Switch", PLATFORM_LOGO, platformInsert);
 		Review r1 = TestMethods.addReview(u1, g1, p1, SCORE, BODY, DATE_STAMP, reviewInsert);
@@ -143,8 +144,8 @@ public class ReviewJdbcDaoTest {
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
 		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Platform p2 = TestMethods.addPlatform("Nintendo Switch", "Switch", PLATFORM_LOGO, platformInsert);
-		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
-		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", userInsert);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
+		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", LOCALE, userInsert);
 		Review r1 = TestMethods.addReview(u1, g1, p1, SCORE, BODY, DATE_STAMP, reviewInsert);
 		Review r2 = TestMethods.addReview(u1, g2, p2, SCORE, BODY, DATE_STAMP, reviewInsert);
 		Review r3 = TestMethods.addReview(u2, g2, p2, SCORE, BODY, DATE_STAMP, reviewInsert);

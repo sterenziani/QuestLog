@@ -76,13 +76,14 @@ public class TestMethods
 		releaseInsert.execute(args);
 	}
 	
-	public static User addUser(String username, String password, String email, SimpleJdbcInsert userInsert)
+	public static User addUser(String username, String password, String email, String locale, SimpleJdbcInsert userInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("username", username);
 		args.put("password", password);
 		args.put("email", email);
-		return new User(userInsert.executeAndReturnKey(args).longValue(), username, password, email);
+		args.put("locale", locale);
+		return new User(userInsert.executeAndReturnKey(args).longValue(), username, password, email, locale);
 	}
 	
 	public static Score addScore(User user, Game game, int score, SimpleJdbcInsert scoreInsert) {

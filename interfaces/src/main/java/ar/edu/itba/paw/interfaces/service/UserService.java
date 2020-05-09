@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import ar.edu.itba.paw.model.User;
 
@@ -28,18 +29,14 @@ public interface UserService
 	 */
 	Optional<User> findByEmail(String email);
 	Optional<User> findByEmailWithDetails(String email);
-	
-	/**
-	 * Create a new user.
-	 * @param username The name of the user.
-	 * @return The created user.
-	 */
-	User register(String username, String password, String email);
 
+	
+	User register(String username, String password, String email, Locale locale);
 	User getLoggedUser();
 	List<User> getAllUsers();
 	void createPasswordResetTokenForUser(User user, String token);
 	String validatePasswordResetToken(String token);
 	Optional<User> getUserByPasswordResetToken(String token);
 	void changeUserPassword(User user, String password);
+	void updateLocale(User user, Locale locale);	
 }

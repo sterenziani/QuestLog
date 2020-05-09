@@ -46,6 +46,7 @@ public class RunJdbcDaoTest {
 	private	static final String USERNAME = "Username";
 	private	static final String PASSWORD = "password";
 	private	static final String EMAIL = "email@example.com";
+	private static final String LOCALE = "en";
 
 	
 	@Autowired
@@ -89,7 +90,7 @@ public class RunJdbcDaoTest {
 	public void	testFindRunByIdExists()
 	{
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User user = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
+		User user = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
 		Platform platform = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Playstyle playstyle = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
 		Run r = TestMethods.addRun(user, game, platform, playstyle, TIME, runInsert);
@@ -105,7 +106,7 @@ public class RunJdbcDaoTest {
 	@Test
 	public void testRegisterRun()
 	{	Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Playstyle ps = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
 		final Run r = runDao.register(u, g, p, ps, TIME);
@@ -122,8 +123,8 @@ public class RunJdbcDaoTest {
 		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
-		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, userInsert);
-		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", userInsert);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
+		User u2 = TestMethods.addUser("Juan1937", PASSWORD, EMAIL+"1", LOCALE, userInsert);
 		Playstyle ps = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
 		Run r1 = TestMethods.addRun(u1, g1, p, ps, TIME, runInsert);
 		Run r2 = TestMethods.addRun(u2, g1, p, ps, TIME, runInsert);
@@ -149,9 +150,9 @@ public class RunJdbcDaoTest {
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
 		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Platform p2 = TestMethods.addPlatform("Nintendo Switch", "Switch", PLATFORM_LOGO, platformInsert);
-		User user1 = TestMethods.addUser("user 1", PASSWORD, EMAIL, userInsert);
-		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL+"1", userInsert);
-		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL+"2", userInsert);
+		User user1 = TestMethods.addUser("user 1", PASSWORD, EMAIL, LOCALE, userInsert);
+		User user2 = TestMethods.addUser("user 2", PASSWORD, EMAIL+"1", LOCALE, userInsert);
+		User user3 = TestMethods.addUser("user 3", PASSWORD, EMAIL+"2", LOCALE, userInsert);
 		Playstyle ps = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
 		
 		Run r1 = TestMethods.addRun(user1, g1, p1, ps, TIME, runInsert);
