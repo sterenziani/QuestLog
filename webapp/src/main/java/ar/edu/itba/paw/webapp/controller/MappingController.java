@@ -492,19 +492,17 @@ public class MappingController
 	
 ///////////////////////////////////////////////////////////////////////
 
-	public List<Game> getUpcomingGames(String backlog)
+	private List<Game> getUpcomingGames(String backlog)
 	{
 		List<Game> list = gs.getUpcomingGames();
 		backlogCookieHandlerService.updateWithBacklogDetails(list, backlog);
 		return list;
 	}
 
-	public List<Game> getPopularGames(String backlog)
+	private List<Game> getPopularGames(String backlog)
 	{
 		List<Game> list = gs.getPopularGames();
 		backlogCookieHandlerService.updateWithBacklogDetails(list, backlog);
 		return list;
 	}
-	
-
 }

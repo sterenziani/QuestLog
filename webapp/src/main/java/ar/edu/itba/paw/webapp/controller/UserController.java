@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -33,6 +34,9 @@ public class UserController
 {
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private BacklogCookieHandlerService backlogCookieHandlerService;
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -72,15 +76,25 @@ public class UserController
 	}
 	
 	@RequestMapping("/users/{id}")
-	public ModelAndView userProfile(@PathVariable("id") long id)
+	public ModelAndView userProfile(@PathVariable("id") long id, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
-		User u = us.findByIdWithDetails(id).orElseThrow(UserNotFoundException::new);
-		mav.addObject("user", u);
+		User visitedUser = us.findByIdWithDetails(id).orElseThrow(UserNotFoundException::new);
+		User loggedUser = us.getLoggedUser();
+		if(loggedUser == null)
+		{
+			backlogCookieHandlerService.updateWithBacklogDetails(visitedUser.getBacklog(), backlog);
+		}
+		mav.addObject("user", visitedUser);
 		return mav;
 	}
 	
-	// TO DO: POST method for managing backlog when looking at other user's profile
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.POST)
+	public ModelAndView addToBacklogAndReturnToUserProfile(@PathVariable("id") long id, @RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
+		return new ModelAndView("redirect:/users/{id}");
+	}
 	
 	@RequestMapping("/profile")
 	public ModelAndView visitOwnProfile()
@@ -91,7 +105,12 @@ public class UserController
 		return mav;
 	}
 	
-	// TO DO: POST method for managing own backlog
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
+	public ModelAndView addToBacklogAndReturnToUserProfile(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
+		return new ModelAndView("redirect:/profile");
+	}
 	
 	@RequestMapping(value = "/forgotPassword", method = { RequestMethod.GET })
 	public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm) 
