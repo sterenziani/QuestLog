@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
+import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
@@ -18,6 +20,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private GameService gs;
 	
 	@Autowired
 	private EmailService emailService;
@@ -35,7 +40,10 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Optional<User> findByIdWithDetails(long id)
 	{
-		return userDao.findByIdWithDetails(id);
+		Optional<User> opt = userDao.findByIdWithDetails(id);
+		if(opt.isPresent())
+			gs.updateBacklogDetails(opt.get().getBacklog());
+		return opt;
 	}
 	
 	@Override
@@ -64,12 +72,12 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User register(String username, String password, String email)
+	public User register(String username, String password, String email, Locale locale)
 	{
 		if(findByUsername(username).isPresent())
 			return null;
 		String encodedPassword = encoder.encode(password);
-		User u = userDao.create(username, encodedPassword, email);
+		User u = userDao.create(username, encodedPassword, email, locale);
 		emailService.sendWelcomeEmail(u);
 		return u;
 	}
@@ -132,5 +140,11 @@ public class UserServiceImpl implements UserService{
 		String encodedPassword = encoder.encode(password);
 		userDao.changePassword(user, encodedPassword);
 		userDao.deleteTokenForUser(user);
+	}
+	
+	@Override
+	public void updateLocale(User user, Locale locale)
+	{
+		userDao.updateLocale(user, locale);
 	}
 }

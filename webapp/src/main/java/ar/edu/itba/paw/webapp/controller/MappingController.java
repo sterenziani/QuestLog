@@ -2,12 +2,14 @@ package ar.edu.itba.paw.webapp.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +71,8 @@ public class MappingController
 	@RequestMapping("/")
 	public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
+		Locale locale = LocaleContextHolder.getLocale();
+		System.out.println(locale.toLanguageTag());
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("cookieBacklog", backlog);
 		User u = us.getLoggedUser();
