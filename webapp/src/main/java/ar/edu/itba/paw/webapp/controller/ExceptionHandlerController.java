@@ -1,12 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
@@ -89,6 +87,15 @@ public class ExceptionHandlerController
 		ModelAndView m = new ModelAndView("errorException");
 		m.addObject("msg", "error.publisherNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
+		return m;
+	}
+	
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ModelAndView notFoundHandler()
+	{
+		ModelAndView m = new ModelAndView("error");
+		m.addObject("msg", "error.500");
 		return m;
 	}
 }
