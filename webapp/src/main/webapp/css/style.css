@@ -16,6 +16,10 @@ body {
     background-color: rgba(0,0,0,.03);
 }
 
+.bg-very-dark {
+    background-color: #263137;
+}
+
 .cover {
     height: 400px;
 }
