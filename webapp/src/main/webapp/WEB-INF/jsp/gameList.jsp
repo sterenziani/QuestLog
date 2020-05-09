@@ -9,7 +9,7 @@
     <div class="game-list-header">
         <h2>${listName}</h2>
     </div>
-    <div class="game-list-games">
+    <div class="d-flex flex-wrap">
         <c:if test="${empty games}">
             <p><spring:message code="gameList.empty"/></p>
         </c:if>
