@@ -6,20 +6,25 @@
    <%@include file="commonHead.jsp"%>
 </head>
 <body class="background-color">
-	<nav id="navigation" class="default-primary-color">
-	    <div class="navigation-logo-container">
-	        <a href="<c:url value="/"/>">
-	            <div class="navigation-logo">
-	                <h1><spring:message code="navigation.questLog"/></h1>
-	            </div>
-	        </a>
-	    </div>
-	    <div class="navigation-search">
-	        <%@include file="navigationSearchBar.jsp"%>
-	    </div>
-
-	    <div class="navigation-explore-container">
-	        <a class="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	    <a class="navbar-brand" href="<c:url value="/"/>">
+	        <div class="navigation-logo">
+	            <h1><spring:message code="navigation.questLog"/></h1>
+	        </div>
+	    </a>
+	    <div class="w-100" id="navbarSupportedContent">
+	        <ul class="navbar-nav d-flex w-100">
+	            <li class="nav-item flex-grow-1 ml-lg-3">
+	                <div class="nav-link w-100">
+	                    <%@include file="navigationSearchBar.jsp"%>
+	                </div>
+	            </li>
+	            <li class="nav-item">
+	                <div class="nav-link">
+	                    <a class="btn btn-dark w-100" role="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
+	                </div>
+	            </li>
+	        </ul>
 	    </div>
 	</nav>
     <div class="error-box">
