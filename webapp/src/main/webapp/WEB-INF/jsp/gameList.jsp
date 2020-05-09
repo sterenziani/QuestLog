@@ -9,7 +9,7 @@
     <div class="card-header bg-very-dark text-white">
         <h2>${listName}</h2>
     </div>
-    <div class="card-body d-flex flex-wrap justify-content-center">
+    <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
         <c:if test="${empty games}">
             <p><spring:message code="gameList.empty"/></p>
         </c:if>

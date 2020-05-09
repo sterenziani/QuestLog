@@ -31,3 +31,15 @@ body {
 .left-wave {
     border-bottom-left-radius: 10em !important;
 }
+
+.genre {
+    height: 120px;
+}
+
+.padding-right-wave {
+    padding-right: 10em;
+}
+
+.padding-left-wave {
+    padding-left: 10em;
+}
