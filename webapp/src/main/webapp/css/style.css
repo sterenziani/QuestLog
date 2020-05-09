@@ -23,3 +23,11 @@ body {
 .cover {
     height: 400px;
 }
+
+.right-wave {
+    border-bottom-right-radius: 10em !important;
+}
+
+.left-wave {
+    border-bottom-left-radius: 10em !important;
+}

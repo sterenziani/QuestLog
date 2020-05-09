@@ -5,7 +5,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="card m-5 bg-very-light">
+<div class="card m-5 bg-very-light right-wave left-wave">
     <div class="card-header bg-very-dark text-white">
         <h2>${listName}</h2>
     </div>
