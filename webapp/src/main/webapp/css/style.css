@@ -47,3 +47,22 @@ body {
 .share-tech-mono {
     font-family: 'Share Tech Mono', monospace;
 }
+
+.slider::-webkit-slider-thumb {
+    background: #607D8B;
+}
+
+.slider::-moz-range-thumb {
+    background: #607D8B;
+}
+.first span { color: #607D8B }
+.first .slider::-webkit-slider-thumb { background: #607D8B }
+
+.slider {
+    background-color: #CFD8DC;
+    height: 15px;
+}
+
+.first .slider {
+    background-color: #CFD8DC;
+}
