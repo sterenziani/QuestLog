@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-grid.min.css"/>">
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-reboot.min.css"/>">
 <link rel="stylesheet" type="text/css" href="<c:out value="http://fonts.googleapis.com/css?family=Roboto"/>">
+<link rel="stylesheet" type="text/css" href="<c:out value="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"/>">
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
 <script src="<c:url value="/js/bootstrap/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/js/bootstrap/bootstrap.bundle.min.js"/>"></script>

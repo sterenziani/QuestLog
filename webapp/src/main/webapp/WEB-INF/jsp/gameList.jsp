@@ -7,7 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="card m-5 bg-very-light right-wave left-wave">
     <div class="card-header bg-very-dark text-white">
-        <h2>${listName}</h2>
+        <h2 class="share-tech-mono">${listName}</h2>
     </div>
     <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
         <c:if test="${empty games}">

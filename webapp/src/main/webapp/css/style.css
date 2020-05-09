@@ -43,3 +43,7 @@ body {
 .padding-left-wave {
     padding-left: 10em;
 }
+
+.share-tech-mono {
+    font-family: 'Share Tech Mono', monospace;
+}
