@@ -12,7 +12,7 @@
         </div>
         <c:if test="${!empty seeAllUrl}">
             <div class="ml-auto">
-                <a class="btn btn-primary" href="<c:url value="${seeAllUrl}"/>"><spring:message code="explore.seeAll"/></a>
+                <a class="btn btn-link text-white" href="<c:url value="${seeAllUrl}"/>"><spring:message code="explore.seeAll"/></a>
             </div>
         </c:if>
     </div>

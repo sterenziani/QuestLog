@@ -6,7 +6,7 @@
 			<h2 class="share-tech-mono"><spring:message code="explore.genres"/></h2>
 		</div>
 		<div class="ml-auto">
-			<a class="btn btn-primary" href="<c:url value="/genres"/>"><spring:message code="explore.seeAll"/></a>
+			<a class="btn btn-link text-white" href="<c:url value="/genres"/>"><spring:message code="explore.seeAll"/></a>
 		</div>
 	</div>
 	<div class="card-body d-flex flex-wrap justify-content-center">
