@@ -47,6 +47,7 @@
                     <c:set var="items" value="${game.publishers}"/>
                     <%@include file="gameDetailsInfoItem.jsp"%>
                 </div>
-
+            </dl>
+        </div>
     </div>
 </div>
