@@ -228,6 +228,22 @@ public class MappingController
 		return mav;
 	}
 	
+	@RequestMapping("/backlog")
+	public ModelAndView backlog(@CookieValue(value="backlog", defaultValue="") String backlog)
+	{
+		final ModelAndView mav = new ModelAndView("fullBacklog");
+		User u = us.getLoggedUser();
+		if(u == null)
+		{
+			mav.addObject("backlogGames", getGamesInBacklog(backlog));
+		}
+		else
+		{
+			mav.addObject("backlogGames", gs.getGamesInBacklog());
+		}
+		return mav;
+	}
+	
 	@RequestMapping("/games")
 	public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
