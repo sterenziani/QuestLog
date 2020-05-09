@@ -20,7 +20,6 @@ import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.PublisherService;
-import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -60,9 +59,6 @@ public class MappingController
 	private PublisherService pubs;
 	
 	@Autowired
-	private ReviewService revs;
-	
-	@Autowired
 	private RunService runs;
 	
 	@Autowired
@@ -75,7 +71,6 @@ public class MappingController
 	{
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("cookieBacklog", backlog);
-		
 		User u = us.getLoggedUser();
 		if(u == null)
 		{
@@ -103,7 +98,7 @@ public class MappingController
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView search(@RequestParam String search, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-
+		LOGGER.debug("Searching results for term {}.", search);
 		final ModelAndView mav = new ModelAndView("gameSearch");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
@@ -125,6 +120,7 @@ public class MappingController
 			if(searchResults.isEmpty())
 				mav.addObject("popularGames", gs.getPopularGames());
 		}
+		LOGGER.debug("Search results for {} successfully extracted.", search);
 		return mav;
 	}
 
@@ -165,6 +161,7 @@ public class MappingController
 			@RequestParam(required = false, defaultValue = "", value = "genres") List<String> genres, @RequestParam("searchTerm") String search,
 			@CookieValue(value="backlog", defaultValue="") String backlog)
 	{
+		LOGGER.debug("Searching results for term {}. Advanced filters include time between {}:{}:{} and {}:{}:{} and score between {} and {}", search, hoursLeft, minsLeft, secsLeft, hoursRight, minsRight, secsRight, scoreLeft, scoreRight);
 		final ModelAndView mav = new ModelAndView("gameSearch");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
@@ -189,6 +186,7 @@ public class MappingController
 			if(filteredResults.isEmpty())
 				mav.addObject("popularGames", gs.getPopularGames());
 		}
+		LOGGER.debug("Search results for {} with advanced filters successfully extracted.", search);
 		return mav;
 	}
 	
@@ -268,12 +266,14 @@ public class MappingController
 		User user = us.getLoggedUser();
 		if(user == null)
 			return new ModelAndView("redirect:/games/{gameId}");
-		Optional<Game> game = gs.findByIdWithDetails(gameId);
-		Optional<Score> score = scors.findScore(user, game.get());
+		Game game = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
+		Optional<Score> score = scors.findScore(user, game);
+		LOGGER.debug("Registering score {} from user {} for game {}.", scoreInput, user.getUsername(), game.getTitle());
 		if (score.isPresent())
-			scors.changeScore(scoreInput, user, game.get());
+			scors.changeScore(scoreInput, user, game);
 		else
-			scors.register(user, game.get(), scoreInput);
+			scors.register(user, game, scoreInput);
+		LOGGER.debug("{}'s score for game {} successfully registered.", user.getUsername(), game.getTitle());
 		return new ModelAndView("redirect:/games/{gameId}");
 	}
 	
@@ -289,7 +289,11 @@ public class MappingController
 		long time = hours*3600 + mins*60 + secs;
 		Optional <Playstyle> play = runs.findPlaystyleByName(playst);
 		if(game.isPresent() && plat.isPresent() && play.isPresent())
+		{
+			LOGGER.debug("Registering run of {} seconds in style {} from user {} for game {} on platform {}.", time, play.get().getName(), user.getUsername(), game.get().getTitle(), plat.get().getShortName());
 			runs.register(user, game.get(), plat.get(), play.get(), time);
+			LOGGER.debug("Registration of run of {} by user {} successful.", game.get().getTitle(), user.getUsername());
+		}
 		return new ModelAndView("redirect:/games/{gameId}");
 	}	
 	
@@ -301,7 +305,7 @@ public class MappingController
 			return new ModelAndView("redirect:/games/{gameId}");
 		final ModelAndView mav = new ModelAndView("createRun");
 		Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
-		mav.addObject("game",g);
+		mav.addObject("game", g);
 		mav.addObject("playstyles",runs.getAllPlaystyles());
 		return mav;
 	}
@@ -519,7 +523,6 @@ public class MappingController
 		cookie.setMaxAge(600000);
 		response.addCookie(cookie);
 	}
-
 	
 	private List<Game> getGamesInBacklog(String backlog)
 	{
@@ -543,7 +546,9 @@ public class MappingController
 	private String addToBacklog(long gameId, String backlog)
 	{
 		if(gameInBacklog(gameId, backlog))
+		{
 			return backlog;
+		}
 		return backlog +"-" +gameId +"-";
 	}
 	
@@ -554,10 +559,12 @@ public class MappingController
 	
 	private void transferBacklog(HttpServletResponse response, String backlog, User u)
 	{
+		LOGGER.debug("Transferring anonymous backlog to user {}.", u.getUsername());
 		List<Game> anonGames = getGamesInBacklog(backlog);
 		for(Game g : anonGames)
 			gs.addToBacklog(g.getId());
 		clearAnonBacklog(response);
+		LOGGER.debug("Backlog successfully transferred to user {}.", u.getUsername());
 	}
 	
 	public List<Game> getUpcomingGames(String backlog)
