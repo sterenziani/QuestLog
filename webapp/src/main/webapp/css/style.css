@@ -15,3 +15,7 @@ body {
 .bg-very-light {
     background-color: rgba(0,0,0,.03);
 }
+
+.cover {
+    height: 400px;
+}
