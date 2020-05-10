@@ -28,7 +28,11 @@ import java.util.Map;
 public class GameJdbcDao implements GameDao
 {
 	private	final SimpleJdbcInsert jdbcInsert;
-	private JdbcTemplate jdbcTemplate;
+	private final SimpleJdbcInsert gameVersionsJdbcInsert;
+	private final SimpleJdbcInsert developmentJdbcInsert;
+	private final SimpleJdbcInsert publishingJdbcInsert;
+	private final SimpleJdbcInsert classificationJdbcInsert;
+	private JdbcTemplate 		   jdbcTemplate;
 	private static final int MIN_AMOUNT_FOR_OVERLAP = 3;
 	private static final int MIN_AMOUNT_FOR_POPULAR = 3;
 	protected static final RowMapper<Game> GAME_MAPPER = new RowMapper<Game>()
@@ -43,8 +47,12 @@ public class GameJdbcDao implements GameDao
 	@Autowired
 	public GameJdbcDao(final DataSource ds)
 	{
-	    jdbcTemplate = new JdbcTemplate(ds);
-	    jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("games").usingGeneratedKeyColumns("game");
+	    jdbcTemplate 			 = new JdbcTemplate(ds);
+	    jdbcInsert 				 = new SimpleJdbcInsert(jdbcTemplate).withTableName("games").usingGeneratedKeyColumns("game");
+	    gameVersionsJdbcInsert 	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("game_versions");
+	    developmentJdbcInsert	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("development");
+	    publishingJdbcInsert	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("publishing");
+	    classificationJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("classifications");
 	}
 
 	@Override
