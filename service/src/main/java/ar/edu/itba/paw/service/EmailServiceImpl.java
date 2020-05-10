@@ -48,7 +48,7 @@ public class EmailServiceImpl implements EmailService
 	{
 		if(u == null)
 			return;
-		Locale locale = LocaleContextHolder.getLocale();
+		Locale locale = u.getLocale();
 		final Context ctx = new Context(locale);
 		ctx.setVariable("username", u.getUsername());
 
@@ -82,7 +82,7 @@ public class EmailServiceImpl implements EmailService
 			List<Game> backlog = gs.getGamesInBacklogReleasingTomorrow(u);
 			if(!backlog.isEmpty())
 			{
-				final Context ctx = new Context(LocaleContextHolder.getLocale());
+				final Context ctx = new Context(u.getLocale());
 				ctx.setVariable("games", backlog);
 				ctx.setVariable("path", url);
 				final MimeMessage mimeMessage = emailSender.createMimeMessage();
@@ -113,7 +113,7 @@ public class EmailServiceImpl implements EmailService
 		String url = WEBSITE_PATH + "changePassword/";
 		if(u == null)
 			return;
-		Locale locale = LocaleContextHolder.getLocale();
+		Locale locale = u.getLocale();
 		final Context ctx = new Context(locale);
 		ctx.setVariable("username", u.getUsername());
 		ctx.setVariable("path", url);

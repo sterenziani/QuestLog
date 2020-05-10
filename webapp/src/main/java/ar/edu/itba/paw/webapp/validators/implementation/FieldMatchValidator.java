@@ -6,11 +6,16 @@ import java.lang.reflect.Field;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object>
 {
     private String baseField;
     private String matchField;
  
+    private static final Logger LOGGER = LoggerFactory.getLogger(FieldMatchValidator.class);
+    
     @Override
     public void initialize(FieldMatch constraint) {
         baseField = constraint.baseField();
@@ -26,7 +31,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
         }
         catch (Exception e)
         {
-            // log error
+            LOGGER.error("Exception thrown while validating fields were equal.");
             return false;
         }
     }

@@ -39,7 +39,7 @@ public class RunJdbcDao implements RunDao {
 		@Override
 		public Run mapRow(ResultSet rs, int rowNum) throws SQLException
 		{	Game game = new Game(rs.getLong("game"), null, null, null);
-			User user = new User(rs.getLong("user_id"), null, null, null);
+			User user = new User(rs.getLong("user_id"), null, null, null, "en");
 			Platform platform = new Platform(rs.getLong("platform"), null, null, null);
 			Playstyle playstyle = new Playstyle(rs.getLong("playstyle"), null);
 			return new Run (rs.getInt("run"), user, game, platform, playstyle, rs.getInt("time"));
@@ -275,7 +275,7 @@ public class RunJdbcDao implements RunDao {
 					@Override
 					public User mapRow(ResultSet rs, int rowNum) throws SQLException
 					{
-						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"));
+						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale"));
 					}
 				}, id).stream().findFirst();
 		return user;

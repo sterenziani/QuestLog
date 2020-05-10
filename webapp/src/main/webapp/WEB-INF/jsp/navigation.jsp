@@ -1,43 +1,55 @@
 <%--
     Include this page:
         <%@ include file="navigation.jsp"%>
-
-    Including jsp should have:
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigation.css"/>">
-
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<nav id="navigation" class="default-primary-color">
-    <div class="navigation-logo-container">
-        <a href="<c:url value="/"/>">
-            <div class="navigation-logo">
-                <h1><spring:message code="navigation.questLog"/></h1>
-            </div>
-        </a>
-    </div>
-    <div class="navigation-search">
-        <%@include file="navigationSearchBar.jsp"%>
-    </div>
-    
-
-    <div class="navigation-explore-container">
-        <a class="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
-    </div>
-    
-    <div class="user-container">
-	    <c:choose>
-	    	<c:when test="${loggedUser == null}">
-	    		<div class="session-link-container"><a class="session-link" href="<c:url value="/login"/>"><spring:message code="navigation.login"/></a></div>
-	    		<div class="session-link-container"><a class="session-link" href="<c:url value="/create"/>"><spring:message code="navigation.signup"/></a></div>
-	    	</c:when>
-	    	<c:otherwise>
-	    		<p class="username"><c:out value="${loggedUser.username}"/></p>
-	    		<div class="session-link-container"><a class="session-link" href="<c:url value="/logout"/>"><spring:message code="navigation.logout"/></a></div>
-	    	</c:otherwise>
-	    </c:choose>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <a class="navbar-brand" href="<c:url value="/"/>">
+        <div class="navigation-logo">
+            <h1><img src="<c:url value="/images/questlog-logo.png"/>" alt="<spring:message code="navigation.questLog"/>"/></h1>
+        </div>
+    </a>
+    <div class="w-100" id="navbarSupportedContent">
+        <ul class="navbar-nav d-flex w-100">
+            <li class="nav-item flex-grow-1 ml-lg-3">
+                <div class="nav-link w-100">
+                    <%@include file="navigationSearchBar.jsp"%>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link">
+                    <a class="btn btn-dark w-100" role="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
+                </div>
+            </li>
+            <c:choose>
+                <c:when test="${loggedUser == null}">
+                    <li class="nav-item mt-3 mt-lg-0 ml-lg-3">
+                        <div class="nav-link">
+                            <a class="btn btn-outline-secondary w-100" role="button" href="<c:url value="/login"/>"><spring:message code="navigation.login"/></a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link">
+                            <a class="btn btn-outline-secondary w-100" role="button" href="<c:url value="/create"/>"><spring:message code="navigation.signup"/></a>
+                        </div>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="nav-item d-flex flex-column justify-content-center mt-3 mt-lg-0 ml-lg-3">
+                        <div class="nav-link">
+                            <a href="<c:url value="/profile"/>" class="m-0 text-white w-100 text-center"><c:out value="${loggedUser.username}"/></a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link">
+                            <a class="btn btn-outline-secondary w-100" role="button" href="<c:url value="/logout"/>"><spring:message code="navigation.logout"/></a>
+                        </div>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </ul>
     </div>
 </nav>

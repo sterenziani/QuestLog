@@ -5,16 +5,13 @@
 <html>
 <head>
     <%@include file="commonHead.jsp"%>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/mainGameLists.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
 </head>
 <body class="background-primary">
 <%@include file="navigation.jsp"%>
-<c:url value="/searchFilter" var="path"/>
+<c:url value="/search" var="path"/>
 <div class="content">
 	<div class="search-parameters">
-	<form:form name="searchFilter" method="GET" action="${path}" >
+	<form:form name="search" method="GET" action="${path}" >
 		<strong><spring:message code="game.platform"/></strong>
 			<input type="hidden" value="${searchTerm}" name="search"/>
 			<input type="hidden" value="1" name="page"/>
@@ -50,12 +47,20 @@
         <c:set var="listName"><spring:message code="search.results" arguments="${search}"/></c:set>
         <%@ include file="gameList.jsp"%>
     </div>
+    <c:if test="${empty games}">
+		<div class="main-game-lists-popular">
+			<spring:message code="index.popular" var="popular"/>
+			<c:set var="listName" value="${popular}"/>
+			<c:set var="games" value="${popularGames}"/>
+			<%@ include file="gameList.jsp"%>
+		</div>
+	</c:if>
     <div>
 
     <table>
         <tr>
             <c:if test="${current != 1}">
-            <form:form name="searchFilterPrev" method="GET" action="${path}" >
+            <form:form name="searchPrev" method="GET" action="${path}" >
 			<input type="hidden" value="${searchTerm}" name="search"/>
 			<input type="hidden" value="${current - 1}" name="page"/>
 			<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
@@ -77,7 +82,7 @@
                         <td>${num}</td>
                     </c:when>
                     <c:otherwise>
-            		<form:form name="searchFilterNext" method="GET" action="${path}" >
+            		<form:form name="searchNext" method="GET" action="${path}" >
 					<input type="hidden" value="${searchTerm}" name="search"/>
 					<input type="hidden" value="${num}" name="page"/>
 					<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
@@ -96,7 +101,7 @@
                 </c:choose>
             </c:forEach>
             <c:if test="${current < pages}">
-            <form:form name="searchFilterNext" method="GET" action="${path}" >
+            <form:form name="searchNext" method="GET" action="${path}" >
 			<input type="hidden" value="${searchTerm}" name="search"/>
 			<input type="hidden" value="${current + 1}" name="page"/>
 			<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>

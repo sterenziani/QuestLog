@@ -1,4 +1,6 @@
 package ar.edu.itba.paw.service;
+import java.util.Locale;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ public class UserServiceImplTest
 	private static final String USERNAME = "username";
 	private static final String PASSWORD = "passwordpassword";
 	private static final String EMAIL = "example@yahoo.com";
+	private static final Locale LOCALE = Locale.ENGLISH;
 
 	@InjectMocks
 	private UserServiceImpl userService = new UserServiceImpl();
@@ -34,11 +37,11 @@ public class UserServiceImplTest
 	public void testCreateUser()
 	{
 		// 1. Setup!
-		Mockito.when(mockDao.create(Mockito.eq(USERNAME), Mockito.eq(PASSWORD), Mockito.eq(EMAIL))).thenReturn(new User(1, USERNAME, PASSWORD, EMAIL));
+		Mockito.when(mockDao.create(Mockito.eq(USERNAME), Mockito.eq(PASSWORD), Mockito.eq(EMAIL), Mockito.eq(LOCALE))).thenReturn(new User(1, USERNAME, PASSWORD, EMAIL, LOCALE.toLanguageTag()));
 		Mockito.when(encoder.encode(Mockito.eq(PASSWORD))).thenReturn(PASSWORD);
 		
 		// 2. "ejercito" la class under test
-		User user = userService.register(USERNAME, PASSWORD, EMAIL);
+		User user = userService.register(USERNAME, PASSWORD, EMAIL, LOCALE);
 		
 		// 3. Asserts!
 		Assert.assertNotNull(user);

@@ -1,15 +1,6 @@
 <%--
     Include this page:
         <%@ include file="mainGameLists.jsp"%>
-
-    Including jsp should have:
-        * variable game
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/mainGameLists.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
-
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -20,7 +11,9 @@
 	    	<spring:message code="index.myBacklog" var="myBacklog"/>
 	        <c:set var="listName" value="${myBacklog}"/>
 	        <c:set var="games" value="${backlogGames}"/>
+			<c:set var="seeAllUrl" value="/backlog"/>
 	        <%@ include file="gameList.jsp"%>
+			<c:remove var="seeAllUrl"/>
 	    </div>
 	</c:if>
     <%-- Recommended games will be available later on

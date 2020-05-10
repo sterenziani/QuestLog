@@ -34,7 +34,7 @@ public class ReviewJdbcDao implements ReviewDao {
 		@Override
 		public Review mapRow(ResultSet rs, int rowNum) throws SQLException
 		{	Game game = new Game(rs.getLong("game"), null, null, null);
-			User user = new User(rs.getLong("user_id"), null, null, null);
+			User user = new User(rs.getLong("user_id"), null, null, null, "en");
 			Platform platform = new Platform(rs.getLong("platform"),null, null, null);
 			return new Review(rs.getInt("review"), user, game, platform, rs.getInt("score"), rs.getString("body"), rs.getDate("post_date"));
 		}
@@ -190,7 +190,7 @@ public class ReviewJdbcDao implements ReviewDao {
 					@Override
 					public User mapRow(ResultSet rs, int rowNum) throws SQLException
 					{
-						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"));
+						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale"));
 					}
 				}, id).stream().findFirst();
 		return user;

@@ -10,10 +10,7 @@
 		<c:forEach items="${developers}" var="developer" end="${developerEndIndex}">
 			<div class="explore-list-item">
 			    <a href="<c:url value="/developers/${developer.id}"/>">
-			        <div>
-			            <div class="explore-list-item-icon">
-			                <img src="<c:url value="${developer.logo}"/>" alt="${developer.name}"/>
-			            </div>
+			        <div class="explore-list-item-dev-pub">
 			            <div class="explore-list-item-data">
 			                <h3><c:out value="${developer.name}"/></h3>
 			            </div>

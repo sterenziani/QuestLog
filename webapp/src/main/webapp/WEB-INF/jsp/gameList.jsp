@@ -1,23 +1,22 @@
 <%--
     Include this page:
         <%@ include file="gameListItem.jsp"%>
-
-    Including jsp should have:
-        * variable games
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameList.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameListItem.css"/>">
-
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="game-list">
-    <div class="game-list-header">
-        <h2>${listName}</h2>
+<div class="card m-5 bg-very-light right-wave left-wave">
+    <div class="card-header bg-very-dark text-white d-flex">
+        <div>
+            <h2 class="share-tech-mono">${listName}</h2>
+        </div>
+        <c:if test="${!empty seeAllUrl}">
+            <div class="ml-auto">
+                <a class="btn btn-link text-white" href="<c:url value="${seeAllUrl}"/>"><spring:message code="explore.seeAll"/></a>
+            </div>
+        </c:if>
     </div>
-    <div class="game-list-games">
+    <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
         <c:if test="${empty games}">
             <p><spring:message code="gameList.empty"/></p>
         </c:if>

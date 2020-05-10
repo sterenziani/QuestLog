@@ -5,9 +5,6 @@
 <html>
 <head>
     <%@include file="commonHead.jsp"%>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/game.css"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/gameDetails.css"/>">
-   <link rel="stylesheet" type="text/css" href="<c:url value="/css/userForm.css"/>">
 </head>
 <body>
     <%@ include file="navigation.jsp"%>

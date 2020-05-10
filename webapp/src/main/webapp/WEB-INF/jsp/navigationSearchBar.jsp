@@ -1,32 +1,15 @@
 <%--
   Include this page:
         <%@ include file="navigationSearchBar.jsp"%>
-
-    Including jsp should have:
-        * variable title
-        * variable items
-        * inside the header:
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-            ** <link rel="stylesheet" type="text/css" href="<c:url value="/css/navigationSearchBar.css"/>">
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="navigation-search-bar">
-    <form action="<c:url value="/searchFilter"/>">
-        <div class="navigation-search-bar-content">
-            <div class="navigation-search-bar-input">
-            	<spring:message code="navigation.searchHint" var="searchHint"/>
-                <input class="navigation-search-text" type="text" name="search" placeholder="${searchHint}">
-            </div>
-            <%-- <a class="navigation-search-button" href="#">
+<form class="form-inline my-2 my-lg-0 d-flex flex-column flex-lg-row align-items-stretch" action="<c:url value="/search"/>">
+    <spring:message code="navigation.searchHint" var="searchHint"/>
+    <input class="form-control mr-lg-2 flex-lg-grow-1" type="search" name="search" placeholder="${searchHint}" aria-label="${searchHint}">
+    <spring:message code="navigation.search" var="search"/>
+    <input type="hidden" value="1" name="page"/>
+    <button class="btn btn-dark my-2 my-lg-0" type="submit"><i class="fa fa-search mr-2"></i>${search}</button>
+</form>
 
-            </a>--%>
-            <div class="navigation-search-bar-button">
-            	<spring:message code="navigation.search" var="search"/>
-            	<input type="hidden" value="1" name="page"/>
-                <input type="submit" value="${search}"/>
-            </div>
-        </div>
-    </form>
-</div>

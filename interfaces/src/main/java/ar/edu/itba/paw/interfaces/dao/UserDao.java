@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.PasswordResetToken;
@@ -36,13 +37,18 @@ public interface UserDao
 	 * @param username	The name of the user.
 	 * @param password	The password of the user.
 	 * @param email		The email of the user.
+	 * @param locale 	The locale the user uses
 	 * @return The created user.
 	 */
-	User create(String username, String password, String email);
+	User create(String username, String password, String email, Locale locale);
+	
+	void updateLocale(User user, Locale locale);
+	
 	List<User> getAllUsers();
 	void saveToken(PasswordResetToken token);
 	Optional<PasswordResetToken> findTokenByToken(String token);
 	Optional<User> findUserByToken(String token);
 	void changePassword(User user, String password);
 	void deleteTokenForUser(User u);
+	
 }

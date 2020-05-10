@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import javax.sql.DataSource;
@@ -37,7 +38,7 @@ public class UserJdbcDao implements UserDao
 		@Override
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
-			User u = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"));
+			User u = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale"));
 			u.setAdminStatus(rs.getBoolean("admin"));
 			return u;
 		}
@@ -47,7 +48,7 @@ public class UserJdbcDao implements UserDao
 		@Override
 		public PasswordResetToken mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
-			PasswordResetToken t = new PasswordResetToken(rs.getString("token"), new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email")), rs.getDate("expiration"));
+			PasswordResetToken t = new PasswordResetToken(rs.getString("token"), new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale")), rs.getDate("expiration"));
 			return t;
 		}
 	};
@@ -126,14 +127,15 @@ public class UserJdbcDao implements UserDao
 	}
 
 	@Override
-	public User create(String username, String password, String email)
+	public User create(String username, String password, String email, Locale locale)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("username", username); 
 		args.put("password", password);
 		args.put("email", email);
+		args.put("locale", locale.toLanguageTag());
 		final Number userId = jdbcInsert.executeAndReturnKey(args);
-		User u = new User(userId.longValue(), username, password, email);
+		User u = new User(userId.longValue(), username, password, email, locale.toLanguageTag());
 		return u;
 	}
 	
@@ -159,8 +161,8 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findUserByToken(String token)
 	{
-		return jdbcTemplate.query("SELECT user_id, username, password, email, bool_and(user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM "
-									+"(SELECT * FROM tokens NATURAL JOIN users WHERE token = ?) AS a GROUP BY user_id, username, password, email", USER_MAPPER, token).stream().findFirst();
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, bool_and(user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM "
+									+"(SELECT * FROM tokens NATURAL JOIN users WHERE token = ?) AS a GROUP BY user_id, username, password, email, locale", USER_MAPPER, token).stream().findFirst();
 	}
 
 	@Override
@@ -173,5 +175,11 @@ public class UserJdbcDao implements UserDao
 	public void deleteTokenForUser(User u)
 	{
 		jdbcTemplate.update("DELETE FROM tokens WHERE user_id = ?", u.getId());
+	}
+
+	@Override
+	public void updateLocale(User user, Locale locale)
+	{
+		jdbcTemplate.update("UPDATE users SET locale = ? WHERE user_id = ?", locale.toLanguageTag(), user.getId());
 	}
 }
