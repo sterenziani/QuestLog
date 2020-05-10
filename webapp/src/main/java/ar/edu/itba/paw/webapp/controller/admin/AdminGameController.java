@@ -79,10 +79,8 @@ public class AdminGameController
 			LOGGER.error("IOException thrown when attempting to upload image {} to the database while creating game {}.", gameForm.getCover().getOriginalFilename(), gameForm.getTitle(), e);
 			throw new BadImageException();
 		}
-		gs.register(gameForm.getTitle(), image.getImageName(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), new LocalDate[0]);
-		ModelAndView mav = new ModelAndView("admin/game/gameForm");
-		//mav.addObject("platforms", platforms);
-		return mav;
+		Game g = gs.register(gameForm.getTitle(), image.getImageName(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), new LocalDate[0]);
+		return new ModelAndView("redirect:/games/" + g.getId());
 	}
 
 	@RequestMapping(value = "/admin/game/{id}/edit", method = RequestMethod.GET)
