@@ -40,7 +40,7 @@
                 <c:otherwise>
                     <li class="nav-item d-flex flex-column justify-content-center mt-3 mt-lg-0 ml-lg-3">
                         <div class="nav-link">
-                            <p class="m-0 text-white w-100 text-center"><c:out value="${loggedUser.username}"/></p>
+                            <a href="<c:url value="/profile"/>" class="m-0 text-white w-100 text-center"><c:out value="${loggedUser.username}"/></a>
                         </div>
                     </li>
                     <li class="nav-item">
