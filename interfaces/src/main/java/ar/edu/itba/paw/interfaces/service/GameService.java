@@ -163,9 +163,11 @@ public interface GameService
 	/**
 	 * Get a list of all games with names that contain the searched term.
 	 * @param search The search term.
+	 * @param page	Page number
+	 * @param pageSize	Page size
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitle(String search);
+	List<Game> searchByTitle(String search, int page, int pageSize);
 	List<Game> searchByTitleWithDetails(String search);
 
 	/**
@@ -198,16 +200,20 @@ public interface GameService
 	 * @param scoreRight	Maximum average score
 	 * @param timeLeft	Minimum average gameplay in Main Game playstyle
 	 * @param timeRight	Maximum average gameplay in Main Game playstyle
-	 * @param u			the user
 	 * @return	The games that pass said filters
 	 */
 	
 	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight, User u);
+			int scoreRight, int timeLeft, int timeRight, int page, int pageSize);
 
 	List<Game> getPopularGames();
 
 	List<Game> getGamesReleasingTomorrow();
 
-	List<Game> getGamesInBacklogReleasingTomorrow(User u);	
+	List<Game> getGamesInBacklogReleasingTomorrow(User u);
+
+	int countSearchResults(String searchTerm);
+
+	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
+			int scoreRight, int timeLeft, int timeRight);	
 }

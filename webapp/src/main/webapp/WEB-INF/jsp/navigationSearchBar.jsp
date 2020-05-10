@@ -13,7 +13,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="navigation-search-bar">
-    <form action="<c:url value="/search"/>">
+    <form action="<c:url value="/searchFilter"/>">
         <div class="navigation-search-bar-content">
             <div class="navigation-search-bar-input">
             	<spring:message code="navigation.searchHint" var="searchHint"/>
@@ -24,6 +24,7 @@
             </a>--%>
             <div class="navigation-search-bar-button">
             	<spring:message code="navigation.search" var="search"/>
+            	<input type="hidden" value="1" name="page"/>
                 <input type="submit" value="${search}"/>
             </div>
         </div>

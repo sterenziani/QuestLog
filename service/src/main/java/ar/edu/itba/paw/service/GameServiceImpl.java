@@ -162,9 +162,9 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override 
-	public List<Game> searchByTitle(String search)
+	public List<Game> searchByTitle(String search, int page, int pageSize)
 	{
-		List<Game> list = gameDao.searchByTitle(search);
+		List<Game> list = gameDao.searchByTitle(search, page, pageSize);
 		for(Game g : list)
 			g.setInBacklog(gameInBacklog(g.getId()));
 		return list;
@@ -282,9 +282,9 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override
-	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, User u)
+	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize)
 	{
-		List<Game> results = gameDao.getFilteredGames(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, u);
+		List<Game> results = gameDao.getFilteredGames(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 		updateBacklogDetails(results);
 		return results;
 	}
@@ -293,5 +293,15 @@ public class GameServiceImpl implements GameService
 	{
 		return gameDao.getGamesInBacklogReleasingTomorrow(u);
 
+	}
+	
+	@Override
+	public 	int countSearchResults(String searchTerm) {
+		return gameDao.countSearchResults(searchTerm);
+	}
+	
+	@Override
+	public 	int countSearchResultsFiltered(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight) {
+		return gameDao.countSearchResultsFiltered(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
 	}
 }

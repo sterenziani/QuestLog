@@ -101,77 +101,129 @@ public class MappingController
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ModelAndView search(@RequestParam String search, @CookieValue(value="backlog", defaultValue="") String backlog)
+	public ModelAndView search(@RequestParam String search, @CookieValue(value="backlog", defaultValue="") String backlog,
+			@RequestParam(required = false, defaultValue = "1", value = "currentPage") int currentPage)
 	{
-
+		int page = currentPage;
+		int pageSize = 15;
+		int countResults = gs.countSearchResults(search);
+		int totalPages = countResults/15 + 1;
+		
 		final ModelAndView mav = new ModelAndView("gameSearch");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
+		mav.addObject("search", search);
+		mav.addObject("pages",totalPages);
+		mav.addObject("current",page);
+		if(countResults == 0) {
+			mav.addObject("games", null);
+			return mav;
+		}
 		User u = us.getLoggedUser();
-		mav.addObject("searchTerm", search);
-
+		List<Game> searchResults = gs.searchByTitle(search, page, pageSize);
+		
 		if(u == null)
 		{
-			List<Game> searchResults = gs.searchByTitle(search);
 			updateWithBacklogDetails(searchResults, backlog);
-			mav.addObject("games", searchResults);
+			mav.addObject("games",searchResults);
 		}
 		else
 		{
-			mav.addObject("games", gs.searchByTitle(search));
+			mav.addObject("games", searchResults);
 		}
 		return mav;
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public ModelAndView addToBacklogAndContinueSearch(@RequestParam String search, @RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+	public ModelAndView addToBacklogAndContinueSearch(@RequestParam String search, @RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog,
+			@RequestParam(required = false, defaultValue = "1", value = "?page") int currentPage)
 	{
+		int page = currentPage;
+		int pageSize = 15;
+		int countResults = gs.countSearchResults(search);
+		int totalPages = countResults/15 + 1;
 		backlog = toggleBacklog(gameId, response, backlog);
 		final ModelAndView mav = new ModelAndView("gameSearch");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
+		mav.addObject("pages",totalPages);
+		mav.addObject("current",page);
+		if(countResults == 0) {
+			mav.addObject("games", null);
+			return mav;
+		}
+		
 		User u = us.getLoggedUser();
+		List<Game> searchResults = gs.searchByTitle(search, page, pageSize);
 		if(u == null)
 		{
-			List<Game> searchResults = gs.searchByTitle(search);
 			updateWithBacklogDetails(searchResults, backlog);
-			mav.addObject("searchTerm", search);
+			mav.addObject("search", search);
 			mav.addObject("games", searchResults);
 		}
 		else
 		{
-			mav.addObject("searchTerm", search);
-			mav.addObject("games", gs.searchByTitle(search));
+			mav.addObject("search", search);
+			mav.addObject("games", searchResults);
 		}
 		return mav;
 	}
 	
 
 	@RequestMapping(value = "/searchFilter", method = RequestMethod.GET)
-	public ModelAndView filteredSearch(@RequestParam("hoursRight") int hoursRight, @RequestParam("minsRight") int minsRight, @RequestParam("secsRight") int secsRight,
-			@RequestParam("hoursLeft") int hoursLeft, @RequestParam("minsLeft") int minsLeft, @RequestParam("secsLeft") int secsLeft,
-			@RequestParam("scoreRight") int scoreRight, @RequestParam("scoreLeft") int scoreLeft,
+	public ModelAndView filteredSearch(@RequestParam(required = false, defaultValue = "9999", value ="hoursRight") int hoursRight, @RequestParam(required = false, defaultValue = "59", value ="minsRight") int minsRight, 
+			@RequestParam(required = false, defaultValue = "59", value ="secsRight") int secsRight,
+			@RequestParam(required = false, defaultValue = "0", value ="hoursLeft") int hoursLeft, @RequestParam(required = false, defaultValue = "0", value ="minsLeft") int minsLeft,
+			@RequestParam(required = false, defaultValue = "0", value ="secsLeft") int secsLeft,
+			@RequestParam(required = false, defaultValue = "100", value ="scoreRight") int scoreRight, @RequestParam(required = false, defaultValue = "0", value ="scoreLeft") int scoreLeft,
 			@RequestParam(required = false, defaultValue = "", value = "platforms") List<String> platforms, 
-			@RequestParam(required = false, defaultValue = "", value = "genres") List<String> genres, @RequestParam("searchTerm") String search,
-			@CookieValue(value="backlog", defaultValue="") String backlog)
+			@RequestParam(required = false, defaultValue = "", value = "genres") List<String> genres, @RequestParam String search,
+			@CookieValue(value="backlog", defaultValue="") String backlog, @RequestParam int page)
 	{
 		final ModelAndView mav = new ModelAndView("gameSearch");
+		int pageSize = 15;
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
 		User u = us.getLoggedUser();
 		int timeLeft = hoursLeft*3600 + minsLeft*60 + secsLeft;
 		int timeRight = hoursRight*3600 + minsRight*60 + secsRight;
+		int countResults = gs.countSearchResultsFiltered(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
+		int totalPages = (countResults + pageSize - 1)/pageSize; 
+		mav.addObject("pages",totalPages);
+		mav.addObject("current",page);
+		
+		mav.addObject("hoursLeft", hoursLeft);
+		mav.addObject("minsLeft", minsLeft);
+		mav.addObject("secsLeft", secsLeft);
+		mav.addObject("hoursRight", hoursRight);
+		mav.addObject("minsRight", minsRight);
+		mav.addObject("secsRight", secsRight);
+		mav.addObject("scoreLeft", scoreLeft);
+		mav.addObject("scoreRight", scoreRight);
+		mav.addObject("currentPlats", String.join(", ", platforms));
+		mav.addObject("currentGens", String.join(", ", genres));
+		
+		System.out.println("");
+		System.out.println("COUNTS");
+		System.out.println(countResults);
+		System.out.println("");
+		System.out.println("");
+		System.out.println(totalPages);
+		System.out.println("");
+		if(countResults == 0) {
+			mav.addObject("games", null);
+			return mav;
+		}
+		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 		
 		if(u == null)
 		{	
-			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, null);
 			updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", filteredResults);
 		}
 		else
 		{
-			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, u);
 			mav.addObject("searchTerm", search);
 			mav.addObject("games", filteredResults);
 		}
@@ -179,32 +231,54 @@ public class MappingController
 	}
 	
 	@RequestMapping(value = "/searchFilter", method = RequestMethod.POST)
-	public ModelAndView addToBacklogAndContinueFilteredSearch(@RequestParam("hoursRight") int hoursRight, @RequestParam("minsRight") int minsRight, @RequestParam("secsRight") int secsRight,
-			@RequestParam("hoursLeft") int hoursLeft, @RequestParam("minsLeft") int minsLeft, @RequestParam("secsLeft") int secsLeft,
-			@RequestParam("scoreRight") int scoreRight, @RequestParam("scoreLeft") int scoreLeft,
+	public ModelAndView addToBacklogAndContinueFilteredSearch(@RequestParam(required = false, defaultValue = "9999", value ="hoursRight") int hoursRight, @RequestParam(required = false, defaultValue = "59", value ="minsRight") int minsRight, 
+			@RequestParam(required = false, defaultValue = "59", value ="secsRight") int secsRight,
+			@RequestParam(required = false, defaultValue = "0", value ="hoursLeft") int hoursLeft, @RequestParam(required = false, defaultValue = "0", value ="minsLeft") int minsLeft, 
+			@RequestParam(required = false, defaultValue = "0", value ="secsLeft") int secsLeft,
+			@RequestParam(required = false, defaultValue = "100", value ="scoreRight") int scoreRight, @RequestParam(required = false, defaultValue = "0", value ="scoreLeft") int scoreLeft,
 			@RequestParam(required = false, defaultValue = "", value = "platforms") List<String> platforms, 
-			@RequestParam(required = false, defaultValue = "", value = "genres") List<String> genres, @RequestParam("searchTerm") String search,
-			HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog, @RequestParam long gameId)
+			@RequestParam(required = false, defaultValue = "", value = "genres") List<String> genres, @RequestParam String search,
+			HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog, @RequestParam long gameId, @RequestParam int page)
 	{
 		backlog = toggleBacklog(gameId, response, backlog);
 		final ModelAndView mav = new ModelAndView("gameSearch");
+		int pageSize = 15;
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
 		User u = us.getLoggedUser();
 		int timeLeft = hoursLeft*3600 + minsLeft*60 + secsLeft;
 		int timeRight = hoursRight*3600 + minsRight*60 + secsRight;
+		int countResults = gs.countSearchResultsFiltered(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
+		int totalPages = (countResults + pageSize - 1)/pageSize; 
+		mav.addObject("pages",totalPages);
+		mav.addObject("current",page);
+		
+		mav.addObject("hoursLeft", hoursLeft);
+		mav.addObject("minsLeft", minsLeft);
+		mav.addObject("secsLeft", secsLeft);
+		mav.addObject("hoursRight", hoursRight);
+		mav.addObject("minsRight", minsRight);
+		mav.addObject("secsRight", secsRight);
+		mav.addObject("scoreLeft", scoreLeft);
+		mav.addObject("scoreRight", scoreRight);
+		mav.addObject("currentPlats", String.join(", ", platforms));
+		mav.addObject("currentGens", String.join(", ", genres));
+
+		if(countResults == 0) {
+			mav.addObject("games", null);
+			return mav;
+		}
+		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 		
 		if(u == null)
 		{	
-			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, null);
 			updateWithBacklogDetails(filteredResults, backlog);
-			mav.addObject("searchTerm", search);
+			mav.addObject("search", search);
 			mav.addObject("games", filteredResults);
 		}
 		else
 		{
-			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, u);
-			mav.addObject("searchTerm", search);
+			mav.addObject("search", search);
 			mav.addObject("games", filteredResults);
 		}
 		return mav;

@@ -167,9 +167,11 @@ public interface GameDao
 	/**
 	 * Get a list of all games with names that contain the searched term.
 	 * @param search The search term.
+	 * @param page	Page number
+	 * @param pageSize	Page size
 	 * @return 	The list of matching games.
 	 */
-	List<Game> searchByTitle(String search);
+	List<Game> searchByTitle(String search, int page, int pageSize);
 	
 	/**
 	 * Get a list of all games (and their additional details) with names that contain the searched term.
@@ -237,10 +239,15 @@ public interface GameDao
 	 */
 	
 	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight, User u);
+			int scoreRight, int timeLeft, int timeRight, int page, int pageSize);
 
 	List<Game> getGamesReleasingTomorrow();
 
 	List<Game> getGamesInBacklogReleasingTomorrow(User u);
+	
+	int countSearchResults(String searchTerm);
+	
+	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
+			int scoreRight, int timeLeft, int timeRight);	
 
 }

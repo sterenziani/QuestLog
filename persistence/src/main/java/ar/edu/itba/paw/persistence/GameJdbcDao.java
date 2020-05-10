@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+
+import javax.management.Query;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -326,8 +328,8 @@ public class GameJdbcDao implements GameDao
 	}
 	
 	@Override
-	public List<Game> searchByTitle(String search){
-		return jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
+	public List<Game> searchByTitle(String search, int page, int pageSize){
+		return jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY game LIMIT ? OFFSET ?", GAME_MAPPER, search, pageSize, (page-1)*pageSize);
 	}
 	
 	public List<Game> searchByTitleWithDetails(String search){
@@ -449,25 +451,59 @@ public class GameJdbcDao implements GameDao
 	}
 	
 	@Override
-	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, User u)
+	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize)
 	{			
 		String genreFilter = "";
 		if(genres.size()>0) 
-			genreFilter =  " NATURAL JOIN (SELECT * FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS g NATURAL JOIN classifications NATURAL JOIN games) AS a";
-	
+			genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";		
+		
 		String platformFilter = "";
 		if(platforms.size()>0)
-			platformFilter = " NATURAL JOIN (SELECT * FROM (SELECT * FROM platforms WHERE platform IN (" + String.join(", ", platforms) + ")) AS g NATURAL JOIN game_versions NATURAL JOIN games) AS b";
-	
+			platformFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM platforms WHERE platform IN (" + String.join(", ", platforms) + ")) AS plats NATURAL JOIN game_versions) AS b";		
+		
 		String scoreFilter = "";
 		if(scoreLeft != 0 || scoreRight != 100)
-			scoreFilter = " NATURAL JOIN (SELECT * FROM (SELECT game FROM scores GROUP BY game HAVING AVG(score) >= " + scoreLeft + " AND AVG(score) <= " + scoreRight + ") AS a NATURAL JOIN games) AS c";
-	
+			scoreFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT game FROM scores GROUP BY game HAVING AVG(score) >= " + scoreLeft + " AND AVG(score) <= " + scoreRight + ") AS sc) AS c";		
 		String timeFilter = "";
 		if(timeLeft != 0 || timeRight != 35999999)
-			timeFilter = " NATURAL JOIN (SELECT * FROM (SELECT game FROM runs WHERE playstyle = 1 GROUP BY game HAVING AVG(time) >= " + timeLeft + " AND AVG(time) <= " + timeRight + ") AS a NATURAL JOIN games) AS d";
-	
-	
-		return jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter + scoreFilter + timeFilter, GAME_MAPPER, searchTerm);
+			timeFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT game FROM runs WHERE playstyle = 1 GROUP BY game HAVING AVG(time) >= " + timeLeft + " AND AVG(time) <= " + timeRight + ") AS a) AS d";
+		
+		return jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter + scoreFilter + timeFilter
+				+ " ORDER BY game LIMIT ? OFFSET ?", GAME_MAPPER, searchTerm, pageSize, (page-1)*pageSize);
 	}
+
+	@Override
+	public int countSearchResults(String searchTerm) {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))", Integer.class, searchTerm);
+
+	}
+
+	@Override
+	public int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
+			int scoreRight, int timeLeft, int timeRight) {
+		String genreFilter = "";
+		if(genres.size()>0) 
+			genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";		
+		
+		System.out.println("COUNTER");
+		System.out.println(genres.size());
+		System.out.println(genres);
+		System.out.println("");
+		
+		String platformFilter = "";
+		if(platforms.size()>0)
+			platformFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM platforms WHERE platform IN (" + String.join(", ", platforms) + ")) AS plats NATURAL JOIN game_versions) AS b";		
+		String scoreFilter = "";
+		if(scoreLeft != 0 || scoreRight != 100)
+			scoreFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT game FROM scores GROUP BY game HAVING AVG(score) >= " + scoreLeft + " AND AVG(score) <= " + scoreRight + ") AS sc) AS c";	
+		
+		String timeFilter = "";
+		if(timeLeft != 0 || timeRight != 35999999)
+			timeFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT game FROM runs WHERE playstyle = 1 GROUP BY game HAVING AVG(time) >= " + timeLeft + " AND AVG(time) <= " + timeRight + ") AS a) AS d";
+		
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM (SELECT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter
+				+ scoreFilter + timeFilter + ") AS x", Integer.class, searchTerm);
+	}
+	
+	
 }
