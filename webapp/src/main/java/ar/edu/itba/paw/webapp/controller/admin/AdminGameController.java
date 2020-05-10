@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.controller.admin;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.exception.BadImageException;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class AdminController
+public class AdminGameController
 {
 	@Autowired
 	private ImageService 		is;
@@ -36,7 +36,7 @@ public class AdminController
 	@Autowired
 	private GenreService 		gs;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdminGameController.class);
 	
 	@RequestMapping("/admin")
 	public ModelAndView admin()
