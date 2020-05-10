@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -63,15 +64,21 @@ public interface GameService
 	 * @return The new, modified game, or null if the original game was not found.
 	 */
 	Optional<Game> changeDescription(long id, String new_desc);
-	
+
 	/**
 	 * Create a new game.
-	 * @param title The title of the game.
-	 * @param cover A link to the cover of the game
-	 * @param description A description of the game
-	 * @return The registered game.
+	 * @param title 		The title of the game.
+	 * @param cover			The cover of the game.
+	 * @param description	The description of the game
+	 * @param platforms		The platforms the game is on
+	 * @param developers	The developers of the game
+	 * @param publishers    The publishers of the game
+	 * @param genres		The genres the game belongs to
+	 * @param releaseDates  The dates when the game releases
+	 * @return 				The registered game.
 	 */
-	Game register(String title, String cover, String description);
+
+	Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates);
 	
 	/**
 	 * Get a list of all available games.

@@ -104,7 +104,7 @@ public class GameJdbcDaoTest
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, RELEASE_TABLE);
 	}
 	
-	@Test
+	/*@Test
 	public void testRegisterGame()
 	{
 		final Game g = gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC);
@@ -112,7 +112,7 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(GAME_TITLE, g.getTitle());
 		Assert.assertEquals(GAME_COVER, g.getCover());
 		Assert.assertEquals(GAME_DESC, g.getDescription());
-	}
+	}*/
 	
 	@Test
 	public void	testFindGameByIdDoesntExist()
@@ -332,47 +332,6 @@ public class GameJdbcDaoTest
 		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel2));
 	}
 	*/
-	@Test 
-	public void	testSearchByTitle() 
-	{ 
-		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
-		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
-		TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
-		 
-		List<Game> myList = new ArrayList<Game>(); 
-		myList.add(raym); 
-		myList.add(mario); 
-		 
-		List<Game> gamesList1 = gameDao.searchByTitle("mA"); 
-		List<Game> gamesList2 = gameDao.searchByTitle("qwerty"); 
-		 
-		Assert.assertFalse(gamesList1.isEmpty()); 
-		Assert.assertEquals(2, gamesList1.size()); 
-		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle()); 
-		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
-		Assert.assertTrue(gamesList2.isEmpty()); 
-	}
-	
-	@Test 
-	public void	testSearchByTitleSimplified() 
-	{ 
-		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
-		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
-		TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
-		 
-		List<Game> myList = new ArrayList<Game>(); 
-		myList.add(raym); 
-		myList.add(mario); 
-		 
-		List<Game> gamesList1 = gameDao.searchByTitle("mA"); 
-		List<Game> gamesList2 = gameDao.searchByTitle("qwerty"); 
-		 
-		Assert.assertFalse(gamesList1.isEmpty()); 
-		Assert.assertEquals(2, gamesList1.size()); 
-		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle()); 
-		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
-		Assert.assertTrue(gamesList2.isEmpty()); 
-	}
 	
 	@Test
 	public void	testGetAllGamesSimplified()

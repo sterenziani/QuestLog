@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -80,9 +81,9 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public Game register(String title, String cover, String description)
+	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates)
 	{
-		return gameDao.register(title, cover, description);
+		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, releaseDates);
 	}
 
 	@Override 
