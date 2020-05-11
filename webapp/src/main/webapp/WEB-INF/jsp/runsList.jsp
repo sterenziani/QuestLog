@@ -19,7 +19,7 @@
 			</tr>
 			<c:forEach var="element" items="${runsInPage}">
 				<tr>
-					<td><c:out value="${element.game.title}"/></td>
+					<td><a href="<c:url value="/games/${element.game.id}"/>">${element.game.title}</a></td>
 					<td><c:out value="${element.platform.shortName}"/></td>
 					<td><spring:message code="playstyle.${element.playstyle.name}"/></td>
 					<td width="130px"><c:out value="${element}"/></td>

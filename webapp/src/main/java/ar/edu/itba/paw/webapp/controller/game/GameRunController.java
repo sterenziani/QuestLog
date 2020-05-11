@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.webapp.controller.game;
-import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -19,10 +18,8 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
-import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Controller
 public class GameRunController
@@ -40,7 +37,6 @@ public class GameRunController
     private PlatformService     ps;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameRunController.class);
-    private static final int PAGE_SIZE = 25;
 
     @RequestMapping(value = "/createRun/run/{gameId}", method = { RequestMethod.POST })
     public ModelAndView register(@RequestParam("hours") int hours, @RequestParam("mins") int mins, @RequestParam("secs") int secs,
@@ -72,21 +68,6 @@ public class GameRunController
         Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
         mav.addObject("game", g);
         mav.addObject("playstyles",runs.getAllPlaystyles());
-        return mav;
-    }
-    
-    @RequestMapping("/users/{userId}/runs")
-    public ModelAndView viewRunsByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        final ModelAndView mav = new ModelAndView("fullRunsList");
-        User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Run> runsInPage = runs.findRunsByUser(visitedUser, page, PAGE_SIZE);
-        mav.addObject("runsInPage", runsInPage);
-        int countResults = runs.countRunsByUser(visitedUser);
-        int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
-		mav.addObject("pages", totalPages);
-		mav.addObject("current", page);
-		mav.addObject("user", visitedUser);
         return mav;
     }
 }

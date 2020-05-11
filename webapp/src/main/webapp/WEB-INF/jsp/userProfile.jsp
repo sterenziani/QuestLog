@@ -18,20 +18,10 @@
 			<c:remove var="seeAllUrl"/>
 	    </div>
 		
-		<div>
-			<h2><spring:message code="user.scores" arguments="${user.username}"/></h2>
-			<c:if test="${empty user.scores}">
-            	<p><spring:message code="user.noScores"/></p>
-        	</c:if>
-			<c:forEach var="element" items="${user.scores}">
-				<div class="user-avg-score">
-					<strong class="score-title">
-						${element.game}:
-							<p class="score-display score-display-avg">${element.score}</p>
-					</strong>
-				</div>
-			</c:forEach>
-		</div>
+		<c:set var="scoresInPage" value="${scoresInPage}"/>
+		<c:set var="seeAllScoresUrl" value="/users/${user.id}/scores"/>
+		<%@ include file="scoresList.jsp"%>
+
 		<c:set var="runsInPage" value="${runsInPage}"/>
 		<c:set var="seeAllRunsUrl" value="/users/${user.id}/runs"/>
 		<%@ include file="runsList.jsp"%>
