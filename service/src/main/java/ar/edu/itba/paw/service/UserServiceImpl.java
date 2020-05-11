@@ -14,6 +14,7 @@ import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -29,14 +30,16 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
+	@Transactional
 	@Override
 	public Optional<User> findById(long id)
 	{
 		Optional<User> opt = userDao.findById(id);
 		return opt;
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<User> findByIdWithDetails(long id)
 	{
@@ -45,32 +48,37 @@ public class UserServiceImpl implements UserService{
 			gs.updateBacklogDetails(opt.get().getBacklog());
 		return opt;
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<User> findByUsername(String username)
 	{
 		Optional<User> opt =  userDao.findByUsername(username);
 		return opt;
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<User> findByUsernameWithDetails(String username)
 	{
 		return userDao.findByUsernameWithDetails(username);
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<User> findByEmail(String email)
 	{
 		return userDao.findByEmail(email);
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<User> findByEmailWithDetails(String email)
 	{
 		return userDao.findByEmailWithDetails(email);
 	}
 
+	@Transactional
 	@Override
 	public User register(String username, String password, String email, Locale locale)
 	{
@@ -81,7 +89,8 @@ public class UserServiceImpl implements UserService{
 		emailService.sendWelcomeEmail(u);
 		return u;
 	}
-	
+
+	@Transactional
 	@Override
 	public User getLoggedUser()
 	{
@@ -93,13 +102,15 @@ public class UserServiceImpl implements UserService{
 		}
 		return null;
 	}
-	
+
+	@Transactional
 	@Override
 	public List<User> getAllUsers()
 	{
 		return userDao.getAllUsers();
 	}
-	
+
+	@Transactional
 	@Override
 	public void createPasswordResetTokenForUser(User user, String token)
 	{
@@ -107,7 +118,8 @@ public class UserServiceImpl implements UserService{
 	    userDao.saveToken(myToken);
 	    emailService.sendAccountRecoveryEmail(user, token);
 	}
-	
+
+	@Transactional
 	@Override
 	public String validatePasswordResetToken(String token)
 	{
@@ -121,7 +133,8 @@ public class UserServiceImpl implements UserService{
 	    }
 	    return "invalidToken";
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<User> getUserByPasswordResetToken(String token)
 	{
@@ -134,6 +147,7 @@ public class UserServiceImpl implements UserService{
 	    return passToken.getExpiryDate().before(cal.getTime());
 	}
 
+	@Transactional
 	@Override
 	public void changeUserPassword(User user, String password)
 	{
@@ -141,7 +155,8 @@ public class UserServiceImpl implements UserService{
 		userDao.changePassword(user, encodedPassword);
 		userDao.deleteTokenForUser(user);
 	}
-	
+
+	@Transactional
 	@Override
 	public void updateLocale(User user, Locale locale)
 	{

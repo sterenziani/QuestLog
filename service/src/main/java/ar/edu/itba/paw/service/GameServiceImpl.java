@@ -14,16 +14,18 @@ import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Release;
 import ar.edu.itba.paw.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GameServiceImpl implements GameService
 {
 	@Autowired
 	private GameDao gameDao;
-	
+
 	@Autowired
 	private UserService us;
 
+	@Transactional
 	@Override
 	public Optional<Game> findById(long id)
 	{
@@ -32,7 +34,8 @@ public class GameServiceImpl implements GameService
 			g.get().setInBacklog(gameInBacklog(id));
 		return g;
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<Game> findByIdWithDetails(long id)
 	{
@@ -42,6 +45,7 @@ public class GameServiceImpl implements GameService
 		return g;
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> findByTitle(String title)
 	{
@@ -50,7 +54,8 @@ public class GameServiceImpl implements GameService
 			g.get().setInBacklog(gameInBacklog(g.get().getId()));
 		return g;
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<Game> findByTitleWithDetails(String title)
 	{
@@ -60,39 +65,45 @@ public class GameServiceImpl implements GameService
 		return g;
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> changeTitle(long id, String new_title)
 	{
 		return gameDao.changeTitle(id, new_title);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> changeCover(long id, String new_cover)
 	{
 		return gameDao.changeCover(id, new_cover);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> changeDescription(long id, String new_desc)
 	{
 		return gameDao.changeDescription(id, new_desc);
 	}
 
+	@Transactional
 	@Override
 	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
 	{
 		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, releaseDates);
 	}
 
-	@Override 
+	@Transactional
+	@Override
 	public List<Game> getAllGames()
 	{
 		List<Game> list = gameDao.getAllGames();
 		updateBacklogDetails(list);
 		return list;
 	}
-	
-	@Override 
+
+	@Transactional
+	@Override
 	public List<Game> getAllGamesWithDetails()
 	{
 		List<Game> list = gameDao.getAllGamesWithDetails();
@@ -100,67 +111,78 @@ public class GameServiceImpl implements GameService
 		return list;
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> addPlatform(Game g, Platform p)
 	{
-		return gameDao.addPlatform(g, p);		
+		return gameDao.addPlatform(g, p);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> removePlatform(Game g, Platform p)
 	{
 		return gameDao.removePlatform(g, p);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> addDeveloper(Game g, Developer p)
 	{
-		return gameDao.addDeveloper(g, p);		
+		return gameDao.addDeveloper(g, p);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> removeDeveloper(Game g, Developer p)
 	{
 		return gameDao.removeDeveloper(g, p);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> addPublisher(Game g, Publisher p)
 	{
-		return gameDao.addPublisher(g, p);		
+		return gameDao.addPublisher(g, p);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> removePublisher(Game g, Publisher p)
 	{
 		return gameDao.removePublisher(g, p);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> addGenre(Game game, Genre genre)
 	{
 		return gameDao.addGenre(game, genre);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> removeGenre(Game game, Genre genre)
 	{
 		return gameDao.removeGenre(game, genre);
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<Game> addReleaseDate(Game game, Release r)
 	{
 		return gameDao.addReleaseDate(game, r);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Game> removeReleaseDate(Game game, Release r)
 	{
 		return gameDao.removeReleaseDate(game, r);
 	}
-	
-	@Override 
+
+	@Transactional
+	@Override
 	public List<Game> searchByTitle(String search, int page, int pageSize)
 	{
 		List<Game> list = gameDao.searchByTitle(search, page, pageSize);
@@ -168,7 +190,8 @@ public class GameServiceImpl implements GameService
 			g.setInBacklog(gameInBacklog(g.getId()));
 		return list;
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getUpcomingGames()
 	{
@@ -177,6 +200,7 @@ public class GameServiceImpl implements GameService
 		return list;
 	}
 
+	@Transactional
 	@Override
 	public List<Game> getGamesReleasingTomorrow()
 	{
@@ -184,7 +208,8 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(list);
 		return list;
 	}
-	
+
+	@Transactional
 	@Override
 	public boolean gameInBacklog(long gameId)
 	{
@@ -193,7 +218,8 @@ public class GameServiceImpl implements GameService
 			return false;
 		return gameDao.isInBacklog(gameId, u);
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getGamesInBacklog()
 	{
@@ -204,7 +230,8 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(games);
 		return games;
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getGamesInBacklog(User u)
 	{
@@ -213,8 +240,9 @@ public class GameServiceImpl implements GameService
 		List<Game> games = gameDao.getGamesInBacklog(u);
 		updateBacklogDetails(games);
 		return games;
-	}	
-	
+	}
+
+	@Transactional
 	@Override
 	public void addToBacklog(long gameId)
 	{
@@ -222,8 +250,8 @@ public class GameServiceImpl implements GameService
 		if(u != null)
 			gameDao.addToBacklog(gameId, u);
 	}
-	
-	
+
+	@Transactional
 	@Override
 	public void removeFromBacklog(long gameId)
 	{
@@ -231,7 +259,8 @@ public class GameServiceImpl implements GameService
 		if(u != null)
 			gameDao.removeFromBacklog(gameId, u);
 	}
-	
+
+	@Transactional
 	@Override
 	public void toggleBacklog(long gameId)
 	{
@@ -245,14 +274,16 @@ public class GameServiceImpl implements GameService
 		}
 		return;
 	}
-	
+
+	@Transactional
 	@Override
 	public void updateBacklogDetails(Collection<Game> games)
 	{
 		for(Game g : games)
 			g.setInBacklog(gameInBacklog(g.getId()));
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getRecommendedGames()
 	{
@@ -263,7 +294,8 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(games);
 		return games;
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getPopularGames()
 	{
@@ -271,7 +303,8 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(games);
 		return games;
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize)
 	{
@@ -280,22 +313,27 @@ public class GameServiceImpl implements GameService
 		return results;
 	}
 
+	@Transactional
+	@Override
 	public List<Game> getGamesInBacklogReleasingTomorrow(User u)
 	{
 		return gameDao.getGamesInBacklogReleasingTomorrow(u);
 
 	}
-	
+
+	@Transactional
 	@Override
 	public 	int countSearchResults(String searchTerm) {
 		return gameDao.countSearchResults(searchTerm);
 	}
-	
+
+	@Transactional
 	@Override
 	public 	int countSearchResultsFiltered(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight) {
 		return gameDao.countSearchResultsFiltered(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getGamesForPlatform(Platform p, int page, int pageSize)
 	{
@@ -304,19 +342,22 @@ public class GameServiceImpl implements GameService
 		return results;
 	}
 
+	@Transactional
 	@Override
 	public int countGamesForPlatform(Platform p)
 	{
 		return gameDao.countGamesForPlatform(p);
 	}
 
+	@Transactional
 	@Override
 	public List<Game> getGamesForGenre(Genre g, int page, int pageSize) {
 		List<Game> results = gameDao.getGamesForGenre(g, page, pageSize);
 		updateBacklogDetails(results);
 		return results;
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize)
 	{
@@ -325,18 +366,21 @@ public class GameServiceImpl implements GameService
 		return results;
 	}
 
+	@Transactional
 	@Override
 	public int countGamesForGenre(Genre g)
 	{
 		return gameDao.countGamesForGenre(g);
 	}
 
+	@Transactional
 	@Override
 	public int countGamesForDeveloper(Developer d)
 	{
 		return gameDao.countGamesForDeveloper(d);
 	}
 
+	@Transactional
 	@Override
 	public List<Game> getGamesForPublisher(Publisher p, int page, int pageSize)
 	{
@@ -345,12 +389,14 @@ public class GameServiceImpl implements GameService
 		return results;
 	}
 
+	@Transactional
 	@Override
 	public int countGamesForPublisher(Publisher p)
 	{
 		return gameDao.countGamesForPublisher(p);
 	}
 
+	@Transactional
 	@Override
 	public List<Game> getGamesInBacklog(int page, int pageSize)
 	{
@@ -362,6 +408,7 @@ public class GameServiceImpl implements GameService
 		return games;
 	}
 
+	@Transactional
 	@Override
 	public List<Game> getGamesInBacklog(User u, int page, int pageSize)
 	{
@@ -372,6 +419,7 @@ public class GameServiceImpl implements GameService
 		return games;
 	}
 
+	@Transactional
 	@Override
 	public int countGamesInBacklog()
 	{
@@ -381,6 +429,7 @@ public class GameServiceImpl implements GameService
 		return gameDao.countGamesInBacklog(u);
 	}
 
+	@Transactional
 	@Override
 	public int countGamesInBacklog(User u)
 	{

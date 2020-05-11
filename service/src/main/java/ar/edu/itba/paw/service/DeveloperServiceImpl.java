@@ -6,20 +6,23 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
 import ar.edu.itba.paw.interfaces.service.DeveloperService;
 import ar.edu.itba.paw.model.Developer;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DeveloperServiceImpl implements DeveloperService{
 	
 	@Autowired
 	private DeveloperDao developerDao;
-	
+
+	@Transactional
 	@Override
 	public Optional<Developer> findById(long id)
 	{
 		Optional<Developer> d = developerDao.findById(id);
 		return d;
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<Developer> findByName(String name)
 	{
@@ -27,24 +30,28 @@ public class DeveloperServiceImpl implements DeveloperService{
 		return d;
 	}
 
+	@Transactional
 	@Override
 	public Optional<Developer> changeName(long id, String new_name)
 	{
 		return developerDao.changeName(id, new_name);
 	}
 
+	@Transactional
 	@Override
 	public Optional<Developer> changeLogo(long id, String new_logo)
 	{
 		return developerDao.changeLogo(id, new_logo);
 	}
 
+	@Transactional
 	@Override
 	public Developer register(String title, String logo)
 	{
 		return developerDao.register(title, logo);
 	}
-	
+
+	@Transactional
 	@Override
 	public List<Developer> getAllDevelopers()
 	{

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.RegionService;
 import ar.edu.itba.paw.model.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class RegionServiceImpl implements RegionService {
     @Autowired
     private RegionDao regionDao;
 
+    @Transactional
     @Override
     public List<Region> getAllRegions() {
         return regionDao.getAllRegions();
