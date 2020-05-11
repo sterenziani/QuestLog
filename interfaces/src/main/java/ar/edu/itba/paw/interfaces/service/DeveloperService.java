@@ -47,10 +47,4 @@ public interface DeveloperService {
 	 * @return The list of all developers.
 	 */
 	List<Developer> getAllDevelopers();	
-	
-	/**
-	 * Get a list of all available developers with their list of games filled in.
-	 * @return The list of all developers.
-	 */
-	List<Developer> getAllDevelopersWithGames();
 }

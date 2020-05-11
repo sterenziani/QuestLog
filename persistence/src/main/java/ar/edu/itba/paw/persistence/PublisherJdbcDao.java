@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.persistence;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
-import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Publisher;
 
 @Repository
@@ -40,12 +38,6 @@ public class PublisherJdbcDao implements PublisherDao {
 	public Optional<Publisher> findById(long id)
 	{
 		Optional<Publisher> p = jdbcTemplate.query("SELECT * FROM publishers WHERE publisher = ?", PUBLISHER_MAPPER, id).stream().findFirst();
-		if(p.isPresent())
-		{
-			List<Game> games = getAllGames(p.get());
-			for(Game g : games)
-				p.get().addGame(g);
-		}
 		return p;
 	}
 
@@ -53,12 +45,6 @@ public class PublisherJdbcDao implements PublisherDao {
 	public Optional<Publisher> findByName(String name)
 	{
 		Optional<Publisher> p = jdbcTemplate.query("SELECT * FROM publishers WHERE publisher_name LIKE ?", PUBLISHER_MAPPER, name).stream().findFirst();
-		if(p.isPresent())
-		{
-			List<Game> games = getAllGames(p.get());
-			for(Game g : games)
-				p.get().addGame(g);
-		}
 		return p;
 	}
 
@@ -90,32 +76,5 @@ public class PublisherJdbcDao implements PublisherDao {
 	public List<Publisher> getAllPublishers()
 	{
 		return jdbcTemplate.query("SELECT publisher, publisher_name, publisher_logo FROM (SELECT publisher, count(*) AS g FROM publishing GROUP BY publisher) AS a NATURAL JOIN publishers ORDER BY g DESC", PUBLISHER_MAPPER);
-	}
-	
-	@Override
-	public List<Publisher> getAllPublishersWithGames()
-	{
-		List<Publisher> publishers = getAllPublishers();
-		for(Publisher p : publishers)
-		{
-			List<Game> games = getAllGames(p);
-			for(Game g : games)
-				p.addGame(g);
-		}
-		return publishers;
-	}
-
-	private  List<Game> getAllGames(Publisher p)
-	{
-		List<Game> gameList = jdbcTemplate.query("SELECT DISTINCT * FROM (SELECT * FROM publishers WHERE publisher = ?) AS p NATURAL JOIN publishing NATURAL JOIN games",
-				new RowMapper<Game>()
-				{
-					@Override
-					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
-					}
-				}, p.getId());
-		return gameList;
 	}
 }

@@ -263,4 +263,9 @@ public interface GameDao
 	
 	int countGamesForGenre(Genre g);
 
+	List<Game> getGamesForDeveloper(Developer d, int page, int pageSize);
+	int countGamesForDeveloper(Developer d);
+
+	List<Game> getGamesForPublisher(Publisher p, int page, int pageSize);
+	int countGamesForPublisher(Publisher p);
 }

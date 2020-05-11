@@ -326,9 +326,37 @@ public class GameServiceImpl implements GameService
 		updateBacklogDetails(results);
 		return results;
 	}
+	
+	@Override
+	public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForDeveloper(d, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
 
 	@Override
 	public int countGamesForGenre(Genre g) {
 		return gameDao.countGamesForGenre(g);
+	}
+
+	@Override
+	public int countGamesForDeveloper(Developer d)
+	{
+		return gameDao.countGamesForDeveloper(d);
+	}
+
+	@Override
+	public List<Game> getGamesForPublisher(Publisher p, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForPublisher(p, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForPublisher(Publisher p)
+	{
+		return gameDao.countGamesForPublisher(p);
 	}
 }

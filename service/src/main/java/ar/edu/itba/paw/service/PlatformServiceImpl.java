@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.model.Platform;
@@ -14,15 +13,10 @@ public class PlatformServiceImpl implements PlatformService
 	@Autowired
 	private PlatformDao platformDao;
 	
-	@Autowired
-	private GameService gs;
-	
 	@Override
 	public Optional<Platform> findById(long id)
 	{
 		Optional<Platform> p = platformDao.findById(id);
-		if(p.isPresent())
-			gs.updateBacklogDetails(p.get().getGames());
 		return p;
 	}
 
@@ -30,8 +24,6 @@ public class PlatformServiceImpl implements PlatformService
 	public Optional<Platform> findByName(String name)
 	{
 		Optional<Platform> p = platformDao.findByName(name);
-		if(p.isPresent())
-			gs.updateBacklogDetails(p.get().getGames());
 		return p;
 	}
 
@@ -63,11 +55,5 @@ public class PlatformServiceImpl implements PlatformService
 	public List<Platform> getAllPlatforms()
 	{
 		return platformDao.getAllPlatforms();
-	}
-	
-	@Override
-	public List<Platform> getAllPlatformsWithGames()
-	{
-		return platformDao.getAllPlatformsWithGames();
 	}
 }

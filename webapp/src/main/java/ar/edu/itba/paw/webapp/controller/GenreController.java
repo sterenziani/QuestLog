@@ -62,6 +62,7 @@ public class GenreController {
        
         if(u == null)
             backlogCookieHandlerService.updateWithBacklogDetails(games, backlog);
+
         mav.addObject("genre", g);
         mav.addObject("gamesInPage",games);
         mav.addObject("pages", totalPages);
