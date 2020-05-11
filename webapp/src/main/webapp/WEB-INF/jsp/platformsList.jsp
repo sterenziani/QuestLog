@@ -12,7 +12,7 @@
 			    <a href="<c:url value="/platforms/${platform.id}"/>">
 			        <div>
 			            <div class="explore-list-item-icon">
-			                <img src="<c:url value="${platform.logo}"/>" alt="${platform.name}"/>
+			                <img height="50px" src="<c:url value="${platform.logo}"/>" alt="${platform.name}"/>
 			            </div>
 			            <div class="explore-list-item-data">
 			                <h3><c:out value="${platform.name}"/></h3>

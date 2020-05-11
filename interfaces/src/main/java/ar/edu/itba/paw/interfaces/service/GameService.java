@@ -210,8 +210,7 @@ public interface GameService
 	 * @return	The games that pass said filters
 	 */
 	
-	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight, int page, int pageSize);
+	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize);
 
 	List<Game> getPopularGames();
 
@@ -221,6 +220,8 @@ public interface GameService
 
 	int countSearchResults(String searchTerm);
 
-	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight);	
+	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight);
+
+	List<Game> getGamesForPlatform(Platform p, int page, int pageSize);
+	int countGamesForPlatform(Platform p);
 }

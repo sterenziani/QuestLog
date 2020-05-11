@@ -2,9 +2,10 @@ package ar.edu.itba.paw.persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.management.Query;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,10 +22,6 @@ import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.model.Region;
 import ar.edu.itba.paw.model.Release;
 import ar.edu.itba.paw.model.User;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Repository
 public class GameJdbcDao implements GameDao
@@ -526,14 +523,14 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public int countSearchResults(String searchTerm) {
+	public int countSearchResults(String searchTerm)
+	{
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))", Integer.class, searchTerm);
-
 	}
 
 	@Override
-	public int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight) {
+	public int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight)
+	{
 		String genreFilter = "";
 		if(genres.size()>0) 
 			genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";		
@@ -557,6 +554,16 @@ public class GameJdbcDao implements GameDao
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM (SELECT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter
 				+ scoreFilter + timeFilter + ") AS x", Integer.class, searchTerm);
 	}
-	
-	
+
+	@Override
+	public List<Game> getGamesForPlatform(Platform p, int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN game_versions WHERE platform = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, p.getId(), pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countGamesForPlatform(Platform p)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN game_versions WHERE platform = ?", Integer.class, p.getId());
+	}	
 }

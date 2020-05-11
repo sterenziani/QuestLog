@@ -305,4 +305,18 @@ public class GameServiceImpl implements GameService
 	public 	int countSearchResultsFiltered(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight) {
 		return gameDao.countSearchResultsFiltered(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
 	}
+	
+	@Override
+	public List<Game> getGamesForPlatform(Platform p, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForPlatform(p, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForPlatform(Platform p)
+	{
+		return gameDao.countGamesForPlatform(p);
+	}
 }
