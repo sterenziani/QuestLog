@@ -426,7 +426,7 @@ public class GameJdbcDao implements GameDao
 	{
 		return jdbcTemplate.query("SELECT game, title, cover, description, min(release_date) AS next_date\n"
 								+ "FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE AND release_date < CURRENT_DATE + 250\n"
-								+ "GROUP BY game ORDER BY next_date", GAME_MAPPER);
+								+ "GROUP BY game ORDER BY next_date LIMIT 10", GAME_MAPPER);
 	}
 	
 	@Override
@@ -442,35 +442,6 @@ public class GameJdbcDao implements GameDao
 									+"AND game in (SELECT game FROM backlogs WHERE user_id = ?)) AS g NATURAL JOIN games", GAME_MAPPER, u.getId());
 	}
 	
-	@Override
-	public List<Game> getUpcomingGamesWithDetails()
-	{
-		List<Game> searchGames = jdbcTemplate.query("SELECT * FROM games NATURAL JOIN releases WHERE release_date > CURRENT_DATE", GAME_MAPPER);
-		for(Game g : searchGames)
-		{	
-			List<Platform> platforms = getAllPlatforms(g);
-			for(Platform p : platforms)
-				g.addPlatform(p);
-
-			List<Developer> developers = getAllDevelopers(g);
-			for(Developer d : developers)
-				g.addDeveloper(d);
-
-			List<Publisher> publishers = getAllPublishers(g);
-			for(Publisher pub: publishers)
-				g.addPublisher(pub);
-
-			List<Genre> genres = getAllGenres(g);
-			for(Genre genre : genres)
-				g.addGenre(genre);
-			
-			List<Release> releases = getAllReleaseDates(g);
-			for(Release r: releases)
-				g.addReleaseDate(r);
-		}
-		return searchGames;
-	}
-
 	@Override
 	public boolean isInBacklog(long gameId, User u)
 	{
@@ -503,13 +474,13 @@ public class GameJdbcDao implements GameDao
 		long id = u.getId();
 		return jdbcTemplate.query("SELECT * FROM (SELECT t2.game AS game FROM backlogs AS t1 JOIN backlogs AS t2 ON t1.user_id = t2.user_id AND t1.user_id != ?"
 												+ "AND t1.game IN (SELECT game FROM backlogs WHERE user_id = ?) AND t2.game NOT IN (SELECT game FROM backlogs WHERE user_id = ?)"
-												+ "GROUP BY t2.game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games", GAME_MAPPER, id, id, id, MIN_AMOUNT_FOR_OVERLAP);
+												+ "GROUP BY t2.game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games LIMIT 10", GAME_MAPPER, id, id, id, MIN_AMOUNT_FOR_OVERLAP);
 	}
 	
 	@Override
 	public List<Game> getMostBacklogged()
 	{
-		return jdbcTemplate.query("SELECT * FROM (SELECT game FROM backlogs GROUP BY game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games", GAME_MAPPER, MIN_AMOUNT_FOR_POPULAR);
+		return jdbcTemplate.query("SELECT * FROM (SELECT game FROM backlogs GROUP BY game HAVING count(*) >= ? ORDER BY count(*) DESC) AS a NATURAL JOIN games LIMIT 10", GAME_MAPPER, MIN_AMOUNT_FOR_POPULAR);
 	}
 	
 	@Override
@@ -577,5 +548,55 @@ public class GameJdbcDao implements GameDao
 	public int countGamesForPlatform(Platform p)
 	{
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN game_versions WHERE platform = ?", Integer.class, p.getId());
+	}
+
+	@Override
+	public List<Game> getGamesForGenre(Genre g, int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN classifications WHERE genre = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, g.getId(), pageSize, (page-1)*pageSize);
+
+	}
+
+	@Override
+	public int countGamesForGenre(Genre g)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN classifications WHERE genre = ?", Integer.class, g.getId());
+	}
+
+	@Override
+	public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN development WHERE developer = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, d.getId(), pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countGamesForDeveloper(Developer d)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN development WHERE developer = ?", Integer.class, d.getId());
+	}
+
+	@Override
+	public List<Game> getGamesForPublisher(Publisher p, int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN publishing WHERE publisher = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, p.getId(), pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countGamesForPublisher(Publisher p)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN publishing WHERE publisher = ?", Integer.class, p.getId());
+	}
+
+	@Override
+	public List<Game> getGamesInBacklog(User u, int page, int pageSize)
+	{
+		List<Game> games = jdbcTemplate.query("SELECT * FROM (SELECT * FROM backlogs WHERE user_id = ?) AS g NATURAL JOIN games LIMIT ? OFFSET ?", GAME_MAPPER, u.getId(), pageSize, (page-1)*pageSize);
+		return games;
+	}
+
+	@Override
+	public int countGamesInBacklog(User u)
+	{
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM (SELECT * FROM backlogs WHERE user_id = ?) AS g NATURAL JOIN games", Integer.class, u.getId());
 	}	
 }

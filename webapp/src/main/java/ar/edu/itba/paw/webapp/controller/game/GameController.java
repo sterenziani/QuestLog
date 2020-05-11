@@ -1,23 +1,26 @@
 package ar.edu.itba.paw.webapp.controller.game;
-
-import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.User;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Locale;
+import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
+import ar.edu.itba.paw.interfaces.service.DeveloperService;
+import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.GenreService;
+import ar.edu.itba.paw.interfaces.service.PlatformService;
+import ar.edu.itba.paw.interfaces.service.PublisherService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.User;
 
 @Controller
 @ComponentScan("ar.edu.itba.paw.webapp.component")
@@ -42,6 +45,8 @@ public class GameController {
     private PublisherService            pubs;
 
     private static final Logger         LOGGER = LoggerFactory.getLogger(GameController.class);
+    private static final int HOME_PAGE_BACKLOG_SIZE = 10;
+    private static final int PAGE_SIZE = 15;
 
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
@@ -49,20 +54,18 @@ public class GameController {
     @RequestMapping("/")
     public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        Locale locale = LocaleContextHolder.getLocale();
-        System.out.println(locale.toLanguageTag());
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("cookieBacklog", backlog);
         User u = us.getLoggedUser();
         if(u == null)
         {
-            mav.addObject("backlogGames", backlogCookieHandlerService.getGamesInBacklog(backlog));
+            mav.addObject("backlogGames", backlogCookieHandlerService.getGamesInBacklog(backlog, 1, HOME_PAGE_BACKLOG_SIZE));
             mav.addObject("upcomingGames", getUpcomingGames(backlog));
             mav.addObject("popularGames", getPopularGames(backlog));
         }
         else
         {
-            mav.addObject("backlogGames", gs.getGamesInBacklog());
+            mav.addObject("backlogGames", gs.getGamesInBacklog(1, PAGE_SIZE));
             mav.addObject("recommendedGames", gs.getRecommendedGames());
             mav.addObject("popularGames", gs.getPopularGames());
             mav.addObject("upcomingGames", gs.getUpcomingGames());
@@ -127,14 +130,13 @@ public class GameController {
 	{
         LOGGER.debug("Searching results for term {}. Advanced filters include time between {}:{}:{} and {}:{}:{} and score between {} and {}", search, hoursLeft, minsLeft, secsLeft, hoursRight, minsRight, secsRight, scoreLeft, scoreRight);
 		final ModelAndView mav = new ModelAndView("gameSearch");
-		int pageSize = 15;
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
 		User u = us.getLoggedUser();
 		int timeLeft = hoursLeft*3600 + minsLeft*60 + secsLeft;
 		int timeRight = hoursRight*3600 + minsRight*60 + secsRight;
 		int countResults = gs.countSearchResultsFiltered(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
-		int totalPages = (countResults + pageSize - 1)/pageSize; 
+		int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE; 
 		mav.addObject("pages",totalPages);
 		mav.addObject("current",page);
 		
@@ -151,17 +153,24 @@ public class GameController {
 		mav.addObject("searchTerm", search);		
 		if(u == null)
 		{	
-			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
-			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
-            if(countResults == 0)
+            if(countResults == 0) {
                 mav.addObject("popularGames", getPopularGames(backlog));
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("games", filteredResults);
 
 		}
 		else
-		{	List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
-	        if(countResults == 0)
-	            mav.addObject("popularGames", gs.getPopularGames());
+		{	
+            if(countResults == 0) {
+                mav.addObject("popularGames", gs.getPopularGames());
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
 			mav.addObject("games", filteredResults);
 		}
         LOGGER.debug("Search results for {} with advanced filters successfully extracted.", search);
@@ -180,14 +189,13 @@ public class GameController {
 	{
         backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
 		final ModelAndView mav = new ModelAndView("gameSearch");
-		int pageSize = 15;
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
 		User u = us.getLoggedUser();
 		int timeLeft = hoursLeft*3600 + minsLeft*60 + secsLeft;
 		int timeRight = hoursRight*3600 + minsRight*60 + secsRight;
 		int countResults = gs.countSearchResultsFiltered(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
-		int totalPages = (countResults + pageSize - 1)/pageSize; 
+		int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE; 
 		mav.addObject("pages",totalPages);
 		mav.addObject("current",page);
 		
@@ -202,40 +210,31 @@ public class GameController {
 		mav.addObject("currentPlats", String.join(", ", platforms));
 		mav.addObject("currentGens", String.join(", ", genres));
 		mav.addObject("searchTerm", search);
-
-		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 		
 		if(u == null)
 		{	
-            backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
-			mav.addObject("games", filteredResults);
-            if(countResults == 0)
+            if(countResults == 0) {
                 mav.addObject("popularGames", getPopularGames(backlog));
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+    		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
+			mav.addObject("games", filteredResults);
+            
 		}
 		else
 		{
-			mav.addObject("games", filteredResults);
-            if(countResults == 0)
+            if(countResults == 0) {
                 mav.addObject("popularGames", gs.getPopularGames());
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+    		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+			mav.addObject("games", filteredResults);
 		}
 		return mav;
 	}
-
-    @RequestMapping("/backlog")
-    public ModelAndView backlog(@CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        final ModelAndView mav = new ModelAndView("fullBacklog");
-        User u = us.getLoggedUser();
-        if(u == null)
-        {
-            mav.addObject("backlogGames", backlogCookieHandlerService.getGamesInBacklog(backlog));
-        }
-        else
-        {
-            mav.addObject("backlogGames", gs.getGamesInBacklog());
-        }
-        return mav;
-    }
 
     private List<Game> getUpcomingGames(String backlog)
     {

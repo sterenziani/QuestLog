@@ -9,12 +9,14 @@
     <div class="content">
 		<h2><spring:message code="user.introduction" arguments="${user.username}"/></h2>
 		
-		<div class="main-game-lists-backlog">
-			<spring:message code="user.backlog" arguments="${user.username}" var="backlog"/>
-			<c:set var="listName" value="${backlog}"/>
-			<c:set var="games" value="${user.backlog}"/>
-			<%@ include file="gameList.jsp"%>
-		</div>
+	    <div class="main-game-lists-backlog">
+	    	<spring:message code="index.myBacklog" var="myBacklog"/>
+	        <c:set var="listName" value="${myBacklog}"/>
+	        <c:set var="games" value="${backlog}"/>
+			<c:set var="seeAllUrl" value="/backlog/${user.id}"/>
+	        <%@ include file="gameList.jsp"%>
+			<c:remove var="seeAllUrl"/>
+	    </div>
 		
 		<div>
 			<h2><spring:message code="user.scores" arguments="${user.username}"/></h2>

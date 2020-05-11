@@ -44,7 +44,7 @@
 	</form:form>
 	</div>
     <div class="game-search-results">
-        <c:set var="listName"><spring:message code="search.results" arguments="${search}"/></c:set>
+        <c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
         <%@ include file="gameList.jsp"%>
     </div>
     <c:if test="${empty games}">
@@ -55,36 +55,15 @@
 			<%@ include file="gameList.jsp"%>
 		</div>
 	</c:if>
-    <div>
 
-    <table>
-        <tr>
-            <c:if test="${current != 1}">
-            <form:form name="searchPrev" method="GET" action="${path}" >
-			<input type="hidden" value="${searchTerm}" name="search"/>
-			<input type="hidden" value="${current - 1}" name="page"/>
-			<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
-			<input type="hidden" value="${minsLeft}" name="minsLeft"/>
-			<input type="hidden" value="${secsLeft}" name="secsLeft"/>
-			<input type="hidden" value="${hoursRight}" name="hoursRight"/>
-			<input type="hidden" value="${minsRight}" name="minsRight"/>
-			<input type="hidden" value="${secsRight}" name="secsRight"/>
-			<input type="hidden" value="${scoreLeft}" name="scoreLeft"/>
-			<input type="hidden" value="${scoreRight}" name="scoreRight"/>
-			<input type="hidden" value="${currentPlats}" name="platforms"/>
-			<input type="hidden" value="${currentGens}" name="genres"/>
-        	<td><input type="submit" value="<spring:message code="search.prev"/>"/></td>
-			</form:form>
-   			 </c:if>
-            <c:forEach begin="1" end="${pages}" var="num">
-                <c:choose>
-                    <c:when test="${current == num}">
-                        <td>${num}</td>
-                    </c:when>
-                    <c:otherwise>
-            		<form:form name="searchNext" method="GET" action="${path}" >
+<div class="col mb-5">
+	<div class="row text-center">
+		<c:choose>
+			<c:when test="${current != 1}">
+				<div class="col">
+					<form:form name="searchPrev" method="GET" action="${path}">
 					<input type="hidden" value="${searchTerm}" name="search"/>
-					<input type="hidden" value="${num}" name="page"/>
+					<input type="hidden" value="${current - 1}" name="page"/>
 					<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
 					<input type="hidden" value="${minsLeft}" name="minsLeft"/>
 					<input type="hidden" value="${secsLeft}" name="secsLeft"/>
@@ -95,31 +74,74 @@
 					<input type="hidden" value="${scoreRight}" name="scoreRight"/>
 					<input type="hidden" value="${currentPlats}" name="platforms"/>
 					<input type="hidden" value="${currentGens}" name="genres"/>
-        			<td><input type="submit" value="${num}"/>"/></td>
-					</form:form>                   
+					<input class="btn btn-dark" type="submit" value="<spring:message code="search.prev"/>"/>
+					</form:form>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="col">
+						<input class="btn btn-light" type="submit" disabled value="<spring:message code="search.prev"/>"/>
+				</div>                 
+			</c:otherwise>
+		</c:choose>
+           
+           <div class="col row">
+		<c:forEach begin="1" end="${pages}" var="num">
+			<div class="col-xs mx-auto">
+				<c:choose>
+					<c:when test="${current == num}">
+						<input class="btn btn-light" type="submit" disabled value="${num}"/>
+					</c:when>
+					<c:otherwise>
+						<form:form name="searchPage" method="GET" action="${path}">
+							<input type="hidden" value="${searchTerm}" name="search"/>
+							<input type="hidden" value="${num}" name="page"/>
+							<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
+							<input type="hidden" value="${minsLeft}" name="minsLeft"/>
+							<input type="hidden" value="${secsLeft}" name="secsLeft"/>
+							<input type="hidden" value="${hoursRight}" name="hoursRight"/>
+							<input type="hidden" value="${minsRight}" name="minsRight"/>
+							<input type="hidden" value="${secsRight}" name="secsRight"/>
+							<input type="hidden" value="${scoreLeft}" name="scoreLeft"/>
+							<input type="hidden" value="${scoreRight}" name="scoreRight"/>
+							<input type="hidden" value="${currentPlats}" name="platforms"/>
+							<input type="hidden" value="${currentGens}" name="genres"/>
+							<input class="btn btn-dark" type="submit" value="${num}"/>
+						</form:form>                   
 					</c:otherwise>
-                </c:choose>
-            </c:forEach>
-            <c:if test="${current < pages}">
-            <form:form name="searchNext" method="GET" action="${path}" >
-			<input type="hidden" value="${searchTerm}" name="search"/>
-			<input type="hidden" value="${current + 1}" name="page"/>
-			<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
-			<input type="hidden" value="${minsLeft}" name="minsLeft"/>
-			<input type="hidden" value="${secsLeft}" name="secsLeft"/>
-			<input type="hidden" value="${hoursRight}" name="hoursRight"/>
-			<input type="hidden" value="${minsRight}" name="minsRight"/>
-			<input type="hidden" value="${secsRight}" name="secsRight"/>
-			<input type="hidden" value="${scoreLeft}" name="scoreLeft"/>
-			<input type="hidden" value="${scoreRight}" name="scoreRight"/>
-			<input type="hidden" value="${currentPlats}" name="platforms"/>
-			<input type="hidden" value="${currentGens}" name="genres"/>
-        	<td><input type="submit" value="<spring:message code="search.next"/>"/></td>
-			</form:form>
-    		</c:if>
-        </tr>
-    </table>
-    </div>
+				</c:choose>
+			</div>
+		</c:forEach>
+		</div>
+           
+           <c:choose>
+			<c:when test="${current < pages}">
+				<div class="col">
+					<form:form name="searchNext" method="GET" action="${path}">
+					<input type="hidden" value="${searchTerm}" name="search"/>
+					<input type="hidden" value="${current + 1}" name="page"/>
+					<input type="hidden" value="${hoursLeft}" name="hoursLeft"/>
+					<input type="hidden" value="${minsLeft}" name="minsLeft"/>
+					<input type="hidden" value="${secsLeft}" name="secsLeft"/>
+					<input type="hidden" value="${hoursRight}" name="hoursRight"/>
+					<input type="hidden" value="${minsRight}" name="minsRight"/>
+					<input type="hidden" value="${secsRight}" name="secsRight"/>
+					<input type="hidden" value="${scoreLeft}" name="scoreLeft"/>
+					<input type="hidden" value="${scoreRight}" name="scoreRight"/>
+					<input type="hidden" value="${currentPlats}" name="platforms"/>
+					<input type="hidden" value="${currentGens}" name="genres"/>
+					<input class="btn btn-dark" type="submit" value="<spring:message code="search.next"/>"/>
+					</form:form>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="col">
+						<input class="btn btn-light" type="submit" disabled value="<spring:message code="search.next"/>"/>
+				</div>         
+			</c:otherwise>
+		</c:choose>
+	</div>
+</div>
 </div>
 </body>
 </html>

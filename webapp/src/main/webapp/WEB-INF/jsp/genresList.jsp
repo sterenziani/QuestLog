@@ -13,7 +13,7 @@
 		<c:forEach items="${genres}" var="genre">
 			<a href="<c:url value="genres/${genre.id}"/>">
 				<div class="card m-3 d-flex bg-transparent" style="width: 18rem;">
-					<a class="d-flex flex-column flex-grow-1 text-white" href="<c:url value="/games/${game.id}"/>">
+					<a class="d-flex flex-column flex-grow-1 text-white" href="<c:url value="/genres/${genre.id}"/>">
 						<img class="card-img-top genre" src="<c:url value="${genre.logo}"/>" alt="<c:out value="${genre.name}"/>"/>
 						<div class="card-body bg-primary flex-grow-1">
 							<h5><spring:message code="genres.${genre.name}"/></h5>

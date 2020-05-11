@@ -182,24 +182,11 @@ public interface GameDao
 	List<Game> searchByTitle(String search, int page, int pageSize);
 	
 	/**
-	 * Get a list of all games (and their additional details) with names that contain the searched term.
-	 * @param search The search term.
-	 * @return 	The list of matching games.
-	 */
-	List<Game> searchByTitleWithDetails(String search);
-	
-	/**
 	 * Get a list of upcoming games.
 	 * @return The list of upcoming games.
 	 */
 	List<Game> getUpcomingGames();
 	
-	/**
-	 * Get a list of upcoming games with extra information.
-	 * @return The list of upcoming games.
-	 */
-	List<Game> getUpcomingGamesWithDetails();
-
 	/**
 	 * Check if the game with the provided id is in the user's backlog.
 	 * @param gameId	The id of the game
@@ -228,7 +215,9 @@ public interface GameDao
 	 * @return	The list of games
 	 */
 	List<Game> getGamesInBacklog(User u);
-
+	List<Game> getGamesInBacklog(User u, int page, int pageSize);
+	int countGamesInBacklog(User u);
+	
 	List<Game> getSimilarToBacklog(User u);
 
 	List<Game> getMostBacklogged();
@@ -257,6 +246,18 @@ public interface GameDao
 	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight);
 
 	List<Game> getGamesForPlatform(Platform p, int page, int pageSize);
+	
 	int countGamesForPlatform(Platform p);
+	
+	List<Game> getGamesForGenre(Genre g, int page, int pageSize);
+	
+	int countGamesForGenre(Genre g);
+
+	List<Game> getGamesForDeveloper(Developer d, int page, int pageSize);
+	int countGamesForDeveloper(Developer d);
+
+	List<Game> getGamesForPublisher(Publisher p, int page, int pageSize);
+	int countGamesForPublisher(Publisher p);
+	
 
 }

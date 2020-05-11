@@ -47,10 +47,4 @@ public interface PublisherService {
 	 * @return The list of all publishers.
 	 */
 	List<Publisher> getAllPublishers();
-	
-	/**
-	 * Get a list of all available publishers with their lists of games filled in.
-	 * @return The list of all publishers.
-	 */
-	List<Publisher> getAllPublishersWithGames();
 }

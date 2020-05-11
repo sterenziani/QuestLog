@@ -170,14 +170,6 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override
-	public List<Game> searchByTitleWithDetails(String search)
-	{
-		List<Game> list = gameDao.searchByTitleWithDetails(search);
-		updateBacklogDetails(list);
-		return list;
-	}
-	
-	@Override
 	public List<Game> getUpcomingGames()
 	{
 		List<Game> list = gameDao.getUpcomingGames();
@@ -316,5 +308,82 @@ public class GameServiceImpl implements GameService
 	public int countGamesForPlatform(Platform p)
 	{
 		return gameDao.countGamesForPlatform(p);
+	}
+
+	@Override
+	public List<Game> getGamesForGenre(Genre g, int page, int pageSize) {
+		List<Game> results = gameDao.getGamesForGenre(g, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+	
+	@Override
+	public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForDeveloper(d, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForGenre(Genre g)
+	{
+		return gameDao.countGamesForGenre(g);
+	}
+
+	@Override
+	public int countGamesForDeveloper(Developer d)
+	{
+		return gameDao.countGamesForDeveloper(d);
+	}
+
+	@Override
+	public List<Game> getGamesForPublisher(Publisher p, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForPublisher(p, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForPublisher(Publisher p)
+	{
+		return gameDao.countGamesForPublisher(p);
+	}
+
+	@Override
+	public List<Game> getGamesInBacklog(int page, int pageSize)
+	{
+		User u = us.getLoggedUser();
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getGamesInBacklog(u, page, pageSize);
+		updateBacklogDetails(games);
+		return games;
+	}
+
+	@Override
+	public List<Game> getGamesInBacklog(User u, int page, int pageSize)
+	{
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getGamesInBacklog(u, page, pageSize);
+		updateBacklogDetails(games);
+		return games;
+	}
+
+	@Override
+	public int countGamesInBacklog()
+	{
+		User u = us.getLoggedUser();
+		if(u == null)
+			return 0;
+		return gameDao.countGamesInBacklog(u);
+	}
+
+	@Override
+	public int countGamesInBacklog(User u)
+	{
+		return gameDao.countGamesInBacklog(u);
 	}
 }

@@ -3,9 +3,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.interfaces.service.DeveloperService;
-import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
+import ar.edu.itba.paw.interfaces.service.DeveloperService;
 import ar.edu.itba.paw.model.Developer;
 
 @Service
@@ -14,15 +13,10 @@ public class DeveloperServiceImpl implements DeveloperService{
 	@Autowired
 	private DeveloperDao developerDao;
 	
-	@Autowired
-	private GameService gs;
-	
 	@Override
 	public Optional<Developer> findById(long id)
 	{
 		Optional<Developer> d = developerDao.findById(id);
-		if(d.isPresent())
-			gs.updateBacklogDetails(d.get().getGames());
 		return d;
 	}
 	
@@ -30,8 +24,6 @@ public class DeveloperServiceImpl implements DeveloperService{
 	public Optional<Developer> findByName(String name)
 	{
 		Optional<Developer> d = developerDao.findByName(name);
-		if(d.isPresent())
-			gs.updateBacklogDetails(d.get().getGames());
 		return d;
 	}
 
@@ -57,11 +49,5 @@ public class DeveloperServiceImpl implements DeveloperService{
 	public List<Developer> getAllDevelopers()
 	{
 		return developerDao.getAllDevelopers();
-	}
-	
-	@Override
-	public List<Developer> getAllDevelopersWithGames()
-	{
-		return developerDao.getAllDevelopersWithGames();
 	}
 }

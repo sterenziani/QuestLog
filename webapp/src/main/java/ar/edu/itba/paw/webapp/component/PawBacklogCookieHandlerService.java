@@ -14,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +77,38 @@ public class PawBacklogCookieHandlerService implements BacklogCookieHandlerServi
             }
         }
         return list;
+    }
+    
+    public List<Game> getGamesInBacklog(String backlog, int page, int pageSize)
+    {
+        List<Game> list = new ArrayList<Game>();
+        String copy = backlog.replace("--", "-");
+        String[] ids = copy.split("-");
+        int base = 1 + pageSize*(page-1);
+        if(base > ids.length-1)
+        	return Collections.emptyList();
+        int limit = pageSize*page;
+        if(limit >= ids.length)
+        	limit = ids.length-1;
+        for(int i=base; i <= limit; i++)
+        {
+            Optional<Game> g = gs.findById(Long.parseLong(ids[i]));
+            if(g.isPresent())
+            {
+                list.add(g.get());
+                g.get().setInBacklog(true);
+            }
+        }
+        return list;
+    }
+    
+    public int countGamesInBacklog(String backlog)
+    {
+    	if(backlog.isEmpty())
+    		return 0;
+        String copy = backlog.replace("--", "-");
+        String[] ids = copy.split("-");
+        return ids.length - 1;
     }
 
     public String addToBacklog(long gameId, String backlog)
