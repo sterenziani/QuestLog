@@ -76,7 +76,7 @@ public class AdminGameController
 		if(errors.hasErrors())
 			return newGame(gameForm);
 		System.out.println("wii");
-		Game g = gs.register(gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), new HashMap<>());
+		Game g = gs.register(gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 		try
 		{
 			LOGGER.debug("Registering game {} to the database. Using file {} as cover.", gameForm.getTitle(), gameForm.getCover().getOriginalFilename());

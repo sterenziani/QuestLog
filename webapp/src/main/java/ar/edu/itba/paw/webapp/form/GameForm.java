@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Map;
 
 public class GameForm {
 
@@ -31,7 +33,8 @@ public class GameForm {
     @NotNull
     private long[]              genres;
 
-    private LocalDate[]         releaseDates;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Map<Long, LocalDate> releaseDates;
 
     public String getTitle() {
         return title;
@@ -61,7 +64,7 @@ public class GameForm {
         return genres;
     }
 
-    public LocalDate[] getReleaseDates() {
+    public Map<Long, LocalDate> getReleaseDates() {
         return releaseDates;
     }
 
@@ -93,7 +96,7 @@ public class GameForm {
         this.genres = genres;
     }
 
-    public void setReleaseDates(LocalDate[] releaseDates) {
+    public void setReleaseDates(Map<Long, LocalDate> releaseDates) {
         this.releaseDates = releaseDates;
     }
 }

@@ -80,6 +80,24 @@
                         <%@include file="../../common/listOfCheckableOptions.jsp"%>
                     </div>
                 </div>
+                <div>
+                    <c:forEach var="region" items="${regions}">
+                        <label for="region-${region.shortName}">${region.name}</label>
+                        <div class="input-group date" id="datetimepicker-${region.shortName}" data-target-input="nearest">
+                            <input id="region-${region.shortName}" name="releaseDates['${region.id}']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-${region.shortName}"/>
+                            <div class="input-group-append" data-target="#datetimepicker-${region.shortName}" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker-${region.shortName}').datetimepicker({
+                                    format: 'YYYY-MM-DD'
+                                });
+                            });
+                        </script>
+                    </c:forEach>
+                </div>
                 <div class="form-element-row">
                     <input type="submit" class="button" value="Upload"/>
                 </div>
