@@ -44,7 +44,7 @@
 	</form:form>
 	</div>
     <div class="game-search-results">
-        <c:set var="listName"><spring:message code="search.results" arguments="${search}"/></c:set>
+        <c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
         <%@ include file="gameList.jsp"%>
     </div>
     <c:if test="${empty games}">
@@ -57,7 +57,7 @@
 	</c:if>
     <div>
 
-    <table>
+    <table class="table-pagination">
         <tr>
             <c:if test="${current != 1}">
             <form:form name="searchPrev" method="GET" action="${path}" >
@@ -73,13 +73,13 @@
 			<input type="hidden" value="${scoreRight}" name="scoreRight"/>
 			<input type="hidden" value="${currentPlats}" name="platforms"/>
 			<input type="hidden" value="${currentGens}" name="genres"/>
-        	<td><input type="submit" value="<spring:message code="search.prev"/>"/></td>
+        	<td><input class="pagination" type="submit" value="<spring:message code="search.prev"/>"/></td>
 			</form:form>
    			 </c:if>
             <c:forEach begin="1" end="${pages}" var="num">
                 <c:choose>
                     <c:when test="${current == num}">
-                        <td>${num}</td>
+                        <td class="current-pagination">${num}</td>
                     </c:when>
                     <c:otherwise>
             		<form:form name="searchNext" method="GET" action="${path}" >
@@ -95,7 +95,7 @@
 					<input type="hidden" value="${scoreRight}" name="scoreRight"/>
 					<input type="hidden" value="${currentPlats}" name="platforms"/>
 					<input type="hidden" value="${currentGens}" name="genres"/>
-        			<td><input type="submit" value="${num}"/>"/></td>
+        			<td><input class="pagination" type="submit" value="${num}"/></td>
 					</form:form>                   
 					</c:otherwise>
                 </c:choose>
@@ -114,7 +114,7 @@
 			<input type="hidden" value="${scoreRight}" name="scoreRight"/>
 			<input type="hidden" value="${currentPlats}" name="platforms"/>
 			<input type="hidden" value="${currentGens}" name="genres"/>
-        	<td><input type="submit" value="<spring:message code="search.next"/>"/></td>
+        	<td><input class="pagination" type="submit" value="<spring:message code="search.next"/>"/></td>
 			</form:form>
     		</c:if>
         </tr>

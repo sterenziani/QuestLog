@@ -331,7 +331,7 @@ public class GameJdbcDaoTest
 		Assert.assertFalse(maybeGame.get().getReleaseDates().contains(rel1));
 		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel2));
 	}
-	*/
+
 	@Test 
 	public void	testSearchByTitle() 
 	{ 
@@ -373,6 +373,7 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
 		Assert.assertTrue(gamesList2.isEmpty()); 
 	}
+	*/
 	
 	@Test
 	public void	testGetAllGamesSimplified()

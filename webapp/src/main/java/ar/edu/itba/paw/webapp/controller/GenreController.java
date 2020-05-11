@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,15 +39,23 @@ public class GenreController {
         return mav;
     }
 
-    @RequestMapping("/{genreId}")
-    public ModelAndView genreProfile(@PathVariable("genreId") long genreId, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
+    @RequestMapping("/genre={genreId}&page={page}")
+    public ModelAndView genreProfile(@PathVariable("genreId") long genreId, @PathVariable("page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    {	
+    	int pageSize = 15;
         final ModelAndView mav = new ModelAndView("genre");
         User u = us.getLoggedUser();
         Genre g = gens.findById(genreId).orElseThrow(GenreNotFoundException::new);
+        int countResults = gens.countGames(g);
+		int totalPages = (countResults + pageSize - 1)/pageSize; 
+        List<Game> games = gens.getAllGamesPaged(g, page, pageSize);
+       
         if(u == null)
-            backlogCookieHandlerService.updateWithBacklogDetails(g.getGames(), backlog);
+            backlogCookieHandlerService.updateWithBacklogDetails(games, backlog);
         mav.addObject("genre", g);
+        mav.addObject("games",games);
+        mav.addObject("pages", totalPages);
+        mav.addObject("current", page);
         return mav;
     }
 

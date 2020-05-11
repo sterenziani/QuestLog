@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -151,17 +153,24 @@ public class GameController {
 		mav.addObject("searchTerm", search);		
 		if(u == null)
 		{	
+            if(countResults == 0) {
+                mav.addObject("popularGames", getPopularGames(backlog));
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
 			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
-            if(countResults == 0)
-                mav.addObject("popularGames", getPopularGames(backlog));
 			mav.addObject("games", filteredResults);
 
 		}
 		else
-		{	List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
-	        if(countResults == 0)
-	            mav.addObject("popularGames", gs.getPopularGames());
+		{	
+            if(countResults == 0) {
+                mav.addObject("popularGames", gs.getPopularGames());
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 			mav.addObject("games", filteredResults);
 		}
         LOGGER.debug("Search results for {} with advanced filters successfully extracted.", search);
@@ -202,21 +211,28 @@ public class GameController {
 		mav.addObject("currentPlats", String.join(", ", platforms));
 		mav.addObject("currentGens", String.join(", ", genres));
 		mav.addObject("searchTerm", search);
-
-		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 		
 		if(u == null)
 		{	
-            backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
-			mav.addObject("games", filteredResults);
-            if(countResults == 0)
+            if(countResults == 0) {
                 mav.addObject("popularGames", getPopularGames(backlog));
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+    		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
+			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
+			mav.addObject("games", filteredResults);
+            
 		}
 		else
 		{
-			mav.addObject("games", filteredResults);
-            if(countResults == 0)
+            if(countResults == 0) {
                 mav.addObject("popularGames", gs.getPopularGames());
+                mav.addObject("games", new ArrayList<Game>());
+                return mav;
+            }
+    		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
+			mav.addObject("games", filteredResults);
 		}
 		return mav;
 	}
