@@ -40,6 +40,9 @@ public class AdminGameController
 	@Autowired
 	private GenreService 		gens;
 
+	@Autowired
+	private RegionService 		rs;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminGameController.class);
 	
 	@RequestMapping("/admin")
@@ -56,10 +59,12 @@ public class AdminGameController
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();
 		List<Genre> 	genres 		= gens.getAllGenres();
+		List<Region>	regions		= rs.getAllRegions();
 		mav.addObject("platforms", platforms);
 		mav.addObject("developers", developers);
 		mav.addObject("publishers", publishers);
 		mav.addObject("genres", genres);
+		mav.addObject("regions", regions);
 		return mav;
 	}
 
