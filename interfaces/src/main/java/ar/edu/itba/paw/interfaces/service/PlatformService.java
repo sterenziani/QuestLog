@@ -57,10 +57,4 @@ public interface PlatformService
 	 * @return The list of all platforms.
 	 */
 	List<Platform> getAllPlatforms();
-	
-	/**
-	 * Get a list of all available platforms with their games filled in.
-	 * @return The list of all platforms.
-	 */
-	List<Platform> getAllPlatformsWithGames();
 }

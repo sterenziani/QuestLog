@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
-import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Platform;
 
 @Repository
@@ -40,12 +39,6 @@ public class PlatformJdbcDao implements PlatformDao
 	public Optional<Platform> findById(long id)
 	{
 		Optional<Platform> p = jdbcTemplate.query("SELECT * FROM platforms WHERE platform = ?", PLATFORM_MAPPER, id).stream().findFirst();
-		if(p.isPresent())
-		{
-			List<Game> games = getAllGames(p.get());
-			for(Game g : games)
-				p.get().addGame(g);
-		}
 		return p;
 	}
 
@@ -53,12 +46,6 @@ public class PlatformJdbcDao implements PlatformDao
 	public Optional<Platform> findByName(String name)
 	{
 		Optional<Platform> p = jdbcTemplate.query("SELECT * FROM platforms WHERE platform_name LIKE ?", PLATFORM_MAPPER, name).stream().findFirst();
-		if(p.isPresent())
-		{
-			List<Game> games = getAllGames(p.get());
-			for(Game g : games)
-				p.get().addGame(g);
-		}
 		return p;
 	}
 
@@ -98,32 +85,5 @@ public class PlatformJdbcDao implements PlatformDao
 	public List<Platform> getAllPlatforms()
 	{
 		return jdbcTemplate.query("SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC", PLATFORM_MAPPER);
-	}
-	
-	@Override
-	public List<Platform> getAllPlatformsWithGames()
-	{
-		List<Platform> platforms = getAllPlatforms();
-		for(Platform p : platforms)
-		{
-			List<Game> games = getAllGames(p);
-			for(Game g : games)
-				p.addGame(g);
-		}
-		return platforms;
-	}
-
-	private List<Game> getAllGames(Platform p)
-	{
-		List<Game> gameList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM platforms WHERE platform = ?) AS p NATURAL JOIN game_versions NATURAL JOIN games",
-				new RowMapper<Game>()
-				{
-					@Override
-					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
-					}
-				}, p.getId());
-		return gameList;
 	}
 }

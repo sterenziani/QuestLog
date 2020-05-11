@@ -47,10 +47,4 @@ public interface GenreService {
 		 * @return The list of all genres.
 		 */
 		List<Genre> getAllGenres();
-		
-		/**
-		 * Get a list of all available genres with their lists of games filled in.
-		 * @return The list of all genres.
-		 */
-		List<Genre> getAllGenresWithGames();
 }

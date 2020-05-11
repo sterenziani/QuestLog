@@ -59,10 +59,4 @@ public class PublisherServiceImpl implements PublisherService
 	{
 		return publisherDao.getAllPublishers();
 	}
-	
-	@Override
-	public List<Publisher> getAllPublishersWithGames()
-	{
-		return publisherDao.getAllPublishersWithGames();
-	}
 }
