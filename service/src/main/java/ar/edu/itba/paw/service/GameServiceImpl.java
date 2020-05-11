@@ -319,4 +319,18 @@ public class GameServiceImpl implements GameService
 	{
 		return gameDao.countGamesForPlatform(p);
 	}
+	
+	@Override
+	public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForDeveloper(d, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForDeveloper(Developer d)
+	{
+		return gameDao.countGamesForDeveloper(d);
+	}
 }

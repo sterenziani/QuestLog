@@ -565,5 +565,17 @@ public class GameJdbcDao implements GameDao
 	public int countGamesForPlatform(Platform p)
 	{
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN game_versions WHERE platform = ?", Integer.class, p.getId());
+	}
+
+	@Override
+	public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN development WHERE developer = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, d.getId(), pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countGamesForDeveloper(Developer d)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN development WHERE developer = ?", Integer.class, d.getId());
 	}	
 }

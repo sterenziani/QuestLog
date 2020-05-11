@@ -43,7 +43,7 @@ public class GenreController {
         User u = us.getLoggedUser();
         Genre g = gens.findById(genreId).orElseThrow(GenreNotFoundException::new);
         if(u == null)
-            backlogCookieHandlerService.updateWithBacklogDetails(g.getGames(), backlog);
+            //backlogCookieHandlerService.updateWithBacklogDetails(g.getGames(), backlog);
         mav.addObject("genre", g);
         return mav;
     }

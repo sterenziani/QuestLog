@@ -258,4 +258,7 @@ public interface GameDao
 	List<Game> getGamesForPlatform(Platform p, int page, int pageSize);
 	int countGamesForPlatform(Platform p);
 
+	List<Game> getGamesForDeveloper(Developer d, int page, int pageSize);
+	int countGamesForDeveloper(Developer d);
+
 }

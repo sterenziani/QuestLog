@@ -46,7 +46,7 @@ public class PublisherController {
         User u = us.getLoggedUser();
         Publisher p = pubs.findById(pubId).orElseThrow(PublisherNotFoundException::new);
         if(u == null)
-            backlogCookieHandlerService.updateWithBacklogDetails(p.getGames(), backlog);
+           // backlogCookieHandlerService.updateWithBacklogDetails(p.getGames(), backlog);
         mav.addObject("publisher", p);
         return mav;
     }

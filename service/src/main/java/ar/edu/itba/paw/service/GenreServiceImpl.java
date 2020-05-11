@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.dao.GenreDao;
 import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.model.Genre;
@@ -14,15 +13,10 @@ public class GenreServiceImpl implements GenreService {
 	@Autowired
 	private GenreDao genreDao;
 	
-	@Autowired
-	private GameService gs;
-	
 	@Override
 	public Optional<Genre> findById(long id)
 	{
 		Optional<Genre> genre = genreDao.findById(id);
-		if(genre.isPresent())
-			gs.updateBacklogDetails(genre.get().getGames());
 		return genre;
 	}
 
@@ -30,8 +24,6 @@ public class GenreServiceImpl implements GenreService {
 	public Optional<Genre> findByName(String name)
 	{
 		Optional<Genre> genre = genreDao.findByName(name);
-		if(genre.isPresent())
-			gs.updateBacklogDetails(genre.get().getGames());
 		return genre;
 	}
 
