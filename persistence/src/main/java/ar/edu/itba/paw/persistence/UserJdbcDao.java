@@ -182,4 +182,15 @@ public class UserJdbcDao implements UserDao
 	{
 		jdbcTemplate.update("UPDATE users SET locale = ? WHERE user_id = ?", locale.toLanguageTag(), user.getId());
 	}
+	
+	@Override
+	public int countUserSearchResults(String searchTerm)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%'))", Integer.class, searchTerm);
+	}
+
+	@Override
+	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize) {
+		return jdbcTemplate.query("SELECT * FROM users WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%')) LIMIT ? OFFSET ?", USER_MAPPER, searchTerm, pageSize, (page-1)*pageSize);
+	}
 }

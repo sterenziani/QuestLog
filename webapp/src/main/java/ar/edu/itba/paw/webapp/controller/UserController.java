@@ -51,6 +51,8 @@ public class UserController
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private static final int PAGE_SIZE = 5;
+	private static final int USER_PAGE_SIZE = 20;
+
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
@@ -82,6 +84,22 @@ public class UserController
 		ModelAndView mav = new ModelAndView("login");
 		mav.addObject("error", true);
 		return mav;
+	}
+	
+	@RequestMapping(value = "/userSearch", method = RequestMethod.GET)
+	public ModelAndView userSearch(@RequestParam String search, @RequestParam int page) {
+		final ModelAndView mav = new ModelAndView("userList");
+		List<User> userList = us.searchByUsernamePaged(search, page, USER_PAGE_SIZE);
+		int countResults = us.countUserSearchResults(search); 
+		int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
+
+		mav.addObject("current",page);
+		mav.addObject("users", userList);
+		mav.addObject("searchTerm",search);
+		mav.addObject("pages", totalPages);
+	
+		return mav;
+
 	}
 	
 	@RequestMapping("/users/{id}")

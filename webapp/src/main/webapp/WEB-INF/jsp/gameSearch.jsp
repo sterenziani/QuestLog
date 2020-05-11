@@ -23,7 +23,7 @@
 		<strong><spring:message code="game.genres"/></strong>
 			<select name="genres" id="genres" multiple>
 			<c:forEach var="genre" items="${genres}">
-				<option value="${genre.id}">${genre.name}</option>
+				<option value="${genre.id}"><spring:message code="genres.${genre.name}"/></option>
 			</c:forEach>
 			</select>
 		<div>

@@ -39,4 +39,22 @@ public interface UserService
 	Optional<User> getUserByPasswordResetToken(String token);
 	void changeUserPassword(User user, String password);
 	void updateLocale(User user, Locale locale);	
+	
+	/**
+	 * Count elements in user search
+	 * @param searchTerm	String that is part of their username
+	 * @return	elements in user search
+	 */
+	
+	int countUserSearchResults(String searchTerm);
+	
+	/**
+	 * Search for users by their username
+	 * @param searchTerm	String that is part of their username
+	 * @param page	Current page
+	 * @param pageSize	Maximum amount of elements in list
+	 * @return	List of usernames that include searchTerm
+	 */
+	List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize);
+	
 }
