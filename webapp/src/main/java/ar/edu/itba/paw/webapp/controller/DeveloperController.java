@@ -23,10 +23,10 @@ import java.util.List;
 public class DeveloperController {
 
     @Autowired
-    private DeveloperService            ds;
+    private DeveloperService ds;
 
     @Autowired
-    private UserService                 us;
+    private UserService us;
 
     @Autowired
     private GameService gs;
