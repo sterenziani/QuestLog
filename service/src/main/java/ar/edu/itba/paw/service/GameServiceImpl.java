@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.service;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
@@ -83,7 +81,7 @@ public class GameServiceImpl implements GameService
 	@Override
 	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates)
 	{
-		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, releaseDates);
+		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, new HashMap<>());
 	}
 
 	@Override 
