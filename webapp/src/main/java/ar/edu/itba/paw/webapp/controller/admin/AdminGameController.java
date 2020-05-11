@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -40,6 +41,9 @@ public class AdminGameController
 	@Autowired
 	private GenreService 		gens;
 
+	@Autowired
+	private RegionService 		rs;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminGameController.class);
 	
 	@RequestMapping("/admin")
@@ -56,30 +60,33 @@ public class AdminGameController
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();
 		List<Genre> 	genres 		= gens.getAllGenres();
+		List<Region>	regions		= rs.getAllRegions();
 		mav.addObject("platforms", platforms);
 		mav.addObject("developers", developers);
 		mav.addObject("publishers", publishers);
 		mav.addObject("genres", genres);
+		mav.addObject("regions", regions);
 		return mav;
 	}
 
 	@RequestMapping(value = "/admin/game/new", method = RequestMethod.POST)
 	public ModelAndView createGame(@Valid @ModelAttribute("gameForm") final GameForm gameForm, final BindingResult errors, HttpServletRequest request, HttpServletResponse response)
 	{
+		System.out.println(gameForm.getReleaseDates());
 		if(errors.hasErrors())
 			return newGame(gameForm);
-		final Image image;
+		System.out.println("wii");
+		Game g = gs.register(gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 		try
 		{
 			LOGGER.debug("Registering game {} to the database. Using file {} as cover.", gameForm.getTitle(), gameForm.getCover().getOriginalFilename());
-			image = is.uploadImage(gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes());
+			final Image image = is.uploadImage(gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes());
 		}
 		catch (IOException e)
 		{
 			LOGGER.error("IOException thrown when attempting to upload image {} to the database while creating game {}.", gameForm.getCover().getOriginalFilename(), gameForm.getTitle(), e);
 			throw new BadImageException();
 		}
-		Game g = gs.register(gameForm.getTitle(), image.getImageName(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), new LocalDate[0]);
 		return new ModelAndView("redirect:/games/" + g.getId());
 	}
 

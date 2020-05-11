@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
@@ -78,7 +79,7 @@ public interface GameService
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates);
+	Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates);
 	
 	/**
 	 * Get a list of all available games.

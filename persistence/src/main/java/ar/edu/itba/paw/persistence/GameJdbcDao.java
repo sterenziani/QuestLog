@@ -31,6 +31,7 @@ public class GameJdbcDao implements GameDao
 	private final SimpleJdbcInsert developmentJdbcInsert;
 	private final SimpleJdbcInsert publishingJdbcInsert;
 	private final SimpleJdbcInsert classificationJdbcInsert;
+	private final SimpleJdbcInsert releasesJdbcInsert;
 	private JdbcTemplate 		   jdbcTemplate;
 	private static final int MIN_AMOUNT_FOR_OVERLAP = 3;
 	private static final int MIN_AMOUNT_FOR_POPULAR = 3;
@@ -52,6 +53,7 @@ public class GameJdbcDao implements GameDao
 	    developmentJdbcInsert	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("development");
 	    publishingJdbcInsert	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("publishing");
 	    classificationJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("classifications");
+	    releasesJdbcInsert		 = new SimpleJdbcInsert(jdbcTemplate).withTableName("releases");
 	}
 
 	@Override
@@ -148,7 +150,7 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates)
+	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("title", title); 
@@ -162,6 +164,7 @@ public class GameJdbcDao implements GameDao
 		addDevelopers(gameIdLong, developers);
 		addPublishers(gameIdLong, publishers);
 		addGenres(gameIdLong, genres);
+		addReleaseDates(gameIdLong, releaseDates);
 		return new Game(gameId.longValue(), title, cover, description);
 	}
 
@@ -353,6 +356,16 @@ public class GameJdbcDao implements GameDao
 	{
 		jdbcTemplate.update("INSERT INTO releases(game, region, release_date) VALUES(?, ?, ?)", game.getId(), r.getRegion().getId(), r.getDate());
 		return findById(game.getId());
+	}
+
+	private void addReleaseDates(long g, Map<Long, LocalDate> releaseDates)
+	{
+		MapSqlParameterSource[] releasesRows = new MapSqlParameterSource[releaseDates.size()];
+		int i = 0;
+		for(Map.Entry<Long, LocalDate> releaseDate : releaseDates.entrySet()){
+			releasesRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("region", releaseDate.getKey()).addValue("release_date", releaseDate.getValue());
+		}
+		releasesJdbcInsert.executeBatch(releasesRows);
 	}
 
 	@Override

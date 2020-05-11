@@ -24,6 +24,13 @@
                     <a class="btn btn-dark w-100" role="button" href="<c:url value="/explore"/>"><spring:message code="navigation.explore"/></a>
                 </div>
             </li>
+            <c:if test="${!empty loggedUser && loggedUser.adminStatus == true}">
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <a class="btn btn-success w-100" role="button" href="<c:url value="/explore"/>"><span class="mr-2">+</span><spring:message code="navigation.addGame"/></a>
+                    </div>
+                </li>
+            </c:if>
             <c:choose>
                 <c:when test="${loggedUser == null}">
                     <li class="nav-item mt-3 mt-lg-0 ml-lg-3">

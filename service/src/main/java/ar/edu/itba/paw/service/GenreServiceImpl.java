@@ -6,13 +6,15 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.GenreDao;
 import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.model.Genre;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GenreServiceImpl implements GenreService {
 	
 	@Autowired
 	private GenreDao genreDao;
-	
+
+	@Transactional
 	@Override
 	public Optional<Genre> findById(long id)
 	{
@@ -20,6 +22,7 @@ public class GenreServiceImpl implements GenreService {
 		return genre;
 	}
 
+	@Transactional
 	@Override
 	public Optional<Genre> findByName(String name)
 	{
@@ -27,23 +30,27 @@ public class GenreServiceImpl implements GenreService {
 		return genre;
 	}
 
+	@Transactional
 	@Override
 	public Optional<Genre> changeName(long id, String new_name)
 	{
 		return genreDao.changeName(id, new_name);
 	}
-	
+
+	@Transactional
 	@Override
 	public Optional<Genre> changeLogo(long id, String new_logo) {
 		return genreDao.changeLogo(id, new_logo);
 	}
 
+	@Transactional
 	@Override
 	public Genre register(String title, String logo)
 	{
 		return genreDao.register(title, logo);
 	}
 
+	@Transactional
 	@Override
 	public List<Genre> getAllGenres()
 	{
