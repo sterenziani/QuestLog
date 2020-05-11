@@ -32,29 +32,9 @@
 				</div>
 			</c:forEach>
 		</div>
-	
-		<div class="game-table-run">
-			<h2><spring:message code="user.runs" arguments="${user.username}"/></h2>
-			<c:if test="${empty user.runs}">
-            	<p><spring:message code="user.noRuns"/></p>
-        	</c:if>
-			<table class="runs-table">
-				<tr>
-				<th><spring:message code="game.game"/></th>
-				<th><spring:message code="game.platform"/></th>
-				<th><spring:message code="game.playstyle"/></th>
-				<th width="130px"><spring:message code="game.time"/></th>
-				</tr>
-				<c:forEach var="element" items="${user.runs}">
-					<tr>
-						<td><c:out value="${element.game.title}"/></td>
-						<td><c:out value="${element.platform.shortName}"/></td>
-						<td><spring:message code="playstyle.${element.playstyle.name}"/></td>
-						<td width="130px"><c:out value="${element}"/></td>
-					</tr>
-				</c:forEach>
-			</table>
-		</div>
+		<c:set var="runsInPage" value="${runsInPage}"/>
+		<c:set var="seeAllRunsUrl" value="/users/${user.id}/runs"/>
+		<%@ include file="runsList.jsp"%>
 	</div>
 </body>
 </html>

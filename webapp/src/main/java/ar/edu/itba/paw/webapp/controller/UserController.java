@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.User;
@@ -42,6 +43,9 @@ public class UserController
 	
 	@Autowired
 	private GameService gs;
+	
+	@Autowired
+	private RunService rs;
 	
 	@Autowired
 	private BacklogCookieHandlerService backlogCookieHandlerService;
@@ -97,6 +101,7 @@ public class UserController
 		}
 		mav.addObject("backlog", gamesInPage);
 		mav.addObject("user", visitedUser);
+		mav.addObject("runsInPage", rs.findRunsByUser(visitedUser, 1, 10));
 		return mav;
 	}
 	
@@ -115,6 +120,7 @@ public class UserController
 		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, PAGE_SIZE);
 		mav.addObject("backlog", gamesInPage);
 		mav.addObject("user", us.findByIdWithDetails(u.getId()).orElseThrow(UserNotFoundException::new));
+		mav.addObject("runsInPage", rs.findRunsByUser(u, 1, 10));
 		return mav;
 	}
 	

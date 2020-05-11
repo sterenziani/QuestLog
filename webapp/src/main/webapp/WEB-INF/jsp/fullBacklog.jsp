@@ -20,7 +20,6 @@
 					<c:url value="/backlog/${visitedUser.id}" var="listPath"/>
 				</c:otherwise>
 			</c:choose>
-	        <c:set var="path" value="${gamesInPage}"/>
 	        <%@ include file="pageNumbers.jsp"%>
 	    </div>
 	</div>
