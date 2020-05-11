@@ -79,9 +79,9 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates)
+	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
 	{
-		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, new HashMap<>());
+		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, releaseDates);
 	}
 
 	@Override 
