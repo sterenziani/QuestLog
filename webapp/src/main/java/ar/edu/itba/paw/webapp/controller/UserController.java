@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
+import java.util.List;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
+import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
@@ -38,12 +41,16 @@ public class UserController
 	private UserService us;
 	
 	@Autowired
+	private GameService gs;
+	
+	@Autowired
 	private BacklogCookieHandlerService backlogCookieHandlerService;
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	private static final int PAGE_SIZE = 5;
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
@@ -83,10 +90,12 @@ public class UserController
 		final ModelAndView mav = new ModelAndView("userProfile");
 		User visitedUser = us.findByIdWithDetails(id).orElseThrow(UserNotFoundException::new);
 		User loggedUser = us.getLoggedUser();
+		List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, 1, PAGE_SIZE);
 		if(loggedUser == null)
 		{
-			backlogCookieHandlerService.updateWithBacklogDetails(visitedUser.getBacklog(), backlog);
+			backlogCookieHandlerService.updateWithBacklogDetails(gamesInPage, backlog);
 		}
+		mav.addObject("backlog", gamesInPage);
 		mav.addObject("user", visitedUser);
 		return mav;
 	}
@@ -103,7 +112,9 @@ public class UserController
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
 		User u = us.getLoggedUser();
-		mav.addObject("user", us.findByIdWithDetails(u.getId()).get());
+		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, PAGE_SIZE);
+		mav.addObject("backlog", gamesInPage);
+		mav.addObject("user", us.findByIdWithDetails(u.getId()).orElseThrow(UserNotFoundException::new));
 		return mav;
 	}
 	

@@ -10,8 +10,18 @@
 	    <div class="main-game-lists-backlog">
 	    	<spring:message code="index.myBacklog" var="myBacklog"/>
 	        <c:set var="listName" value="${myBacklog}"/>
-	        <c:set var="games" value="${backlogGames}"/>
+	        <c:set var="games" value="${gamesInPage}"/>
 	        <%@ include file="gameList.jsp"%>
+			<c:choose>
+				<c:when test="${visitedUser == null}}">
+					<c:url value="/backlog" var="listPath"/>
+				</c:when>
+				<c:otherwise>
+					<c:url value="/backlog/${visitedUser.id}" var="listPath"/>
+				</c:otherwise>
+			</c:choose>
+	        <c:set var="path" value="${gamesInPage}"/>
+	        <%@ include file="pageNumbers.jsp"%>
 	    </div>
 	</div>
 </body>

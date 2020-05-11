@@ -172,14 +172,6 @@ public class GameServiceImpl implements GameService
 	}
 	
 	@Override
-	public List<Game> searchByTitleWithDetails(String search)
-	{
-		List<Game> list = gameDao.searchByTitleWithDetails(search);
-		updateBacklogDetails(list);
-		return list;
-	}
-	
-	@Override
 	public List<Game> getUpcomingGames()
 	{
 		List<Game> list = gameDao.getUpcomingGames();
@@ -336,7 +328,8 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public int countGamesForGenre(Genre g) {
+	public int countGamesForGenre(Genre g)
+	{
 		return gameDao.countGamesForGenre(g);
 	}
 
@@ -358,5 +351,41 @@ public class GameServiceImpl implements GameService
 	public int countGamesForPublisher(Publisher p)
 	{
 		return gameDao.countGamesForPublisher(p);
+	}
+
+	@Override
+	public List<Game> getGamesInBacklog(int page, int pageSize)
+	{
+		User u = us.getLoggedUser();
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getGamesInBacklog(u, page, pageSize);
+		updateBacklogDetails(games);
+		return games;
+	}
+
+	@Override
+	public List<Game> getGamesInBacklog(User u, int page, int pageSize)
+	{
+		if(u == null)
+			return Collections.emptyList();
+		List<Game> games = gameDao.getGamesInBacklog(u, page, pageSize);
+		updateBacklogDetails(games);
+		return games;
+	}
+
+	@Override
+	public int countGamesInBacklog()
+	{
+		User u = us.getLoggedUser();
+		if(u == null)
+			return 0;
+		return gameDao.countGamesInBacklog(u);
+	}
+
+	@Override
+	public int countGamesInBacklog(User u)
+	{
+		return gameDao.countGamesInBacklog(u);
 	}
 }

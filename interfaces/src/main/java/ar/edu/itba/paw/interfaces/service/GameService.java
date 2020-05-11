@@ -175,7 +175,6 @@ public interface GameService
 	 * @return 	The list of matching games.
 	 */
 	List<Game> searchByTitle(String search, int page, int pageSize);
-	List<Game> searchByTitleWithDetails(String search);
 
 	/**
 	 * Get a list of upcoming games.
@@ -186,7 +185,11 @@ public interface GameService
 	boolean gameInBacklog(long gameId);
 
 	List<Game> getGamesInBacklog();
+	List<Game> getGamesInBacklog(int page, int pageSize);
 	List<Game> getGamesInBacklog(User u);
+	List<Game> getGamesInBacklog(User u, int page, int pageSize);
+	int countGamesInBacklog();
+	int countGamesInBacklog(User u);
 
 	void addToBacklog(long gameId);
 
