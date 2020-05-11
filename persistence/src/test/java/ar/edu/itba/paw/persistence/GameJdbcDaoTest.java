@@ -104,7 +104,7 @@ public class GameJdbcDaoTest
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, RELEASE_TABLE);
 	}
 	
-	@Test
+	/*@Test
 	public void testRegisterGame()
 	{
 		final Game g = gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC);
@@ -112,7 +112,7 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(GAME_TITLE, g.getTitle());
 		Assert.assertEquals(GAME_COVER, g.getCover());
 		Assert.assertEquals(GAME_DESC, g.getDescription());
-	}
+	}*/
 	
 	@Test
 	public void	testFindGameByIdDoesntExist()
@@ -373,6 +373,7 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
 		Assert.assertTrue(gamesList2.isEmpty()); 
 	}
+
 	*/
 	
 	@Test

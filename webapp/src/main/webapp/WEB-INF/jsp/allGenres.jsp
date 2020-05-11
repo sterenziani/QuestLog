@@ -5,6 +5,8 @@
 </head>
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
+    <c:set var="genreEndIndex" value="${listSize}"/>
+    
     <div>
 		<%@ include file="genresList.jsp"%>
     </div>

@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -80,9 +81,9 @@ public class GameServiceImpl implements GameService
 	}
 
 	@Override
-	public Game register(String title, String cover, String description)
+	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates)
 	{
-		return gameDao.register(title, cover, description);
+		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, releaseDates);
 	}
 
 	@Override 
@@ -303,5 +304,31 @@ public class GameServiceImpl implements GameService
 	@Override
 	public 	int countSearchResultsFiltered(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight) {
 		return gameDao.countSearchResultsFiltered(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
+	}
+	
+	@Override
+	public List<Game> getGamesForPlatform(Platform p, int page, int pageSize)
+	{
+		List<Game> results = gameDao.getGamesForPlatform(p, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForPlatform(Platform p)
+	{
+		return gameDao.countGamesForPlatform(p);
+	}
+
+	@Override
+	public List<Game> getGamesForGenre(Genre g, int page, int pageSize) {
+		List<Game> results = gameDao.getGamesForGenre(g, page, pageSize);
+		updateBacklogDetails(results);
+		return results;
+	}
+
+	@Override
+	public int countGamesForGenre(Genre g) {
+		return gameDao.countGamesForGenre(g);
 	}
 }

@@ -1,13 +1,16 @@
 package ar.edu.itba.paw.persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.management.Query;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
@@ -20,15 +23,15 @@ import ar.edu.itba.paw.model.Region;
 import ar.edu.itba.paw.model.Release;
 import ar.edu.itba.paw.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Repository
 public class GameJdbcDao implements GameDao
 {
 	private	final SimpleJdbcInsert jdbcInsert;
-	private JdbcTemplate jdbcTemplate;
+	private final SimpleJdbcInsert gameVersionsJdbcInsert;
+	private final SimpleJdbcInsert developmentJdbcInsert;
+	private final SimpleJdbcInsert publishingJdbcInsert;
+	private final SimpleJdbcInsert classificationJdbcInsert;
+	private JdbcTemplate 		   jdbcTemplate;
 	private static final int MIN_AMOUNT_FOR_OVERLAP = 3;
 	private static final int MIN_AMOUNT_FOR_POPULAR = 3;
 	protected static final RowMapper<Game> GAME_MAPPER = new RowMapper<Game>()
@@ -43,8 +46,12 @@ public class GameJdbcDao implements GameDao
 	@Autowired
 	public GameJdbcDao(final DataSource ds)
 	{
-	    jdbcTemplate = new JdbcTemplate(ds);
-	    jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("games").usingGeneratedKeyColumns("game");
+	    jdbcTemplate 			 = new JdbcTemplate(ds);
+	    jdbcInsert 				 = new SimpleJdbcInsert(jdbcTemplate).withTableName("games").usingGeneratedKeyColumns("game");
+	    gameVersionsJdbcInsert 	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("game_versions");
+	    developmentJdbcInsert	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("development");
+	    publishingJdbcInsert	 = new SimpleJdbcInsert(jdbcTemplate).withTableName("publishing");
+	    classificationJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("classifications");
 	}
 
 	@Override
@@ -141,13 +148,20 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public Game register(String title, String cover, String description)
+	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("title", title); 
 		args.put("cover", cover); 
 		args.put("description", description);
 		final Number gameId = jdbcInsert.executeAndReturnKey(args);
+		if(gameId == null)
+			return null;
+		final long gameIdLong = gameId.longValue();
+		addPlatforms(gameIdLong, platforms);
+		addDevelopers(gameIdLong, developers);
+		addPublishers(gameIdLong, publishers);
+		addGenres(gameIdLong, genres);
 		return new Game(gameId.longValue(), title, cover, description);
 	}
 
@@ -192,6 +206,15 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
+	private void addPlatforms(long g, long[] platforms_ids)
+	{
+		MapSqlParameterSource[] gameVersionRows = new MapSqlParameterSource[platforms_ids.length];
+		for(int i = 0; i < platforms_ids.length; i++){
+			gameVersionRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("platform", platforms_ids[i]);
+		}
+		gameVersionsJdbcInsert.executeBatch(gameVersionRows);
+	}
+
 	@Override
 	public Optional<Game> removePlatform(Game g, Platform p)
 	{
@@ -218,6 +241,15 @@ public class GameJdbcDao implements GameDao
 	{
 		jdbcTemplate.update("INSERT INTO publishing(game, publisher) VALUES(?, ?)", g.getId(), p.getId());
 		return findById(g.getId());
+	}
+
+	private void addPublishers(long g, long[] publisher_ids)
+	{
+		MapSqlParameterSource[] publishingRows = new MapSqlParameterSource[publisher_ids.length];
+		for(int i = 0; i < publisher_ids.length; i++){
+			publishingRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("publisher", publisher_ids[i]);
+		}
+		publishingJdbcInsert.executeBatch(publishingRows);
 	}
 
 	@Override
@@ -248,6 +280,15 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
+	private void addDevelopers(long g, long[] devs_ids)
+	{
+		MapSqlParameterSource[] developmentRows = new MapSqlParameterSource[devs_ids.length];
+		for(int i = 0; i < devs_ids.length; i++){
+			developmentRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("developer", devs_ids[i]);
+		}
+		developmentJdbcInsert.executeBatch(developmentRows);
+	}
+
 	@Override
 	public Optional<Game> removeDeveloper(Game g, Developer d)
 	{
@@ -274,6 +315,15 @@ public class GameJdbcDao implements GameDao
 	{
 		jdbcTemplate.update("INSERT INTO classifications(game, genre) VALUES(?, ?)", game.getId(), genre.getId());
 		return findById(game.getId());
+	}
+
+	private void addGenres(long g, long[] genres_ids)
+	{
+		MapSqlParameterSource[] classificationRows = new MapSqlParameterSource[genres_ids.length];
+		for(int i = 0; i < genres_ids.length; i++){
+			classificationRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("genre", genres_ids[i]);
+		}
+		classificationJdbcInsert.executeBatch(classificationRows);
 	}
 
 	@Override
@@ -473,14 +523,14 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public int countSearchResults(String searchTerm) {
+	public int countSearchResults(String searchTerm)
+	{
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))", Integer.class, searchTerm);
-
 	}
 
 	@Override
-	public int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight) {
+	public int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight)
+	{
 		String genreFilter = "";
 		if(genres.size()>0) 
 			genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";		
@@ -504,6 +554,28 @@ public class GameJdbcDao implements GameDao
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM (SELECT * FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%'))) as z" + genreFilter + platformFilter
 				+ scoreFilter + timeFilter + ") AS x", Integer.class, searchTerm);
 	}
-	
-	
+
+	@Override
+	public List<Game> getGamesForPlatform(Platform p, int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN game_versions WHERE platform = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, p.getId(), pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countGamesForPlatform(Platform p)
+	{
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN game_versions WHERE platform = ?", Integer.class, p.getId());
+	}
+
+	@Override
+	public List<Game> getGamesForGenre(Genre g, int page, int pageSize) {
+		return jdbcTemplate.query("SELECT * FROM games NATURAL JOIN classifications WHERE genre = ? ORDER BY title LIMIT ? OFFSET ?", GAME_MAPPER, g.getId(), pageSize, (page-1)*pageSize);
+
+	}
+
+	@Override
+	public int countGamesForGenre(Genre g) {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM games NATURAL JOIN classifications WHERE genre = ?", Integer.class, g.getId());
+
+	}	
 }

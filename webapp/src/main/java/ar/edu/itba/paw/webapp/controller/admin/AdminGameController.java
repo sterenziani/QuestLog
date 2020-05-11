@@ -16,11 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
 public class AdminGameController
 {
+	@Autowired
+	private GameService			gs;
+
 	@Autowired
 	private ImageService 		is;
 
@@ -34,7 +38,7 @@ public class AdminGameController
 	private PublisherService 	pubs;
 
 	@Autowired
-	private GenreService 		gs;
+	private GenreService 		gens;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminGameController.class);
 	
@@ -51,7 +55,7 @@ public class AdminGameController
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();
-		List<Genre> 	genres 		= gs.getAllGenres();
+		List<Genre> 	genres 		= gens.getAllGenres();
 		mav.addObject("platforms", platforms);
 		mav.addObject("developers", developers);
 		mav.addObject("publishers", publishers);
@@ -64,19 +68,19 @@ public class AdminGameController
 	{
 		if(errors.hasErrors())
 			return newGame(gameForm);
+		final Image image;
 		try
 		{
 			LOGGER.debug("Registering game {} to the database. Using file {} as cover.", gameForm.getTitle(), gameForm.getCover().getOriginalFilename());
-			final Image image = is.uploadImage(gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes());
+			image = is.uploadImage(gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes());
 		}
 		catch (IOException e)
 		{
 			LOGGER.error("IOException thrown when attempting to upload image {} to the database while creating game {}.", gameForm.getCover().getOriginalFilename(), gameForm.getTitle(), e);
 			throw new BadImageException();
 		}
-		ModelAndView mav = new ModelAndView("admin/game/gameForm");
-		//mav.addObject("platforms", platforms);
-		return mav;
+		Game g = gs.register(gameForm.getTitle(), image.getImageName(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), new LocalDate[0]);
+		return new ModelAndView("redirect:/games/" + g.getId());
 	}
 
 	@RequestMapping(value = "/admin/game/{id}/edit", method = RequestMethod.GET)

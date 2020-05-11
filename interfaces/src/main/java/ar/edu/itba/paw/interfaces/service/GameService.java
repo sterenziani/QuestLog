@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -63,15 +64,21 @@ public interface GameService
 	 * @return The new, modified game, or null if the original game was not found.
 	 */
 	Optional<Game> changeDescription(long id, String new_desc);
-	
+
 	/**
 	 * Create a new game.
-	 * @param title The title of the game.
-	 * @param cover A link to the cover of the game
-	 * @param description A description of the game
-	 * @return The registered game.
+	 * @param title 		The title of the game.
+	 * @param cover			The cover of the game.
+	 * @param description	The description of the game
+	 * @param platforms		The platforms the game is on
+	 * @param developers	The developers of the game
+	 * @param publishers    The publishers of the game
+	 * @param genres		The genres the game belongs to
+	 * @param releaseDates  The dates when the game releases
+	 * @return 				The registered game.
 	 */
-	Game register(String title, String cover, String description);
+
+	Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, LocalDate[] releaseDates);
 	
 	/**
 	 * Get a list of all available games.
@@ -203,8 +210,7 @@ public interface GameService
 	 * @return	The games that pass said filters
 	 */
 	
-	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight, int page, int pageSize);
+	List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize);
 
 	List<Game> getPopularGames();
 
@@ -214,6 +220,13 @@ public interface GameService
 
 	int countSearchResults(String searchTerm);
 
-	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft,
-			int scoreRight, int timeLeft, int timeRight);	
+	int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight);
+
+	List<Game> getGamesForPlatform(Platform p, int page, int pageSize);
+	
+	int countGamesForPlatform(Platform p);
+	
+	List<Game> getGamesForGenre(Genre g, int page, int pageSize);
+	
+	int countGamesForGenre(Genre g);
 }
