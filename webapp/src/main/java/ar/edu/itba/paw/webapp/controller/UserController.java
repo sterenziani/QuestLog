@@ -102,7 +102,7 @@ public class UserController
 	public ModelAndView userProfile(@PathVariable("id") long id, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
-		User visitedUser = us.findByIdWithDetails(id).orElseThrow(UserNotFoundException::new);
+		User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
 		User loggedUser = us.getLoggedUser();
 		List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, 1, BACKLOG_TEASER_PAGE_SIZE);
 		if(loggedUser == null)
@@ -130,7 +130,7 @@ public class UserController
 		User u = us.getLoggedUser();
 		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("backlog", gamesInPage);
-		mav.addObject("user", us.findByIdWithDetails(u.getId()).orElseThrow(UserNotFoundException::new));
+		mav.addObject("user", us.findById(u.getId()).orElseThrow(UserNotFoundException::new));
 		mav.addObject("scoresInPage", scors.findAllUserScores(u, 1, SCORE_TEASER_PAGE_SIZE));
 		mav.addObject("runsInPage", rs.findRunsByUser(u, 1, RUNS_TEASER_PAGE_SIZE));
 		return mav;
