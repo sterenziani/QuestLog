@@ -164,6 +164,7 @@ public class GameJdbcDao implements GameDao
 		addDevelopers(gameIdLong, developers);
 		addPublishers(gameIdLong, publishers);
 		addGenres(gameIdLong, genres);
+		addReleaseDates(gameIdLong, releaseDates);
 		return new Game(gameId.longValue(), title, cover, description);
 	}
 
@@ -357,7 +358,7 @@ public class GameJdbcDao implements GameDao
 		return findById(game.getId());
 	}
 
-	private void addGenres(long g, Map<Long, LocalDate> releaseDates)
+	private void addReleaseDates(long g, Map<Long, LocalDate> releaseDates)
 	{
 		MapSqlParameterSource[] releasesRows = new MapSqlParameterSource[releaseDates.size()];
 		int i = 0;
