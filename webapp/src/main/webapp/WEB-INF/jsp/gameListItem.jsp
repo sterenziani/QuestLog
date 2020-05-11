@@ -23,7 +23,7 @@
         </c:choose>
     </form>
     <a class="d-flex flex-column flex-grow-1 text-white" href="<c:url value="/games/${game.id}"/>">
-        <img class="card-img-top cover" src="<c:url value="${game.cover}"/>" alt="<c:out value="${game.title}"/>"/>
+        <img class="card-img-top cover" src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>"/>
         <div class="card-body bg-primary flex-grow-1">
             <h5><c:out value="${game.title}"/></h5>
         </div>
