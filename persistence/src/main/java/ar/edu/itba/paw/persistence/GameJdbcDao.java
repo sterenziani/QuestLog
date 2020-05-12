@@ -152,13 +152,12 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
 	{
+		System.out.println(releaseDates);
 		final Map<String, Object> args = new HashMap<>();
 		args.put("title", title); 
 		args.put("cover", cover); 
 		args.put("description", description);
 		final Number gameId = jdbcInsert.executeAndReturnKey(args);
-		if(gameId == null)
-			return null;
 		final long gameIdLong = gameId.longValue();
 		addPlatforms(gameIdLong, platforms);
 		addDevelopers(gameIdLong, developers);
@@ -364,6 +363,7 @@ public class GameJdbcDao implements GameDao
 		int i = 0;
 		for(Map.Entry<Long, LocalDate> releaseDate : releaseDates.entrySet()){
 			releasesRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("region", releaseDate.getKey()).addValue("release_date", releaseDate.getValue());
+			i++;
 		}
 		releasesJdbcInsert.executeBatch(releasesRows);
 	}
