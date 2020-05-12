@@ -20,13 +20,11 @@ public class ImageUniqueValidator implements ConstraintValidator<ImageUnique, Mu
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext constraintValidatorContext) {
         if(multipartFile == null)
         {
-            LOGGER.debug("Rejecting form. No image file.");
-            return false;
+            return true;
         }
         if(multipartFile.isEmpty())
         {
-            LOGGER.debug("Rejecting form. Image file is empty.");
-            return false;
+            return true;
         }
         try
         {

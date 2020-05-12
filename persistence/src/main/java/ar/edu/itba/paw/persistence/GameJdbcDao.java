@@ -87,7 +87,8 @@ public class GameJdbcDao implements GameDao
 			
 			List<Release> releases = getAllReleaseDates(g.get());
 			for(Release r: releases)
-				g.get().addReleaseDate(r);
+				if(r.getDate() != null)
+					g.get().addReleaseDate(r);
 		}
 		return g;
 	}

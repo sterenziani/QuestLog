@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.webapp.form;
+import ar.edu.itba.paw.webapp.validators.anotation.ImageExists;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +18,7 @@ public class GameForm {
     @Size(max = 15000)
     private String              description;
 
+    @ImageExists
     @ImageUnique
     @ImageSize(max=256000)
     private MultipartFile       cover;
