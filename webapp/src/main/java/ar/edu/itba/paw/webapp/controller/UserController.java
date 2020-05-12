@@ -108,7 +108,7 @@ public class UserController
 		List<User> users = us.searchByUsernamePaged(search, page, USER_PAGE_SIZE);
 		int countResults = us.countUserSearchResults(search); 
 
-		int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
+		int totalPages = (countResults + USER_PAGE_SIZE - 1)/USER_PAGE_SIZE;
 
 		mav.addObject("current",page);
 		mav.addObject("users", users);
