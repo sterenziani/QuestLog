@@ -2,6 +2,8 @@ package ar.edu.itba.paw.service;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
@@ -15,6 +17,8 @@ public class ScoreServiceImpl implements ScoreService{
 	
 	@Autowired
 	private ScoreDao scoreDao;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScoreServiceImpl.class);
 
 	@Transactional
 	@Override
@@ -42,7 +46,9 @@ public class ScoreServiceImpl implements ScoreService{
 
 	@Transactional
 	@Override
-	public Score register(User user, Game game, int score) {
+	public Score register(User user, Game game, int score)
+	{
+		LOGGER.debug("Registering that {} rated {} with a {}", user.getUsername(), score, game.getTitle());
 		return scoreDao.register(user, game, score);
 	}
 

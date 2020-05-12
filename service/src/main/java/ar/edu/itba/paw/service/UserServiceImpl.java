@@ -3,6 +3,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +29,8 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private PasswordEncoder encoder;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Transactional
 	@Override
@@ -54,10 +59,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User register(String username, String password, String email, Locale locale)
 	{
+		LOGGER.debug("Registering new user {} with email {} and language {}", username, email, locale.toLanguageTag());
 		if(findByUsername(username).isPresent())
 			return null;
 		String encodedPassword = encoder.encode(password);
 		User u = userDao.create(username, encodedPassword, email, locale);
+		LOGGER.debug("User {} successflly created! Sending welcome email to their address {}", username, email);
 		emailService.sendWelcomeEmail(u);
 		return u;
 	}
@@ -95,14 +102,20 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public String validatePasswordResetToken(String token)
 	{
+		LOGGER.debug("Validating password reset token {}", token);
 	    final Optional<PasswordResetToken> opt = userDao.findTokenByToken(token);
 	    if(opt.isPresent())
 	    {
 	    	PasswordResetToken passToken = opt.get();
 	    	if(isTokenExpired(passToken))
+	    	{
+	    		LOGGER.debug("Token {} rejected because it expired", token);
 	    		return "expired";
+	    	}
+	    	LOGGER.debug("Token {} is valid!", token);
 	    	return null;
 	    }
+	    LOGGER.debug("Token {} rejected because it is invalid", token);
 	    return "invalidToken";
 	}
 
@@ -123,16 +136,20 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void changeUserPassword(User user, String password)
 	{
+		LOGGER.debug("Changing password for user {}", user.getUsername());
 		String encodedPassword = encoder.encode(password);
 		userDao.changePassword(user, encodedPassword);
 		userDao.deleteTokenForUser(user);
+		LOGGER.debug("Password for {} successfully changed!", user.getUsername());
 	}
 
 	@Transactional
 	@Override
 	public void updateLocale(User user, Locale locale)
 	{
+		LOGGER.debug("Changing locale for user {} into {}", user.getUsername(), locale.toLanguageTag());
 		userDao.updateLocale(user, locale);
+		LOGGER.debug("Locale of user {} successfulyl changed into {}", user.getUsername(), locale.toLanguageTag());
 	}
 
 	@Override
@@ -141,19 +158,27 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize) {
+	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize)
+	{
 		return userDao.searchByUsernamePaged(searchTerm, page, pageSize);
 	}
 	
 	@Override
-	public void changeAdminStatus(User u) {
-		if(u.getAdminStatus()) {
+	public void changeAdminStatus(User u)
+	{
+		LOGGER.debug("Changing admin status of {}", u.getUsername());
+		if(u.getAdminStatus())
+		{
+			LOGGER.debug("Removing {}'s admin privileges", u.getUsername());
 			u.setAdminStatus(false);
 			userDao.removeAdmin(u);	
 		}
-		else {
+		else
+		{
+			LOGGER.debug("Giving {} admin privileges", u.getUsername());
 			u.setAdminStatus(true);
 			userDao.addAdmin(u);
 		}
+		LOGGER.debug("{}'s admin privileges have been modified!", u.getUsername());
 	}
 }

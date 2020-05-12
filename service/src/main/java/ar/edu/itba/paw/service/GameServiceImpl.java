@@ -3,6 +3,9 @@ import java.time.LocalDate;
 import java.util.*;
 
 import ar.edu.itba.paw.interfaces.service.ImageService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
@@ -28,6 +31,8 @@ public class GameServiceImpl implements GameService
 
 	@Autowired
 	private ImageService is;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
 
 	@Transactional
 	@Override
@@ -73,6 +78,7 @@ public class GameServiceImpl implements GameService
 	@Override
 	public Optional<Game> changeTitle(long id, String new_title)
 	{
+		LOGGER.debug("Changing title of game of ID {} into {}", id, new_title);
 		return gameDao.changeTitle(id, new_title);
 	}
 
@@ -80,6 +86,7 @@ public class GameServiceImpl implements GameService
 	@Override
 	public Optional<Game> changeCover(long id, String new_cover)
 	{
+		LOGGER.debug("Changing cover of game of ID {} into {}", id, new_cover);
 		return gameDao.changeCover(id, new_cover);
 	}
 
@@ -87,6 +94,7 @@ public class GameServiceImpl implements GameService
 	@Override
 	public Optional<Game> changeDescription(long id, String new_desc)
 	{
+		LOGGER.debug("Changing description of game of ID {} into {}", id, new_desc);
 		return gameDao.changeDescription(id, new_desc);
 	}
 
@@ -94,6 +102,7 @@ public class GameServiceImpl implements GameService
 	@Override
 	public Game register(String title, String cover, byte[] cover_image, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates)
 	{
+		LOGGER.debug("Registering new game {} with cover {}, platforms {}", title, cover, platforms);
 		Game g = gameDao.register(title, cover, description);
 		gameDao.addPlatforms(g.getId(), platforms);
 		gameDao.addDevelopers(g.getId(), developers);

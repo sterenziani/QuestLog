@@ -9,9 +9,11 @@
     <%@include file="navigation.jsp"%>
 	<c:choose>
     	<c:when test="${emailSent}">
-    		<div class="content user-form">
-    			<h4><spring:message code="forgotPassword.emailSent"/></h4>
-    		</div>
+		    <div class="container text-center align-middle px-5">
+		    	<div class="my-5 py-5 bg-light border-bottom border-primary rounded-lg">
+			        <h4><spring:message code="forgotPassword.emailSent"/></h4>
+		        </div>
+		    </div>
     	</c:when>
     	<c:otherwise>
     		<div class="content user-form">

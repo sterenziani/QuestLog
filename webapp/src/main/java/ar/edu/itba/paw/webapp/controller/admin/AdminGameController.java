@@ -83,6 +83,7 @@ public class AdminGameController
 		{
 			LOGGER.debug("Registering game {} to the database. Using file {} as cover.", gameForm.getTitle(), gameForm.getCover().getOriginalFilename());
 			final Game g = gs.register(gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
+			LOGGER.debug("Game {} successfully registered!", gameForm.getTitle());
 			return new ModelAndView("redirect:/games/" + g.getId());
 		}
 		catch (IOException e)

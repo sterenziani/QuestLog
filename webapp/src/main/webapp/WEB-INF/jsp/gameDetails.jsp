@@ -37,7 +37,7 @@
                     <spring:message code="game.genres" var="genres"/>
                     <c:set var="title" value="${genres}"/>
                     <c:set var="items" value="${game.genres}"/>
-                    <%@include file="gameGenreDetailsInfoItem.jsp"%>
+                    <%@include file="gameDetailsInfoItem.jsp"%>
                 </div>
                 <div class="game-details-platforms">
                     <spring:message code="game.platforms" var="platforms"/>

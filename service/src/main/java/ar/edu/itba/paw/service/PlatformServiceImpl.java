@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.service;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
@@ -13,6 +16,8 @@ public class PlatformServiceImpl implements PlatformService
 {
 	@Autowired
 	private PlatformDao platformDao;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(PlatformServiceImpl.class);
 
 	@Transactional
 	@Override
@@ -34,6 +39,7 @@ public class PlatformServiceImpl implements PlatformService
 	@Override
 	public Optional<Platform> changeName(long id, String new_name)
 	{
+		LOGGER.debug("Changing name of Platform of ID {} to {}", id, new_name);
 		return platformDao.changeName(id, new_name);
 	}
 
@@ -41,6 +47,7 @@ public class PlatformServiceImpl implements PlatformService
 	@Override
 	public Optional<Platform> changeLogo(long id, String new_logo)
 	{
+		LOGGER.debug("Changing logo of Platform of ID {} to {}", id, new_logo);
 		return platformDao.changeLogo(id, new_logo);
 	}
 
@@ -48,6 +55,7 @@ public class PlatformServiceImpl implements PlatformService
 	@Override
 	public Optional<Platform> changeShortName(long id, String new_shortName)
 	{
+		LOGGER.debug("Changing short name of Platform of ID {} to {}", id, new_shortName);
 		return platformDao.changeShortName(id, new_shortName);
 	}
 
@@ -55,6 +63,7 @@ public class PlatformServiceImpl implements PlatformService
 	@Override
 	public Platform register(String title, String shortName, String logo)
 	{
+		LOGGER.debug("Registering platform {} ({}) with logo {}", title, shortName, logo);
 		return platformDao.register(title, shortName, logo);
 	}
 

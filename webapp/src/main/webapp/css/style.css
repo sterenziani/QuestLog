@@ -42,6 +42,11 @@ body {
     height: 120px;
 }
 
+.score-display{
+	font-size: 32;
+	font-style: bold;
+}
+
 .list-icon{
 	height: 40px;
 }

@@ -7,9 +7,11 @@
 </head>
 <body class="background-color">
     <%@include file="navigation.jsp"%>
-    <div class="error-box">
-        <h2><spring:message code="error.title"/></h2>
-        <h5><spring:message code="${msg}"/></h5>
-    </div>
+    <div class="container text-center align-middle">
+    	<div class="my-5 py-5 bg-light border-bottom border-primary rounded-lg">
+	        <h2 class="align-middle"><spring:message code="error.title"/></h2>
+	        <h5 class="align-middle"><spring:message code="${msg}"/></h5>
+        </div>
+    </div>>
 </body>
 </html>

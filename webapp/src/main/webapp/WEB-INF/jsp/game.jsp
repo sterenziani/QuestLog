@@ -16,50 +16,66 @@
 				<%@include file="gameDetails.jsp"%>
 			</div>
 			<div class="p-3 flex-grow-1">
-
-				<form:form name="scores" method="POST" action="scores/${game.id}">
-					<strong class="score-title"><spring:message code="game.score"/></strong>
-					<spring:message code="game.score" var="score"/>
-					<c:choose>
-						<c:when test="${empty user_score}">
-							<div class="score-slider">
-								<input class="slider mt-3 mb-3" id="range-slider" type="range" name="score" min="0" max="100" oninput="scoreText.innerHTML = document.getElementById('range-slider').value" value="50">
-							</div>
-							<div class="score-number">
-								<p class="score-display" id="scoreText">-</p>
-							</div>
-							<div class="score-submit">
-								<input type="submit" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>"/>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<div class="score-slider">
-								<input class="slider mt-3 mb-3" id="range-slider" type="range" name="score" min="0" max="100" oninput="scoreText.innerHTML = document.getElementById('range-slider').value" value="${user_score.score}">
-							</div>
-							<div class="score-number">
-								<p class="score-display" id="scoreText">${user_score.score}</p>
-							</div>
-							<div class="score-submit">
-								<input type="submit" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>"/>
-							</div>
-						</c:otherwise>
-					</c:choose>
-
-					<input type="hidden" value="${game.id}" name="game"/>
-				</form:form>
-				<div class="user-avg-score">
-					<strong class="score-title">
-						<spring:message code="game.averageUserScore"/>
+				
+			<div class="container">	
+			<div class="row">
+				<div class="col">
+					<div class="row"><strong class="score-title"><spring:message code="game.averageUserScore"/></strong></div>
+					<div class="row">
 						<c:choose>
 							<c:when test="${empty averageScore}">
-								<p class="score-display score-display-avg">-</p>
+								<p class="score-display badge badge-dark score-display-avg">N/A</p>
 							</c:when>
 							<c:otherwise>
-								<p class="score-display score-display-avg">${averageScore}</p>
+								<p class="score-display badge badge-dark">${averageScore}</p>
 							</c:otherwise>
 						</c:choose>
-					</strong>
+					</div>
 				</div>
+				<div class="col-sm-7 my-auto">
+					<form:form name="scores" method="POST" action="scores/${game.id}">
+						<div class="row m-auto">
+							<strong class="score-title"><spring:message code="game.yourScore"/></strong>
+						</div>
+						<spring:message code="game.yourScore" var="score"/>
+						<c:choose>
+							<c:when test="${empty user_score}">
+								<div class="score-slider">
+									<input class="slider mt-3 mb-3" id="range-slider" type="range" name="score" min="0" max="100" oninput="scoreText.innerHTML = document.getElementById('range-slider').value" value="50">
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="score-slider">
+									<input class="slider mt-3 mb-3" id="range-slider" type="range" name="score" min="0" max="100" oninput="scoreText.innerHTML = document.getElementById('range-slider').value" value="${user_score.score}">
+								</div>
+							</c:otherwise>
+						</c:choose>
+						<input type="hidden" value="${game.id}" name="game"/>
+				</div>
+				<div class="col">
+						<c:choose>
+							<c:when test="${empty user_score}">
+								<div class="score-number">
+									<p class="display-4 score-display badge badge-success" id="scoreText">-</p>
+								</div>
+								<div class="score-submit">
+									<input type="submit" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>"/>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="score-number text-center">
+									<p class="score-display badge badge-success" id="scoreText">${user_score.score}</p>
+								</div>
+								<div class="score-submit">
+									<input type="submit" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>"/>
+								</div>
+							</c:otherwise>
+						</c:choose>
+				</div>
+				</form:form>
+			</div></div>
+
+
 				
 				<div class="card m-5 bg-very-light right-wave left-wave">
 				    <div class="card-header bg-very-dark text-white d-flex">

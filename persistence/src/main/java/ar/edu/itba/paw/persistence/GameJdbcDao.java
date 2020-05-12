@@ -87,7 +87,8 @@ public class GameJdbcDao implements GameDao
 			
 			List<Release> releases = getAllReleaseDates(g.get());
 			for(Release r: releases)
-				g.get().addReleaseDate(r);
+				if(r.getDate() != null)
+					g.get().addReleaseDate(r);
 		}
 		return g;
 	}
@@ -471,7 +472,7 @@ public class GameJdbcDao implements GameDao
 	public List<Game> getGamesInBacklogReleasingTomorrow(User u)
 	{
 		return jdbcTemplate.query("SELECT DISTINCT game, title, cover, description FROM games NATURAL JOIN releases WHERE release_date = CURRENT_DATE + 1 "
-									+"AND game in (SELECT game FROM backlogs WHERE user_id = ?)) AS g NATURAL JOIN games", GAME_MAPPER, u.getId());
+									+"AND game in (SELECT game FROM backlogs WHERE user_id = ?)", GAME_MAPPER, u.getId());
 	}
 	
 	@Override

@@ -61,9 +61,7 @@ public class UserController
 	AuthenticationManager authenticationManager;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	private static final int PAGE_SIZE = 5;
 	private static final int USER_PAGE_SIZE = 20;
-
 	private static final int BACKLOG_TEASER_PAGE_SIZE = 5;
 	private static final int SCORE_TEASER_PAGE_SIZE = 10;
 	private static final int RUNS_TEASER_PAGE_SIZE = 10;

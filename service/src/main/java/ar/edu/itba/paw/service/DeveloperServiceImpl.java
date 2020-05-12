@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.service;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
 import ar.edu.itba.paw.interfaces.service.DeveloperService;
 import ar.edu.itba.paw.model.Developer;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -14,6 +17,8 @@ public class DeveloperServiceImpl implements DeveloperService
 	
 	@Autowired
 	private DeveloperDao developerDao;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeveloperServiceImpl.class);
 
 	@Transactional
 	@Override
@@ -35,6 +40,7 @@ public class DeveloperServiceImpl implements DeveloperService
 	@Override
 	public Optional<Developer> changeName(long id, String new_name)
 	{
+		LOGGER.debug("Changing name of Developer of ID {} to {}", id, new_name);
 		return developerDao.changeName(id, new_name);
 	}
 
@@ -42,14 +48,16 @@ public class DeveloperServiceImpl implements DeveloperService
 	@Override
 	public Optional<Developer> changeLogo(long id, String new_logo)
 	{
+		LOGGER.debug("Changing logo of Developer of ID {} into {}", id, new_logo);
 		return developerDao.changeLogo(id, new_logo);
 	}
 
 	@Transactional
 	@Override
-	public Developer register(String title, String logo)
+	public Developer register(String name, String logo)
 	{
-		return developerDao.register(title, logo);
+		LOGGER.debug("Registering Developer {} with logo {}", name, logo);
+		return developerDao.register(name, logo);
 	}
 
 	@Transactional

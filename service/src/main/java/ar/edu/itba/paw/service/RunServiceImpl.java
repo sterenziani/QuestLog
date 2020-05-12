@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class RunServiceImpl implements RunService {
 	
 	@Autowired
 	private RunDao runDao;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RunServiceImpl.class);
 
 	@Transactional
 	@Override
@@ -96,7 +100,9 @@ public class RunServiceImpl implements RunService {
 
 	@Transactional
 	@Override
-	public Run register(User user, Game game, Platform platform, Playstyle playstyle, long time) {
+	public Run register(User user, Game game, Platform platform, Playstyle playstyle, long time)
+	{
+		LOGGER.debug("Registering run of {} by {} for {} in style {}", user.getUsername(), game.getTitle(), platform.getShortName(), playstyle.getName());
 		return runDao.register(user, game, platform, playstyle, time);
 	}
 
@@ -108,7 +114,9 @@ public class RunServiceImpl implements RunService {
 
 	@Transactional
 	@Override
-	public Optional<Playstyle> changePlaystyleName(String new_name, long playstyle) {
+	public Optional<Playstyle> changePlaystyleName(String new_name, long playstyle)
+	{
+		LOGGER.debug("Changing name of playstyle of ID {} into {}", playstyle, new_name);
 		return runDao.changePlaystyleName(new_name, playstyle);
 	}
 
@@ -120,7 +128,9 @@ public class RunServiceImpl implements RunService {
 
 	@Transactional
 	@Override
-	public Playstyle register(String name) {
+	public Playstyle register(String name)
+	{
+		LOGGER.debug("Registering playstyle {}", name);
 		return runDao.register(name);
 	}
 

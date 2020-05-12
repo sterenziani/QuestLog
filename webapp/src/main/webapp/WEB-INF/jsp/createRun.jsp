@@ -8,14 +8,13 @@
 </head>
 <body>
     <%@ include file="navigation.jsp"%>
-	<div class="content">
-		<div class="game">
-			<div class="run-form-game-title">
-				<h2>${game.title}</h2>
-			</div>
+	<div class="card m-5 bg-very-light right-wave left-wave">
+		<div class="card-header bg-very-dark text-white">
+			<h2 class="share-tech-mono"><spring:message code="game.addingRun" arguments="${game.title}"/></h2>
+		</div>
 			<div class="game-details">
 				<div class="game-details-cover">
-	        		<img src="<c:url value="${game.cover}"/>" alt="<c:out value="${game.title}"/>">
+	        		<img src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>">
 	    		</div>
     		</div>
 		    <div class="game-details-runs">

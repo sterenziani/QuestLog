@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.service;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
@@ -14,6 +17,8 @@ public class PublisherServiceImpl implements PublisherService
 	@Autowired
 	private PublisherDao publisherDao;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(PublisherServiceImpl.class);
+	
 	@Transactional
 	@Override
 	public Optional<Publisher> findById(long id)
@@ -34,6 +39,7 @@ public class PublisherServiceImpl implements PublisherService
 	@Override
 	public Optional<Publisher> changeName(long id, String new_name)
 	{
+		LOGGER.debug("Changing name of Publisher of ID {} to {}", id, new_name);
 		return publisherDao.changeName(id, new_name);
 	}
 
@@ -41,14 +47,16 @@ public class PublisherServiceImpl implements PublisherService
 	@Override
 	public Optional<Publisher> changeLogo(long id, String new_logo)
 	{
+		LOGGER.debug("Changing logo of Publisher of ID {} to {}", id, new_logo);
 		return publisherDao.changeLogo(id, new_logo);
 	}
 
 	@Transactional
 	@Override
-	public Publisher register(String title, String logo)
+	public Publisher register(String name, String logo)
 	{
-		return publisherDao.register(title, logo);
+		LOGGER.debug("Registering publisher {} with logo {}", name, logo);
+		return publisherDao.register(name, logo);
 	}
 
 	@Transactional

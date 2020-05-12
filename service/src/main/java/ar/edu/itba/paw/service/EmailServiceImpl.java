@@ -3,6 +3,9 @@ import java.util.List;
 import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -40,6 +43,7 @@ public class EmailServiceImpl implements EmailService
 	
 	private static final String WEBSITE_PATH = "http://pawserver.it.itba.edu.ar/paw-2020a-4/";
 	//private static final String WEBSITE_PATH = "http://localhost:8080/webapp/";
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
 	@Transactional
 	@Async
@@ -54,6 +58,7 @@ public class EmailServiceImpl implements EmailService
 
 	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
 	    MimeMessageHelper message;
+	    LOGGER.debug("Sending welcome email to user {} at {}. Using language {}", u.getUsername(), u.getEmail(), u.getLocale().toLanguageTag());
 		try
 		{
 			message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -66,7 +71,7 @@ public class EmailServiceImpl implements EmailService
 		}
 		catch (MessagingException e)
 		{
-			;
+			LOGGER.error("An exception was thrown while attempting to send welcome email to user {} at {} in {}", u.getUsername(), u.getEmail(), u.getLocale().toLanguageTag(), e);
 		}
 	}
 
@@ -75,6 +80,7 @@ public class EmailServiceImpl implements EmailService
 	@Override
 	public void sendDailyEmails()
 	{
+		LOGGER.debug("Sending daily emails to all users");
 		String url = WEBSITE_PATH + "games/";
 		List<User> userList = us.getAllUsers();
 		for(User u : userList)
@@ -87,6 +93,7 @@ public class EmailServiceImpl implements EmailService
 				ctx.setVariable("path", url);
 				final MimeMessage mimeMessage = emailSender.createMimeMessage();
 				MimeMessageHelper message;
+				LOGGER.debug("Sending daily email to {}, who has {} games releasing tomorrow they should know about.", u.getUsername(), backlog.size());
 				try
 				{
 					message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -100,7 +107,7 @@ public class EmailServiceImpl implements EmailService
 				}
 				catch (MessagingException e)
 				{
-					;
+					LOGGER.error("An exception was thrown while attempting to send daily email to user {} at {} in {}", u.getUsername(), u.getEmail(), u.getLocale().toLanguageTag(), e);
 				}
 			}
 		}
@@ -121,6 +128,7 @@ public class EmailServiceImpl implements EmailService
 		
 	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
 	    MimeMessageHelper message;
+	    LOGGER.debug("Sending password reset email to {} at {} in {}", u.getUsername(), u.getEmail(), u.getLocale().toLanguageTag());
 		try
 		{
 			message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -135,7 +143,7 @@ public class EmailServiceImpl implements EmailService
 		}
 		catch (MessagingException e)
 		{
-			;
+			LOGGER.error("An exception was thrown while attempting to send password reset email to user {} at {} in {}", u.getUsername(), u.getEmail(), u.getLocale().toLanguageTag(), e);
 		}
 	}
 }
