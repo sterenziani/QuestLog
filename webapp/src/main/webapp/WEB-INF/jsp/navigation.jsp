@@ -27,7 +27,7 @@
             <c:if test="${!empty loggedUser && loggedUser.adminStatus == true}">
                 <li class="nav-item">
                     <div class="nav-link">
-                        <a class="btn btn-success w-100" role="button" href="<c:url value="/explore"/>"><span class="mr-2">+</span><spring:message code="navigation.addGame"/></a>
+                        <a class="btn btn-success w-100" role="button" href="<c:url value="/admin/game/new"/>"><span class="mr-2">+</span><spring:message code="navigation.addGame"/></a>
                     </div>
                 </li>
             </c:if>
