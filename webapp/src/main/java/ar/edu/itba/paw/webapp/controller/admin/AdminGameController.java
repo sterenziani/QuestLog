@@ -66,11 +66,11 @@ public class AdminGameController
 		List<Publisher> publishers 	= pubs.getAllPublishers();
 		List<Genre> 	genres 		= gens.getAllGenres();
 		List<Region>	regions		= rs.getAllRegions();
-		mav.addObject("platforms", platforms);
-		mav.addObject("developers", developers);
-		mav.addObject("publishers", publishers);
-		mav.addObject("genres", genres);
-		mav.addObject("regions", regions);
+		mav.addObject("allPlatforms", platforms);
+		mav.addObject("allDevelopers", developers);
+		mav.addObject("allPublishers", publishers);
+		mav.addObject("allGenres", genres);
+		mav.addObject("allRegions", regions);
 		return mav;
 	}
 
@@ -93,25 +93,25 @@ public class AdminGameController
 	}
 
 	@RequestMapping(value = "/admin/game/{id}/edit", method = RequestMethod.GET)
-	public ModelAndView editGame(@ModelAttribute("gameForm") final GameForm gameForm, @PathVariable("id") final long id)
+	public ModelAndView editGame(@ModelAttribute("gameForm") GameForm gameForm, @PathVariable("id") final long id)
 	{
 		ModelAndView mav = new ModelAndView("admin/game/gameForm");
-		Optional<Game> optg 		= gs.findById(id);
+		Optional<Game> optg 		= gs.findByIdWithDetails(id);
 		if(!optg.isPresent())
 			throw new UserNotFoundException();
 		Game g 						= optg.get();
-		gameForm.setTitle(g.getTitle());
-		gameForm.setDescription(g.getDescription());
+		gameForm = new GameForm(g);
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();
 		List<Genre> 	genres 		= gens.getAllGenres();
 		List<Region>	regions		= rs.getAllRegions();
-		mav.addObject("platforms", platforms);
-		mav.addObject("developers", developers);
-		mav.addObject("publishers", publishers);
-		mav.addObject("genres", genres);
-		mav.addObject("regions", regions);
+		mav.addObject("gameForm", gameForm);
+		mav.addObject("allPlatforms", platforms);
+		mav.addObject("allDevelopers", developers);
+		mav.addObject("allPublishers", publishers);
+		mav.addObject("allGenres", genres);
+		mav.addObject("allRegions", regions);
 		return mav;
 	}
 

@@ -80,7 +80,7 @@ public interface GameService
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, String cover, byte[] cover_image, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates);
+	Game register(String title, String cover, byte[] cover_image, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates);
 	
 	/**
 	 * Get a list of all available games.

@@ -114,3 +114,8 @@ body {
   width: 60%;
   padding: 10px;
 }
+
+.checkboxes{
+    height: 15em !important;
+    overflow-y: scroll;
+}

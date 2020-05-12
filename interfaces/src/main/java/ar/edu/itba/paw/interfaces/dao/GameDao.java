@@ -102,7 +102,7 @@ public interface GameDao
 	 * @return					The updated game, now linked to the platforms
 	 */
 
-	void addPlatforms(long g, long[] platforms_ids);
+	void addPlatforms(long g, List<Long> platforms_ids);
 	
 	/**
 	 * Unlinks a game to a specified platform
@@ -132,7 +132,7 @@ public interface GameDao
 	 * @param devs_ids		The developers to link the game to
 	 * @return				The updated game, now linked to the developers
 	 */
-	void addDevelopers(long g, long[] devs_ids);
+	void addDevelopers(long g, List<Long> devs_ids);
 	
 	/**
 	 * Unlinks a game to a specified developer
@@ -169,7 +169,7 @@ public interface GameDao
 	 * @param g				The game
 	 * @param publisher_ids	The publishers to unlink the game from
 	 */
-	void addPublishers(long g, long[] publisher_ids);
+	void addPublishers(long g, List<Long> publisher_ids);
 
 	/**
 	 * Unlinks a game from all its publishers
@@ -191,7 +191,7 @@ public interface GameDao
 	 * @param genres_ids		The genre
 	 * @return					The updated game, now marked as being of that genre
 	 */
-	void addGenres(long g, long[] genres_ids);
+	void addGenres(long g, List<Long> genres_ids);
 	
 	/**
 	 * Stop categorizing a game as being part of a genre

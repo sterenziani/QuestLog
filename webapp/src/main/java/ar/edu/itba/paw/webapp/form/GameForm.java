@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.webapp.form;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -7,7 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class GameForm {
 
@@ -22,19 +27,33 @@ public class GameForm {
     private MultipartFile       cover;
 
     @NotNull
-    private long[]              platforms;
+    private List<Long>          platforms;
 
     @NotNull
-    private long[]              developers;
+    private List<Long>          developers;
 
     @NotNull
-    private long[]              publishers;
+    private List<Long>          publishers;
 
     @NotNull
-    private long[]              genres;
+    private List<Long>          genres;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Map<Long, LocalDate> releaseDates;
+
+    public GameForm(){
+
+    }
+
+    public GameForm(Game g){
+        this.title        = g.getTitle();
+        this.description  = g.getDescription();
+        this.platforms    = g.getPlatforms().stream().map(Platform::getId).collect(Collectors.toList());
+        this.developers   = g.getDevelopers().stream().map(Developer::getId).collect(Collectors.toList());
+        this.publishers   = g.getPublishers().stream().map(Publisher::getId).collect(Collectors.toList());
+        this.genres       = g.getGenres().stream().map(Genre::getId).collect(Collectors.toList());
+        this.releaseDates = g.getReleaseDates().stream().collect(Collectors.toMap(r -> r.getRegion().getId(), r -> r.getDate().toLocalDate()));
+    }
 
     public String getTitle() {
         return title;
@@ -48,19 +67,19 @@ public class GameForm {
         return cover;
     }
 
-    public long[] getPlatforms() {
+    public List<Long> getPlatforms() {
         return platforms;
     }
 
-    public long[] getDevelopers() {
+    public List<Long> getDevelopers() {
         return developers;
     }
 
-    public long[] getPublishers() {
+    public List<Long> getPublishers() {
         return publishers;
     }
 
-    public long[] getGenres() {
+    public List<Long> getGenres() {
         return genres;
     }
 
@@ -80,19 +99,19 @@ public class GameForm {
         this.cover = cover;
     }
 
-    public void setPlatforms(long[] platforms) {
+    public void setPlatforms(List<Long> platforms) {
         this.platforms = platforms;
     }
 
-    public void setDevelopers(long[] developers) {
+    public void setDevelopers(List<Long> developers) {
         this.developers = developers;
     }
 
-    public void setPublishers(long[] publishers) {
+    public void setPublishers(List<Long> publishers) {
         this.publishers = publishers;
     }
 
-    public void setGenres(long[] genres) {
+    public void setGenres(List<Long> genres) {
         this.genres = genres;
     }
 

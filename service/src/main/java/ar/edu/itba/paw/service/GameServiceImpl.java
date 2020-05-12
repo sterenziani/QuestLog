@@ -92,7 +92,7 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Game register(String title, String cover, byte[] cover_image, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
+	public Game register(String title, String cover, byte[] cover_image, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates)
 	{
 		Game g = gameDao.register(title, cover, description);
 		gameDao.addPlatforms(g.getId(), platforms);
