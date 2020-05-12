@@ -242,4 +242,8 @@ public interface GameService
 	List<Game> getGamesForPublisher(Publisher p, int page, int pageSize);
 	
 	int countGamesForPublisher(Publisher p);
+
+	void removeById(long id);
+
+	void remove(Game g);
 }

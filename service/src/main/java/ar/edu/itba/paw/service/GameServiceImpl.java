@@ -446,4 +446,23 @@ public class GameServiceImpl implements GameService
 	{
 		return gameDao.countGamesInBacklog(u);
 	}
+
+	@Transactional
+	@Override
+	public void remove(Game g){
+		gameDao.removeAllPlatforms(g);
+		gameDao.removeAllDevelopers(g);
+		gameDao.removeAllPublishers(g);
+		gameDao.removeAllGenres(g);
+		gameDao.removeAllReleaseDates(g);
+		gameDao.remove(g);
+		is.removeByName(g.getCover());
+	}
+
+	@Transactional
+	@Override
+	public void removeById(long id){
+		Optional<Game> g = gameDao.findById(id);
+		remove(g.get());
+	}
 }

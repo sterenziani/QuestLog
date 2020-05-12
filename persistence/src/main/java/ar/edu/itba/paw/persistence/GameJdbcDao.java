@@ -218,6 +218,11 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
+	@Override
+	public void removeAllPlatforms(Game g) {
+		jdbcTemplate.update("DELETE FROM game_versions WHERE game = ?", g.getId());
+	}
+
 	private List<Platform> getAllPlatforms(Game g)
 	{
 		List<Platform> platformList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN game_versions NATURAL JOIN platforms",
@@ -247,6 +252,11 @@ public class GameJdbcDao implements GameDao
 			publishingRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("publisher", publisher_ids[i]);
 		}
 		publishingJdbcInsert.executeBatch(publishingRows);
+	}
+
+	@Override
+	public void removeAllPublishers(Game g) {
+		jdbcTemplate.update("DELETE FROM publishing WHERE game = ?", g.getId());
 	}
 
 	@Override
@@ -294,6 +304,11 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
+	@Override
+	public void removeAllDevelopers(Game g) {
+		jdbcTemplate.update("DELETE FROM development WHERE game = ?", g.getId());
+	}
+
 	private List<Developer> getAllDevelopers(Game g)
 	{
 		List<Developer> developerList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN development NATURAL JOIN developers",
@@ -331,7 +346,12 @@ public class GameJdbcDao implements GameDao
 		return findById(game.getId());
 	}
 
-	
+	@Override
+	public void removeAllGenres(Game g) {
+		jdbcTemplate.update("DELETE FROM classifications WHERE game = ?", g.getId());
+	}
+
+
 	private List<Genre> getAllGenres(Game g)
 	{
 		List<Genre> genreList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN classifications NATURAL JOIN genres",
@@ -371,7 +391,12 @@ public class GameJdbcDao implements GameDao
 		jdbcTemplate.update("DELETE FROM releases WHERE game = ? AND region = ?", game.getId(), r.getRegion().getId());
 		return findById(game.getId());
 	}
-	
+
+	@Override
+	public void removeAllReleaseDates(Game g) {
+		jdbcTemplate.update("DELETE FROM releases WHERE game = ?", g.getId());
+	}
+
 	private List<Release> getAllReleaseDates(Game g)
 	{
 		List<Release> dates = jdbcTemplate.query("SELECT * FROM releases NATURAL JOIN regions WHERE game = ?",
@@ -596,5 +621,10 @@ public class GameJdbcDao implements GameDao
 	public int countGamesInBacklog(User u)
 	{
 		return jdbcTemplate.queryForObject("SELECT count(*) FROM (SELECT * FROM backlogs WHERE user_id = ?) AS g NATURAL JOIN games", Integer.class, u.getId());
-	}	
+	}
+
+	@Override
+	public void remove(Game g){
+		jdbcTemplate.update("DELETE FROM games WHERE game = ?", g.getId());
+	}
 }

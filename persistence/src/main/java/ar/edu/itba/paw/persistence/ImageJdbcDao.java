@@ -51,6 +51,6 @@ public class ImageJdbcDao implements ImageDao {
 
     @Override
     public void removeByName(String image_name) {
-        jdbcTemplate.query("DELETE FROM images WHERE image_name = ?", IMAGE_MAPPER, image_name);
+        jdbcTemplate.update("DELETE FROM images WHERE image_name = ?", image_name);
     }
 }

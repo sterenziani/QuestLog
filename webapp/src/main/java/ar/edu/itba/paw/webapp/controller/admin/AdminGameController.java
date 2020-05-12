@@ -134,10 +134,10 @@ public class AdminGameController
 		return mav;
 	}
 
-	@RequestMapping(value = "/admin/game/delete", method = RequestMethod.POST)
-	public ModelAndView deleteGame(final long id, HttpServletRequest request)
+	@RequestMapping(value = "/admin/game/{id}/delete", method = RequestMethod.GET)
+	public ModelAndView deleteGame(@PathVariable("id") final long id, HttpServletRequest request)
 	{
-		System.out.println(id + " boom");
+		gs.removeById(id);
 		return new ModelAndView("redirect:" + request.getHeader("Referer"));
 	}
 }

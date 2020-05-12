@@ -113,6 +113,12 @@ public interface GameDao
 	Optional<Game> removePlatform(Game g, Platform p);
 
 	/**
+	 * Unlinks a game to all its platforms
+	 * @param g		The game
+	 */
+	void removeAllPlatforms(Game g);
+
+	/**
 	 * Links a game to a specified developer
 	 * @param g		The game
 	 * @param d		The developer to link the game to
@@ -135,6 +141,12 @@ public interface GameDao
 	 * @return		The updated game, now unlinked from the developer
 	 */
 	Optional<Game> removeDeveloper(Game g, Developer d);
+
+	/**
+	 * Unlinks a game to all its developers
+	 * @param g		The game
+	 */
+	void removeAllDevelopers(Game g);
 	
 	/**
 	 * Links a game to a specified publisher
@@ -153,12 +165,17 @@ public interface GameDao
 	Optional<Game> removePublisher(Game g, Publisher pub);
 
 	/**
-	 * Unlinks a game to specified publishers
+	 * Links a game to specified publishers
 	 * @param g				The game
 	 * @param publisher_ids	The publishers to unlink the game from
-	 * @return				The updated game, now unlinked from the publishers
 	 */
 	void addPublishers(long g, long[] publisher_ids);
+
+	/**
+	 * Unlinks a game from all its publishers
+	 * @param g		The game
+	 */
+	void removeAllPublishers(Game g);
 
 	/**
 	 * Categorize a game as part of a certain genre
@@ -183,6 +200,12 @@ public interface GameDao
 	 * @return			The updated game, now marked as not being of that genre
 	 */
 	Optional<Game> removeGenre(Game game, Genre genre);
+
+	/**
+	 * Stop categorizing a game
+	 * @param g		The game
+	 */
+	void removeAllGenres(Game g);
 	
 	/**
 	 * Adds a release (date and region) for the game
@@ -207,6 +230,12 @@ public interface GameDao
 	 * @return		The updated game, now without that release listed
 	 */
 	Optional<Game> removeReleaseDate(Game game, Release r);
+
+	/**
+	 * Removes all releases (date and region) for the game
+	 * @param g		The game
+	 */
+	void removeAllReleaseDates(Game g);
 	
 	/**
 	 * Get a list of all games with names that contain the searched term.
@@ -295,5 +324,5 @@ public interface GameDao
 	List<Game> getGamesForPublisher(Publisher p, int page, int pageSize);
 	int countGamesForPublisher(Publisher p);
 	
-
+	void remove(Game g);
 }
