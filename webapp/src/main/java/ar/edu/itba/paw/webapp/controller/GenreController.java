@@ -72,6 +72,7 @@ public class GenreController {
         mav.addObject("gamesInPage",games);
         mav.addObject("pages", totalPages);
         mav.addObject("current", page);
+        mav.addObject("listIcon", g.getLogo());
         return mav;
     }
 
