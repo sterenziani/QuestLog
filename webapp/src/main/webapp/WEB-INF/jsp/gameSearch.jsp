@@ -177,3 +177,6 @@
 </div>
 </body>
 </html>
+
+<script type="text/javascript" src="<c:url value="/js/filters/search-filters.js"/>"></script>
+
