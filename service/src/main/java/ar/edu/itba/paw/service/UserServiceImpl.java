@@ -8,22 +8,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
-import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserDao userDao;
-	
-	@Autowired
-	private GameService gs;
 	
 	@Autowired
 	private EmailService emailService;
@@ -41,16 +37,6 @@ public class UserServiceImpl implements UserService{
 
 	@Transactional
 	@Override
-	public Optional<User> findByIdWithDetails(long id)
-	{
-		Optional<User> opt = userDao.findByIdWithDetails(id);
-		if(opt.isPresent())
-			gs.updateBacklogDetails(opt.get().getBacklog());
-		return opt;
-	}
-
-	@Transactional
-	@Override
 	public Optional<User> findByUsername(String username)
 	{
 		Optional<User> opt =  userDao.findByUsername(username);
@@ -59,23 +45,9 @@ public class UserServiceImpl implements UserService{
 
 	@Transactional
 	@Override
-	public Optional<User> findByUsernameWithDetails(String username)
-	{
-		return userDao.findByUsernameWithDetails(username);
-	}
-
-	@Transactional
-	@Override
 	public Optional<User> findByEmail(String email)
 	{
 		return userDao.findByEmail(email);
-	}
-
-	@Transactional
-	@Override
-	public Optional<User> findByEmailWithDetails(String email)
-	{
-		return userDao.findByEmailWithDetails(email);
 	}
 
 	@Transactional

@@ -20,6 +20,12 @@ public class ScoreJdbcDao implements ScoreDao{
 	
 	private JdbcTemplate jdbcScoreTemplate;
 	
+	@Autowired
+	private UserJdbcDao userDao;
+	
+	@Autowired
+	private GameJdbcDao gameDao;
+	
 	protected static final RowMapper<Score> SCORE_MAPPER = new RowMapper<Score>() {
 		
 		@Override
@@ -71,46 +77,19 @@ public class ScoreJdbcDao implements ScoreDao{
 	
 
 	@Override
-	public List<Score> getAllScores() {
+	public List<Score> getAllScores()
+	{
 		List<Score> score = jdbcScoreTemplate.query("SELECT * FROM scores", SCORE_MAPPER);
 		for(Score s: score) {
-			Optional <Game> game = getGame(s.getGame().getId());
-			Optional <User> user = getUser(s.getUser().getId());
-			if(game.isPresent() && user.isPresent()) {
+			Optional <Game> game = gameDao.findById(s.getGame().getId());
+			Optional <User> user = userDao.findById(s.getUser().getId());
+			if(game.isPresent() && user.isPresent())
+			{
 				s.setGame(game.get());
 				s.setUser(user.get());
 			}
 		}
 		return score;
-	}
-
-	@Override
-	public Optional<Game> getGame(long id)
-	{
-		return jdbcScoreTemplate.query("SELECT * FROM (SELECT * FROM scores WHERE game = ?) AS g NATURAL JOIN games",
-				new RowMapper<Game>()
-				{
-					@Override
-					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
-					}
-				}, id).stream().findFirst();
-	}
-	
-	@Override
-	public Optional<User> getUser(long id)
-	{
-		Optional <User> user = jdbcScoreTemplate.query("SELECT * FROM (SELECT * FROM scores WHERE user_id = ?) AS g NATURAL JOIN users",
-				new RowMapper<User>()
-				{
-					@Override
-					public User mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale"));
-					}
-				}, id).stream().findFirst();
-		return user;
 	}
 	
 	@Override
@@ -119,7 +98,7 @@ public class ScoreJdbcDao implements ScoreDao{
 		List<Score> scores = jdbcScoreTemplate.query("SELECT * FROM scores WHERE user_id = ?", SCORE_MAPPER, user.getId());
 		for(Score s : scores)
 		{
-			Optional <Game> game = getGame(s.getGame().getId());
+			Optional <Game> game = gameDao.findById(s.getGame().getId());
 			if(game.isPresent())
 			{
 				s.setGame(game.get());
@@ -129,4 +108,27 @@ public class ScoreJdbcDao implements ScoreDao{
 		return scores;
 	}
 
+
+	@Override
+	public List<Score> findAllUserScores(User user, int page, int pageSize)
+	{
+		List<Score> scores = jdbcScoreTemplate.query("SELECT * FROM scores WHERE user_id = ? LIMIT ? OFFSET ?", SCORE_MAPPER, user.getId(), pageSize, (page-1)*pageSize);
+		for(Score s: scores)
+		{
+			Optional <Game> game = gameDao.findById(s.getGame().getId());
+			if(game.isPresent())
+			{
+				s.setGame(game.get());
+				s.setUser(user);
+			}
+		}
+		return scores;
+	}
+
+
+	@Override
+	public int countAllUserScores(User user)
+	{
+		return jdbcScoreTemplate.queryForObject("SELECT count(*) FROM scores WHERE user_id = ?", Integer.class, user.getId());
+	}
 }

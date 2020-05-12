@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.service;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.model.Game;
@@ -55,5 +52,16 @@ public class ScoreServiceImpl implements ScoreService{
 	{
 		return scoreDao.findAllUserScores(user);
 	}
-	
+
+	@Override
+	public List<Score> findAllUserScores(User user, int page, int pageSize)
+	{
+		return scoreDao.findAllUserScores(user, page, pageSize);
+	}
+
+	@Override
+	public int countAllUserScores(User user)
+	{
+		return scoreDao.countAllUserScores(user);
+	}
 }

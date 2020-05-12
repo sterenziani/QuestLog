@@ -25,8 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.RunService;
+import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Run;
+import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
@@ -44,13 +48,23 @@ public class UserController
 	private GameService gs;
 	
 	@Autowired
+	private RunService rs;
+	
+    @Autowired
+    private ScoreService scors;
+	
+	@Autowired
 	private BacklogCookieHandlerService backlogCookieHandlerService;
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	private static final int PAGE_SIZE = 5;
+	private static final int BACKLOG_TEASER_PAGE_SIZE = 5;
+	private static final int SCORE_TEASER_PAGE_SIZE = 10;
+	private static final int RUNS_TEASER_PAGE_SIZE = 10;
+	private static final int SCORES_PAGE_SIZE = 25;
+	private static final int RUNS_PAGE_SIZE = 25;
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
@@ -88,15 +102,17 @@ public class UserController
 	public ModelAndView userProfile(@PathVariable("id") long id, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
-		User visitedUser = us.findByIdWithDetails(id).orElseThrow(UserNotFoundException::new);
+		User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
 		User loggedUser = us.getLoggedUser();
-		List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, 1, PAGE_SIZE);
+		List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, 1, BACKLOG_TEASER_PAGE_SIZE);
 		if(loggedUser == null)
 		{
 			backlogCookieHandlerService.updateWithBacklogDetails(gamesInPage, backlog);
 		}
 		mav.addObject("backlog", gamesInPage);
 		mav.addObject("user", visitedUser);
+		mav.addObject("scoresInPage", scors.findAllUserScores(visitedUser, 1, SCORE_TEASER_PAGE_SIZE));
+		mav.addObject("runsInPage", rs.findRunsByUser(visitedUser, 1, RUNS_TEASER_PAGE_SIZE));
 		return mav;
 	}
 	
@@ -112,9 +128,11 @@ public class UserController
 	{
 		final ModelAndView mav = new ModelAndView("userProfile");
 		User u = us.getLoggedUser();
-		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, PAGE_SIZE);
+		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("backlog", gamesInPage);
-		mav.addObject("user", us.findByIdWithDetails(u.getId()).orElseThrow(UserNotFoundException::new));
+		mav.addObject("user", us.findById(u.getId()).orElseThrow(UserNotFoundException::new));
+		mav.addObject("scoresInPage", scors.findAllUserScores(u, 1, SCORE_TEASER_PAGE_SIZE));
+		mav.addObject("runsInPage", rs.findRunsByUser(u, 1, RUNS_TEASER_PAGE_SIZE));
 		return mav;
 	}
 	
@@ -191,4 +209,34 @@ public class UserController
 	    SecurityContextHolder.getContext().setAuthentication(authentication);
         LOGGER.debug("User {} automatically logged in.", username);
 	}
+	
+    @RequestMapping("/users/{userId}/scores")
+    public ModelAndView viewScoresByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    {
+        final ModelAndView mav = new ModelAndView("fullScoreList");
+        User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Score> scoresInPage = scors.findAllUserScores(visitedUser, page, SCORES_PAGE_SIZE);
+        mav.addObject("scoresInPage", scoresInPage);
+        int countResults = scors.countAllUserScores(visitedUser);
+        int totalPages = (countResults + SCORES_PAGE_SIZE - 1)/SCORES_PAGE_SIZE;
+		mav.addObject("pages", totalPages);
+		mav.addObject("current", page);
+		mav.addObject("user", visitedUser);
+        return mav;
+    }
+    
+    @RequestMapping("/users/{userId}/runs")
+    public ModelAndView viewRunsByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    {
+        final ModelAndView mav = new ModelAndView("fullRunsList");
+        User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Run> runsInPage = rs.findRunsByUser(visitedUser, page, RUNS_PAGE_SIZE);
+        mav.addObject("runsInPage", runsInPage);
+        int countResults = rs.countRunsByUser(visitedUser);
+        int totalPages = (countResults + RUNS_PAGE_SIZE - 1)/RUNS_PAGE_SIZE;
+		mav.addObject("pages", totalPages);
+		mav.addObject("current", page);
+		mav.addObject("user", visitedUser);
+        return mav;
+    }
 }

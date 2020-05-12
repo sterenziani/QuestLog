@@ -45,22 +45,8 @@ public interface ScoreDao {
 	 * @return The score.
 	 */
 	Score register(User user, Game game, int score);
-	
-	/**
-	 * Get a game given its id
-	 * @param id	Game id
-	 * @return	 game
-	 */
-	Optional<Game> getGame(long id);
-	
-	/**
-	 * Get a user given its id
-	 * @param id	User id
-	 * @return	 user
-	 */
-
-	Optional<User> getUser(long id);
 
 	List<Score> findAllUserScores(User user);
-
+	List<Score> findAllUserScores(User user, int page, int pageSize);
+	int countAllUserScores(User user);
 }
