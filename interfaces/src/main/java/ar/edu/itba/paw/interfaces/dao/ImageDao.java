@@ -23,4 +23,11 @@ public interface ImageDao {
      */
 
     Image           uploadImage(String image_name, byte[] image_data);
+
+    /**
+     * Removes an image.
+     * @param image_name	The name of the image.
+     */
+
+    void            removeByName(String image_name);
 }

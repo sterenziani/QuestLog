@@ -27,4 +27,9 @@ public class ImageServiceImpl implements ImageService {
     public Image uploadImage(String image_name, byte[] image_data) {
         return imageDao.uploadImage(image_name, image_data);
     }
+
+    @Override
+    public void removeByName(String image_name) {
+        imageDao.removeByName(image_name);
+    }
 }

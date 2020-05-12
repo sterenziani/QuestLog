@@ -48,4 +48,9 @@ public class ImageJdbcDao implements ImageDao {
         final Number key = jdbcInsert.executeAndReturnKey(args);
         return new Image(key.longValue(), image_name, image_data);
     }
+
+    @Override
+    public void removeByName(String image_name) {
+        jdbcTemplate.query("DELETE FROM images WHERE image_name = ?", IMAGE_MAPPER, image_name);
+    }
 }
