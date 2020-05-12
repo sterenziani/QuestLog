@@ -53,7 +53,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception
 	{
-		http.sessionManagement()
+		http.sessionManagement().invalidSessionUrl("/")
 			.and().authorizeRequests()
 				.antMatchers("/login", "/login_error", "/create").anonymous()
 				.antMatchers("/admin/**").hasRole("ADMIN")

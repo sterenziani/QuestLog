@@ -14,6 +14,35 @@
         <spring:message code="game.addingToBacklog" var="addingToBacklog"/>
         <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
         <spring:message code="game.removingFromBacklog" var="removingFromBacklog"/>
+    <c:if test="${loggedUser != null && loggedUser.adminStatus == true}">
+        <div class="d-flex">
+            <spring:message code="game.edit" var="edit"/>
+            <spring:message code="game.delete" var="delete"/>
+            <a href="<c:url value="/admin/game/${game.id}/edit"/>" class="btn btn-block btn-outline-warning not-rounded-bottom btn-lg">${edit}</a>
+            <button type="button" class="btn btn-block btn-outline-danger not-rounded-bottom btn-lg mt-0" data-toggle="modal" data-target="#deleteGameModal-${game.id}">
+                ${delete}
+            </button>
+            <div class="modal fade" id="deleteGameModal-${game.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteGameModalLabe-${game.id}l"><spring:message code="game.delete"/> ${game.title}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <spring:message code="game.delete.message"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="game.delete.dismiss"/></button>
+                            <a href="<c:url value="/admin/game/${game.id}/delete"/>" class="btn btn-danger"><spring:message code="game.delete.confirm"/></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
         <c:choose>
             <c:when test="${game.inBacklog}">
                 <input class="btn btn-block btn-outline-danger btn-lg not-rounded-bottom button-${game.id} remove-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${removingFromBacklog}';}" value="${removeFromBacklog}"/>

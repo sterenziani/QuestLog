@@ -42,6 +42,10 @@ body {
     height: 120px;
 }
 
+.form-error{
+	color: #cb0000;
+}
+
 .score-display{
 	font-size: 32;
 	font-style: bold;
