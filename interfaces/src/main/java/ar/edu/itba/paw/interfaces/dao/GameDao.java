@@ -325,4 +325,8 @@ public interface GameDao
 	int countGamesForPublisher(Publisher p);
 	
 	void remove(Game g);
+
+	void update(Game g);
+
+	void updateWithoutCover(Game g);
 }

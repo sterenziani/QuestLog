@@ -1,23 +1,20 @@
 package ar.edu.itba.paw.service;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import ar.edu.itba.paw.interfaces.service.ImageService;
 
+import ar.edu.itba.paw.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.Release;
-import ar.edu.itba.paw.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -473,5 +470,33 @@ public class GameServiceImpl implements GameService
 	public void removeById(long id){
 		Optional<Game> g = gameDao.findById(id);
 		remove(g.get());
+	}
+
+	@Transactional
+	@Override
+	public void update(long id, String title, String cover, byte[] data, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) {
+		Optional<Game> optg = gameDao.findById(id);
+		Game		   g    = optg.get();
+		g.setTitle(title);
+		g.setDescription(description);
+		gameDao.removeAllPlatforms(g);
+		gameDao.removeAllDevelopers(g);
+		gameDao.removeAllPublishers(g);
+		gameDao.removeAllGenres(g);
+		gameDao.removeAllReleaseDates(g);
+		gameDao.addPlatforms(id, platforms);
+		gameDao.addDevelopers(id, developers);
+		gameDao.addPublishers(id, publishers);
+		gameDao.addGenres(id, genres);
+		gameDao.addReleaseDates(id, releaseDates);
+		if(cover != null && data != null && data.length != 0) {
+			g.setCover(cover);
+			is.removeByName(g.getCover());
+			is.uploadImage(cover, data);
+			gameDao.update(g);
+		} else {
+			gameDao.updateWithoutCover(g);
+		}
+
 	}
 }

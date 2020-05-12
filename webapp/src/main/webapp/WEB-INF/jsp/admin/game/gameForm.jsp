@@ -14,8 +14,7 @@
             </div>
         </div>
         <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-            <c:url value="/admin/game/new" var="postPath"/>
-            <form:form modelAttribute="gameForm" action="${postPath}" method="post" enctype="multipart/form-data" cssClass="w-100">
+            <form:form modelAttribute="gameForm" method="post" enctype="multipart/form-data" cssClass="w-100">
                 <div class="form-group">
                     <c:set var="title"><spring:message code="gameForm.title"/></c:set>
                     <form:label for="title" path="title">${title}</form:label>

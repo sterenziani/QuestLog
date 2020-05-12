@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller.admin;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.exception.BadImageException;
+import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.GameForm;
 import org.slf4j.Logger;
@@ -101,7 +102,7 @@ public class AdminGameController
 		if(!optg.isPresent())
 			throw new UserNotFoundException();
 		Game g 						= optg.get();
-		gameForm = new GameForm(g);
+		gameForm 					= new GameForm(g);
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();
@@ -123,16 +124,14 @@ public class AdminGameController
 			return editGame(gameForm, id);
 		try
 		{
-			final Image image = is.uploadImage(gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes());
+			gs.update(id, gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 		}
 		catch (IOException e)
 		{
 			LOGGER.error("The image provided for game {} threw an exception", gameForm.getTitle(), e);
 			throw new BadImageException();
 		}
-		ModelAndView mav = new ModelAndView("admin/game/gameForm");
-		//mav.addObject("platforms", platforms);
-		return mav;
+		return new ModelAndView("redirect:/games/" + id);
 	}
 
 	@RequestMapping(value = "/admin/game/{id}/delete", method = RequestMethod.GET)

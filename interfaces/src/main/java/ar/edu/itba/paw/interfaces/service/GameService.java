@@ -4,13 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.Release;
-import ar.edu.itba.paw.model.User;
+
+import ar.edu.itba.paw.model.*;
 
 public interface GameService
 {
@@ -246,4 +241,6 @@ public interface GameService
 	void removeById(long id);
 
 	void remove(Game g);
+
+	void update(long id, String title, String cover, byte[] data, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates);
 }

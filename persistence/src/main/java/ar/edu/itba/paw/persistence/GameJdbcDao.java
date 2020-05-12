@@ -637,4 +637,14 @@ public class GameJdbcDao implements GameDao
 	public void remove(Game g){
 		jdbcTemplate.update("DELETE FROM games WHERE game = ?", g.getId());
 	}
+
+	@Override
+	public void update(Game g){
+		jdbcTemplate.update("UPDATE games SET title = ?, description = ?, cover = ? WHERE game = ?", g.getTitle(), g.getDescription(), g.getCover(), g.getId());
+	}
+
+	@Override
+	public void updateWithoutCover(Game g){
+		jdbcTemplate.update("UPDATE games SET title = ?, description = ? WHERE game = ?", g.getTitle(), g.getDescription(), g.getId());
+	}
 }

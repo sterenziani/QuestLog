@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,7 +24,6 @@ public class GameForm {
     @Size(max = 15000)
     private String              description;
 
-    @ImageExists
     @ImageUnique
     @ImageSize(max=256000)
     private MultipartFile       cover;
