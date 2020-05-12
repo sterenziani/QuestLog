@@ -205,6 +205,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addPlatforms(long g, List<Long> platforms_ids)
 	{
+		if(platforms_ids == null)
+			return;
 		MapSqlParameterSource[] gameVersionRows = new MapSqlParameterSource[platforms_ids.size()];
 		int i = 0;
 		for(Long platform_id: platforms_ids){
@@ -250,6 +252,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addPublishers(long g, List<Long> publisher_ids)
 	{
+		if(publisher_ids == null)
+			return;
 		MapSqlParameterSource[] publishingRows = new MapSqlParameterSource[publisher_ids.size()];
 		int i = 0;
 		for(Long publisher_id : publisher_ids){
@@ -295,6 +299,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addDevelopers(long g, List<Long> devs_ids)
 	{
+		if(devs_ids == null)
+			return;
 		MapSqlParameterSource[] developmentRows = new MapSqlParameterSource[devs_ids.size()];
 		int i = 0;
 		for(Long dev_id : devs_ids){
@@ -340,6 +346,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addGenres(long g, List<Long> genres_ids)
 	{
+		if(genres_ids == null)
+			return;
 		MapSqlParameterSource[] classificationRows = new MapSqlParameterSource[genres_ids.size()];
 		int i = 0;
 		for(Long genre_id : genres_ids){

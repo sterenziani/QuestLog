@@ -12,7 +12,7 @@ import ar.edu.itba.paw.webapp.validators.implementation.ImageSizeValidator;
 @Retention(RUNTIME)
 @Constraint(validatedBy = {ImageSizeValidator.class})
 public @interface ImageSize {
-    String                     message() default "ar.edu.itba.paw.error.image.unique";
+    String                     message() default "ar.edu.itba.paw.error.image.size";
     Class<?>[]                 groups()  default {};
     Class<? extends Payload>[] payload() default {};
     int min() default 0;

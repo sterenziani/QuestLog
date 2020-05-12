@@ -1,20 +1,19 @@
 package ar.edu.itba.paw.webapp.form;
-import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.webapp.validators.anotation.ImageExists;
-import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
-import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
+import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
 
 public class GameForm {
 
@@ -28,16 +27,12 @@ public class GameForm {
     @ImageSize(max=256000)
     private MultipartFile       cover;
 
-    @NotNull
     private List<Long>          platforms;
 
-    @NotNull
     private List<Long>          developers;
 
-    @NotNull
     private List<Long>          publishers;
 
-    @NotNull
     private List<Long>          genres;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
