@@ -54,7 +54,12 @@ public class GameForm {
         this.developers   = g.getDevelopers().stream().map(Developer::getId).collect(Collectors.toList());
         this.publishers   = g.getPublishers().stream().map(Publisher::getId).collect(Collectors.toList());
         this.genres       = g.getGenres().stream().map(Genre::getId).collect(Collectors.toList());
-        this.releaseDates = g.getReleaseDates().stream().collect(Collectors.toMap(r -> r.getRegion().getId(), r -> r.getDate().toLocalDate()));
+        this.releaseDates = g.getReleaseDates().stream().collect(Collectors.toMap(r -> r.getRegion().getId(), r -> {
+            LocalDate         date          = r.getDate().toLocalDate();
+            DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String            plainTextDate = date.format(formatter);
+            return LocalDate.parse(plainTextDate, formatter);
+        }));
     }
 
     public String getTitle() {

@@ -62,11 +62,20 @@
                     <%@include file="../../common/listOfCheckableOptions.jsp"%>
                 </div>
                 <div class="form-group">
-                    <label><spring:message code="gameForm.releaseDates"/></label>
+                    <div>
+                        <label><spring:message code="gameForm.releaseDates"/></label>
+                    </div>
                     <c:forEach var="region" items="${allRegions}">
                         <label for="region-${region.shortName}">${region.name}</label>
                         <div class="input-group date" id="datetimepicker-${region.shortName}" data-target-input="nearest">
-                            <input id="region-${region.shortName}" name="releaseDates['${region.id}']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-${region.shortName}"/>
+                            <c:choose>
+                                <c:when test="${gameForm.releaseDates.containsKey(region.id)}">
+                                    <input id="region-${region.shortName}" name="releaseDates['${region.id}']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-${region.shortName}" value="${gameForm.releaseDates.get(region.id)}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <input id="region-${region.shortName}" name="releaseDates['${region.id}']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-${region.shortName}" />
+                                </c:otherwise>
+                            </c:choose>
                             <div class="input-group-append" data-target="#datetimepicker-${region.shortName}" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
