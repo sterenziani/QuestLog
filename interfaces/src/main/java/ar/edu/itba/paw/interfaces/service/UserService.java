@@ -57,4 +57,6 @@ public interface UserService
 	 */
 	List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize);
 	
+	void changeAdminStatus(User u);
+	
 }

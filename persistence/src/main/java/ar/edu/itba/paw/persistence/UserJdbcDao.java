@@ -191,6 +191,17 @@ public class UserJdbcDao implements UserDao
 
 	@Override
 	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize) {
-		return jdbcTemplate.query("SELECT * FROM users WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%')) LIMIT ? OFFSET ?", USER_MAPPER, searchTerm, pageSize, (page-1)*pageSize);
+		return jdbcTemplate.query("SELECT *, bool_and(users.user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM users WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%')) GROUP BY user_id LIMIT ? OFFSET ?", 
+				USER_MAPPER, searchTerm, pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public void addAdmin(User u) {
+		jdbcTemplate.update("INSERT INTO role_assignments(user_id,role) VALUES(?, (SELECT role FROM roles WHERE role_name = 'Admin'))", u.getId());	
+	}
+
+	@Override
+	public void removeAdmin(User u) {
+		jdbcTemplate.update("DELETE FROM role_assignments WHERE user_id = ?", u.getId());	
 	}
 }

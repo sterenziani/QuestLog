@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,16 +90,27 @@ public class UserController
 	@RequestMapping(value = "/userSearch", method = RequestMethod.GET)
 	public ModelAndView userSearch(@RequestParam String search, @RequestParam int page) {
 		final ModelAndView mav = new ModelAndView("userList");
-		List<User> userList = us.searchByUsernamePaged(search, page, USER_PAGE_SIZE);
+		List<User> users = us.searchByUsernamePaged(search, page, USER_PAGE_SIZE);
 		int countResults = us.countUserSearchResults(search); 
+
 		int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
 
 		mav.addObject("current",page);
-		mav.addObject("users", userList);
+		mav.addObject("users", users);
 		mav.addObject("searchTerm",search);
 		mav.addObject("pages", totalPages);
-	
+		mav.addObject("u", us.getLoggedUser());
 		return mav;
+
+	}
+	
+	@RequestMapping(value = "/userSearch", method = RequestMethod.POST)
+	public ModelAndView userSearchAdmin(@RequestParam String search, @RequestParam int page, @RequestParam("pickedUser") String pickedUser) {
+		
+		Optional<User> u = us.findByUsername(pickedUser);
+		if(u.isPresent()) 
+			us.changeAdminStatus(u.get());
+		return new ModelAndView("redirect:/userSearch?search=" + search + "&page=" + page);
 
 	}
 	

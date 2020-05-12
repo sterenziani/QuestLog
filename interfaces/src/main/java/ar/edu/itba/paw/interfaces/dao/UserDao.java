@@ -68,4 +68,11 @@ public interface UserDao
 	 */
 	List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize);
 	
+	void addAdmin(User u);
+	
+	void removeAdmin(User u);
+	
+	
+
+	
 }

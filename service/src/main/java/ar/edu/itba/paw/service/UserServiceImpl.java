@@ -172,4 +172,16 @@ public class UserServiceImpl implements UserService{
 	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize) {
 		return userDao.searchByUsernamePaged(searchTerm, page, pageSize);
 	}
+	
+	@Override
+	public void changeAdminStatus(User u) {
+		if(u.getAdminStatus()) {
+			u.setAdminStatus(false);
+			userDao.removeAdmin(u);	
+		}
+		else {
+			u.setAdminStatus(true);
+			userDao.addAdmin(u);
+		}
+	}
 }
