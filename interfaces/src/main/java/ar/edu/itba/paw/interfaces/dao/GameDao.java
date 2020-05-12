@@ -70,15 +70,10 @@ public interface GameDao
 	 * @param title 		The title of the game.
 	 * @param cover			The cover of the game.
 	 * @param description	The description of the game
-	 * @param platforms		The platforms the game is on
-	 * @param developers	The developers of the game
-	 * @param publishers    The publishers of the game
-	 * @param genres		The genres the game belongs to
-	 * @param releaseDates  The dates when the game releases
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates);
+	Game register(String title, String cover, String description);
 	
 	/**
 	 * Get a list of all available games.
@@ -99,6 +94,15 @@ public interface GameDao
 	 * @return		The updated game, now linked to the platform
 	 */
 	Optional<Game> addPlatform(Game g, Platform p);
+
+	/**
+	 * Links a game to a specified platforms
+	 * @param g					The game
+	 * @param platforms_ids		The platforms to link the game to
+	 * @return					The updated game, now linked to the platforms
+	 */
+
+	void addPlatforms(long g, long[] platforms_ids);
 	
 	/**
 	 * Unlinks a game to a specified platform
@@ -107,7 +111,7 @@ public interface GameDao
 	 * @return		The updated game, now unlinked from the platform
 	 */
 	Optional<Game> removePlatform(Game g, Platform p);
-	
+
 	/**
 	 * Links a game to a specified developer
 	 * @param g		The game
@@ -115,6 +119,14 @@ public interface GameDao
 	 * @return		The updated game, now linked to the developer
 	 */
 	Optional<Game> addDeveloper(Game g, Developer d);
+
+	/**
+	 * Links a game to specified developers
+	 * @param g				The game
+	 * @param devs_ids		The developers to link the game to
+	 * @return				The updated game, now linked to the developers
+	 */
+	void addDevelopers(long g, long[] devs_ids);
 	
 	/**
 	 * Unlinks a game to a specified developer
@@ -131,7 +143,7 @@ public interface GameDao
 	 * @return		The updated game, now linked to the publisher
 	 */
 	Optional<Game> addPublisher(Game g, Publisher pub);
-	
+
 	/**
 	 * Unlinks a game to a specified publisher
 	 * @param g		The game
@@ -141,12 +153,28 @@ public interface GameDao
 	Optional<Game> removePublisher(Game g, Publisher pub);
 
 	/**
+	 * Unlinks a game to specified publishers
+	 * @param g				The game
+	 * @param publisher_ids	The publishers to unlink the game from
+	 * @return				The updated game, now unlinked from the publishers
+	 */
+	void addPublishers(long g, long[] publisher_ids);
+
+	/**
 	 * Categorize a game as part of a certain genre
 	 * @param game		The game
 	 * @param genre		The genre
 	 * @return			The updated game, now marked as being of that genre
 	 */
 	Optional<Game> addGenre(Game game, Genre genre);
+
+	/**
+	 * Categorize a game as part of a certain genre
+	 * @param g					The game
+	 * @param genres_ids		The genre
+	 * @return					The updated game, now marked as being of that genre
+	 */
+	void addGenres(long g, long[] genres_ids);
 	
 	/**
 	 * Stop categorizing a game as being part of a genre
@@ -163,6 +191,14 @@ public interface GameDao
 	 * @return		The updated game, now updated with the new release info.
 	 */
 	Optional<Game> addReleaseDate(Game game, Release r);
+
+	/**
+	 * Adds releases (date and region) for the game
+	 * @param g					The game
+	 * @param releaseDates		The releases
+	 * @return					The updated game, now updated with the new release info.
+	 */
+	void addReleaseDates(long g, Map<Long, LocalDate> releaseDates);
 	
 	/**
 	 * Removes a release (date and region) for the game
@@ -198,7 +234,7 @@ public interface GameDao
 	/**
 	 * Add a game to a registered user's backlog
 	 * @param u	The user adding the game to their backlog
-	 * @param g The game
+	 * @param gameId The game
 	 */
 	void addToBacklog(long gameId, User u);
 	

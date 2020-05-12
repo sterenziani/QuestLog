@@ -70,6 +70,7 @@ public interface GameService
 	 * Create a new game.
 	 * @param title 		The title of the game.
 	 * @param cover			The cover of the game.
+	 * @param cover_image	The cover data in bytes of the game.
 	 * @param description	The description of the game
 	 * @param platforms		The platforms the game is on
 	 * @param developers	The developers of the game
@@ -79,7 +80,7 @@ public interface GameService
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates);
+	Game register(String title, String cover, byte[] cover_image, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates);
 	
 	/**
 	 * Get a list of all available games.

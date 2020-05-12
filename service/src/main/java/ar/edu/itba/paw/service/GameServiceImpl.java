@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 import java.time.LocalDate;
 import java.util.*;
 
+import ar.edu.itba.paw.interfaces.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
@@ -24,6 +25,9 @@ public class GameServiceImpl implements GameService
 
 	@Autowired
 	private UserService us;
+
+	@Autowired
+	private ImageService is;
 
 	@Transactional
 	@Override
@@ -88,9 +92,16 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
+	public Game register(String title, String cover, byte[] cover_image, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
 	{
-		return gameDao.register(title, cover, description, platforms, developers, publishers, genres, releaseDates);
+		Game g = gameDao.register(title, cover, description);
+		gameDao.addPlatforms(g.getId(), platforms);
+		gameDao.addDevelopers(g.getId(), developers);
+		gameDao.addPublishers(g.getId(), publishers);
+		gameDao.addGenres(g.getId(), genres);
+		gameDao.addReleaseDates(g.getId(), releaseDates);
+		is.uploadImage(cover, cover_image);
+		return g;
 	}
 
 	@Transactional
