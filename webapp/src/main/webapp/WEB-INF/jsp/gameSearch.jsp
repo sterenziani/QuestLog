@@ -11,37 +11,69 @@
 <c:url value="/search" var="path"/>
 <div class="content">
 	<div class="search-parameters">
+	<table style="width:100%">
 	<form:form name="search" method="GET" action="${path}" >
+
+		<tr>
+		<th style="text-align: center; vertical-align: bottom; padding: 5px;">
+		<h5>
 		<strong><spring:message code="game.platform"/></strong>
+		</h5>
+		</th>
+		<th style="text-align: center; vertical-align: bottom; padding: 5px;">
+				<h5>
+		<strong><spring:message code="game.genres"/></strong>
+		</h5>
+		</th>
+		<th style="text-align: right; vertical-align: bottom; padding: 5px 45px;">
+		<h5>
+		<strong><spring:message code="game.score"/></strong>
+		</h5>
+		</th>
+		<th style="text-align: center; vertical-align: bottom; padding: 5px;">
+		<h5>
+		<strong><spring:message code="game.timeSearch"/></strong>
+				</h5>
+		</th>
+		</tr>
+		<tr>
+		<td style="text-align: center; vertical-align: middle; padding:5px 5px">
 			<input type="hidden" value="${searchTerm}" name="search"/>
 			<input type="hidden" value="1" name="page"/>
-			<select name="platforms" id="platforms" multiple>
+			<select name="platforms" size="3" id="platforms" class="search-filters" multiple>
 			<c:forEach var="platform" items="${platforms}">
 				<option value="${platform.id}">${platform.name}</option>
 			</c:forEach>
 			</select>
-		<strong><spring:message code="game.genres"/></strong>
-			<select name="genres" id="genres" multiple>
+		</td>
+		<td style="text-align: center; vertical-align: middle; padding:5px 5px">
+			<div class="search-filters">
+			<select name="genres" size="3" id="genres" multiple>
+			</div>
 			<c:forEach var="genre" items="${genres}">
 				<option value="${genre.id}"><spring:message code="genres.${genre.name}"/></option>
 			</c:forEach>
 			</select>
-		<div>
-		<strong><spring:message code="game.score"/></strong>
+		</td>
+		<td style="text-align: right; vertical-align: top; padding:0px 3px">
 			<input type="number" min="0" max="100" id="scoreLeft" name="scoreLeft" value="${scoreLeft}"/><strong> - </strong>
 			<input type="number" min="0" max="100" id="scoreRight" name="scoreRight" value="${scoreRight}"/>
-		</div>
-		<div>
-		<strong><spring:message code="game.timeSearch"/></strong>
+		</td>
+		<td style="text-align: center; vertical-align: top;">
 			<input type="number" min="0" max="9999" id="hoursLeft" name="hoursLeft" value="${hoursLeft}"/><strong> :</strong>
 			<input type="number" min="0" max="59" id="minsLeft" name="minsLeft" value="${minsLeft}"/><strong> :</strong>
 			<input type="number" min="0" max="59" id="secsLeft" name="secsLeft" value="${secsLeft}"/><strong> - </strong>
 			<input type="number" min="0" max="9999" id="hoursRight" name="hoursRight" value="${hoursRight}"/><strong> :</strong>
 			<input type="number" min="0" max="59" id="minsRight" name="minsRight" value="${minsRight}"/><strong> :</strong>
 			<input type="number" min="0" max="59" id="secsRight" name="secsRight" value="${secsRight}"/>
-		</div>
-		<input type="submit" class="filter-search-button" value="<spring:message code="game.filter"/>">
+
+		</td>
+		<td style="text-align: left; vertical-align: top;" >		
+			<input type="submit" class="btn btn-primary btn-lg button" value="<spring:message code="game.filter"/>">
+		</td>
+		</tr>
 	</form:form>
+	</table>
 	</div>
     <div class="game-search-results">
         <c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
