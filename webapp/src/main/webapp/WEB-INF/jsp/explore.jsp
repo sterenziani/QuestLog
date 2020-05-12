@@ -7,18 +7,19 @@
     <%@include file="navigation.jsp"%>
     <div>
         <div>
+        	<c:set var="seeAllGenresUrl" value="/genres"/>
 	        <%@ include file="genresList.jsp"%>
     	</div>
-    	<c:set var="platformEndIndex" value="17"/>
         <div>
+        	<c:set var="seeAllPlatformsUrl" value="/platforms"/>
 	        <%@ include file="platformsList.jsp"%>
     	</div>
-    	<c:set var="developerEndIndex" value="17"/>
     	<div>
+    	    <c:set var="seeAllDevsUrl" value="/developers"/>
 	        <%@ include file="developersList.jsp"%>
     	</div>
-    	<c:set var="publisherEndIndex" value="17"/>
     	<div>
+    		<c:set var="seeAllPubsUrl" value="/publishers"/>
 	        <%@ include file="publishersList.jsp"%>
     	</div>
     </div>

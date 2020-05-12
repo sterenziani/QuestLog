@@ -77,4 +77,22 @@ public class PublisherJdbcDao implements PublisherDao {
 	{
 		return jdbcTemplate.query("SELECT publisher, publisher_name, publisher_logo FROM (SELECT publisher, count(*) AS g FROM publishing GROUP BY publisher) AS a NATURAL JOIN publishers ORDER BY g DESC", PUBLISHER_MAPPER);
 	}
+	
+	@Override
+	public List<Publisher> getBiggestPublishers(int amount)
+	{
+		return jdbcTemplate.query("SELECT publisher, publisher_name, publisher_logo FROM (SELECT publisher, count(*) AS g FROM publishing GROUP BY publisher) AS a NATURAL JOIN publishers ORDER BY g DESC LIMIT ?", PUBLISHER_MAPPER, amount);
+	}
+
+	@Override
+	public List<Publisher> getPublishers(int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM publishers ORDER BY publisher_name LIMIT ? OFFSET ?", PUBLISHER_MAPPER, pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countPublishers()
+	{
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM publishers", Integer.class);
+	}
 }

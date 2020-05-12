@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
 import ar.edu.itba.paw.model.Developer;
 
@@ -76,6 +77,24 @@ public class DeveloperJdbcDao implements DeveloperDao {
 	@Override
 	public List<Developer> getAllDevelopers()
 	{
-		return jdbcTemplate.query("SELECT developer, developer_name, developer_logo FROM (SELECT developer, count(*) AS g FROM development GROUP BY developer) AS a NATURAL JOIN developers ORDER BY g DESC", DEVELOPER_MAPPER);
+		return jdbcTemplate.query("SELECT * FROM developers ORDER BY developer_name DESC", DEVELOPER_MAPPER);
+	}
+	
+	@Override
+	public List<Developer> getBiggestDevelopers(int amount)
+	{
+		return jdbcTemplate.query("SELECT developer, developer_name, developer_logo FROM (SELECT developer, count(*) AS g FROM development GROUP BY developer) AS a NATURAL JOIN developers ORDER BY g DESC LIMIT ?", DEVELOPER_MAPPER, amount);
+	}
+
+	@Override
+	public List<Developer> getDevelopers(int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM developers ORDER BY developer_name LIMIT ? OFFSET ?", DEVELOPER_MAPPER, pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countDevelopers()
+	{
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM developers", Integer.class);
 	}
 }

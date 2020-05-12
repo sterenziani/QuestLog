@@ -46,5 +46,8 @@ public interface DeveloperService {
 	 * Get a list of all available developers.
 	 * @return The list of all developers.
 	 */
-	List<Developer> getAllDevelopers();	
+	List<Developer> getAllDevelopers();
+	List<Developer> getDevelopers(int page, int pageSize);
+	int countDevelopers();
+	List<Developer> getBiggestDevelopers(int amount);
 }

@@ -49,4 +49,7 @@ public interface GenreDao {
 	 * @return The list of all genres.
 	 */
 	List<Genre> getAllGenres();
+	
+	List<Genre> getGenres(int page, int pageSize);
+	int countGenres();
 }

@@ -32,7 +32,13 @@ body {
     border-bottom-left-radius: 4em !important;
 }
 
-.genre {
+.genre-icon {
+    height: 120px;
+    width: 120px;
+}
+
+.platform-icon {
+    padding: 5px;
     height: 120px;
 }
 

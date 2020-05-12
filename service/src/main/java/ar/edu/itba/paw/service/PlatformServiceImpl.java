@@ -64,4 +64,40 @@ public class PlatformServiceImpl implements PlatformService
 	{
 		return platformDao.getAllPlatforms();
 	}
+
+	@Override
+	public List<Platform> getPlatforms(int page, int pageSize)
+	{
+		return platformDao.getPlatforms(page, pageSize);
+	}
+
+	@Override
+	public int countPlatforms()
+	{
+		return platformDao.countPlatforms();
+	}
+
+	@Override
+	public List<Platform> getBiggestPlatforms(int amount)
+	{
+		return platformDao.getBiggestPlatforms(amount);
+	}
+
+	@Override
+	public List<Platform> getAllPlatformsWithGames()
+	{
+		return platformDao.getAllPlatformsWithGames();
+	}
+
+	@Override
+	public List<Platform> getPlatformsWithGames(int page, int pageSize)
+	{
+		return platformDao.getPlatformsWithGames(page, pageSize);
+	}
+
+	@Override
+	public int countPlatformsWithGames()
+	{
+		return platformDao.countPlatformsWithGames();
+	}
 }

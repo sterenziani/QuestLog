@@ -84,6 +84,42 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public List<Platform> getAllPlatforms()
 	{
+		return jdbcTemplate.query("SELECT * FROM platforms ORDER BY platform_name", PLATFORM_MAPPER);
+	}
+	
+	@Override
+	public List<Platform> getBiggestPlatforms(int amount)
+	{
+		return jdbcTemplate.query("SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC LIMIT ?", PLATFORM_MAPPER, amount);
+	}
+
+	@Override
+	public List<Platform> getPlatforms(int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM genres ORDER BY developer_name LIMIT ? OFFSET ?", PLATFORM_MAPPER, pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countPlatforms()
+	{
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM platforms", Integer.class);
+	}
+	
+	@Override
+	public List<Platform> getAllPlatformsWithGames()
+	{
 		return jdbcTemplate.query("SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC", PLATFORM_MAPPER);
+	}
+	
+	@Override
+	public List<Platform> getPlatformsWithGames(int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC LIMIT ? OFFSET ?", PLATFORM_MAPPER, pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countPlatformsWithGames()
+	{
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM (SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC) AS p", Integer.class);
 	}
 }

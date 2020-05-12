@@ -47,4 +47,7 @@ public interface PublisherService {
 	 * @return The list of all publishers.
 	 */
 	List<Publisher> getAllPublishers();
+	List<Publisher> getPublishers(int page, int pageSize);
+	List<Publisher> getBiggestPublishers(int amount);
+	int countPublishers();
 }

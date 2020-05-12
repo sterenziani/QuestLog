@@ -78,4 +78,16 @@ public class GenreJdbcDao implements GenreDao
 	{
 		return jdbcTemplate.query("SELECT * FROM genres", GENRE_MAPPER);
 	}
+
+	@Override
+	public List<Genre> getGenres(int page, int pageSize)
+	{
+		return jdbcTemplate.query("SELECT * FROM genres ORDER BY genre LIMIT ? OFFSET ?", GENRE_MAPPER, pageSize, (page-1)*pageSize);
+	}
+
+	@Override
+	public int countGenres()
+	{
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM genres", Integer.class);
+	}
 }

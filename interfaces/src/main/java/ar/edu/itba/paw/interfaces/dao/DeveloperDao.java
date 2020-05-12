@@ -49,4 +49,7 @@ public interface DeveloperDao {
 	 * @return The list of all developers.
 	 */
 	List<Developer> getAllDevelopers();
+	List<Developer> getDevelopers(int page, int pageSize);
+	int countDevelopers();
+	List<Developer> getBiggestDevelopers(int amount);
 }

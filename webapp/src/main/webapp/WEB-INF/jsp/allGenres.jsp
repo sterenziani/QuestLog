@@ -4,11 +4,11 @@
     <%@include file="commonHead.jsp"%>
 </head>
 <body class="background-primary">
-    <%@include file="navigation.jsp"%>
-    <c:set var="genreEndIndex" value="${listSize}"/>
-    
+    <%@include file="navigation.jsp"%>    
     <div>
 		<%@ include file="genresList.jsp"%>
+		<c:url value="/genres" var="listPath"/>
+		<%@ include file="pageNumbers.jsp"%>
     </div>
 </body>
 </html>

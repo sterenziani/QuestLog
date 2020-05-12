@@ -57,4 +57,22 @@ public class PublisherServiceImpl implements PublisherService
 	{
 		return publisherDao.getAllPublishers();
 	}
+
+	@Override
+	public List<Publisher> getPublishers(int page, int pageSize)
+	{
+		return publisherDao.getPublishers(page, pageSize);
+	}
+
+	@Override
+	public List<Publisher> getBiggestPublishers(int amount)
+	{
+		return publisherDao.getBiggestPublishers(amount);
+	}
+
+	@Override
+	public int countPublishers()
+	{
+		return publisherDao.countPublishers();
+	}
 }
