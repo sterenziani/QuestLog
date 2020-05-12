@@ -57,4 +57,11 @@ public interface PlatformService
 	 * @return The list of all platforms.
 	 */
 	List<Platform> getAllPlatforms();
+	List<Platform> getPlatforms(int page, int pageSize);
+	int countPlatforms();
+	List<Platform> getBiggestPlatforms(int amount);
+
+	List<Platform> getAllPlatformsWithGames();
+	List<Platform> getPlatformsWithGames(int page, int pageSize);
+	int countPlatformsWithGames();
 }

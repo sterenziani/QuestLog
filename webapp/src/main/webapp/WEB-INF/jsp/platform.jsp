@@ -6,7 +6,6 @@
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
     <div class="content">
-    	<div class="logo"><img class="page-header-image" src="${platform.logo}"/></div>
         <div>
 	        <spring:message code="platform.gamesForPlatform" arguments="${platform.name}" var="gamesForPlatform"/>
 	        <c:set var="games" value="${gamesInPage}"/>

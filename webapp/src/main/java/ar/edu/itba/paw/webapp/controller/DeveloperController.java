@@ -34,13 +34,18 @@ public class DeveloperController {
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
     
+    private static final int DEV_LIST_PAGE_SIZE = 30;
     private static final int PAGE_SIZE = 15;
 
     @RequestMapping("")
-    public ModelAndView developersList()
+    public ModelAndView developersList(@RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
         final ModelAndView mav = new ModelAndView("allDevelopers");
-        List<Developer> list = ds.getAllDevelopers();
+        List<Developer> list = ds.getDevelopers(page, DEV_LIST_PAGE_SIZE);
+        int countResults = ds.countDevelopers();
+        int totalPages = (countResults + DEV_LIST_PAGE_SIZE - 1)/DEV_LIST_PAGE_SIZE;
+		mav.addObject("pages", totalPages);
+		mav.addObject("current", page);
         mav.addObject("developers", list);
         mav.addObject("listSize", list.size());
         return mav;

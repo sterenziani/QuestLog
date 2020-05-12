@@ -56,4 +56,16 @@ public class GenreServiceImpl implements GenreService {
 	{
 		return genreDao.getAllGenres();
 	}
+
+	@Override
+	public List<Genre> getGenres(int page, int pageSize)
+	{
+		return genreDao.getGenres(page, pageSize);
+	}
+
+	@Override
+	public int countGenres()
+	{
+		return genreDao.countGenres();
+	}
 }

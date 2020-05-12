@@ -150,21 +150,13 @@ public class GameJdbcDao implements GameDao
 	}
 
 	@Override
-	public Game register(String title, String cover, String description, long[] platforms, long[] developers, long[] publishers, long[] genres, Map<Long, LocalDate> releaseDates)
+	public Game register(String title, String cover, String description)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("title", title); 
 		args.put("cover", cover); 
 		args.put("description", description);
 		final Number gameId = jdbcInsert.executeAndReturnKey(args);
-		if(gameId == null)
-			return null;
-		final long gameIdLong = gameId.longValue();
-		addPlatforms(gameIdLong, platforms);
-		addDevelopers(gameIdLong, developers);
-		addPublishers(gameIdLong, publishers);
-		addGenres(gameIdLong, genres);
-		addReleaseDates(gameIdLong, releaseDates);
 		return new Game(gameId.longValue(), title, cover, description);
 	}
 
@@ -209,7 +201,8 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	private void addPlatforms(long g, long[] platforms_ids)
+	@Override
+	public void addPlatforms(long g, long[] platforms_ids)
 	{
 		MapSqlParameterSource[] gameVersionRows = new MapSqlParameterSource[platforms_ids.length];
 		for(int i = 0; i < platforms_ids.length; i++){
@@ -246,7 +239,8 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	private void addPublishers(long g, long[] publisher_ids)
+	@Override
+	public void addPublishers(long g, long[] publisher_ids)
 	{
 		MapSqlParameterSource[] publishingRows = new MapSqlParameterSource[publisher_ids.length];
 		for(int i = 0; i < publisher_ids.length; i++){
@@ -283,7 +277,8 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	private void addDevelopers(long g, long[] devs_ids)
+	@Override
+	public void addDevelopers(long g, long[] devs_ids)
 	{
 		MapSqlParameterSource[] developmentRows = new MapSqlParameterSource[devs_ids.length];
 		for(int i = 0; i < devs_ids.length; i++){
@@ -320,7 +315,7 @@ public class GameJdbcDao implements GameDao
 		return findById(game.getId());
 	}
 
-	private void addGenres(long g, long[] genres_ids)
+	public void addGenres(long g, long[] genres_ids)
 	{
 		MapSqlParameterSource[] classificationRows = new MapSqlParameterSource[genres_ids.length];
 		for(int i = 0; i < genres_ids.length; i++){
@@ -358,12 +353,14 @@ public class GameJdbcDao implements GameDao
 		return findById(game.getId());
 	}
 
-	private void addReleaseDates(long g, Map<Long, LocalDate> releaseDates)
+	@Override
+	public void addReleaseDates(long g, Map<Long, LocalDate> releaseDates)
 	{
 		MapSqlParameterSource[] releasesRows = new MapSqlParameterSource[releaseDates.size()];
 		int i = 0;
 		for(Map.Entry<Long, LocalDate> releaseDate : releaseDates.entrySet()){
 			releasesRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("region", releaseDate.getKey()).addValue("release_date", releaseDate.getValue());
+			i++;
 		}
 		releasesJdbcInsert.executeBatch(releasesRows);
 	}

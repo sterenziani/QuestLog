@@ -1,5 +1,16 @@
 package ar.edu.itba.paw.webapp.controller.game;
-
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.RunService;
@@ -9,19 +20,10 @@ import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @Controller
-public class GameRunController {
-
+public class GameRunController
+{
     @Autowired
     private UserService         us;
 

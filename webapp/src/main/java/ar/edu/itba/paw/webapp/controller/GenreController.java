@@ -36,14 +36,19 @@ public class GenreController {
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
     
+    private static final int GENRE_LIST_PAGE_SIZE = 25;
     private static final int PAGE_SIZE = 15;
 
 
     @RequestMapping("")
-    public ModelAndView genresList()
+    public ModelAndView genresList(@RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
         final ModelAndView mav = new ModelAndView("allGenres");
-        List<Genre> list = gens.getAllGenres();
+        List<Genre> list = gens.getGenres(page, GENRE_LIST_PAGE_SIZE);
+        int countResults = gens.countGenres();
+        int totalPages = (countResults + GENRE_LIST_PAGE_SIZE - 1)/GENRE_LIST_PAGE_SIZE;
+		mav.addObject("pages", totalPages);
+		mav.addObject("current", page);
         mav.addObject("genres", list);
         mav.addObject("listSize", list.size());
         return mav;
@@ -67,6 +72,7 @@ public class GenreController {
         mav.addObject("gamesInPage",games);
         mav.addObject("pages", totalPages);
         mav.addObject("current", page);
+        mav.addObject("listIcon", g.getLogo());
         return mav;
     }
 

@@ -9,7 +9,8 @@ import ar.edu.itba.paw.model.Developer;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DeveloperServiceImpl implements DeveloperService{
+public class DeveloperServiceImpl implements DeveloperService
+{
 	
 	@Autowired
 	private DeveloperDao developerDao;
@@ -56,5 +57,23 @@ public class DeveloperServiceImpl implements DeveloperService{
 	public List<Developer> getAllDevelopers()
 	{
 		return developerDao.getAllDevelopers();
+	}
+
+	@Override
+	public List<Developer> getDevelopers(int page, int pageSize)
+	{
+		return developerDao.getDevelopers(page, pageSize);
+	}
+
+	@Override
+	public int countDevelopers()
+	{
+		return developerDao.countDevelopers();
+	}
+
+	@Override
+	public List<Developer> getBiggestDevelopers(int amount)
+	{
+		return developerDao.getBiggestDevelopers(amount);
 	}
 }

@@ -32,7 +32,14 @@ public class RunJdbcDao implements RunDao {
 	private	final SimpleJdbcInsert jdbcPlaystyleInsert;
 	private JdbcTemplate jdbcPlaystyleTemplate;
 	
-
+	@Autowired
+	private UserJdbcDao userDao;
+	
+	@Autowired
+	private GameJdbcDao gameDao;
+	
+	@Autowired
+	private PlatformJdbcDao platformDao;
 
 	protected static final RowMapper<Run> RUN_MAPPER = new RowMapper<Run>()
 	{
@@ -69,9 +76,9 @@ public class RunJdbcDao implements RunDao {
 	public Optional<Run> findRunById(long run) {
 		Optional<Run> r = jdbcRunTemplate.query("SELECT * FROM runs WHERE run = ?", RUN_MAPPER, run).stream().findFirst();
 		if(r.isPresent()) {
-			Optional <Game> game = getGame(r.get().getGame().getId());
-			Optional <User> user = getUser(r.get().getUser().getId());
-			Optional <Platform> platform = getPlatform(r.get().getPlatform().getId());
+			Optional <Game> game = gameDao.findById(r.get().getGame().getId());
+			Optional <User> user = userDao.findById(r.get().getUser().getId());
+			Optional <Platform> platform = platformDao.findById(r.get().getPlatform().getId());
 			Optional <Playstyle> ps = findPlaystyleById(r.get().getPlaystyle().getId());
 			if(game.isPresent() && user.isPresent() && platform.isPresent() && ps.isPresent()) {
 				r.get().setGame(game.get());
@@ -87,7 +94,7 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> findGameRuns(Game game, User user) {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE user_id = ? AND game = ?", RUN_MAPPER, user.getId(), game.getId());
 		for(Run r : runs) {
-			Optional <Platform> platform = getPlatform(r.getPlatform().getId());
+			Optional <Platform> platform = platformDao.findById(r.getPlatform().getId());
 			Optional <Playstyle> ps = findPlaystyleById(r.getPlaystyle().getId());
 			if(platform.isPresent() && ps.isPresent()) {
 				r.setGame(game);
@@ -103,8 +110,8 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> findAllUserRuns(User user) {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE user_id = ?", RUN_MAPPER, user.getId());
 		for(Run r : runs){
-			Optional <Game> game = getGame(r.getGame().getId());
-			Optional <Platform> platform = getPlatform(r.getPlatform().getId());
+			Optional <Game> game = gameDao.findById(r.getGame().getId());
+			Optional <Platform> platform = platformDao.findById(r.getPlatform().getId());
 			Optional <Playstyle> ps = findPlaystyleById(r.getPlaystyle().getId());
 			if(game.isPresent() && platform.isPresent() && ps.isPresent()) {
 				r.setGame(game.get());
@@ -120,8 +127,8 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> findAllGameRuns(Game game) {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE game = ?", RUN_MAPPER, game.getId());
 		for(Run r : runs){
-			Optional <User> user = getUser(r.getUser().getId());
-			Optional <Platform> platform = getPlatform(r.getPlatform().getId());
+			Optional <User> user = userDao.findById(r.getUser().getId());
+			Optional <Platform> platform = platformDao.findById(r.getPlatform().getId());
 			Optional <Playstyle> ps = findPlaystyleById(r.getPlaystyle().getId());
 			if(user.isPresent() && platform.isPresent() && ps.isPresent()) {
 				r.setGame(game);
@@ -137,9 +144,9 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> getAllRuns() {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs", RUN_MAPPER);
 		for (Run r : runs){
-			Optional <Game> game = getGame(r.getGame().getId());
-			Optional <User> user = getUser(r.getUser().getId());
-			Optional <Platform> platform = getPlatform(r.getPlatform().getId());
+			Optional <Game> game = gameDao.findById(r.getGame().getId());
+			Optional <User> user = userDao.findById(r.getUser().getId());
+			Optional <Platform> platform = platformDao.findById(r.getPlatform().getId());
 			Optional <Playstyle> ps = findPlaystyleById(r.getPlaystyle().getId());
 			if(game.isPresent() && user.isPresent() && platform.isPresent() && ps.isPresent()) {
 				r.setGame(game.get());
@@ -155,7 +162,7 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> findPlatformAndGameRuns(Game game, Platform platform) {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE platform = ? AND game = ?", RUN_MAPPER, platform.getId(), game.getId());
 		for (Run r : runs){
-			Optional <User> user = getUser(r.getUser().getId());
+			Optional <User> user = userDao.findById(r.getUser().getId());
 			Optional <Playstyle> ps = findPlaystyleById(r.getPlaystyle().getId());
 			if(user.isPresent() && ps.isPresent()) {
 				r.setGame(game);
@@ -172,8 +179,8 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> findPlaystyleAndGameRuns(Game game, Playstyle playstyle) {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE playstyle = ? AND game = ?", RUN_MAPPER, playstyle.getId(), game.getId());
 		for (Run r : runs){
-			Optional <User> user = getUser(r.getUser().getId());
-			Optional <Platform> platform = getPlatform(r.getPlatform().getId());
+			Optional <User> user = userDao.findById(r.getUser().getId());
+			Optional <Platform> platform = platformDao.findById(r.getPlatform().getId());
 			if(user.isPresent() && platform.isPresent()) {
 				r.setGame(game);
 				r.setPlatform(platform.get());
@@ -189,7 +196,7 @@ public class RunJdbcDao implements RunDao {
 	public List<Run> findSpecificRuns(Game game, Playstyle playstyle, Platform platform) {
 		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE playstyle = ? AND game = ? AND platform = ?", RUN_MAPPER, playstyle.getId(), game.getId(), platform.getId());
 		for (Run r : runs){
-			Optional <User> user = getUser(r.getUser().getId());
+			Optional <User> user = userDao.findById(r.getUser().getId());
 			if(user.isPresent()) {
 				r.setGame(game);
 				r.setPlatform(platform);
@@ -252,50 +259,6 @@ public class RunJdbcDao implements RunDao {
 		return new Run(runId.longValue(), user, game, platform, playstyle, time);
 	}
 	
-	@Override
-	public Optional<Game> getGame(long id)
-	{
-		return jdbcRunTemplate.query("SELECT * FROM (SELECT * FROM runs WHERE game = ? ORDER BY playstyle) AS g NATURAL JOIN games",
-				new RowMapper<Game>()
-				{
-					@Override
-					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
-					}
-				}, id).stream().findFirst();
-	}
-	
-	@Override
-	public Optional<User> getUser(long id)
-	{
-		Optional <User> user = jdbcRunTemplate.query("SELECT * FROM (SELECT * FROM runs WHERE user_id = ?) AS g NATURAL JOIN users",
-				new RowMapper<User>()
-				{
-					@Override
-					public User mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale"));
-					}
-				}, id).stream().findFirst();
-		return user;
-	}
-	
-	@Override
-	public Optional<Platform> getPlatform(long id)
-	{
-		Optional <Platform> platform = jdbcRunTemplate.query("SELECT * FROM (SELECT * FROM runs WHERE platform = ?) AS g NATURAL JOIN platforms",
-				new RowMapper<Platform>()
-				{
-					@Override
-					public Platform mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Platform(rs.getInt("platform"), rs.getString("platform_name"), rs.getString("platform_name_short"), rs.getString("platform_logo"));
-					}
-				}, id).stream().findFirst();
-		return platform;
-	}
-	
 	/**PLAYSTYLE METHODS
 	 */
 
@@ -329,6 +292,30 @@ public class RunJdbcDao implements RunDao {
 		args.put("playstyle_name", name); 
 		return new Playstyle(jdbcPlaystyleInsert.executeAndReturnKey(args).longValue(), name);
 	}
-		
 
+	@Override
+	public List<Run> findRunsByUser(User user, int page, int pageSize)
+	{
+		List<Run> runs = jdbcRunTemplate.query("SELECT * FROM runs WHERE user_id = ? LIMIT ? OFFSET ?", RUN_MAPPER, user.getId(), pageSize, (page-1)*pageSize);
+		for (Run r : runs)
+		{
+			Optional <Game> game = gameDao.findById(r.getGame().getId());
+			Optional <Platform> platform = platformDao.findById(r.getPlatform().getId());
+			Optional <Playstyle> ps = findPlaystyleById(r.getPlaystyle().getId());
+			if(game.isPresent() && platform.isPresent() && ps.isPresent())
+			{
+				r.setGame(game.get());
+				r.setPlatform(platform.get());
+				r.setPlaystyle(ps.get());
+				r.setUser(user);
+			}
+		}
+		return runs;
+	}
+
+	@Override
+	public int countRunsByUser(User user)
+	{
+		return jdbcRunTemplate.queryForObject("SELECT count(*) FROM runs WHERE user_id = ?", Integer.class, user.getId());
+	}
 }

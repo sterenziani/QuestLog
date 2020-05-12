@@ -34,13 +34,18 @@ public class PublisherController {
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
     
+    private static final int PUB_LIST_PAGE_SIZE = 30;
     private static final int PAGE_SIZE = 15;
 
     @RequestMapping("")
-    public ModelAndView publishersList()
+    public ModelAndView publishersList(@RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
         final ModelAndView mav = new ModelAndView("allPublishers");
-        List<Publisher> list = pubs.getAllPublishers();
+        List<Publisher> list = pubs.getPublishers(page, PUB_LIST_PAGE_SIZE);
+        int countResults = pubs.countPublishers();
+        int totalPages = (countResults + PUB_LIST_PAGE_SIZE - 1)/PUB_LIST_PAGE_SIZE;
+		mav.addObject("pages", totalPages);
+		mav.addObject("current", page);
         mav.addObject("publishers", list);
         mav.addObject("listSize", list.size());
         return mav;

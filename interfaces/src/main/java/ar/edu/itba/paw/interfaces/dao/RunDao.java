@@ -38,6 +38,8 @@ List<Run> findGameRuns(Game game, User user);
  */
 
 List<Run> findAllUserRuns(User user);
+List<Run> findRunsByUser(User user, int page, int pageSize);
+int countRunsByUser(User user);
 
 /**
  * Find all runs of a game
@@ -129,30 +131,6 @@ List<Run> getAllRuns();
  */
 
 Run register(User user, Game game, Platform platform, Playstyle playstyle, long time);
-
-/**
- * Get platform
- * @param id	platform id
- * @return	the platform
- */
-Optional<Platform> getPlatform(long id);
-
-
-/**
- * Get user
- * @param id	user id
- * @return	the user
- */
-Optional<User> getUser(long id);
-
-/**
- * Get game
- * @param id	game id
- * @return	 the game
- */
-Optional<Game> getGame(long id);
-
-
 
 /** PLAYSTYLE METHODS
  */

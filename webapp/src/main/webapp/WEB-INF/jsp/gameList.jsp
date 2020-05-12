@@ -10,11 +10,20 @@
         <div>
             <h2 class="share-tech-mono">${listName}</h2>
         </div>
-        <c:if test="${!empty seeAllUrl}">
-            <div class="ml-auto">
-                <a class="btn btn-link text-white" href="<c:url value="${seeAllUrl}"/>"><spring:message code="explore.seeAll"/></a>
-            </div>
-        </c:if>
+		<c:choose>
+			<c:when test="${!empty seeAllUrl}">
+	            <div class="ml-auto">
+	                <a class="btn btn-link text-white" href="<c:url value="${seeAllUrl}"/>"><spring:message code="explore.seeAll"/></a>
+	            </div>
+			</c:when>
+			<c:when test="${!empty listIcon}">
+				<div class="ml-auto">
+	                <div class="m-auto"><img class="list-icon page-header-image" src="<c:url value="/images/${listIcon}"/>"/></div>
+	            </div>
+			</c:when>
+			<c:otherwise>
+			</c:otherwise>
+		</c:choose>
     </div>
     <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
         <c:if test="${empty games}">
