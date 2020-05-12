@@ -94,8 +94,8 @@ public class AdminGameController
 		}
 	}
 
-	@RequestMapping(value = "/admin/game/{id}/edit", method = RequestMethod.GET)
-	public ModelAndView editGame(@ModelAttribute("gameForm") GameForm gameForm, @PathVariable("id") final long id)
+	@RequestMapping(value = "/admin/game/{game_id}/edit", method = RequestMethod.GET)
+	public ModelAndView editGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
 	{
 		ModelAndView mav = new ModelAndView("admin/game/gameForm");
 		Optional<Game> optg 		= gs.findByIdWithDetails(id);
@@ -117,21 +117,38 @@ public class AdminGameController
 		return mav;
 	}
 
-	@RequestMapping(value = "/admin/game/{id}/edit", method = RequestMethod.POST)
-	public ModelAndView updateGame(@Valid @ModelAttribute("gameForm") final GameForm gameForm, @PathVariable("id") final long id, final BindingResult errors, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView errorEditGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
+	{
+		ModelAndView mav = new ModelAndView("admin/game/gameForm");
+		List<Platform> 	platforms 	= ps.getAllPlatforms();
+		List<Developer> developers 	= ds.getAllDevelopers();
+		List<Publisher> publishers 	= pubs.getAllPublishers();
+		List<Genre> 	genres 		= gens.getAllGenres();
+		List<Region>	regions		= rs.getAllRegions();
+		mav.addObject("gameForm", gameForm);
+		mav.addObject("allPlatforms", platforms);
+		mav.addObject("allDevelopers", developers);
+		mav.addObject("allPublishers", publishers);
+		mav.addObject("allGenres", genres);
+		mav.addObject("allRegions", regions);
+		return mav;
+	}
+
+	@RequestMapping(value = "/admin/game/{game_id}/edit", method = RequestMethod.POST)
+	public ModelAndView updateGame(@PathVariable("game_id") long id, @Valid @ModelAttribute("gameForm") final GameForm gameForm, final BindingResult errors, HttpServletRequest request, HttpServletResponse response)
 	{
 		if(errors.hasErrors())
-			return editGame(gameForm, id);
+			return errorEditGame(id, gameForm);
 		try
 		{
 			gs.update(id, gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
+			return new ModelAndView("redirect:/games/" + id);
 		}
 		catch (IOException e)
 		{
 			LOGGER.error("The image provided for game {} threw an exception", gameForm.getTitle(), e);
 			throw new BadImageException();
 		}
-		return new ModelAndView("redirect:/games/" + id);
 	}
 
 	@RequestMapping(value = "/admin/game/{id}/delete", method = RequestMethod.GET)
