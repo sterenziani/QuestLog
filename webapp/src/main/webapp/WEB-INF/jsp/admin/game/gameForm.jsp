@@ -10,7 +10,16 @@
     <div class="card m-5 bg-very-light right-wave left-wave">
         <div class="card-header bg-very-dark text-white d-flex">
             <div>
-                <h2 class="share-tech-mono"><spring:message code="navigation.addGame"/></h2>
+                <h2 class="share-tech-mono">
+                    <c:choose>
+                        <c:when test="${! empty editMode && editMode == true}">
+                            <spring:message code="navigation.editGame"/>
+                        </c:when>
+                        <c:otherwise>
+                            <spring:message code="navigation.addGame"/>
+                        </c:otherwise>
+                    </c:choose>
+                </h2>
             </div>
         </div>
         <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
@@ -88,7 +97,15 @@
                         </script>
                     </c:forEach>
                 </div>
-                <input type="submit" class="btn btn-primary btn-block" value="Upload"/>
+                <c:choose>
+                    <c:when test="${! empty editMode && editMode == true}">
+                        <input type="submit" class="btn btn-primary btn-block" value="<spring:message code="gameForm.editSubmit"/>"/>
+                    </c:when>
+                    <c:otherwise>
+                        <input type="submit" class="btn btn-primary btn-block" value="<spring:message code="gameForm.addSubmit"/>"/>
+                    </c:otherwise>
+                </c:choose>
+
             </form:form>
         </div>
     </div>

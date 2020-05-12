@@ -114,6 +114,7 @@ public class AdminGameController
 		mav.addObject("allPublishers", publishers);
 		mav.addObject("allGenres", genres);
 		mav.addObject("allRegions", regions);
+		mav.addObject("editMode", true);
 		return mav;
 	}
 
@@ -131,6 +132,7 @@ public class AdminGameController
 		mav.addObject("allPublishers", publishers);
 		mav.addObject("allGenres", genres);
 		mav.addObject("allRegions", regions);
+		mav.addObject("editMode", true);
 		return mav;
 	}
 
