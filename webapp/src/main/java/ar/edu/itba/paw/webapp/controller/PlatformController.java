@@ -66,6 +66,7 @@ public class PlatformController {
 		mav.addObject("pages", totalPages);
 		mav.addObject("current", page);
 		mav.addObject("gamesInPage", pageResults);
+		mav.addObject("listIcon", p.getLogo());
         return mav;
     }
 

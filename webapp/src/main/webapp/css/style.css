@@ -42,6 +42,10 @@ body {
     height: 120px;
 }
 
+.list-icon{
+	height: 40px;
+}
+
 .padding-right-wave {
     padding-right: 4em;
 }
