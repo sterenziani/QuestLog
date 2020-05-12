@@ -5,9 +5,10 @@
 </head>
 <body class="background-primary">
     <%@include file="navigation.jsp"%>
-    <c:set var="publisherEndIndex" value="${listSize}"/>
     <div>
 		<%@ include file="publishersList.jsp"%>
+		<c:url value="/publishers" var="listPath"/>
+		<%@ include file="pageNumbers.jsp"%>
     </div>
 </body>
 </html>
