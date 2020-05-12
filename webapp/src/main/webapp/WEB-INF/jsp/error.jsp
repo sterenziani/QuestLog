@@ -9,7 +9,7 @@
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 	    <a class="navbar-brand" href="<c:url value="/"/>">
 	        <div class="navigation-logo">
-	            <h1><spring:message code="navigation.questLog"/></h1>
+	            <h1><img src="<c:url value="/images/questlog-logo.png"/>" alt="<spring:message code="navigation.questLog"/>"/></h1>
 	        </div>
 	    </a>
 	    <div class="w-100" id="navbarSupportedContent">
