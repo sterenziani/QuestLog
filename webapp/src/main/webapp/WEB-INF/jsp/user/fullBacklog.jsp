@@ -3,6 +3,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+    <title>QuestLog - <spring:message code="index.myBacklog"/></title>
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>

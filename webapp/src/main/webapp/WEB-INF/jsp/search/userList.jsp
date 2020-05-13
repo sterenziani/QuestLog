@@ -6,15 +6,31 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+	<c:choose>
+		<c:when test="${empty searchTerm}">
+			<title>QuestLog - <spring:message code="search.results" arguments="*"/></title>
+		</c:when>
+		<c:otherwise>
+			<title>QuestLog - <spring:message code="search.results" arguments="${searchTerm}"/></title>
+		</c:otherwise>
+    </c:choose>
+    <title>QuestLog - <spring:message code="search.results" arguments="${searchTerm}"/></title>
 </head>
 <body class="background-primary">
     <%@include file="../common/navigation.jsp"%>
     <div class="content">
     <div class="card m-5 bg-very-light right-wave left-wave">
-          <div class="card-header bg-very-dark text-white d-flex">
-         <div>
-         <h2 class="share-tech-mono"><spring:message code="search.results" arguments="${searchTerm}"/></h2>
-        </div>        
+		<div class="card-header bg-very-dark text-white d-flex">
+			<div>
+				<c:choose>
+					<c:when test="${empty searchTerm}">
+						<h2 class="share-tech-mono"><spring:message code="search.results" arguments="*"/></h2>
+					</c:when>
+					<c:otherwise>
+						<h2 class="share-tech-mono"><spring:message code="search.results" arguments="${searchTerm}"/></h2>
+					</c:otherwise>
+         		</c:choose>
+			</div>        
         </div>
         <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
         <div>

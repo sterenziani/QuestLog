@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@include file="../common/commonHead.jsp"%>
-
+	<title>QuestLog - ${game.title}</title>
 </head>
 <body>
     <%@ include file="../common/navigation.jsp"%>

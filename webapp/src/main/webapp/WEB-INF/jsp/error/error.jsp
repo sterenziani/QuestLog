@@ -4,6 +4,7 @@
 <html>
 <head>
    <%@include file="../common/commonHead.jsp"%>
+   <title>QuestLog - <spring:message code="error.title"/></title>
 </head>
 <body class="background-color">
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">

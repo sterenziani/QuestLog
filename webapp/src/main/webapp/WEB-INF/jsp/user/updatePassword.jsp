@@ -4,6 +4,7 @@
 <html>
 <head>
    <%@include file="../common/commonHead.jsp"%>
+   <title>QuestLog - <spring:message code="updatePassword.resetPasswords"/></title>
 </head>
 <body class="background-color">
     <%@include file="../common/navigation.jsp"%>

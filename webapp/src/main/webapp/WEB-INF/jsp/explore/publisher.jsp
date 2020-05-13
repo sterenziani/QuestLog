@@ -5,6 +5,7 @@
 </head>
 <body class="background-primary">
     <%@include file="../common/navigation.jsp"%>
+    <title>QuestLog - ${publisher.name}</title>
     <div class="content">
         <div>
 	        <spring:message code="publisher.gamesFromPublisher" arguments="${publisher.name}" var="gamesFromPublisher"/>

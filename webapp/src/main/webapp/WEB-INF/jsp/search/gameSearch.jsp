@@ -5,8 +5,17 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+	<c:choose>
+		<c:when test="${empty searchTerm}">
+			<title>QuestLog - <spring:message code="search.results" arguments="*"/></title>
+		</c:when>
+		<c:otherwise>
+			<title>QuestLog - <spring:message code="search.results" arguments="${searchTerm}"/></title>
+		</c:otherwise>
+    </c:choose>
 </head>
 <body class="background-primary">
+<c:set var="gameSearchResults" value="true"/>
 <%@include file="../common/navigation.jsp"%>
 <c:url value="/search" var="path"/>
 <div class="content">

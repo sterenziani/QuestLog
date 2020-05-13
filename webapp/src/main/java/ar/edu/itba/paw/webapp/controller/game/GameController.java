@@ -80,31 +80,6 @@ public class GameController {
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping("/games")
-    public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        final ModelAndView mav = new ModelAndView("explore/allGames");
-        User u = us.getLoggedUser();
-        if(u == null)
-        {
-            List<Game> games = gs.getAllGames();
-            backlogCookieHandlerService.updateWithBacklogDetails(games, backlog);
-            mav.addObject("games", games);
-        }
-        else
-        {
-            mav.addObject("games", gs.getAllGames());
-        }
-        return mav;
-    }
-
-    @RequestMapping(value = "/games", method = RequestMethod.POST)
-    public ModelAndView gamesList(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
-        return new ModelAndView("redirect:/games");
-    }
-
     @RequestMapping("/explore")
     public ModelAndView explore()
     {

@@ -4,6 +4,14 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+     <c:choose>
+         <c:when test="${! empty editMode && editMode == true}">
+             <title>QuestLog - <spring:message code="navigation.editGame"/></title>
+         </c:when>
+         <c:otherwise>
+             <title>QuestLog - <spring:message code="navigation.addGame"/></title>
+         </c:otherwise>
+     </c:choose>
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>
@@ -76,7 +84,7 @@
                         <label><strong><spring:message code="gameForm.releaseDates"/></strong></label>
                     </div>
                     <c:forEach var="region" items="${allRegions}">
-                        <label for="region-${region.shortName}">${region.name}</label>
+                        <label for="region-${region.shortName}">${region.shortName}</label>
                         <div class="input-group date mb-3" id="datetimepicker-${region.shortName}" data-target-input="nearest">
                             <c:choose>
                                 <c:when test="${gameForm.releaseDates.containsKey(region.id)}">

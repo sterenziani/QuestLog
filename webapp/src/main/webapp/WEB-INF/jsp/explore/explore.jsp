@@ -2,6 +2,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+    <title>QuestLog - <spring:message code="navigation.explore"/></title>
 </head>
 <body class="background-primary">
     <%@include file="../common/navigation.jsp"%>

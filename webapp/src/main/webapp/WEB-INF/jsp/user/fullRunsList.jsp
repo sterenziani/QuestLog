@@ -3,6 +3,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+    <title>QuestLog - <spring:message code="user.runs" arguments="${user.username}"/></title>
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>

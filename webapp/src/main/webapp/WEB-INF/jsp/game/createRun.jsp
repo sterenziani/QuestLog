@@ -5,6 +5,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
+    <title>QuestLog - <spring:message code="game.addRun"/></title>
 </head>
 <body>
     <%@ include file="../common/navigation.jsp"%>
