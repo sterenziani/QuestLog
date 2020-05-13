@@ -1,21 +1,27 @@
 package ar.edu.itba.paw.service;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import ar.edu.itba.paw.interfaces.service.ImageService;
-
-import ar.edu.itba.paw.model.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import org.springframework.transaction.annotation.Transactional;
+import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.GameDetail;
+import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Release;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class GameServiceImpl implements GameService
@@ -43,9 +49,9 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Optional<Game> findByIdWithDetails(long id)
+	public Optional<GameDetail> findByIdWithDetails(long id)
 	{
-		Optional<Game> g = gameDao.findByIdWithDetails(id);
+		Optional<GameDetail> g = gameDao.findByIdWithDetails(id);
 		if(g.isPresent())
 			g.get().setInBacklog(gameInBacklog(id));
 		return g;
@@ -63,9 +69,9 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Optional<Game> findByTitleWithDetails(String title)
+	public Optional<GameDetail> findByTitleWithDetails(String title)
 	{
-		Optional<Game> g = gameDao.findByTitleWithDetails(title);
+		Optional<GameDetail> g = gameDao.findByTitleWithDetails(title);
 		if(g.isPresent())
 			g.get().setInBacklog(gameInBacklog(g.get().getId()));
 		return g;
@@ -115,15 +121,6 @@ public class GameServiceImpl implements GameService
 	public List<Game> getAllGames()
 	{
 		List<Game> list = gameDao.getAllGames();
-		updateBacklogDetails(list);
-		return list;
-	}
-
-	@Transactional
-	@Override
-	public List<Game> getAllGamesWithDetails()
-	{
-		List<Game> list = gameDao.getAllGamesWithDetails();
 		updateBacklogDetails(list);
 		return list;
 	}

@@ -23,6 +23,7 @@ import ar.edu.itba.paw.interfaces.service.PublisherService;
 import ar.edu.itba.paw.interfaces.service.RegionService;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
@@ -100,10 +101,10 @@ public class AdminGameController
 	public ModelAndView editGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
 	{
 		ModelAndView mav = new ModelAndView("admin/game/gameForm");
-		Optional<Game> optg 		= gs.findByIdWithDetails(id);
+		Optional<GameDetail> optg 		= gs.findByIdWithDetails(id);
 		if(!optg.isPresent())
 			throw new GameNotFoundException();
-		Game g 						= optg.get();
+		GameDetail g 						= optg.get();
 		gameForm 					= new GameForm(g);
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();
