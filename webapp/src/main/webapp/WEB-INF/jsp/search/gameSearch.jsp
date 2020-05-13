@@ -41,7 +41,7 @@
 								<div class="form-group">
 									<input type="hidden" value="${searchTerm}" name="search"/>
 									<input type="hidden" value="1" name="page"/>
-									<select class="form-control" name="platforms" size="5" id="platforms" class="search-filters" multiple>
+									<select class="form-control advanced-select" name="platforms" size="5" id="platforms" class="search-filters" multiple>
 										<c:forEach var="platform" items="${platforms}">
 											<option value="${platform.id}">${platform.name}</option>
 										</c:forEach>
@@ -50,7 +50,7 @@
 							</td>
 							<td style="text-align: center; vertical-align: middle; padding:5px 5px">
 								<div class="form-group">
-									<select class="form-control" name="genres" size="5" id="genres" multiple>
+									<select class="form-control advanced-select" name="genres" size="5" id="genres" multiple>
 										<c:forEach var="genre" items="${genres}">
 											<option value="${genre.id}"><spring:message code="genres.${genre.name}"/></option>
 										</c:forEach>

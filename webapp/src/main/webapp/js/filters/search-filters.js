@@ -1,5 +1,5 @@
 //Allow to pick more than one option in genre and platform filter without using Ctrl
-$("select").mousedown(function(option){
+$(".advanced-select").mousedown(function(option){
     option.preventDefault();
     option.target.selected = !option.target.selected;
     
