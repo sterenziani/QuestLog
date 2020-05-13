@@ -52,22 +52,22 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findById(final long id)
 	{
-		return jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
-								+ "AS admin FROM users WHERE user_id = ? GROUP BY user_id", USER_MAPPER, id).stream().findFirst();
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND user_id = ?) "
+				+ "AS admin FROM users WHERE user_id = ?", USER_MAPPER, id, id).stream().findFirst();
 	}
 	
 	@Override
 	public Optional<User> findByUsername(String username)
 	{
-		return jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
-								+ "AS admin FROM users WHERE username LIKE ? GROUP BY user_id", USER_MAPPER, username).stream().findFirst();
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND username = ?) "
+				+ "AS admin FROM users WHERE username = ?", USER_MAPPER, username, username).stream().findFirst();
 	}
 	
 	@Override
 	public Optional<User> findByEmail(String email)
 	{
-		return jdbcTemplate.query("SELECT *, bool_and(users.user_id in (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin'))"
-								+ "AS admin FROM users WHERE email LIKE ? GROUP BY user_id", USER_MAPPER, email).stream().findFirst();
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND email = ?) "
+				+ "AS admin FROM users WHERE email = ?", USER_MAPPER, email, email).stream().findFirst();
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public List<User> getAllUsers()
 	{
-		return jdbcTemplate.query("SELECT *, bool_and(users.user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM users GROUP BY user_id", USER_MAPPER);
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND user_id = users.user_id) AS admin FROM users", USER_MAPPER);
 	}
 
 	@Override

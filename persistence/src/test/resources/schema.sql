@@ -116,3 +116,9 @@ CREATE TABLE IF NOT EXISTS role_assignments(
 	user_id INT NOT NULL,
 	role INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS tokens(
+	user_id INT NOT NULL,
+	token VARCHAR(250),
+	expiration DATE,
+);

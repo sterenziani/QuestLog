@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Publisher;
@@ -84,6 +85,7 @@ public class TestMethods
 		args.put("password", password);
 		args.put("email", email);
 		args.put("locale", locale);
+
 		return new User(userInsert.executeAndReturnKey(args).longValue(), username, password, email, locale);
 	}
 	
@@ -132,11 +134,11 @@ public class TestMethods
 		
 	}
 	
-	public static void addRole(String roleName, SimpleJdbcInsert roleInsert)
+	public static int addRole(String roleName, SimpleJdbcInsert roleInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("role_name", roleName);
-		roleInsert.execute(args);
+		return roleInsert.executeAndReturnKey(args).intValue();
 	}
 	
 	public static void connectDev(Game g, Developer d, SimpleJdbcInsert developmentInsert)
@@ -171,10 +173,21 @@ public class TestMethods
 		versionInsert.execute(args);
 	}
 	
-	public static void addRole(String roleName, SimpleJdbcInsert roleInsert)
+	public static void connectRoles(User u, int roleId, SimpleJdbcInsert versionInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
-		args.put("role_name", roleName);
-		roleInsert.execute(args);
+		args.put("user_id", u.getId());
+		args.put("role", roleId);
+		versionInsert.execute(args);
+	}
+	
+	public static PasswordResetToken addToken(User u, String token, Date date, SimpleJdbcInsert versionInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("user_id", u.getId());
+		args.put("token", token);
+		args.put("expiration", date);
+		versionInsert.execute(args);
+		return new PasswordResetToken(token,u,date);
 	}
 }
