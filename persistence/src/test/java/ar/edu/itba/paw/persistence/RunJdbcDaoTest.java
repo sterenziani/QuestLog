@@ -88,7 +88,13 @@ public class RunJdbcDaoTest {
 	
 	@Test
 	public void	testFindRunByIdExists()
-	{
+	{	
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, RUN_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLAYSTYLE_TABLE);
+
 		Game game = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		User user = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
 		Platform platform = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
@@ -105,7 +111,14 @@ public class RunJdbcDaoTest {
 	
 	@Test
 	public void testRegisterRun()
-	{	Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+	{	
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, RUN_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLAYSTYLE_TABLE);
+		
+		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, userInsert);
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		Playstyle ps = TestMethods.addPlaystyle(PLAYSTYLE_NAME, playstyleInsert);
@@ -120,6 +133,11 @@ public class RunJdbcDaoTest {
 	
 	@Test
 	public void testFindGameRuns() {
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, RUN_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLAYSTYLE_TABLE);
 		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
@@ -146,6 +164,12 @@ public class RunJdbcDaoTest {
 	
 	@Test
 	public void testGetAveragePlatformPlaytime() {
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, RUN_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLAYSTYLE_TABLE);
+		
 		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game g2 = TestMethods.addGame("Zelda 980", GAME_COVER, GAME_DESC, gameInsert);
 		Platform p1 = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);

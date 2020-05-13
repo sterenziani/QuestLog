@@ -96,7 +96,7 @@ public class PlatformJdbcDao implements PlatformDao
 	@Override
 	public List<Platform> getPlatforms(int page, int pageSize)
 	{
-		return jdbcTemplate.query("SELECT * FROM genres ORDER BY developer_name LIMIT ? OFFSET ?", PLATFORM_MAPPER, pageSize, (page-1)*pageSize);
+		return jdbcTemplate.query("SELECT * FROM platforms ORDER BY platform_name LIMIT ? OFFSET ?", PLATFORM_MAPPER, pageSize, (page-1)*pageSize);
 	}
 
 	@Override

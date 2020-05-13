@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.dao.ImageDao;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import org.hsqldb.types.BinaryData;
@@ -63,12 +64,30 @@ public class ImageJdbcDaoTest {
     {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
 
-        final Map<String, Object> args = new HashMap<>();
-        args.put("image_name", IMAGE_NAME);
-        Number key = jdbcInsert.executeAndReturnKey(args);
+        TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, jdbcInsert);
 
         Optional<Image> maybeImage = imageJdbcDao.findByImageName(IMAGE_NAME);
         Assert.assertTrue(maybeImage.isPresent());
         Assert.assertEquals(IMAGE_NAME, maybeImage.get().getImageName());
+        Assert.assertEquals(IMAGE_DATA, maybeImage.get().getImageData());
+
+    }
+    
+    @Test
+    public void testRemoveByName()
+    {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
+        TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, jdbcInsert);
+        Image image2 = TestMethods.addImage("pic", IMAGE_DATA, jdbcInsert);
+        
+        imageJdbcDao.removeByName(image2.getImageName());
+
+        Optional<Image> maybeImage = imageJdbcDao.findByImageName(image2.getImageName());
+        Assert.assertFalse(maybeImage.isPresent());
+        
+        imageJdbcDao.removeByName("pic2");
+        Optional<Image> maybeImage2 = imageJdbcDao.findByImageName(IMAGE_NAME);
+        Assert.assertTrue(maybeImage2.isPresent());
+        Assert.assertEquals(IMAGE_NAME, maybeImage2.get().getImageName());
     }
 }

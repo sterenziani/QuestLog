@@ -133,4 +133,58 @@ public class GenreJdbcDaoTest
 		Assert.assertEquals(genreList.get(0).getName(), myList.get(0).getName());
 		Assert.assertEquals(genreList.get(1).getName(), myList.get(1).getName());
 	}
+	
+	@Test
+	public void testGetGenres() {
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, genreInsert);
+		Genre g3 = TestMethods.addGenre("Action", GENRE_LOGO, genreInsert);
+		
+		List<Genre> myList = new ArrayList<Genre>();
+		myList.add(g1);
+		myList.add(g2);
+		myList.add(g3);
+		List<Genre> genreList1 = genreDao.getGenres(1,2);
+		List<Genre> genreList2 = genreDao.getGenres(2,2);
+		List<Genre> genreList3 = genreDao.getGenres(1,5);
+
+		Assert.assertFalse(genreList1.isEmpty());
+		Assert.assertFalse(genreList2.isEmpty());
+		Assert.assertFalse(genreList3.isEmpty());
+
+		Assert.assertEquals(2, genreList1.size());
+		Assert.assertEquals(1, genreList2.size());
+		Assert.assertEquals(3, genreList3.size());
+
+
+		Assert.assertEquals(genreList1.get(0).getName(), myList.get(0).getName());
+		Assert.assertEquals(genreList1.get(1).getName(), myList.get(1).getName());
+		
+		Assert.assertEquals(genreList2.get(0).getName(), myList.get(2).getName());
+		
+		Assert.assertEquals(genreList3.get(0).getName(), myList.get(0).getName());
+		Assert.assertEquals(genreList3.get(1).getName(), myList.get(1).getName());
+		Assert.assertEquals(genreList3.get(2).getName(), myList.get(2).getName());
+	}
+	
+	@Test
+	public void testCountGenres() {
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		TestMethods.addGenre("Puzzle", GENRE_LOGO, genreInsert);
+		
+		int count = genreDao.countGenres();
+		Assert.assertEquals(2, count);
+		
+		TestMethods.addGenre("Action", GENRE_LOGO, genreInsert);
+		
+		count = genreDao.countGenres();
+		Assert.assertEquals(3, count);
+		
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		
+		count = genreDao.countGenres();
+		Assert.assertEquals(0, count);
+	}
 }

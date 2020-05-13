@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Publisher;
@@ -121,6 +122,14 @@ public class TestMethods
 		final Map<String, Object> args = new HashMap<>();
 		args.put("playstyle_name", name);
 		return new Playstyle (playstyleInsert.executeAndReturnKey(args).longValue(), name);
+	}
+	
+	public static Image addImage(String name, byte[] data, SimpleJdbcInsert imageInsert) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("image_name", name);
+        args.put("image_data", data);
+        return new Image(imageInsert.executeAndReturnKey(args).longValue(), name, data);
+		
 	}
 	
 	public static void connectDev(Game g, Developer d, SimpleJdbcInsert developmentInsert)
