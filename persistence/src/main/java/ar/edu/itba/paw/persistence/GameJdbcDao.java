@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
@@ -43,6 +44,14 @@ public class GameJdbcDao implements GameDao
 			return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
 		}
 	};
+	protected static final RowMapper<GameDetail> GAME_DETAIL_MAPPER = new RowMapper<GameDetail>()
+	{
+		@Override
+		public GameDetail mapRow(ResultSet rs, int rowNum) throws SQLException
+		{
+			return new GameDetail(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
+		}
+	};
 	
 	@Autowired
 	public GameJdbcDao(final DataSource ds)
@@ -64,9 +73,9 @@ public class GameJdbcDao implements GameDao
 	}
 	
 	@Override
-	public Optional<Game> findByIdWithDetails(long id)
+	public Optional<GameDetail> findByIdWithDetails(long id)
 	{
-		Optional<Game> g = jdbcTemplate.query("SELECT * FROM games WHERE game = ?", GAME_MAPPER, id).stream().findFirst();
+		Optional<GameDetail> g = jdbcTemplate.query("SELECT * FROM games WHERE game = ?", GAME_DETAIL_MAPPER, id).stream().findFirst();
 		if(g.isPresent())
 		{
 			List<Platform> platforms = getAllPlatforms(g.get());
@@ -101,9 +110,9 @@ public class GameJdbcDao implements GameDao
 	}
 	
 	@Override
-	public Optional<Game> findByTitleWithDetails(String title)
+	public Optional<GameDetail> findByTitleWithDetails(String title)
 	{
-		Optional<Game> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE ?", GAME_MAPPER, title).parallelStream().findFirst();
+		Optional<GameDetail> game = jdbcTemplate.query("SELECT * FROM games WHERE title LIKE ?", GAME_DETAIL_MAPPER, title).parallelStream().findFirst();
 		if(game.isPresent())
 		{
 			List<Platform> platforms = getAllPlatforms(game.get());
@@ -167,10 +176,10 @@ public class GameJdbcDao implements GameDao
 	}
 	
 	@Override
-	public List<Game> getAllGamesWithDetails()
+	public List<GameDetail> getAllGamesWithDetails()
 	{
-		List<Game> games = jdbcTemplate.query("SELECT * FROM games", GAME_MAPPER);
-		for(Game g : games)
+		List<GameDetail> games = jdbcTemplate.query("SELECT * FROM games", GAME_DETAIL_MAPPER);
+		for(GameDetail g : games)
 		{
 			List<Platform> platforms = getAllPlatforms(g);
 			for(Platform p : platforms)
@@ -205,6 +214,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addPlatforms(long g, List<Long> platforms_ids)
 	{
+		if(platforms_ids == null)
+			return;
 		MapSqlParameterSource[] gameVersionRows = new MapSqlParameterSource[platforms_ids.size()];
 		int i = 0;
 		for(Long platform_id: platforms_ids){
@@ -226,7 +237,7 @@ public class GameJdbcDao implements GameDao
 		jdbcTemplate.update("DELETE FROM game_versions WHERE game = ?", g.getId());
 	}
 
-	private List<Platform> getAllPlatforms(Game g)
+	private List<Platform> getAllPlatforms(GameDetail gameDetail)
 	{
 		List<Platform> platformList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN game_versions NATURAL JOIN platforms",
 				new RowMapper<Platform>()
@@ -236,7 +247,7 @@ public class GameJdbcDao implements GameDao
 					{
 						return new Platform(rs.getInt("platform"), rs.getString("platform_name"), rs.getString("platform_name_short"), rs.getString("platform_logo"));
 					}
-				}, g.getId());
+				}, gameDetail.getId());
 		return platformList;
 	}
 	
@@ -250,6 +261,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addPublishers(long g, List<Long> publisher_ids)
 	{
+		if(publisher_ids == null)
+			return;
 		MapSqlParameterSource[] publishingRows = new MapSqlParameterSource[publisher_ids.size()];
 		int i = 0;
 		for(Long publisher_id : publisher_ids){
@@ -271,7 +284,7 @@ public class GameJdbcDao implements GameDao
 		return findById(g.getId());
 	}
 
-	private List<Publisher> getAllPublishers(Game g)
+	private List<Publisher> getAllPublishers(GameDetail gameDetail)
 	{
 		List<Publisher> publisherList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN publishing NATURAL JOIN publishers",
 				new RowMapper<Publisher>()
@@ -281,7 +294,7 @@ public class GameJdbcDao implements GameDao
 					{
 						return new Publisher(rs.getInt("publisher"), rs.getString("publisher_name"), rs.getString("publisher_logo"));
 					}
-				}, g.getId());
+				}, gameDetail.getId());
 		return publisherList;
 	}
 	
@@ -295,6 +308,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addDevelopers(long g, List<Long> devs_ids)
 	{
+		if(devs_ids == null)
+			return;
 		MapSqlParameterSource[] developmentRows = new MapSqlParameterSource[devs_ids.size()];
 		int i = 0;
 		for(Long dev_id : devs_ids){
@@ -316,7 +331,7 @@ public class GameJdbcDao implements GameDao
 		jdbcTemplate.update("DELETE FROM development WHERE game = ?", g.getId());
 	}
 
-	private List<Developer> getAllDevelopers(Game g)
+	private List<Developer> getAllDevelopers(GameDetail gameDetail)
 	{
 		List<Developer> developerList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN development NATURAL JOIN developers",
 				new RowMapper<Developer>()
@@ -326,7 +341,7 @@ public class GameJdbcDao implements GameDao
 					{
 						return new Developer(rs.getInt("developer"), rs.getString("developer_name"), rs.getString("developer_logo"));
 					}
-				}, g.getId());
+				}, gameDetail.getId());
 		return developerList;
 	}
 
@@ -340,6 +355,8 @@ public class GameJdbcDao implements GameDao
 	@Override
 	public void addGenres(long g, List<Long> genres_ids)
 	{
+		if(genres_ids == null)
+			return;
 		MapSqlParameterSource[] classificationRows = new MapSqlParameterSource[genres_ids.size()];
 		int i = 0;
 		for(Long genre_id : genres_ids){
@@ -362,7 +379,7 @@ public class GameJdbcDao implements GameDao
 	}
 
 
-	private List<Genre> getAllGenres(Game g)
+	private List<Genre> getAllGenres(GameDetail gameDetail)
 	{
 		List<Genre> genreList = jdbcTemplate.query("SELECT * FROM (SELECT * FROM games WHERE game = ?) AS g NATURAL JOIN classifications NATURAL JOIN genres",
 				new RowMapper<Genre>()
@@ -372,7 +389,7 @@ public class GameJdbcDao implements GameDao
 					{
 						return new Genre(rs.getInt("genre"), rs.getString("genre_name"), rs.getString("genre_logo"));
 					}
-				}, g.getId());
+				}, gameDetail.getId());
 		return genreList;
 	}
 
@@ -407,7 +424,7 @@ public class GameJdbcDao implements GameDao
 		jdbcTemplate.update("DELETE FROM releases WHERE game = ?", g.getId());
 	}
 
-	private List<Release> getAllReleaseDates(Game g)
+	private List<Release> getAllReleaseDates(GameDetail gameDetail)
 	{
 		List<Release> dates = jdbcTemplate.query("SELECT * FROM releases NATURAL JOIN regions WHERE game = ?",
 				new RowMapper<Release>()
@@ -418,7 +435,7 @@ public class GameJdbcDao implements GameDao
 						Region r = new Region(rs.getLong("region"), rs.getString("region_name"), rs.getString("region_short"));
 						return new Release(r, rs.getDate("release_date"));
 					}
-				}, g.getId());
+				}, gameDetail.getId());
 		return dates;
 	}
 	
@@ -427,9 +444,9 @@ public class GameJdbcDao implements GameDao
 		return jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY game LIMIT ? OFFSET ?", GAME_MAPPER, search, pageSize, (page-1)*pageSize);
 	}
 	
-	public List<Game> searchByTitleWithDetails(String search){
-		List<Game> searchGames = jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_MAPPER, search);
-		for(Game g : searchGames)
+	public List<GameDetail> searchByTitleWithDetails(String search){
+		List<GameDetail> searchGames = jdbcTemplate.query("SELECT DISTINCT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',?,'%')) ", GAME_DETAIL_MAPPER, search);
+		for(GameDetail g : searchGames)
 		{	
 			List<Platform> platforms = getAllPlatforms(g);
 			for(Platform p : platforms)

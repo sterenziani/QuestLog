@@ -20,8 +20,8 @@
 			<div class="row">
 				<div class="col-sm-4 text-right"><a href="<c:url value="/games/${element.game.id}"/>">${element.game}</a></div>
 				<div class="col-sm-2 text-center"><c:out value="${element.platform.shortName}"/></div>
-				<div class="col-sm-2 text-center"><spring:message code="playstyle.${element.playstyle.name}"/></div>
-				<div class="col-sm-3 text-center"><c:out value="${element}"/></div>
+				<div class="col-sm-3 text-center"><spring:message code="playstyle.${element.playstyle.name}"/></div>
+				<div class="col-sm-2 text-center"><c:out value="${element}"/></div>
 			</div>
 		</c:forEach>
 		</div>

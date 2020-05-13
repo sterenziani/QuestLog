@@ -1,16 +1,18 @@
 package ar.edu.itba.paw.service;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ScoreServiceImpl implements ScoreService{

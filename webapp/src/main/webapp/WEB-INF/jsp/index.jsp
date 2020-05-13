@@ -7,14 +7,16 @@
     <%@include file="navigation.jsp"%>
     <div class="content">
 	    <c:if test="${loggedUser != null && !empty cookieBacklog}">
-	    	<div class="import-prompt-box light-primary-color">
+		    <div class="container text-center align-middle mt-3">
+		    	<div class="my-1 py-4 bg-light border-bottom border-primary rounded-lg">
 	    		<p class="import-warning"><spring:message code="index.importPrompt"/></p>
-	    		<div class="import-buttons-box">
-	    			<a class="button" href="<c:url value="/backlog/clear"/>"><spring:message code="index.noImport"/></a>
-		    		<a class="button" href="<c:url value="/backlog/transfer"/>"><spring:message code="index.yesImport"/></a>
+	    		<div>
+	    			<a class="btn btn-dark" href="<c:url value="/backlog/clear"/>"><spring:message code="index.noImport"/></a>
+		    		<a class="btn btn-dark" href="<c:url value="/backlog/transfer"/>"><spring:message code="index.yesImport"/></a>
 		    	</div>
-		    	<p class="secondary-text-color import-tip"><spring:message code="index.ignoreImport"/></p>
-	    	</div>
+		    	<p class="my-1"><spring:message code="index.ignoreImport"/></p>
+		        </div>
+		    </div>
 	    </c:if>
         <%@include file="mainGameLists.jsp"%>
     </div>

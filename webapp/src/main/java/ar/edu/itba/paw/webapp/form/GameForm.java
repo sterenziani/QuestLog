@@ -1,53 +1,60 @@
 package ar.edu.itba.paw.webapp.form;
-import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.webapp.validators.anotation.ImageExists;
-import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
-import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.GameDetail;
+import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
+import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
+import ar.edu.itba.paw.webapp.validators.anotation.TitleUnique;
 
+@TitleUnique(gameId = "id", gameTitle = "title")
 public class GameForm {
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	private long id;
+	
     @Size(min = 1)
     private String              title;
 
     @Size(max = 15000)
     private String              description;
 
-    @ImageUnique
     @ImageSize(max=256000)
     private MultipartFile       cover;
 
-    @NotNull
     private List<Long>          platforms;
 
-    @NotNull
     private List<Long>          developers;
 
-    @NotNull
     private List<Long>          publishers;
 
-    @NotNull
     private List<Long>          genres;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Map<Long, LocalDate> releaseDates;
 
     public GameForm(){
-
     }
 
-    public GameForm(Game g){
+    public GameForm(GameDetail g){
+    	this.id = g.getId();
         this.title        = g.getTitle();
         this.description  = g.getDescription();
         this.platforms    = g.getPlatforms().stream().map(Platform::getId).collect(Collectors.toList());

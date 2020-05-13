@@ -25,35 +25,33 @@
 		    	<form:form name="runs" method="POST" action="run/${game.id}">
 		    		<input type="hidden" value="${game.id}" name="game"/>
 		    		<div class="user-form" style="text-align: center; vertical-align: middle;">
-			            <div class="form-field" style="padding:10px">
-			            	<h5>
-			            	<strong><spring:message code="game.platform"/></strong>
-			            	</h5>
-			               	<select name="platforms" id="platforms" style="padding: 5px">
-			                	<c:forEach var="platform" items="${game.platforms}">
-			                    <option value="${platform.name}">${platform.name}</option>
-			                    </c:forEach>
-							</select>
+			            <div class="form-field mt-2">
+			            	<h5><strong><spring:message code="game.platform"/></strong></h5>
+			            	<div class="form-group">
+				               	<select class="form-control" name="platforms" id="platforms" style="padding: 5px">
+				                	<c:forEach var="platform" items="${game.platforms}">
+				                    	<option value="${platform.name}">${platform.name}</option>
+				                    </c:forEach>
+								</select>
+			            	</div>
 						</div>
-						<div class="form-field" style="padding:10px">
-							<h5>
-							<strong><spring:message code="game.playstyle"/></strong>
-							</h5>
-							<select name="playstyles" id="playstyles" style="padding: 5px">
-			                	<c:forEach var="playstyle" items="${playstyles}">
-			                    	<option value="${playstyle}"><spring:message code="playstyle.${playstyle.name}"/></option>
-			                	</c:forEach>
-							</select>
+						<div class="form-field mt-2">
+							<h5><strong><spring:message code="game.playstyle"/></strong></h5>
+							<div class="form-group">
+								<select class="form-control" name="playstyles" id="playstyles" style="padding: 5px">
+				                	<c:forEach var="playstyle" items="${playstyles}">
+				                    	<option value="${playstyle}"><spring:message code="playstyle.${playstyle.name}"/></option>
+				                	</c:forEach>
+								</select>
+							</div>
 						</div>
-						<div class="form-field" style="padding:10px">
-							<h5>
-							<strong><spring:message code="game.time"/></strong>
-							</h5>
+						<div class="form-field mt-2">
+							<h5><strong><spring:message code="game.time"/></strong></h5>
 							<input type="number" min="0" max="9999" id="hours" name="hours" value="0"/><strong> :</strong>
 							<input type="number" min="0" max="59" id="mins" name="mins" value="0"/><strong> :</strong>
 							<input type="number" min="0" max="59" id="secs" name="secs" value="0"/>
 						</div>
-						<input type="submit" class="btn btn-dark" value="<spring:message code="game.submit"/>">
+						<input type="submit" class="btn btn-dark mt-3" value="<spring:message code="game.submit"/>">
 					</div>
 				</form:form>
 			</div>
