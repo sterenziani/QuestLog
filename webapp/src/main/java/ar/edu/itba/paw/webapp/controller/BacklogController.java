@@ -36,7 +36,7 @@ public class BacklogController {
     @RequestMapping("")
     public ModelAndView backlog(@RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("fullBacklog");
+        final ModelAndView mav = new ModelAndView("user/fullBacklog");
         User u = us.getLoggedUser();
         if(u == null)
         {
@@ -67,7 +67,7 @@ public class BacklogController {
     @RequestMapping("/{userId}")
     public ModelAndView backlog(@PathVariable("userId") long userId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("fullBacklog");
+        final ModelAndView mav = new ModelAndView("user/fullBacklog");
         User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
         User u = us.getLoggedUser();
         List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, page, PAGE_SIZE);

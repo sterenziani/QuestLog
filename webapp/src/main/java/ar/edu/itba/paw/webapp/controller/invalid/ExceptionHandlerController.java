@@ -24,7 +24,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchImage()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.imageNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -34,7 +34,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchUser()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.userNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -44,7 +44,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchGame()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.gameNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -54,7 +54,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchPlatform()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.platformNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -64,7 +64,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchDeveloper()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.developerNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -74,7 +74,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchGenre()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.genreNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -84,7 +84,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ModelAndView NoSuchPublisher()
 	{
-		ModelAndView m = new ModelAndView("errorException");
+		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.publisherNotExists");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
@@ -94,7 +94,7 @@ public class ExceptionHandlerController
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView notFoundHandler()
 	{
-		ModelAndView m = new ModelAndView("error");
+		ModelAndView m = new ModelAndView("error/error");
 		m.addObject("msg", "error.500");
 		return m;
 	}

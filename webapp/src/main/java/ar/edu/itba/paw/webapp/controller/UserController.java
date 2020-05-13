@@ -71,7 +71,7 @@ public class UserController
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
 	{
-		return new ModelAndView("register");
+		return new ModelAndView("user/register");
 	}
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.POST })
@@ -89,20 +89,20 @@ public class UserController
 	@RequestMapping("/login")
 	public ModelAndView login()
 	{
-		return new ModelAndView("login");
+		return new ModelAndView("user/login");
 	}
 	
 	@RequestMapping("/login_error")
 	public ModelAndView loginError()
 	{
-		ModelAndView mav = new ModelAndView("login");
+		ModelAndView mav = new ModelAndView("user/login");
 		mav.addObject("error", true);
 		return mav;
 	}
 	
 	@RequestMapping(value = "/userSearch", method = RequestMethod.GET)
 	public ModelAndView userSearch(@RequestParam String search, @RequestParam int page) {
-		final ModelAndView mav = new ModelAndView("userList");
+		final ModelAndView mav = new ModelAndView("search/userList");
 		List<User> users = us.searchByUsernamePaged(search, page, USER_PAGE_SIZE);
 		int countResults = us.countUserSearchResults(search); 
 
@@ -130,7 +130,7 @@ public class UserController
 	@RequestMapping("/users/{id}")
 	public ModelAndView userProfile(@PathVariable("id") long id, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
-		final ModelAndView mav = new ModelAndView("userProfile");
+		final ModelAndView mav = new ModelAndView("user/userProfile");
 		User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
 		User loggedUser = us.getLoggedUser();
 		List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, 1, BACKLOG_TEASER_PAGE_SIZE);
@@ -155,7 +155,7 @@ public class UserController
 	@RequestMapping("/profile")
 	public ModelAndView visitOwnProfile()
 	{
-		final ModelAndView mav = new ModelAndView("userProfile");
+		final ModelAndView mav = new ModelAndView("user/userProfile");
 		User u = us.getLoggedUser();
 		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("backlog", gamesInPage);
@@ -175,7 +175,7 @@ public class UserController
 	@RequestMapping(value = "/forgotPassword", method = { RequestMethod.GET })
 	public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm) 
 	{
-		return new ModelAndView("forgotPassword");
+		return new ModelAndView("user/forgotPassword");
 	}
 	
 	@RequestMapping(value = "/forgotPassword", method = { RequestMethod.POST })
@@ -187,7 +187,7 @@ public class UserController
 		String token = UUID.randomUUID().toString();
 		LOGGER.debug("Creating Password Reset Token for {}.", u.getUsername());
 		us.createPasswordResetTokenForUser(u, token);
-		final ModelAndView mav = new ModelAndView("forgotPassword");
+		final ModelAndView mav = new ModelAndView("user/forgotPassword");
 		mav.addObject("emailSent", true);
 		return mav;
 	}
@@ -203,7 +203,7 @@ public class UserController
 	    }
 	    else
 	    {
-	    	final ModelAndView mav = new ModelAndView("updatePassword");
+	    	final ModelAndView mav = new ModelAndView("user/updatePassword");
 	        mav.addObject("token", token);
 	        return mav;
 	    }
@@ -242,7 +242,7 @@ public class UserController
     @RequestMapping("/users/{userId}/scores")
     public ModelAndView viewScoresByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("fullScoreList");
+        final ModelAndView mav = new ModelAndView("user/fullScoreList");
         User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Score> scoresInPage = scors.findAllUserScores(visitedUser, page, SCORES_PAGE_SIZE);
         mav.addObject("scoresInPage", scoresInPage);
@@ -257,7 +257,7 @@ public class UserController
     @RequestMapping("/users/{userId}/runs")
     public ModelAndView viewRunsByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("fullRunsList");
+        final ModelAndView mav = new ModelAndView("user/fullRunsList");
         User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Run> runsInPage = rs.findRunsByUser(visitedUser, page, RUNS_PAGE_SIZE);
         mav.addObject("runsInPage", runsInPage);

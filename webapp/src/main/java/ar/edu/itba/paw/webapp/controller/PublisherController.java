@@ -40,7 +40,7 @@ public class PublisherController {
     @RequestMapping("")
     public ModelAndView publishersList(@RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
-        final ModelAndView mav = new ModelAndView("allPublishers");
+        final ModelAndView mav = new ModelAndView("explore/allPublishers");
         List<Publisher> list = pubs.getPublishers(page, PUB_LIST_PAGE_SIZE);
         int countResults = pubs.countPublishers();
         int totalPages = (countResults + PUB_LIST_PAGE_SIZE - 1)/PUB_LIST_PAGE_SIZE;
@@ -54,7 +54,7 @@ public class PublisherController {
     @RequestMapping("/{pubId}")
     public ModelAndView publisherProfile(@PathVariable("pubId") long pubId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("publisher");
+        final ModelAndView mav = new ModelAndView("explore/publisher");
         User u = us.getLoggedUser();
         Publisher p = pubs.findById(pubId).orElseThrow(PublisherNotFoundException::new);
         List<Game> pageResults = gs.getGamesForPublisher(p, page, PAGE_SIZE);
