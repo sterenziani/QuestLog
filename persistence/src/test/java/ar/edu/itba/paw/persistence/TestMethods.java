@@ -2,10 +2,7 @@ package ar.edu.itba.paw.persistence;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import ar.edu.itba.paw.model.*;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-<<<<<<< HEAD
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Genre;
@@ -19,8 +16,6 @@ import ar.edu.itba.paw.model.Review;
 import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
-=======
->>>>>>> 733c9de97f6da66b5794e35dda06813df4fe82f8
 
 public class TestMethods
 {
@@ -74,19 +69,13 @@ public class TestMethods
 		return new Region(regionInsert.executeAndReturnKey(args).longValue(), name, shortName);
 	}
 	
-	public static Release addRelease(Game g, Region r, Date d, SimpleJdbcInsert releaseInsert)
+	public static void addRelease(Game g, Region r, Date d, SimpleJdbcInsert releaseInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("game", g.getId());
 		args.put("region", r.getId());
 		args.put("release_date", d);
 		releaseInsert.execute(args);
-		return new Release(r, d);
-	}
-
-	public static Release makeRelease(Game g, Region r, Date d)
-	{
-		return new Release(r, d);
 	}
 	
 	public static User addUser(String username, String password, String email, String locale, SimpleJdbcInsert userInsert)
@@ -183,7 +172,7 @@ public class TestMethods
 		args.put("platform", p.getId());
 		versionInsert.execute(args);
 	}
-
+	
 	public static void connectRoles(User u, int roleId, SimpleJdbcInsert versionInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
@@ -201,5 +190,4 @@ public class TestMethods
 		versionInsert.execute(args);
 		return new PasswordResetToken(token,u,date);
 	}
-
 }

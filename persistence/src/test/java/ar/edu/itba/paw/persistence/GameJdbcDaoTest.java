@@ -549,7 +549,7 @@ public class GameJdbcDaoTest
 
 		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, CLASSIFICATION_TABLE));
 	}
-
+/*
 	@Test
 	public void testAddReleaseDate(){
 		Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
@@ -564,7 +564,8 @@ public class GameJdbcDaoTest
 	final static String ALTERNATIVE_REGION_NAME 	= "Japan";
 	final static String ALTERNATIVE_REGION_SHORT	= "JP";
 	final static Date   ALTERNATIVE_RELEASE_DATE	= Date.valueOf(LocalDate.now().minusDays(2));
-
+	*/
+/*
 	@Test
 	public void testAddReleaseDates(){
 		Game g 			 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
@@ -588,7 +589,7 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, RELEASE_TABLE, "game ='" + g.getId()
 				+"' AND region = '" + aregion.getId() + "' AND release_date = '" + ALTERNATIVE_RELEASE_DATE.toLocalDate() + "'"));
 	}
-
+*//*
 	@Test
 	public void testRemoveSpecificReleaseDate(){
 		Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
@@ -618,6 +619,7 @@ public class GameJdbcDaoTest
 
 		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, RELEASE_TABLE));
 	}
+	*/
 
 	static final String NON_MATCHING_GAME_TITLE = "Hello";
 	static final String MATCHING_GAME_TITLE		= "Hola";

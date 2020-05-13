@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.persistence;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -407,7 +406,7 @@ public class GameJdbcDao implements GameDao
 		MapSqlParameterSource[] releasesRows = new MapSqlParameterSource[releaseDates.size()];
 		int i = 0;
 		for(Map.Entry<Long, LocalDate> releaseDate : releaseDates.entrySet()){
-			releasesRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("region", releaseDate.getKey()).addValue("release_date", Date.valueOf(releaseDate.getValue()));
+			releasesRows[i] = new MapSqlParameterSource().addValue("game", g).addValue("region", releaseDate.getKey()).addValue("release_date", releaseDate.getValue());
 			i++;
 		}
 		releasesJdbcInsert.executeBatch(releasesRows);
