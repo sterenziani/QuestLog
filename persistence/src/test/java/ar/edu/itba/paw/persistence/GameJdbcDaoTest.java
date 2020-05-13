@@ -52,6 +52,8 @@ public class GameJdbcDaoTest
 	private static final String REGION_NAME 			= "North America";
 	private static final String REGION_SHORT 			= "NA";
 	private static final Date RELEASE_DATE 				= Date.valueOf(LocalDate.now());
+	private static final String USER_TABLE				= "users";
+	private static final String BACKLOG_TABLE			= "backlogs";
 	
 	@Autowired
 	private DataSource ds;
@@ -70,6 +72,8 @@ public class GameJdbcDaoTest
 	private SimpleJdbcInsert versionInsert;
 	private SimpleJdbcInsert regionInsert;
 	private SimpleJdbcInsert releaseInsert;
+	private SimpleJdbcInsert userInsert;
+	private SimpleJdbcInsert backlogInsert;
 	
 	@Before
 	public void	setUp()
@@ -87,6 +91,8 @@ public class GameJdbcDaoTest
 		versionInsert = new SimpleJdbcInsert(ds).withTableName(VERSION_TABLE);
 		regionInsert = new SimpleJdbcInsert(ds).withTableName(REGION_TABLE).usingGeneratedKeyColumns("region");
 		releaseInsert = new SimpleJdbcInsert(ds).withTableName(RELEASE_TABLE);
+		userInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("user_id");
+		backlogInsert = new SimpleJdbcInsert(ds).withTableName(BACKLOG_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHING_TABLE);
@@ -98,6 +104,8 @@ public class GameJdbcDaoTest
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, VERSION_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, REGION_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, RELEASE_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, BACKLOG_TABLE);
 	}
 	
 	/*@Test
@@ -636,183 +644,197 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(MATCHING_GAME_TITLE, match.getTitle());
 	}
 
-	/*
+	static final Date UPCOMING_GAME 		= Date.valueOf(LocalDate.now().plusDays(5));
+	static final Date RELEASED_TODAY_GAME 	= Date.valueOf(LocalDate.now());
+	static final Date RELEASED_GAME 		= Date.valueOf(LocalDate.now().minusDays(2));
+
 	@Test
-	public void testAddDeveloper()
-	{
+	public void testGetUpcomingGames(){
+		Game g_upcoming = TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game g_today	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game g_released = TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Region region   = TestMethods.addRegion(REGION_NAME, REGION_SHORT, regionInsert);
+		TestMethods.addRelease(g_upcoming, region, UPCOMING_GAME, releaseInsert);
+		List<Game> games = gameDao.getUpcomingGames();
+		Assert.assertEquals(1, games.size());
+	}
+
+	static final String USER_NAME 		= "root";
+	static final String USER_PASSWORD 	= "root";
+	static final String USER_EMAIL		= "root@questlog.com";
+	static final String USER_LOCALE		= "en";
+
+	@Test
+	public void testIsInBacklogWhenItIs(){
 		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Developer d1 = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
-		Developer d2 = TestMethods.addDeveloper("Nintendo", DEVELOPER_LOGO, devInsert);
-		TestMethods.connectDev(g, d1, developmentInsert);
-		Optional<Game> maybeGame = gameDao.addDeveloper(g, d2);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getDevelopers().contains(d1));
-		Assert.assertTrue(maybeGame.get().getDevelopers().contains(d2));
+		User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		TestMethods.addBacklog(g, u, backlogInsert);
+		Assert.assertTrue(gameDao.isInBacklog(g.getId(), u));
 	}
 
 	@Test
-	public void testAddPublisher()
-	{
+	public void testIsInBacklogWhenItIsNot(){
 		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
-		Optional<Game> maybeGame = gameDao.addPublisher(g, p);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getPublishers().contains(p));
-	}
-	
-	@Test
-	public void testAddGenre()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		Optional<Game> maybeGame = gameDao.addGenre(g, g1);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getGenres().contains(g1));
-	}
-	
-	@Test
-	public void testAddPlatform()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
-		Optional<Game> maybeGame = gameDao.addPlatform(g, p);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getPlatforms().contains(p));
+		User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		Assert.assertFalse(gameDao.isInBacklog(g.getId(), u));
 	}
 
 	@Test
-	public void testAddRelease()
-	{
+	public void testAddToBacklog(){
 		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Region r = TestMethods.addRegion(REGION_NAME, REGION_SHORT, regionInsert);
-		Release rel = new Release(r, new Date(2017, 03, 03));
-		Optional<Game> maybeGame = gameDao.addReleaseDate(g, rel);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel));
+		User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		gameDao.addToBacklog(g.getId(), u);
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, BACKLOG_TABLE));
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + g.getId()
+				+ "' AND user_id = '" + u.getId() + "'"));
+	}
+
+	private static final String ALTERNATIVE_GAME_TITLE 	= "Death Stranding";
+	private static final String ALTERNATIVE_GAME_COVER 	= "death-stranding.jpg";
+	private static final String ALTERNATIVE_GAME_DESC 	= "Venture into a post-apocalyptic world in orden to find connections, saving yourself and the world.";
+
+	@Test
+	public void removeFromBacklog(){
+		Game g 	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		User u 	= TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		TestMethods.addBacklog(g, u, backlogInsert);
+		TestMethods.addBacklog(ag, u, backlogInsert);
+		gameDao.removeFromBacklog(g.getId(), u);
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, BACKLOG_TABLE));
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + ag.getId()
+				+ "' AND user_id = '" + u.getId() + "'"));
+	}
+
+	private static final String ALTERNATIVE_USER_NAME 		= "admin";
+	private static final String ALTERNATIVE_USER_PASSWORD 	= "admin";
+	private static final String ALTERNATIVE_USER_EMAIL		= "admin@questlog.com";
+	private static final String ALTERNATIVE_USER_LOCALE		= "es";
+
+	private static final String ANOTHER_ALTERNATIVE_GAME_TITLE = "Pokemon Sword";
+	private static final String ANOTHER_ALTERNATIVE_GAME_COVER = "pkmn-sword.jpg";
+	private static final String ANOTHER_ALTERNATIVE_GAME_DESC  = "Throw yourself into the Galar Region! A region where Pokemon Battles take place in a huge stadium and Pokemon become as huge.";
+
+	@Test
+	public void testGetGamesInBacklog(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, userInsert);
+
+		TestMethods.addBacklog(g, u, backlogInsert);
+		TestMethods.addBacklog(ag, u, backlogInsert);
+		TestMethods.addBacklog(ag, au, backlogInsert);
+		TestMethods.addBacklog(aag, au, backlogInsert);
+
+		List<Game> inBacklog = gameDao.getGamesInBacklog(u);
+
+		Assert.assertEquals(2, inBacklog.size());
+		Iterator<Game> it = inBacklog.iterator();
+		Game next = it.next();
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + next.getId()
+				+ "' AND user_id = '" + u.getId() + "'"));
+		next = it.next();
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + next.getId()
+				+ "' AND user_id = '" + u.getId() + "'"));
 	}
 
 	@Test
-	public void testRemoveDeveloper()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Developer d1 = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
-		Developer d2 = TestMethods.addDeveloper("Nintendo", DEVELOPER_LOGO, devInsert);
-		TestMethods.connectDev(g, d1, developmentInsert);
-		TestMethods.connectDev(g, d2, developmentInsert);
-		Optional<Game> maybeGame = gameDao.removeDeveloper(g, d2);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertFalse(maybeGame.get().getDevelopers().isEmpty());
-		Assert.assertTrue(maybeGame.get().getDevelopers().contains(d1));
-		Assert.assertFalse(maybeGame.get().getDevelopers().contains(d2));
-	}
-	
-	@Test
-	public void testRemovePublisher()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Publisher p1 = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
-		Publisher p2 = TestMethods.addPublisher("SquareEnix", PUBLISHER_LOGO, pubInsert);
-		TestMethods.connectPub(g, p1, publishingInsert);
-		TestMethods.connectPub(g, p2, publishingInsert);
-		Optional<Game> maybeGame = gameDao.removePublisher(g, p1);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertFalse(maybeGame.get().getPublishers().isEmpty());
-		Assert.assertFalse(maybeGame.get().getPublishers().contains(p1));
-		Assert.assertTrue(maybeGame.get().getPublishers().contains(p2));
-	}
-	
-	@Test
-	public void testRemoveGenre()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		TestMethods.connectGenre(g, g1, classificationInsert);
-		Optional<Game> maybeGame = gameDao.removeGenre(g, g1);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getPlatforms().isEmpty());
-	}
-	
-	@Test
-	public void testRemovePlatform()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
-		TestMethods.connectPlatform(g, p, versionInsert);
-		Optional<Game> maybeGame = gameDao.removePlatform(g, p);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertTrue(maybeGame.get().getPlatforms().isEmpty());
-	}
-	
-	@Test
-	public void testRemoveRelease()
-	{
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Region r1 = TestMethods.addRegion(REGION_NAME, REGION_SHORT, regionInsert);
-		Region r2 = TestMethods.addRegion("Japan", "JP", regionInsert);
-		Release rel1 = new Release(r1, Date.valueOf("2017-03-03"));
-		Release rel2 = new Release(r2, Date.valueOf("2017-06-20"));
-		TestMethods.addRelease(g, r1, rel1.getDate(), releaseInsert);
-		TestMethods.addRelease(g, r2, rel2.getDate(), releaseInsert);
-		Optional<Game> maybeGame = gameDao.removeReleaseDate(g, rel1);
-		
-		Assert.assertTrue(maybeGame.isPresent());
-		Assert.assertFalse(maybeGame.get().getReleaseDates().contains(rel1));
-		Assert.assertTrue(maybeGame.get().getReleaseDates().contains(rel2));
+	public void testGetGamesInBacklogPaginated(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, userInsert);
+
+		TestMethods.addBacklog(g, u, backlogInsert);
+		TestMethods.addBacklog(ag, u, backlogInsert);
+		TestMethods.addBacklog(ag, au, backlogInsert);
+		TestMethods.addBacklog(aag, au, backlogInsert);
+
+		List<Game> inBacklog = gameDao.getGamesInBacklog(u, 1, 1);
+
+		Assert.assertEquals(1, inBacklog.size());
+		Iterator<Game> it = inBacklog.iterator();
+		Game next = it.next();
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + next.getId()
+				+ "' AND user_id = '" + u.getId() + "'"));
 	}
 
-	@Test 
-	public void	testSearchByTitle() 
-	{ 
-		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
-		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
-		TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
-		 
-		List<Game> myList = new ArrayList<Game>(); 
-		myList.add(raym); 
-		myList.add(mario); 
-		 
-		List<Game> gamesList1 = gameDao.searchByTitle("mA"); 
-		List<Game> gamesList2 = gameDao.searchByTitle("qwerty"); 
-		 
-		Assert.assertFalse(gamesList1.isEmpty()); 
-		Assert.assertEquals(2, gamesList1.size()); 
-		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle()); 
-		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
-		Assert.assertTrue(gamesList2.isEmpty()); 
-	}
-	
-	@Test 
-	public void	testSearchByTitleSimplified() 
-	{ 
-		Game raym = TestMethods.addGame("Rayman Legends", GAME_COVER, GAME_DESC, gameInsert); 
-		Game mario = TestMethods.addGame("Super Mario 3D World", GAME_COVER, GAME_DESC, gameInsert); 
-		TestMethods.addGame("Cuphead", GAME_COVER, GAME_DESC, gameInsert); 
-		 
-		List<Game> myList = new ArrayList<Game>(); 
-		myList.add(raym); 
-		myList.add(mario); 
-		 
-		List<Game> gamesList1 = gameDao.searchByTitle("mA"); 
-		List<Game> gamesList2 = gameDao.searchByTitle("qwerty"); 
-		 
-		Assert.assertFalse(gamesList1.isEmpty()); 
-		Assert.assertEquals(2, gamesList1.size()); 
-		Assert.assertEquals(gamesList1.get(0).getTitle(), myList.get(0).getTitle()); 
-		Assert.assertEquals(gamesList1.get(1).getTitle(), myList.get(1).getTitle()); 
-		Assert.assertTrue(gamesList2.isEmpty()); 
+	@Test
+	public void testCountGamesInBacklog(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, userInsert);
+
+		TestMethods.addBacklog(g, u, backlogInsert);
+		TestMethods.addBacklog(ag, u, backlogInsert);
+		TestMethods.addBacklog(ag, au, backlogInsert);
+		TestMethods.addBacklog(aag, au, backlogInsert);
+
+		int amout = gameDao.countGamesInBacklog(u);
+
+		Assert.assertEquals(2, amout);
 	}
 
-	*/
-	
+	private static final String ANOTHER_ALTERNATIVE_USER_NAME 		= "agua2";
+	private static final String ANOTHER_ALTERNATIVE_USER_PASSWORD 	= "ague2";
+	private static final String ANOTHER_ALTERNATIVE_USER_EMAIL		= "agua@questlog.com";
+	private static final String ANOTHER_ALTERNATIVE_USER_LOCALE		= "es";
+
+	private static final String NINTENDO_USER			= "nintendo";
+	private static final String NINTENDO_USER_EMAIL		= "nintendo@questlog.com";
+
+	private static final String PLAYSTATION_USER		= "playstation";
+	private static final String PLAYSTATION_USER_EMAIL	= "playstation@questlog.com";
+
+	@Test
+	public void testGetSimilarToBacklog(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game sw  = TestMethods.addGame("Star Wars Republic", ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, userInsert);
+		User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
+		User nu  = TestMethods.addUser(NINTENDO_USER, ANOTHER_ALTERNATIVE_USER_PASSWORD, NINTENDO_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
+		User pu  = TestMethods.addUser(PLAYSTATION_USER, ANOTHER_ALTERNATIVE_USER_PASSWORD, PLAYSTATION_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
+
+		TestMethods.addBacklog(g, u, backlogInsert);
+		TestMethods.addBacklog(ag, u, backlogInsert);
+		TestMethods.addBacklog(aag, u, backlogInsert);
+		TestMethods.addBacklog(sw, u, backlogInsert);
+		TestMethods.addBacklog(g, au, backlogInsert);
+		TestMethods.addBacklog(ag, au, backlogInsert);
+		TestMethods.addBacklog(aag, au, backlogInsert);
+
+		List<Game> similar = gameDao.getSimilarToBacklog(u);
+
+		Assert.assertEquals(1, similar.size());
+	}
+
+	@Test
+	public void testGetMostBacklogged(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, userInsert);
+		User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
+		User nu  = TestMethods.addUser(NINTENDO_USER, ANOTHER_ALTERNATIVE_USER_PASSWORD, NINTENDO_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
+
+		TestMethods.addBacklog(g, u, backlogInsert);
+		TestMethods.addBacklog(g, au, backlogInsert);
+		TestMethods.addBacklog(g, aau, backlogInsert);
+		TestMethods.addBacklog(g, nu, backlogInsert);
+
+		List<Game> popular = gameDao.getMostBacklogged();
+
+		Assert.assertEquals(1, popular.size());
+	}
+
+
 	@Test
 	public void	testGetAllGamesSimplified()
 	{

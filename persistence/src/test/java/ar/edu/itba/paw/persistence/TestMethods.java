@@ -166,4 +166,12 @@ public class TestMethods
 		args.put("platform", p.getId());
 		versionInsert.execute(args);
 	}
+
+	public static void addBacklog(Game g, User u, SimpleJdbcInsert backlogInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("game", g.getId());
+		args.put("user_id", u.getId());
+		backlogInsert.execute(args);
+	}
 }

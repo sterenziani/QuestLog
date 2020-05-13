@@ -116,3 +116,8 @@ CREATE TABLE IF NOT EXISTS role_assignments(
 	user_id INT NOT NULL,
 	role INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS backlogs(
+	user_id INT NOT NULL,
+	game INT NOT NULL,
+);
