@@ -770,8 +770,6 @@ public class GameJdbcDaoTest
 	public void testGetSimilarToBacklog(){
 		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
-		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
-		Game sw  = TestMethods.addGame("Star Wars Republic", ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
 		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
 		User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, userInsert);
 		User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
@@ -788,7 +786,7 @@ public class GameJdbcDaoTest
 		TestMethods.addBacklog(ag, nu, backlogInsert);
 		TestMethods.addBacklog(ag, pu, backlogInsert);
 
-		List<Game> similar = gameDao.getSimilarToBacklog(u);
+		List<Game> similar = gameDao.getSimilarToBacklog(pu);
 
 		Assert.assertEquals(1, similar.size());
 	}
