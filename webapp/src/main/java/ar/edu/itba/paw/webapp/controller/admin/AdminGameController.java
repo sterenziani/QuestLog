@@ -1,39 +1,41 @@
 package ar.edu.itba.paw.webapp.controller.admin;
-import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.webapp.exception.BadImageException;
-import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.GameForm;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import ar.edu.itba.paw.interfaces.service.DeveloperService;
+import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.GenreService;
+import ar.edu.itba.paw.interfaces.service.PlatformService;
+import ar.edu.itba.paw.interfaces.service.PublisherService;
+import ar.edu.itba.paw.interfaces.service.RegionService;
+import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.webapp.exception.BadImageException;
+import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import ar.edu.itba.paw.webapp.form.GameForm;
 
 @Controller
 public class AdminGameController
 {
 	@Autowired
 	private GameService			gs;
-
-	@Autowired
-	private ImageService 		is;
 
 	@Autowired
 	private PlatformService 	ps;
@@ -100,7 +102,7 @@ public class AdminGameController
 		ModelAndView mav = new ModelAndView("admin/game/gameForm");
 		Optional<Game> optg 		= gs.findByIdWithDetails(id);
 		if(!optg.isPresent())
-			throw new UserNotFoundException();
+			throw new GameNotFoundException();
 		Game g 						= optg.get();
 		gameForm 					= new GameForm(g);
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
@@ -108,6 +110,7 @@ public class AdminGameController
 		List<Publisher> publishers 	= pubs.getAllPublishers();
 		List<Genre> 	genres 		= gens.getAllGenres();
 		List<Region>	regions		= rs.getAllRegions();
+		mav.addObject("gameId", id);
 		mav.addObject("gameForm", gameForm);
 		mav.addObject("allPlatforms", platforms);
 		mav.addObject("allDevelopers", developers);

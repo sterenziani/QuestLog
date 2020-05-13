@@ -24,10 +24,12 @@
         </div>
         <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
             <form:form modelAttribute="gameForm" method="post" enctype="multipart/form-data" cssClass="w-100">
+            	<form:input value="${gameId}" type="hidden" path="id"/>
                 <div class="form-group">
                     <c:set var="title"><spring:message code="gameForm.title"/></c:set>
                     <form:label for="title" path="title">${title}</form:label>
                     <form:errors path="title" class="form-error" element="p"/>
+                    <form:errors class="form-error" element="p"/>
                     <form:input cssClass="form-control" path="title" name="title" type="text" placeholder="${title}"/>
                 </div>
                 <div class="form-group">
