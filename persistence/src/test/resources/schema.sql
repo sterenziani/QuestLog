@@ -117,14 +117,12 @@ CREATE TABLE IF NOT EXISTS role_assignments(
 	role INT NOT NULL
 );
 
-<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS backlogs(
 	user_id INT NOT NULL,
-	game INT NOT NULL,
-=======
+	game INT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS tokens(
 	user_id INT NOT NULL,
 	token VARCHAR(250),
 	expiration DATE,
->>>>>>> fe1b1da4d267f8722251c0f4bb9944fa43ff1ac7
 );

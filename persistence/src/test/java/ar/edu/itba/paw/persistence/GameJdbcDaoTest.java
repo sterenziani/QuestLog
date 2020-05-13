@@ -836,6 +836,38 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(1, popular.size());
 	}
 
+	@Test
+	public void testRemove(){
+		Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		gameDao.remove(g);
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, GAME_TABLE));
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "game = '" + ag.getId() + "'"));
+	}
+
+	@Test
+	public void testUpdate(){
+		Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		g.setTitle(ALTERNATIVE_GAME_TITLE);
+		g.setCover(ALTERNATIVE_GAME_COVER);
+		g.setDescription(ALTERNATIVE_GAME_DESC);
+		gameDao.update(g);
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "game = '" + g.getId()
+				+ "' AND title = '" + ALTERNATIVE_GAME_TITLE + "' AND description = '" + ALTERNATIVE_GAME_DESC
+				+ "' AND cover = '" + ALTERNATIVE_GAME_COVER + "'"));
+	}
+
+	@Test
+	public void testUpdateWithoutCover(){
+		Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		g.setTitle(ALTERNATIVE_GAME_TITLE);
+		g.setCover(ALTERNATIVE_GAME_COVER);
+		g.setDescription(ALTERNATIVE_GAME_DESC);
+		gameDao.updateWithoutCover(g);
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "game = '" + g.getId()
+				+ "' AND title = '" + ALTERNATIVE_GAME_TITLE + "' AND description = '" + ALTERNATIVE_GAME_DESC
+				+ "' AND cover = '" + GAME_COVER + "'"));
+	}
 
 	@Test
 	public void	testGetAllGamesSimplified()
