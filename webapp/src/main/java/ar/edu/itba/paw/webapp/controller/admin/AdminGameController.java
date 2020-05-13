@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.webapp.controller.admin;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exception.BadFormatException;
 import ar.edu.itba.paw.webapp.exception.BadImageException;
 import ar.edu.itba.paw.webapp.form.GameForm;
@@ -23,13 +24,6 @@ import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.PublisherService;
 import ar.edu.itba.paw.interfaces.service.RegionService;
-import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.GameDetail;
-import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.Region;
 import ar.edu.itba.paw.webapp.exception.BadImageException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.form.GameForm;
@@ -157,6 +151,10 @@ public class AdminGameController
 	public ModelAndView deleteGame(@PathVariable("id") final long id, HttpServletRequest request)
 	{
 		gs.removeById(id);
-		return new ModelAndView("redirect:" + request.getHeader("Referer"));
+		String referer = request.getHeader("Referer");
+		if(referer == null){
+			return new ModelAndView("redirect:/");
+		}
+		return new ModelAndView("redirect:" + referer);
 	}
 }
