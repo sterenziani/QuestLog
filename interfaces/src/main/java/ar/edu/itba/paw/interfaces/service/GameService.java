@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exception.BadFormatException;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface GameService
 {
@@ -65,7 +67,6 @@ public interface GameService
 	 * Create a new game.
 	 * @param title 		The title of the game.
 	 * @param cover			The cover of the game.
-	 * @param cover_image	The cover data in bytes of the game.
 	 * @param description	The description of the game
 	 * @param platforms		The platforms the game is on
 	 * @param developers	The developers of the game
@@ -75,7 +76,7 @@ public interface GameService
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, String cover, byte[] cover_image, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates);
+	Game register(String title, MultipartFile cover, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException;
 	
 	/**
 	 * Get a list of all available games.
@@ -242,5 +243,5 @@ public interface GameService
 
 	void remove(Game g);
 
-	void update(long id, String title, String cover, byte[] data, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates);
+	void update(long id, String title, MultipartFile cover, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException;
 }

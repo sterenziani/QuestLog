@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exception.BadFormatException;
 import ar.edu.itba.paw.webapp.exception.BadImageException;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -83,11 +84,11 @@ public class AdminGameController
 		try
 		{
 			LOGGER.debug("Registering game {} to the database. Using file {} as cover.", gameForm.getTitle(), gameForm.getCover().getOriginalFilename());
-			final Game g = gs.register(gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
+			final Game g = gs.register(gameForm.getTitle(), gameForm.getCover(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 			LOGGER.debug("Game {} successfully registered!", gameForm.getTitle());
 			return new ModelAndView("redirect:/games/" + g.getId());
 		}
-		catch (IOException e)
+		catch (BadFormatException e)
 		{
 			LOGGER.error("IOException thrown when attempting to upload image {} to the database while creating game {}.", gameForm.getCover().getOriginalFilename(), gameForm.getTitle(), e);
 			throw new BadImageException();
@@ -143,10 +144,10 @@ public class AdminGameController
 			return errorEditGame(id, gameForm);
 		try
 		{
-			gs.update(id, gameForm.getTitle(), gameForm.getCover().getOriginalFilename(), gameForm.getCover().getBytes(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
+			gs.update(id, gameForm.getTitle(), gameForm.getCover(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 			return new ModelAndView("redirect:/games/" + id);
 		}
-		catch (IOException e)
+		catch (BadFormatException e)
 		{
 			LOGGER.error("The image provided for game {} threw an exception", gameForm.getTitle(), e);
 			throw new BadImageException();

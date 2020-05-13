@@ -23,7 +23,6 @@ public class GameForm {
     @Size(max = 15000)
     private String              description;
 
-    @ImageUnique
     @ImageSize(max=256000)
     private MultipartFile       cover;
 

@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -7,6 +8,9 @@ import java.util.stream.Collectors;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exception.BadFormatException;
+import javassist.NotFoundException;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class GameServiceImpl implements GameService
@@ -97,16 +102,22 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Game register(String title, String cover, byte[] cover_image, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates)
+	public Game register(String title, MultipartFile cover, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException
 	{
 		LOGGER.debug("Registering new game {} with cover {}, platforms {}", title, cover, platforms);
-		Game g = gameDao.register(title, cover, description);
+		Game g = gameDao.register(title, null, description);
+		g.setCover(getCoverName(g.getId(), cover));
+		gameDao.update(g);
 		gameDao.addPlatforms(g.getId(), platforms);
 		gameDao.addDevelopers(g.getId(), developers);
 		gameDao.addPublishers(g.getId(), publishers);
 		gameDao.addGenres(g.getId(), genres);
 		gameDao.addReleaseDates(g.getId(), releaseDates);
-		is.uploadImage(cover, cover_image);
+		try {
+			is.uploadImage(g.getCover(), cover.getBytes());
+		} catch (IOException e){
+			throw new BadFormatException();
+		}
 		return g;
 	}
 
@@ -474,7 +485,7 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public void update(long id, String title, String cover, byte[] data, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) {
+	public void update(long id, String title, MultipartFile cover, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException {
 		Optional<Game> optg = gameDao.findById(id);
 		Game		   g    = optg.get();
 		g.setTitle(title);
@@ -489,14 +500,23 @@ public class GameServiceImpl implements GameService
 		gameDao.addPublishers(id, publishers);
 		gameDao.addGenres(id, genres);
 		gameDao.addReleaseDates(id, releaseDates);
-		if(cover != null && data != null && data.length != 0) {
-			g.setCover(cover);
+		if(cover != null && !cover.isEmpty()) {
+			String coverName = getCoverName(id, cover);
 			is.removeByName(g.getCover());
-			is.uploadImage(cover, data);
+			try {
+				is.uploadImage(coverName, cover.getBytes());
+			} catch (IOException e){
+				throw new BadFormatException();
+			}
+			g.setCover(coverName);
 			gameDao.update(g);
 		} else {
 			gameDao.updateWithoutCover(g);
 		}
 
+	}
+
+	private String getCoverName(long id, MultipartFile cover){
+		return "cover-game-"+ id + FilenameUtils.getExtension(cover.getOriginalFilename());
 	}
 }
