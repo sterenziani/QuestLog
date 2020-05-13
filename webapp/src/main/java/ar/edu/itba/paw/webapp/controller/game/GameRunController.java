@@ -16,6 +16,7 @@ import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.User;
@@ -45,7 +46,7 @@ public class GameRunController
         User user = us.getLoggedUser();
         if(user == null)
             return new ModelAndView("redirect:/games/{gameId}");
-        Optional<Game> game = gs.findByIdWithDetails(gameId);
+        Optional<GameDetail> game = gs.findByIdWithDetails(gameId);
         Optional <Platform> plat = ps.findByName(platform);
         long time = hours*3600 + mins*60 + secs;
         Optional <Playstyle> play = runs.findPlaystyleByName(playst);

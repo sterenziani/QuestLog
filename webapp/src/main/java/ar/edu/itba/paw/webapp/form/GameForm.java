@@ -9,14 +9,27 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
+import ar.edu.itba.paw.webapp.validators.anotation.TitleUnique;
 
+@TitleUnique(gameId = "id", gameTitle = "title")
 public class GameForm {
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	private long id;
+	
     @Size(min = 1)
     private String              title;
 
@@ -38,10 +51,10 @@ public class GameForm {
     private Map<Long, LocalDate> releaseDates;
 
     public GameForm(){
-
     }
 
-    public GameForm(Game g){
+    public GameForm(GameDetail g){
+    	this.id = g.getId();
         this.title        = g.getTitle();
         this.description  = g.getDescription();
         this.platforms    = g.getPlatforms().stream().map(Platform::getId).collect(Collectors.toList());

@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.webapp.validators.implementation;
 import ar.edu.itba.paw.webapp.validators.anotation.FieldMatch;
-
 import java.lang.reflect.Field;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,5 +39,5 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
         passwordField.setAccessible(true);
         return passwordField.get(object);
     }
- 
+
 }
