@@ -309,7 +309,7 @@ public class GameJdbcDaoTest
 
 	public void testRegister()
 	{
-		Game g = gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC);
+		gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC);
 		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "title ='" + GAME_TITLE +"' AND cover = '"
 				+ GAME_COVER + "' AND description = '" + GAME_DESC + "'"));
 	}
@@ -820,18 +820,16 @@ public class GameJdbcDaoTest
 		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
 		TestMethods.connectGenre(g, gen, classificationInsert);
 		TestMethods.connectGenre(ag, gen, classificationInsert);
-		TestMethods.connectGenre(aag, gen, classificationInsert);
 		TestMethods.connectGenre(sw, gen, classificationInsert);
 		TestMethods.connectPlatform(g, p, versionInsert);
 		TestMethods.connectPlatform(ag, p, versionInsert);
 		TestMethods.connectPlatform(aag, p, versionInsert);
-		TestMethods.connectPlatform(sw, p, versionInsert);
 		TestMethods.addScore(u, g, 7, scoreInsert);
-		TestMethods.addScore(u, ag, 5, scoreInsert);
+		TestMethods.addScore(u, ag, 2, scoreInsert);
 		TestMethods.addScore(u, aag, 6, scoreInsert);
 		TestMethods.addScore(u, sw, 9, scoreInsert);
-		List<Game> games = gameDao.getFilteredGames("", Collections.singletonList(gen.getId() + ""),Collections.singletonList(p.getId() + ""), 5, 8, 0, 0, 1, 4 );
-		Assert.assertEquals(2, games.size());
+		List<Game> games = gameDao.getFilteredGames("", Collections.singletonList(gen.getId() + ""),Collections.singletonList(p.getId() + ""), 5, 8, 0, 35999999, 1, 4 );
+		Assert.assertEquals(1, games.size());
 	}
 
 	@Test

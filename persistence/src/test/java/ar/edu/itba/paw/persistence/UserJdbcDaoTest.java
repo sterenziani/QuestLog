@@ -121,6 +121,8 @@ public class UserJdbcDaoTest
 		Optional<User> maybeUser = userDao.findByUsername(u.getUsername());
 		Assert.assertTrue(maybeUser.isPresent());
 		Assert.assertEquals(USERNAME, maybeUser.get().getUsername());
+		Assert.assertFalse(maybeUser.get().getAdminStatus());
+
 	}
 	
 	@Test
@@ -152,6 +154,7 @@ public class UserJdbcDaoTest
 		myList.add(u2);
 		
 		Assert.assertFalse(users.isEmpty());
+		Assert.assertFalse(users.get(0).getAdminStatus());
 		Assert.assertEquals(2, users.size());
 
 		Assert.assertEquals(users.get(0).getId(), myList.get(0).getId());
@@ -239,10 +242,76 @@ public class UserJdbcDaoTest
 		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
 		TestMethods.connectRoles(u, role, assignInsert);
 
-		
 		userDao.removeAdmin(u);
 		Optional<User> user = userDao.findById(u.getId());
 		Assert.assertFalse(user.get().getAdminStatus());	
+		
+	}
+	
+	@Test
+	public void testFindUserByToken()
+	{
+		int role = TestMethods.addRole("Admin", roleInsert);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		TestMethods.connectRoles(u1, role, assignInsert);
+		User u2 = TestMethods.addUser("user2", PASSWORD, EMAIL + ".ar", LOCALE, jdbcInsert);
+		TestMethods.addToken(u1, TOKEN, DATE, tokenInsert);
+		TestMethods.addToken(u2, TOKEN + "2", DATE, tokenInsert);
+		Optional<User> user1 = userDao.findUserByToken(TOKEN);
+		Optional<User> user2 = userDao.findUserByToken(TOKEN + "2");
+		Optional<User> user3 = userDao.findUserByToken(TOKEN + "3");
+		
+		Assert.assertTrue(user1.isPresent());	
+		Assert.assertTrue(user2.isPresent());	
+		Assert.assertFalse(user3.isPresent());	
+
+		Assert.assertTrue(user1.get().getAdminStatus());	
+		Assert.assertFalse(user2.get().getAdminStatus());
+		
+		Assert.assertEquals(user1.get().getUsername(), u1.getUsername());
+		Assert.assertEquals(user2.get().getUsername(), u2.getUsername());
+	}
+	
+	@Test
+	public void	searchByUsernamePaged()
+	{	
+		int role = TestMethods.addRole("Admin", roleInsert);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		TestMethods.connectRoles(u1, role, assignInsert);
+		User u2 = TestMethods.addUser("user2", PASSWORD, "user2@aol.com", LOCALE, jdbcInsert);
+		User u3 = TestMethods.addUser("uSer3", PASSWORD, "user3@aol.com", LOCALE, jdbcInsert);
+		User u4 = TestMethods.addUser("pepe1234", PASSWORD, "user4@aol.com", LOCALE, jdbcInsert);
+
+		List<User> users1 = userDao.searchByUsernamePaged("", 2,2);
+		List<User> users2 = userDao.searchByUsernamePaged("us", 2,2);
+		List<User> users3 = userDao.searchByUsernamePaged("us", 1,4);
+		List<User> users4 = userDao.searchByUsernamePaged("asdgh", 1,4);
+
+		List<User> myList = new ArrayList<User>();
+		myList.add(u1);
+		myList.add(u2);
+		myList.add(u3);
+		myList.add(u4);
+		
+		Assert.assertFalse(users1.isEmpty());
+		Assert.assertFalse(users2.isEmpty());
+		Assert.assertFalse(users3.isEmpty());
+		Assert.assertTrue(users4.isEmpty());
+
+		Assert.assertEquals(2, users1.size());
+		Assert.assertEquals(1, users2.size());
+		Assert.assertEquals(3, users3.size());
+
+		Assert.assertEquals(users1.get(0).getId(), myList.get(2).getId());
+		Assert.assertEquals(users1.get(1).getId(), myList.get(3).getId());
+		
+		Assert.assertEquals(users2.get(0).getId(), myList.get(2).getId());
+		
+		Assert.assertEquals(users3.get(0).getId(), myList.get(0).getId());
+		Assert.assertEquals(users3.get(1).getId(), myList.get(1).getId());
+		Assert.assertEquals(users3.get(2).getId(), myList.get(2).getId());
+		Assert.assertTrue(users3.get(0).getAdminStatus());
+		Assert.assertFalse(users3.get(1).getAdminStatus());
 		
 	}
 }

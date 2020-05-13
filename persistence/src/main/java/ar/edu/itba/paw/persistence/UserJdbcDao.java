@@ -105,8 +105,8 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public Optional<User> findUserByToken(String token)
 	{
-		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, bool_and(user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM "
-									+"(SELECT * FROM tokens NATURAL JOIN users WHERE token = ?) AS a GROUP BY user_id, username, password, email, locale", USER_MAPPER, token).stream().findFirst();
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND user_id = a.user_id) AS admin FROM "
+									+"(SELECT * FROM tokens NATURAL JOIN users WHERE token = ?) AS a", USER_MAPPER, token).stream().findFirst();
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class UserJdbcDao implements UserDao
 
 	@Override
 	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize) {
-		return jdbcTemplate.query("SELECT *, bool_and(users.user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM users WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%')) GROUP BY user_id LIMIT ? OFFSET ?", 
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND user_id = users.user_id) AS admin FROM users WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%')) LIMIT ? OFFSET ?", 
 				USER_MAPPER, searchTerm, pageSize, (page-1)*pageSize);
 	}
 
