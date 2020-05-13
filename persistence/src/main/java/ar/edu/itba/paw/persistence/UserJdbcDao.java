@@ -86,7 +86,7 @@ public class UserJdbcDao implements UserDao
 	@Override
 	public List<User> getAllUsers()
 	{
-		return jdbcTemplate.query("SELECT *, bool_and(users.user_id IN (SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin')) AS admin FROM users GROUP BY user_id", USER_MAPPER);
+		return jdbcTemplate.query("SELECT user_id, username, password, email, locale, exists(SELECT user_id FROM role_assignments NATURAL JOIN roles WHERE role_name LIKE 'Admin' AND user_id = users.user_id) AS admin FROM users", USER_MAPPER);
 	}
 
 	@Override
