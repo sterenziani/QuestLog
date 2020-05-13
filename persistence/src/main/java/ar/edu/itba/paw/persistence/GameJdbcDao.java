@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.persistence;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;

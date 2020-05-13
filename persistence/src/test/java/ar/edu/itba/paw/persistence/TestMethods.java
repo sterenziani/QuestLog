@@ -2,9 +2,20 @@ package ar.edu.itba.paw.persistence;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import ar.edu.itba.paw.model.*;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.PasswordResetToken;
+import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Playstyle;
+import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.model.Review;
+import ar.edu.itba.paw.model.Run;
+import ar.edu.itba.paw.model.Score;
+import ar.edu.itba.paw.model.User;
 
 public class TestMethods
 {
@@ -58,19 +69,13 @@ public class TestMethods
 		return new Region(regionInsert.executeAndReturnKey(args).longValue(), name, shortName);
 	}
 	
-	public static Release addRelease(Game g, Region r, Date d, SimpleJdbcInsert releaseInsert)
+	public static void addRelease(Game g, Region r, Date d, SimpleJdbcInsert releaseInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("game", g.getId());
 		args.put("region", r.getId());
 		args.put("release_date", d);
 		releaseInsert.execute(args);
-		return new Release(r, d);
-	}
-
-	public static Release makeRelease(Game g, Region r, Date d)
-	{
-		return new Release(r, d);
 	}
 	
 	public static User addUser(String username, String password, String email, String locale, SimpleJdbcInsert userInsert)
@@ -80,6 +85,7 @@ public class TestMethods
 		args.put("password", password);
 		args.put("email", email);
 		args.put("locale", locale);
+
 		return new User(userInsert.executeAndReturnKey(args).longValue(), username, password, email, locale);
 	}
 	
@@ -128,11 +134,11 @@ public class TestMethods
 		
 	}
 	
-	public static void addRole(String roleName, SimpleJdbcInsert roleInsert)
+	public static int addRole(String roleName, SimpleJdbcInsert roleInsert)
 	{
 		final Map<String, Object> args = new HashMap<>();
 		args.put("role_name", roleName);
-		roleInsert.execute(args);
+		return roleInsert.executeAndReturnKey(args).intValue();
 	}
 	
 	public static void connectDev(Game g, Developer d, SimpleJdbcInsert developmentInsert)
@@ -173,5 +179,23 @@ public class TestMethods
 		args.put("game", g.getId());
 		args.put("user_id", u.getId());
 		backlogInsert.execute(args);
+	}
+	
+	public static void connectRoles(User u, int roleId, SimpleJdbcInsert versionInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("user_id", u.getId());
+		args.put("role", roleId);
+		versionInsert.execute(args);
+	}
+	
+	public static PasswordResetToken addToken(User u, String token, Date date, SimpleJdbcInsert versionInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("user_id", u.getId());
+		args.put("token", token);
+		args.put("expiration", date);
+		versionInsert.execute(args);
+		return new PasswordResetToken(token,u,date);
 	}
 }
