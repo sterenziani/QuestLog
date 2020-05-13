@@ -619,6 +619,23 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, RELEASE_TABLE));
 	}
 
+	static final String NON_MATCHING_GAME_TITLE = "Hello";
+	static final String MATCHING_GAME_TITLE		= "Hola";
+
+	static final String SEARCH_TERM				= "ola";
+
+	@Test
+	public void testSearchByTitle(){
+		TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		List<Game> matches 			= gameDao.searchByTitle(SEARCH_TERM, 1, 2);
+		Assert.assertEquals(1, matches.size());
+		Optional<Game> maybeMatch 	= matches.stream().findFirst();
+		Assert.assertTrue(maybeMatch.isPresent());
+		Game match					= maybeMatch.get();
+		Assert.assertEquals(MATCHING_GAME_TITLE, match.getTitle());
+	}
+
 	/*
 	@Test
 	public void testAddDeveloper()
