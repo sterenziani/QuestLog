@@ -54,7 +54,7 @@ public class GameController {
     @RequestMapping("/")
     public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("index/index");
         mav.addObject("cookieBacklog", backlog);
         User u = us.getLoggedUser();
         if(u == null)
@@ -80,38 +80,13 @@ public class GameController {
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping("/games")
-    public ModelAndView gamesList(@CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        final ModelAndView mav = new ModelAndView("allGames");
-        User u = us.getLoggedUser();
-        if(u == null)
-        {
-            List<Game> games = gs.getAllGames();
-            backlogCookieHandlerService.updateWithBacklogDetails(games, backlog);
-            mav.addObject("games", games);
-        }
-        else
-        {
-            mav.addObject("games", gs.getAllGames());
-        }
-        return mav;
-    }
-
-    @RequestMapping(value = "/games", method = RequestMethod.POST)
-    public ModelAndView gamesList(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
-        return new ModelAndView("redirect:/games");
-    }
-
     @RequestMapping("/explore")
     public ModelAndView explore()
     {
-        final ModelAndView mav = new ModelAndView("explore");
-        mav.addObject("platforms", ps.getBiggestPlatforms(20));
-        mav.addObject("developers", ds.getBiggestDevelopers(10));
-        mav.addObject("publishers", pubs.getBiggestPublishers(10));
+        final ModelAndView mav = new ModelAndView("explore/explore");
+        mav.addObject("platforms", ps.getBiggestPlatforms(18));
+        mav.addObject("developers", ds.getBiggestDevelopers(15));
+        mav.addObject("publishers", pubs.getBiggestPublishers(15));
         mav.addObject("genres", gens.getGenres(1, 25));
         return mav;
     }
@@ -129,7 +104,7 @@ public class GameController {
 			@CookieValue(value="backlog", defaultValue="") String backlog, @RequestParam int page)
 	{
         LOGGER.debug("Searching results for term {}. Advanced filters include time between {}:{}:{} and {}:{}:{} and score between {} and {}", search, hoursLeft, minsLeft, secsLeft, hoursRight, minsRight, secsRight, scoreLeft, scoreRight);
-		final ModelAndView mav = new ModelAndView("gameSearch");
+		final ModelAndView mav = new ModelAndView("search/gameSearch");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
 		User u = us.getLoggedUser();
@@ -188,7 +163,7 @@ public class GameController {
 			HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog, @RequestParam long gameId, @RequestParam int page)
 	{
         backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
-		final ModelAndView mav = new ModelAndView("gameSearch");
+		final ModelAndView mav = new ModelAndView("search/gameSearch");
 		mav.addObject("platforms", ps.getAllPlatforms());
 		mav.addObject("genres", gens.getAllGenres());
 		User u = us.getLoggedUser();

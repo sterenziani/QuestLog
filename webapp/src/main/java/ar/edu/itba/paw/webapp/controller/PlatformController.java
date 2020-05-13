@@ -40,7 +40,7 @@ public class PlatformController {
     @RequestMapping("")
     public ModelAndView platformsList(@RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
-        final ModelAndView mav = new ModelAndView("allPlatforms");
+        final ModelAndView mav = new ModelAndView("explore/allPlatforms");
         List<Platform> list = ps.getPlatformsWithGames(page, PLATFORM_LIST_PAGE_SIZE);
         int countResults = ps.countPlatformsWithGames();
         int totalPages = (countResults + PLATFORM_LIST_PAGE_SIZE - 1)/PLATFORM_LIST_PAGE_SIZE;
@@ -54,7 +54,7 @@ public class PlatformController {
     @RequestMapping("/{platformId}")
     public ModelAndView platformProfile(@PathVariable("platformId") long platformId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("platform");
+        final ModelAndView mav = new ModelAndView("explore/platform");
         User u = us.getLoggedUser();
         Platform p = ps.findById(platformId).orElseThrow(PlatformNotFoundException::new);
         List<Game> pageResults = gs.getGamesForPlatform(p, page, PAGE_SIZE);
@@ -71,7 +71,7 @@ public class PlatformController {
     }
 
     @RequestMapping(value = "/{platformId}", method = RequestMethod.POST)
-    public ModelAndView platformProfile(@PathVariable("platformId") long platformId, @RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+    public ModelAndView platformProfile(@PathVariable("explore/platformId") long platformId, @RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
         backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
         return new ModelAndView("redirect:/platforms/{platformId}?page="+page);

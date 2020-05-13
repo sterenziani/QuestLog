@@ -57,16 +57,10 @@ public class AdminGameController
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminGameController.class);
 	
-	@RequestMapping("/admin")
-	public ModelAndView admin()
-	{
-		return new ModelAndView("admin/admin");
-	}
-
 	@RequestMapping(value = "/admin/game/new", method = RequestMethod.GET)
 	public ModelAndView newGame(@ModelAttribute("gameForm") final GameForm gameForm)
 	{
-		ModelAndView mav = new ModelAndView("admin/game/gameForm");
+		ModelAndView mav = new ModelAndView("admin/gameForm");
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();
@@ -102,7 +96,7 @@ public class AdminGameController
 	@RequestMapping(value = "/admin/game/{game_id}/edit", method = RequestMethod.GET)
 	public ModelAndView editGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
 	{
-		ModelAndView mav = new ModelAndView("admin/game/gameForm");
+		ModelAndView mav = new ModelAndView("admin/gameForm");
 		Optional<GameDetail> optg 		= gs.findByIdWithDetails(id);
 		if(!optg.isPresent())
 			throw new GameNotFoundException();
@@ -126,7 +120,7 @@ public class AdminGameController
 
 	public ModelAndView errorEditGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
 	{
-		ModelAndView mav = new ModelAndView("admin/game/gameForm");
+		ModelAndView mav = new ModelAndView("admin/gameForm");
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();
 		List<Publisher> publishers 	= pubs.getAllPublishers();

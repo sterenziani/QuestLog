@@ -52,12 +52,6 @@ public class RunServiceImpl implements RunService {
 
 	@Transactional
 	@Override
-	public List<Run> findPlatformAndGameRuns(Game game, Platform platform) {
-		return runDao.findPlatformAndGameRuns(game, platform);
-	}
-
-	@Transactional
-	@Override
 	public List<Run> findPlaystyleAndGameRuns(Game game, Playstyle playstyle) {
 		return runDao.findPlaystyleAndGameRuns(game, playstyle);
 	}

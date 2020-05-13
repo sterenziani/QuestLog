@@ -128,6 +128,13 @@ public class TestMethods
 		
 	}
 	
+	public static void addRole(String roleName, SimpleJdbcInsert roleInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("role_name", roleName);
+		roleInsert.execute(args);
+	}
+	
 	public static void connectDev(Game g, Developer d, SimpleJdbcInsert developmentInsert)
 	{
 		final Map<String, Object> developmentArgs = new HashMap<>();
@@ -158,5 +165,12 @@ public class TestMethods
 		args.put("game", g.getId());
 		args.put("platform", p.getId());
 		versionInsert.execute(args);
+	}
+	
+	public static void addRole(String roleName, SimpleJdbcInsert roleInsert)
+	{
+		final Map<String, Object> args = new HashMap<>();
+		args.put("role_name", roleName);
+		roleInsert.execute(args);
 	}
 }
