@@ -157,4 +157,11 @@ public class AdminGameController
 		}
 		return new ModelAndView("redirect:" + referer);
 	}
+
+	@RequestMapping(value = "/admin/game/{id}/delete/fromdetails", method = RequestMethod.GET)
+	public ModelAndView deleteFromDetailsGame(@PathVariable("id") final long id, HttpServletRequest request)
+	{
+		gs.removeById(id);
+		return new ModelAndView("redirect:/");
+	}
 }
