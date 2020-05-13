@@ -65,7 +65,7 @@ public class GameRunController
         User u = us.getLoggedUser();
         if(u == null)
             return new ModelAndView("redirect:/games/{gameId}");
-        final ModelAndView mav = new ModelAndView("createRun");
+        final ModelAndView mav = new ModelAndView("game/createRun");
         Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
         mav.addObject("game", g);
         mav.addObject("playstyles",runs.getAllPlaystyles());

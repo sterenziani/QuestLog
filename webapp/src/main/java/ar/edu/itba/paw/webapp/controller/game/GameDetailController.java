@@ -41,7 +41,7 @@ public class GameDetailController {
     @RequestMapping("/games/{gameId}")
     public ModelAndView gameProfile(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("game");
+        final ModelAndView mav = new ModelAndView("game/game");
         User u = us.getLoggedUser();
         GameDetail g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
         mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));

@@ -17,7 +17,7 @@ public class ErrorController
 	@RequestMapping("/error404")
 	public ModelAndView error_404()
 	{
-		ModelAndView m = new ModelAndView("error");
+		ModelAndView m = new ModelAndView("error/error");
 		m.addObject("msg", "error.404");
 		return m;
 	}
@@ -25,7 +25,7 @@ public class ErrorController
 	@RequestMapping("/error403")
 	public ModelAndView forbidden()
 	{
-		ModelAndView m = new ModelAndView("error");
+		ModelAndView m = new ModelAndView("error/error");
 		m.addObject("msg", "error.403");
 		return m;
 	}

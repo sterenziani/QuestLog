@@ -40,7 +40,7 @@ public class DeveloperController {
     @RequestMapping("")
     public ModelAndView developersList(@RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
-        final ModelAndView mav = new ModelAndView("allDevelopers");
+        final ModelAndView mav = new ModelAndView("explore/allDevelopers");
         List<Developer> list = ds.getDevelopers(page, DEV_LIST_PAGE_SIZE);
         int countResults = ds.countDevelopers();
         int totalPages = (countResults + DEV_LIST_PAGE_SIZE - 1)/DEV_LIST_PAGE_SIZE;
@@ -54,7 +54,7 @@ public class DeveloperController {
     @RequestMapping("/{devId}")
     public ModelAndView developerProfile(@PathVariable("devId") long devId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("developer");
+        final ModelAndView mav = new ModelAndView("explore/developer");
         Developer d = ds.findById(devId).orElseThrow(DeveloperNotFoundException::new);
         User u = us.getLoggedUser();
         List<Game> pageResults = gs.getGamesForDeveloper(d, page, PAGE_SIZE);
