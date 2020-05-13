@@ -77,7 +77,7 @@
                     <form:label path="${path}"><strong><spring:message code="gameForm.genres"/></strong></form:label>
 
                     <c:set var="items" value="${allGenres}"/>
-                    <%@include file="../common/listOfCheckableOptions.jsp"%>
+                    <%@include file="listOfCheckableGenreOptions.jsp"%>
                 </div>
                 <div class="form-group">
                     <div>
