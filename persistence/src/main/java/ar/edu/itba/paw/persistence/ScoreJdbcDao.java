@@ -108,7 +108,6 @@ public class ScoreJdbcDao implements ScoreDao{
 		return scores;
 	}
 
-
 	@Override
 	public List<Score> findAllUserScores(User user, int page, int pageSize)
 	{

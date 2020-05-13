@@ -50,15 +50,6 @@ int countRunsByUser(User user);
 List<Run> findAllGameRuns(Game game);
 
 /**
- * Find all runs of a game in a specific platform
- * @param game The game 
- * @param platform The platform 
- * @return The list of runs
- */
-
-List<Run> findPlatformAndGameRuns(Game game, Platform platform);
-
-/**
  * Find all runs of a game of a specific playstyle
  * @param game The game 
  * @param playstyle The playstyle

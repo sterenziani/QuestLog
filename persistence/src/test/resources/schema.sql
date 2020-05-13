@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS users(
-	user_id INTEGER IDENTITY PRIMARY KEY,
+	user_id INTEGER IDENTITY,
     username VARCHAR(100) UNIQUE,
     password VARCHAR(255),
-    email VARCHAR(100) UNIQUE    
+    email VARCHAR(100) UNIQUE,   
+    locale VARCHAR(25) DEFAULT 'en',
 );
 
 CREATE TABLE IF NOT EXISTS platforms(
@@ -104,4 +105,14 @@ CREATE TABLE IF NOT EXISTS images(
     image      INTEGER IDENTITY,
     image_name VARCHAR(60) NOT NULL,
     image_data BINARY
+);
+
+CREATE TABLE IF NOT EXISTS roles(
+	role 		INTEGER IDENTITY,
+	role_name	VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS role_assignments(
+	user_id INT NOT NULL,
+	role INT NOT NULL
 );
