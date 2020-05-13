@@ -806,12 +806,14 @@ public class GameJdbcDaoTest
 		User pu  = TestMethods.addUser(PLAYSTATION_USER, ANOTHER_ALTERNATIVE_USER_PASSWORD, PLAYSTATION_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, userInsert);
 
 		TestMethods.addBacklog(g, u, backlogInsert);
-		TestMethods.addBacklog(ag, u, backlogInsert);
-		TestMethods.addBacklog(aag, u, backlogInsert);
-		TestMethods.addBacklog(sw, u, backlogInsert);
 		TestMethods.addBacklog(g, au, backlogInsert);
+		TestMethods.addBacklog(g, aau, backlogInsert);
+		TestMethods.addBacklog(g, nu, backlogInsert);
+		TestMethods.addBacklog(ag, u, backlogInsert);
 		TestMethods.addBacklog(ag, au, backlogInsert);
-		TestMethods.addBacklog(aag, au, backlogInsert);
+		TestMethods.addBacklog(ag, aau, backlogInsert);
+		TestMethods.addBacklog(ag, nu, backlogInsert);
+		TestMethods.addBacklog(ag, pu, backlogInsert);
 
 		List<Game> similar = gameDao.getSimilarToBacklog(u);
 
@@ -836,6 +838,248 @@ public class GameJdbcDaoTest
 		Assert.assertEquals(1, popular.size());
 	}
 
+	@Test
+	public void testCountSearchResults(){
+		TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		int matches 			= gameDao.countSearchResults(SEARCH_TERM);
+		Assert.assertEquals(1, matches);
+	}
+
+	@Test
+	public void testGetGamesForPlatformAllGamesSinglePage(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Platform ap = TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, platformInsert);
+
+		TestMethods.connectPlatform(g, p, versionInsert);
+		TestMethods.connectPlatform(aag, p, versionInsert);
+		TestMethods.connectPlatform(aag, ap, versionInsert);
+		TestMethods.connectPlatform(ag, ap, versionInsert);
+
+		List<Game> games = gameDao.getGamesForPlatform(p, 1, 2);
+
+		Assert.assertNotNull(games);
+		Assert.assertEquals(2, games.size());
+		Assert.assertTrue(games.contains(g));
+		Assert.assertTrue(games.contains(aag));
+	}
+
+	@Test
+	public void testGetGamesForPlatformAllGamesSingleTwoPages(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Platform ap = TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, platformInsert);
+
+		TestMethods.connectPlatform(g, p, versionInsert);
+		TestMethods.connectPlatform(aag, p, versionInsert);
+		TestMethods.connectPlatform(aag, ap, versionInsert);
+		TestMethods.connectPlatform(ag, ap, versionInsert);
+
+		List<Game> games2 = gameDao.getGamesForPlatform(p,2,1);
+
+		Assert.assertNotNull(games2);
+		Assert.assertEquals(1, games2.size());
+	}
+
+
+	@Test
+	public void testCountGamesForPlatform(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		Platform ap = TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, platformInsert);
+
+		TestMethods.connectPlatform(g, p, versionInsert);
+		TestMethods.connectPlatform(aag, p, versionInsert);
+		TestMethods.connectPlatform(aag, ap, versionInsert);
+		TestMethods.connectPlatform(ag, ap, versionInsert);
+
+		int amount = gameDao.countGamesForPlatform(p);
+
+		Assert.assertEquals(2, amount);
+	}
+
+
+	@Test
+	public void testGetGamesForGenreAllGamesSinglePage(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, genreInsert);
+
+		TestMethods.connectGenre(g, gen, classificationInsert);
+		TestMethods.connectGenre(aag, gen, classificationInsert);
+		TestMethods.connectGenre(aag, agen, classificationInsert);
+		TestMethods.connectGenre(ag, agen, classificationInsert);
+
+		List<Game> games = gameDao.getGamesForGenre(gen, 1, 2);
+
+		Assert.assertNotNull(games);
+		Assert.assertEquals(2, games.size());
+		Assert.assertTrue(games.contains(g));
+		Assert.assertTrue(games.contains(aag));
+	}
+
+	@Test
+	public void testGetGamesForGenreAllGamesSingleTwoPages(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, genreInsert);
+
+		TestMethods.connectGenre(g, gen, classificationInsert);
+		TestMethods.connectGenre(aag, gen, classificationInsert);
+		TestMethods.connectGenre(aag, agen, classificationInsert);
+		TestMethods.connectGenre(ag, agen, classificationInsert);
+
+		List<Game> games2 = gameDao.getGamesForGenre(gen,2,1);
+
+		Assert.assertNotNull(games2);
+		Assert.assertEquals(1, games2.size());
+	}
+
+	@Test
+	public void testCountGetGamesForGenre(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, genreInsert);
+
+		TestMethods.connectGenre(g, gen, classificationInsert);
+		TestMethods.connectGenre(aag, gen, classificationInsert);
+		TestMethods.connectGenre(aag, agen, classificationInsert);
+		TestMethods.connectGenre(ag, agen, classificationInsert);
+
+		int amount = gameDao.countGamesForGenre(gen);
+
+		Assert.assertEquals(2, amount);
+	}
+
+	@Test
+	public void testGetGamesForDeveloperAllGamesSinglePage(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer ad	= TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, devInsert);
+
+		TestMethods.connectDev(g, d, developmentInsert);
+		TestMethods.connectDev(aag, d, developmentInsert);
+		TestMethods.connectDev(aag, ad, developmentInsert);
+		TestMethods.connectDev(ag, ad, developmentInsert);
+
+		List<Game> games = gameDao.getGamesForDeveloper(d, 1, 2);
+
+		Assert.assertNotNull(games);
+		Assert.assertEquals(2, games.size());
+		Assert.assertTrue(games.contains(g));
+		Assert.assertTrue(games.contains(aag));
+	}
+
+	@Test
+	public void testGetGamesForDeveloperAllGamesSingleTwoPages(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer ad	= TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, devInsert);
+
+		TestMethods.connectDev(g, d, developmentInsert);
+		TestMethods.connectDev(aag, d, developmentInsert);
+		TestMethods.connectDev(aag, ad, developmentInsert);
+		TestMethods.connectDev(ag, ad, developmentInsert);
+
+		List<Game> games2 = gameDao.getGamesForDeveloper(d, 2,1);
+
+		Assert.assertNotNull(games2);
+		Assert.assertEquals(1, games2.size());
+	}
+
+	@Test
+	public void testCountGetGamesForDeveloper(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, devInsert);
+		Developer ad	= TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, devInsert);
+
+		TestMethods.connectDev(g, d, developmentInsert);
+		TestMethods.connectDev(aag, d, developmentInsert);
+		TestMethods.connectDev(aag, ad, developmentInsert);
+		TestMethods.connectDev(ag, ad, developmentInsert);
+
+		int amount = gameDao.countGamesForDeveloper(d);
+
+		Assert.assertEquals(2, amount);
+	}
+
+	@Test
+	public void testGetGamesForPublisherAllGamesSinglePage(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Publisher ap	= TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, pubInsert);
+
+		TestMethods.connectPub(g, p, publishingInsert);
+		TestMethods.connectPub(aag, p, publishingInsert);
+		TestMethods.connectPub(aag, ap, publishingInsert);
+		TestMethods.connectPub(ag, ap, publishingInsert);
+
+		List<Game> games = gameDao.getGamesForPublisher(p, 1, 2);
+
+		Assert.assertNotNull(games);
+		Assert.assertEquals(2, games.size());
+		Assert.assertTrue(games.contains(g));
+		Assert.assertTrue(games.contains(aag));
+	}
+
+	@Test
+	public void testGetGamesForPublisherAllGamesSingleTwoPages(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Publisher ap	= TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, pubInsert);
+
+		TestMethods.connectPub(g, p, publishingInsert);
+		TestMethods.connectPub(aag, p, publishingInsert);
+		TestMethods.connectPub(aag, ap, publishingInsert);
+		TestMethods.connectPub(ag, ap, publishingInsert);
+
+		List<Game> games2 = gameDao.getGamesForPublisher(p, 2,1);
+
+		Assert.assertNotNull(games2);
+		Assert.assertEquals(1, games2.size());
+	}
+
+	@Test
+	public void testCountGetGamesForPublisher(){
+		Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, pubInsert);
+		Publisher ap	= TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, pubInsert);
+
+		TestMethods.connectPub(g, p, publishingInsert);
+		TestMethods.connectPub(aag, p, publishingInsert);
+		TestMethods.connectPub(aag, ap, publishingInsert);
+		TestMethods.connectPub(ag, ap, publishingInsert);
+
+		int amount = gameDao.countGamesForPublisher(p);
+
+		Assert.assertEquals(2, amount);
+	}
+	
 	@Test
 	public void testRemove(){
 		Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
