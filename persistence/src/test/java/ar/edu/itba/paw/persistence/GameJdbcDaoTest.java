@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.persistence;
+import java.sql.Array;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +55,7 @@ public class GameJdbcDaoTest
 	private static final Date RELEASE_DATE 				= Date.valueOf(LocalDate.now());
 	private static final String USER_TABLE				= "users";
 	private static final String BACKLOG_TABLE			= "backlogs";
+	private static final String SCORE_TABLE				= "scores";
 	
 	@Autowired
 	private DataSource ds;
@@ -74,6 +76,7 @@ public class GameJdbcDaoTest
 	private SimpleJdbcInsert releaseInsert;
 	private SimpleJdbcInsert userInsert;
 	private SimpleJdbcInsert backlogInsert;
+	private SimpleJdbcInsert scoreInsert;
 	
 	@Before
 	public void	setUp()
@@ -93,6 +96,7 @@ public class GameJdbcDaoTest
 		releaseInsert = new SimpleJdbcInsert(ds).withTableName(RELEASE_TABLE);
 		userInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("user_id");
 		backlogInsert = new SimpleJdbcInsert(ds).withTableName(BACKLOG_TABLE);
+		scoreInsert = new SimpleJdbcInsert(ds).withTableName(SCORE_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHING_TABLE);
@@ -107,16 +111,6 @@ public class GameJdbcDaoTest
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, BACKLOG_TABLE);
 	}
-	
-	/*@Test
-	public void testRegisterGame()
-	{
-		final Game g = gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC);
-		Assert.assertNotNull(g);
-		Assert.assertEquals(GAME_TITLE, g.getTitle());
-		Assert.assertEquals(GAME_COVER, g.getCover());
-		Assert.assertEquals(GAME_DESC, g.getDescription());
-	}*/
 	
 	@Test
 	public void	testFindGameByIdDoesntExist()
@@ -650,17 +644,6 @@ public class GameJdbcDaoTest
 	static final Date RELEASED_TODAY_GAME 	= Date.valueOf(LocalDate.now());
 	static final Date RELEASED_GAME 		= Date.valueOf(LocalDate.now().minusDays(2));
 
-	@Test
-	public void testGetUpcomingGames(){
-		Game g_upcoming = TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Game g_today	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Game g_released = TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Region region   = TestMethods.addRegion(REGION_NAME, REGION_SHORT, regionInsert);
-		TestMethods.addRelease(g_upcoming, region, UPCOMING_GAME, releaseInsert);
-		List<Game> games = gameDao.getUpcomingGames();
-		Assert.assertEquals(1, games.size());
-	}
-
 	static final String USER_NAME 		= "root";
 	static final String USER_PASSWORD 	= "root";
 	static final String USER_EMAIL		= "root@questlog.com";
@@ -679,16 +662,6 @@ public class GameJdbcDaoTest
 		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
 		User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
 		Assert.assertFalse(gameDao.isInBacklog(g.getId(), u));
-	}
-
-	@Test
-	public void testAddToBacklog(){
-		Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
-		gameDao.addToBacklog(g.getId(), u);
-		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, BACKLOG_TABLE));
-		Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + g.getId()
-				+ "' AND user_id = '" + u.getId() + "'"));
 	}
 
 	private static final String ALTERNATIVE_GAME_TITLE 	= "Death Stranding";
@@ -836,6 +809,30 @@ public class GameJdbcDaoTest
 		List<Game> popular = gameDao.getMostBacklogged();
 
 		Assert.assertEquals(1, popular.size());
+	}
+
+	@Test
+	public void testGetFiltered(){
+		Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		Game sw  = TestMethods.addGame("Star Wars Republic", ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, gameInsert);
+		User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, userInsert);
+		Genre gen  = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, platformInsert);
+		TestMethods.connectGenre(g, gen, classificationInsert);
+		TestMethods.connectGenre(ag, gen, classificationInsert);
+		TestMethods.connectGenre(aag, gen, classificationInsert);
+		TestMethods.connectGenre(sw, gen, classificationInsert);
+		TestMethods.connectPlatform(g, p, versionInsert);
+		TestMethods.connectPlatform(ag, p, versionInsert);
+		TestMethods.connectPlatform(aag, p, versionInsert);
+		TestMethods.connectPlatform(sw, p, versionInsert);
+		TestMethods.addScore(u, g, 7, scoreInsert);
+		TestMethods.addScore(u, ag, 5, scoreInsert);
+		TestMethods.addScore(u, aag, 6, scoreInsert);
+		TestMethods.addScore(u, sw, 9, scoreInsert);
+		gameDao.getFilteredGames("", Collections.singletonList(gen.getId() + ""),Collections.singletonList(p.getId() + ""), 6, 7, 0, 0, 1, 4 );
 	}
 
 	@Test
@@ -1079,7 +1076,7 @@ public class GameJdbcDaoTest
 
 		Assert.assertEquals(2, amount);
 	}
-	
+
 	@Test
 	public void testRemove(){
 		Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
