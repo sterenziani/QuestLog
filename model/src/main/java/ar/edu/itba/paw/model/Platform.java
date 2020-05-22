@@ -1,12 +1,37 @@
 package ar.edu.itba.paw.model;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="platforms")
 public class Platform
 {
-	private final long platform;
+	@Id
+	@Column(name = "platform")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "platforms_platform_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "platforms_platform_seq", name = "platforms_platform_seq")
+	private Long platform;
+	
+	@Column(name = "platform_name", length = 30, nullable = false, unique = true)
 	private String name;
+	
+	@Column(name = "platform_name_short", length = 6, nullable = false, unique = true)
 	private String shortName;
+	
+	@Column(name = "platform_logo")
 	private String logo;
 	
+	Platform()
+	{
+		// Let Hibernate do the work
+	}
+	
+	@Deprecated
 	public Platform(long platform, String name, String shortName, String logo)
 	{
 		this.platform = platform;
@@ -15,7 +40,14 @@ public class Platform
 		this.logo = logo;
 	}
 	
-	public long getId()
+	public Platform(String name, String shortName, String logo)
+	{
+		this.name = name;
+		this.shortName = shortName;
+		this.logo = logo;
+	}
+	
+	public Long getId()
 	{
 		return platform;
 	}

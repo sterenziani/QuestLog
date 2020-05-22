@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
 import ar.edu.itba.paw.model.Platform;
 
-@Repository
+//@Repository
 public class PlatformJdbcDao implements PlatformDao
 {
 	private	final SimpleJdbcInsert jdbcInsert;
