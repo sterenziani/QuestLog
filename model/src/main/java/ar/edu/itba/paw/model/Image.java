@@ -1,16 +1,43 @@
 package ar.edu.itba.paw.model;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-import java.io.InputStream;
+@Entity
+@Table(name = "images")
+public class Image
+{
+	@Id
+	@Column(name = "image")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_image_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "images_image_seq", name = "images_image_seq")
+    private Long id;
+	
+	@Column(name = "image_name", length = 60, nullable = false, unique = true)
+    private String imageName;
+	
+	@Column(name = "image_data")
+    private byte[] imageData;
 
-public class Image {
-
-    private final long      id;
-    private final String    imageName;
-    private byte[]          imageData;
-
+    Image()
+    {
+    	
+    }
+    
+    @Deprecated
     public Image(long id, String imageName, byte[] imageData){
-        this.id         = id;
+		this.id         = id;
         this.imageName  = imageName;
+        this.imageData  = imageData;
+    }
+    
+    public Image(String imageName, byte[] imageData)
+    {
+		this.imageName  = imageName;
         this.imageData  = imageData;
     }
 
