@@ -1,14 +1,44 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="regions")
 public class Region
 {
-	private final long region;
+	@Id
+	@Column(name = "region")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "regions_region_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "regions_region_seq", name = "regions_region_seq")
+	private Long region;
+	
+	@Column(name = "region_name", length = 15, nullable = false, unique = true)
 	private String name;
+	
+	@Column(name = "region_short", length = 5, nullable = false, unique = true)
 	private String shortName;
 	
+	Region()
+	{
+		// Let Hibernate do the work
+	}
+	
+	@Deprecated
 	public Region(long region, String name, String shortName)
 	{
 		this.region = region;
+		this.name = name;
+		this.shortName = shortName;
+	}
+	
+	public Region(String name, String shortName)
+	{
 		this.name = name;
 		this.shortName = shortName;
 	}
