@@ -39,6 +39,9 @@ public class Game
 	@OneToMany(mappedBy = "game")
 	private Set<Publishing> publishings;
 
+	@OneToMany(mappedBy = "game")
+	private Set<Classification> classifications;
+
 	/*
 	private Set<Platform> platforms;
 	private Set<Developer> developers;
