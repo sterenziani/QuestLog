@@ -1,12 +1,40 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "games")
 public class Game
 {
-	private final long game;
+	@Id
+	@Column(name = "game")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "games_game_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "games_game_seq", name = "games_game_seq")
+	private long game;
+
+	@Column(name = "title")
 	private String title;
+
+	@Column(name = "cover")
 	private String cover;
+
+	@Column(name = "description")
 	private String description;
+
+	@Transient
 	private boolean inBacklog;
+
+	/*
+	private Set<Platform> platforms;
+	private Set<Developer> developers;
+	private Set<Publisher> publishers;
+	private Set<Genre> genres;
+	private Set<Release> releaseDates;*/
+
+	Game(){
+		//Just for Hibernate
+	}
 	
 	public Game(long game, String title, String cover, String description)
 	{
@@ -51,12 +79,14 @@ public class Game
 	{
 		return description;
 	}
-	
+
+	@Transient
 	public boolean getInBacklog()
 	{
 		return inBacklog;
 	}
-	
+
+	@Transient
 	public void setInBacklog(boolean val)
 	{
 		inBacklog = val;
