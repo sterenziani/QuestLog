@@ -9,9 +9,9 @@ import java.util.Objects;
 public class GameVersionKey implements Serializable {
 
     @Column(name = "game")
-    Long gameId;
+    private Long gameId;
     @Column(name = "platform")
-    Long platformId;
+    private Long platformId;
 
     @Override
     public boolean equals(Object o) {
