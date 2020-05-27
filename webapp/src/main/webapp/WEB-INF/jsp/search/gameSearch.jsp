@@ -83,7 +83,14 @@
 		</div>
 	</div>
     <div class="game-search-results">
-        <c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
+		<c:choose>
+			<c:when test="${empty searchTerm}">
+				<c:set var="listName"><spring:message code="search.results" arguments="*"/></c:set>
+			</c:when>
+			<c:otherwise>
+				<c:set var="listName"><spring:message code="search.results" arguments="${searchTerm}"/></c:set>
+			</c:otherwise>
+      	</c:choose>
         <%@ include file="../common/gameList.jsp"%>
     </div>
     <c:if test="${empty games}">

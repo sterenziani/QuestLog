@@ -41,7 +41,7 @@ public class GameRunController
 
     @RequestMapping(value = "/createRun/run/{gameId}", method = { RequestMethod.POST })
     public ModelAndView register(@RequestParam("hours") int hours, @RequestParam("mins") int mins, @RequestParam("secs") int secs,
-                                 @RequestParam("game") long gameId, @RequestParam("platforms") String platform, @RequestParam("playstyles") String playst)
+                                 @RequestParam("game") long gameId, @RequestParam("platforms") String platform, @RequestParam("playstyles") String playst, @RequestParam("removeFromBacklog") boolean removeFromBacklog)
     {
         User user = us.getLoggedUser();
         if(user == null)
@@ -56,6 +56,8 @@ public class GameRunController
             runs.register(user, game.get(), plat.get(), play.get(), time);
             LOGGER.debug("Registration of run of {} by user {} successful.", game.get().getTitle(), user.getUsername());
         }
+        if(removeFromBacklog)
+        	gs.removeFromBacklog(gameId);
         return new ModelAndView("redirect:/games/{gameId}");
     }
 
