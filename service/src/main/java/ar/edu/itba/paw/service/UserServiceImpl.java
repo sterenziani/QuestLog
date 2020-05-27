@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Optional<User> findByUsername(String username)
 	{
-		Optional<User> opt =  userDao.findByUsername(username);
+		Optional<User> opt = userDao.findByUsername(username);
 		return opt;
 	}
 
@@ -129,7 +129,9 @@ public class UserServiceImpl implements UserService{
 	private boolean isTokenExpired(PasswordResetToken passToken)
 	{
 	    final Calendar cal = Calendar.getInstance();
-	    return passToken.getExpiryDate().before(cal.getTime());
+	    if(passToken.getExpiryDate() != null)
+	    	return passToken.getExpiryDate().before(cal.getTime());
+	    return false;
 	}
 
 	@Transactional
@@ -138,7 +140,7 @@ public class UserServiceImpl implements UserService{
 	{
 		LOGGER.debug("Changing password for user {}", user.getUsername());
 		String encodedPassword = encoder.encode(password);
-		userDao.changePassword(user, encodedPassword);
+		user.setPassword(encodedPassword);
 		userDao.deleteTokenForUser(user);
 		LOGGER.debug("Password for {} successfully changed!", user.getUsername());
 	}
@@ -148,21 +150,24 @@ public class UserServiceImpl implements UserService{
 	public void updateLocale(User user, Locale locale)
 	{
 		LOGGER.debug("Changing locale for user {} into {}", user.getUsername(), locale.toLanguageTag());
-		userDao.updateLocale(user, locale);
+		user.setLocale(locale);
 		LOGGER.debug("Locale of user {} successfulyl changed into {}", user.getUsername(), locale.toLanguageTag());
 	}
 
+	@Transactional
 	@Override
 	public int countUserSearchResults(String searchTerm) {
 		return userDao.countUserSearchResults(searchTerm);
 	}
 
+	@Transactional
 	@Override
 	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize)
 	{
 		return userDao.searchByUsernamePaged(searchTerm, page, pageSize);
 	}
-	
+
+	@Transactional
 	@Override
 	public void changeAdminStatus(User u)
 	{
@@ -171,13 +176,11 @@ public class UserServiceImpl implements UserService{
 		{
 			LOGGER.debug("Removing {}'s admin privileges", u.getUsername());
 			u.setAdminStatus(false);
-			userDao.removeAdmin(u);	
 		}
 		else
 		{
 			LOGGER.debug("Giving {} admin privileges", u.getUsername());
 			u.setAdminStatus(true);
-			userDao.addAdmin(u);
 		}
 		LOGGER.debug("{}'s admin privileges have been modified!", u.getUsername());
 	}

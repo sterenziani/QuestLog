@@ -16,7 +16,7 @@ import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 
-@Repository
+//@Repository
 public class UserJdbcDao implements UserDao
 {
 	

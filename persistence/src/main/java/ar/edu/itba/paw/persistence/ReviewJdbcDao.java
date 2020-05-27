@@ -22,7 +22,7 @@ import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Review;
 import ar.edu.itba.paw.model.User;
 
-@Repository
+//@Repository
 public class ReviewJdbcDao implements ReviewDao {
 
 

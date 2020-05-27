@@ -1,10 +1,35 @@
 package ar.edu.itba.paw.model;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-public class Developer {
-	private final long developer;
+@Entity
+@Table(name="developers")
+public class Developer 
+{
+	
+	@Id
+	@Column(name = "developer")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "developers_developer_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "developers_developer_seq", name = "developers_developer_seq")
+	private Long developer;
+	
+	@Column(name = "developer_name", length = 75, nullable = false, unique = true)
 	private String name;
+	
+	@Column(name = "developer_logo")
 	private String logo;
 	
+	Developer()
+	{
+		
+	}
+	
+	@Deprecated
 	public Developer(long developer, String name, String logo)
 	{
 		this.developer = developer;
@@ -12,7 +37,13 @@ public class Developer {
 		this.logo = logo;
 	}
 	
-	public long getId()
+	public Developer(String name, String logo)
+	{
+		this.name = name;
+		this.logo = logo;
+	}
+	
+	public Long getId()
 	{
 		return developer;
 	}

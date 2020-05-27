@@ -69,16 +69,32 @@ public class UserController
 	private static final int RUNS_PAGE_SIZE = 25;
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
-	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm) 
+	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm, HttpServletRequest request)
 	{
+		User user = us.getLoggedUser();
+		if(user != null) {
+			String referer = request.getHeader("Referer");
+			if(referer == null){
+				return new ModelAndView("redirect:/");
+			}
+			return new ModelAndView("redirect:" + referer);
+		}
 		return new ModelAndView("user/register");
 	}
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.POST })
 	public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm registerForm, final BindingResult errors, HttpServletRequest request, HttpServletResponse response) 
 	{
+		User user = us.getLoggedUser();
+		if(user != null) {
+			String referer = request.getHeader("Referer");
+			if(referer == null){
+				return new ModelAndView("redirect:/");
+			}
+			return new ModelAndView("redirect:" + referer);
+		}
 		if (errors.hasErrors())
-			return registerForm(registerForm);
+			return registerForm(registerForm, request);
 		LOGGER.debug("Creating new user {} with email {}.", registerForm.getUsername(), registerForm.getEmail());
 		final User u = us.register(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail(), LocaleContextHolder.getLocale());
 		LOGGER.debug("User {} successfully created.", registerForm.getUsername());
@@ -87,14 +103,30 @@ public class UserController
 	}
 	
 	@RequestMapping("/login")
-	public ModelAndView login()
+	public ModelAndView login(HttpServletRequest request)
 	{
+		User user = us.getLoggedUser();
+		if(user != null) {
+			String referer = request.getHeader("Referer");
+			if(referer == null){
+				return new ModelAndView("redirect:/");
+			}
+			return new ModelAndView("redirect:" + referer);
+		}
 		return new ModelAndView("user/login");
 	}
 	
 	@RequestMapping("/login_error")
-	public ModelAndView loginError()
+	public ModelAndView loginError(HttpServletRequest request)
 	{
+		User user = us.getLoggedUser();
+		if(user != null) {
+			String referer = request.getHeader("Referer");
+			if(referer == null){
+				return new ModelAndView("redirect:/");
+			}
+			return new ModelAndView("redirect:" + referer);
+		}
 		ModelAndView mav = new ModelAndView("user/login");
 		mav.addObject("error", true);
 		return mav;
@@ -121,7 +153,7 @@ public class UserController
 	public ModelAndView userSearchAdmin(@RequestParam String search, @RequestParam int page, @RequestParam("pickedUser") String pickedUser) {
 		
 		Optional<User> u = us.findByUsername(pickedUser);
-		if(u.isPresent()) 
+		if(u.isPresent())
 			us.changeAdminStatus(u.get());
 		return new ModelAndView("redirect:/userSearch?search=" + search + "&page=" + page);
 

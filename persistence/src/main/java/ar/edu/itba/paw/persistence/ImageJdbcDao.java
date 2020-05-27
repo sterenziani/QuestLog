@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class ImageJdbcDao implements ImageDao {
 
     private static final String     IMAGE_TABLE          = "images";

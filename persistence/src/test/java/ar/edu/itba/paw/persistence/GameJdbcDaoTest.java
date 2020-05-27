@@ -828,8 +828,8 @@ public class GameJdbcDaoTest
 		TestMethods.addScore(u, ag, 2, scoreInsert);
 		TestMethods.addScore(u, aag, 6, scoreInsert);
 		TestMethods.addScore(u, sw, 9, scoreInsert);
-		List<Game> games = gameDao.getFilteredGames("", Collections.singletonList(gen.getId() + ""),Collections.singletonList(p.getId() + ""), 5, 8, 0, 35999999, 1, 4 );
-		Assert.assertEquals(1, games.size());
+		List<Game> games = gameDao.getFilteredGames("", Collections.singletonList(gen.getId() + ""),Collections.singletonList(p.getId() + ""), 6, 8, 0, 9999*3600+59*60+59, 1, 4 );
+		Assert.assertEquals(2, games.size());
 	}
 
 	@Test

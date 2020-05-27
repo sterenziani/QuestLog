@@ -1,15 +1,42 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="playstyles")
 public class Playstyle {
-	private final long playstyle;
+	
+	@Id
+	@Column(name = "playstyle")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "playstyles_playstyle_id_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "playstyles_playstyle_id_seq", name = "playstyles_playstyle_id_seq")
+	private Long playstyle;
+	
+	@Column(name = "playstyle_name", nullable = false)
 	private String name;
 	
+	Playstyle()
+	{
+		
+	}
+	
+	@Deprecated
 	public Playstyle(long playstyle, String name) {
 		this.playstyle = playstyle;
 		this.name = name;
 	}
 	
-	public long getId() {
+	public Playstyle(String name) {
+		this.name = name;
+	}
+	
+	public Long getId() {
 		return playstyle;
 	}
 	

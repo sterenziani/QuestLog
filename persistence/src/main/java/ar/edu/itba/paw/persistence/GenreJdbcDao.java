@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.GenreDao;
 import ar.edu.itba.paw.model.Genre;
 
-@Repository
+//@Repository
 public class GenreJdbcDao implements GenreDao
 {	
 	private	final SimpleJdbcInsert jdbcInsert;

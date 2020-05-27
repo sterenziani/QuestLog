@@ -36,7 +36,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="game.delete.dismiss"/></button>
-                            <a href="<c:url value="/admin/game/${game.id}/delete"/>" class="btn btn-danger"><spring:message code="game.delete.confirm"/></a>
+                            <a href="<c:url value="/admin/game/${game.id}/delete/fromdetails"/>" class="btn btn-danger"><spring:message code="game.delete.confirm"/></a>
                         </div>
                     </div>
                 </div>

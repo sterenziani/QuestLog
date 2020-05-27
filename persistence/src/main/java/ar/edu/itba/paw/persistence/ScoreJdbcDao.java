@@ -15,7 +15,7 @@ import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
 
-@Repository
+//@Repository
 public class ScoreJdbcDao implements ScoreDao{
 	
 	private JdbcTemplate jdbcScoreTemplate;

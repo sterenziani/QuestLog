@@ -2,15 +2,51 @@ package ar.edu.itba.paw.model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="reviews")
 public class Review {
-	private final long review;
+	
+	@Id
+	@Column(name = "review")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviews_review_id_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "reviews_review_id_seq", name = "reviews_review_id_seq")
+	private Long review;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Game game;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Platform platform;
-	private final int score;
+	
+	@Column(nullable = false)
+	private int score;
+	
+	@Column(length = 2000)
 	private String body;
+	
+	@Column
 	private Date post_date;
 	
+	
+	Review()
+	{
+		
+	}
+	
+	@Deprecated
 	public Review (long review, User user, Game game, Platform platform, int score, String body, Date post_date)
 	{
 		this.review = review;
@@ -22,7 +58,18 @@ public class Review {
 		this.post_date = post_date;
 	}
 	
-	public long getId() {
+	public Review (User user, Game game, Platform platform, int score, String body, Date post_date)
+	{
+		this.user = user;
+		this.game = game;
+		this.platform = platform;
+		this.score = score;
+		this.body = body;
+		this.post_date = post_date;
+	}
+	
+	
+	public Long getId() {
 		return review;
 	}
 	

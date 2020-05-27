@@ -51,5 +51,6 @@ public interface GenreDao {
 	List<Genre> getAllGenres();
 	
 	List<Genre> getGenres(int page, int pageSize);
+	
 	int countGenres();
 }

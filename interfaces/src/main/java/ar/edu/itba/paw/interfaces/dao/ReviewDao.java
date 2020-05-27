@@ -82,26 +82,4 @@ public interface ReviewDao {
 	
 	Review register(User user, Game game, Platform platform, int score, String body, Date date);
 
-	/**
-	 * Get game
-	 * @param id	 game id
-	 * @return	the game
-	 */
-	Optional<Game> getGame(long id);
-
-	/**
-	 * 
-	 * get user
-	 * @param id	user id
-	 * @return	the user
-	 */
-	Optional<User> getUser(long id);
-	
-	/**
-	 * Get platform
-	 * @param id	platform id
-	 * @return	the platform
-	 */
-	Optional<Platform> getPlatform(long id);
-
 }

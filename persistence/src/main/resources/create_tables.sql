@@ -117,7 +117,7 @@ END';
 
 --CREATE TABLE IF NOT EXISTS reviews(
 --	review SERIAL,
---	user_id INT NOT NULL,
+--	user INT NOT NULL,
 --	game INT NOT NULL,
 --	platform INT NOT NULL,
 --	score INT NOT NULL,

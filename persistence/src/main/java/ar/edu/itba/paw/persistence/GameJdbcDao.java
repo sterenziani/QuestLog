@@ -568,11 +568,6 @@ public class GameJdbcDao implements GameDao
 		if(genres.size()>0) 
 			genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";		
 		
-		System.out.println("COUNTER");
-		System.out.println(genres.size());
-		System.out.println(genres);
-		System.out.println("");
-		
 		String platformFilter = "";
 		if(platforms.size()>0)
 			platformFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM platforms WHERE platform IN (" + String.join(", ", platforms) + ")) AS plats NATURAL JOIN game_versions) AS b";		

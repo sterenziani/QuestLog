@@ -47,6 +47,8 @@ public interface ScoreDao {
 	Score register(User user, Game game, int score);
 
 	List<Score> findAllUserScores(User user);
+	
 	List<Score> findAllUserScores(User user, int page, int pageSize);
+	
 	int countAllUserScores(User user);
 }

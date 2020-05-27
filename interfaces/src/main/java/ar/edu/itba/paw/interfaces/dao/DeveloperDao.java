@@ -5,7 +5,8 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.model.Developer;
 
-public interface DeveloperDao {
+public interface DeveloperDao 
+{
 	/**
 	 * Finds a developer given its ID
 	 * @param id The unique ID for the developer.
@@ -49,7 +50,10 @@ public interface DeveloperDao {
 	 * @return The list of all developers.
 	 */
 	List<Developer> getAllDevelopers();
+	
 	List<Developer> getDevelopers(int page, int pageSize);
+	
 	int countDevelopers();
+	
 	List<Developer> getBiggestDevelopers(int amount);
 }

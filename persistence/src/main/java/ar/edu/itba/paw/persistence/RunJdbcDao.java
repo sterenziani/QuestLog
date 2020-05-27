@@ -22,7 +22,7 @@ import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.User;
 
-@Repository
+//@Repository
 public class RunJdbcDao implements RunDao {
 
 	private	final SimpleJdbcInsert jdbcRunInsert;

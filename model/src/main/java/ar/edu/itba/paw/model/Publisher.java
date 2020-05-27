@@ -1,11 +1,35 @@
 package ar.edu.itba.paw.model;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-public class Publisher {
+@Entity
+@Table(name="publishers")
+public class Publisher 
+{
 	
-	private final long publisher;
+	@Id
+	@Column(name = "publisher")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "publishers_publisher_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "publishers_publisher_seq", name = "publishers_publisher_seq")
+	private Long publisher;
+	
+	@Column(name = "publisher_name", length = 75, nullable = false, unique = true)
 	private String name;
+	
+	@Column(name = "publisher_logo")
 	private String logo;
 	
+	Publisher()
+	{
+		
+	}
+	
+	@Deprecated
 	public Publisher(long publisher, String name, String logo)
 	{
 		this.publisher = publisher;
@@ -13,7 +37,13 @@ public class Publisher {
 		this.logo = logo;
 	}
 	
-	public long getId()
+	public Publisher(String name, String logo)
+	{
+		this.name = name;
+		this.logo = logo;
+	}
+	
+	public Long getId()
 	{
 		return publisher;
 	}

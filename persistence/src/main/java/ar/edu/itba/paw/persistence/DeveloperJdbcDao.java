@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
 import ar.edu.itba.paw.model.Developer;
 
-@Repository
+//@Repository
 public class DeveloperJdbcDao implements DeveloperDao {
 
 	private	final SimpleJdbcInsert jdbcInsert;

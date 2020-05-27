@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
 import ar.edu.itba.paw.model.Publisher;
 
-@Repository
+//@Repository
 public class PublisherJdbcDao implements PublisherDao {
 	private	final SimpleJdbcInsert jdbcInsert;
 	private JdbcTemplate jdbcTemplate;
