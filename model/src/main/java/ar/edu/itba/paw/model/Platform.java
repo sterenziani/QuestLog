@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.model;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import ar.edu.itba.paw.model.relations.GameVersion;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="platforms")
@@ -25,6 +22,9 @@ public class Platform
 	
 	@Column(name = "platform_logo")
 	private String logo;
+
+	@OneToMany(mappedBy = "platform")
+	private Set<GameVersion> game_versions;
 	
 	Platform()
 	{
