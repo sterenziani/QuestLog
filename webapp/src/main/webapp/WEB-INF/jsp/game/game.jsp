@@ -70,7 +70,7 @@
 							</c:choose>
 							<div class="score-submit px-5">
 					            <c:choose>
-					                <c:when test="${game.inBacklog}">
+					                <c:when test="${game.inBacklog && loggedUser != null}">
 										<input type="button" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>" data-toggle="modal" data-target="#removeGameFromBacklogModal-${game.id}"/>
 							            
 							            <div class="modal fade" id="removeGameFromBacklogModal-${game.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
