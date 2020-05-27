@@ -44,9 +44,13 @@ public class GameController {
     @Autowired
     private PublisherService            pubs;
 
-    private static final Logger         LOGGER = LoggerFactory.getLogger(GameController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
     private static final int HOME_PAGE_BACKLOG_SIZE = 10;
     private static final int PAGE_SIZE = 15;
+    private static final int GENRES_IN_EXPLORE_PAGE = 25;
+    private static final int PLATFORMS_IN_EXPLORE_PAGE = 18;
+    private static final int DEVS_IN_EXPLORE_PAGE = 15;
+    private static final int PUBLISHERS_IN_EXPLORE_PAGE = 15;
 
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
@@ -60,12 +64,14 @@ public class GameController {
         if(u == null)
         {
             mav.addObject("backlogGames", backlogCookieHandlerService.getGamesInBacklog(backlog, 1, HOME_PAGE_BACKLOG_SIZE));
+            mav.addObject("backlogCropped", backlogCookieHandlerService.countGamesInBacklog(backlog) > HOME_PAGE_BACKLOG_SIZE);
             mav.addObject("upcomingGames", getUpcomingGames(backlog));
             mav.addObject("popularGames", getPopularGames(backlog));
         }
         else
         {
-            mav.addObject("backlogGames", gs.getGamesInBacklog(1, PAGE_SIZE));
+            mav.addObject("backlogGames", gs.getGamesInBacklog(1, HOME_PAGE_BACKLOG_SIZE));
+            mav.addObject("backlogCropped", gs.countGamesInBacklog() > HOME_PAGE_BACKLOG_SIZE);
             mav.addObject("recommendedGames", gs.getRecommendedGames());
             mav.addObject("popularGames", gs.getPopularGames());
             mav.addObject("upcomingGames", gs.getUpcomingGames());
@@ -84,10 +90,14 @@ public class GameController {
     public ModelAndView explore()
     {
         final ModelAndView mav = new ModelAndView("explore/explore");
-        mav.addObject("platforms", ps.getBiggestPlatforms(18));
-        mav.addObject("developers", ds.getBiggestDevelopers(15));
-        mav.addObject("publishers", pubs.getBiggestPublishers(15));
-        mav.addObject("genres", gens.getGenres(1, 25));
+        mav.addObject("platforms", ps.getBiggestPlatforms(PLATFORMS_IN_EXPLORE_PAGE));
+        mav.addObject("platformsCropped", ps.countPlatformsWithGames() > PLATFORMS_IN_EXPLORE_PAGE);
+        mav.addObject("developers", ds.getBiggestDevelopers(DEVS_IN_EXPLORE_PAGE));
+        mav.addObject("developersCropped", pubs.countPublishers() > DEVS_IN_EXPLORE_PAGE);
+        mav.addObject("publishers", pubs.getBiggestPublishers(PUBLISHERS_IN_EXPLORE_PAGE));
+        mav.addObject("publishersCropped", pubs.countPublishers() > PUBLISHERS_IN_EXPLORE_PAGE);
+        mav.addObject("genres", gens.getGenres(1, GENRES_IN_EXPLORE_PAGE));
+        mav.addObject("genresCropped", gens.countGenres() > GENRES_IN_EXPLORE_PAGE);
         return mav;
     }
 

@@ -12,17 +12,23 @@
 	    	<spring:message code="user.backlog" arguments="${user.username}" var="myBacklog"/>
 	        <c:set var="listName" value="${myBacklog}"/>
 	        <c:set var="games" value="${backlog}"/>
-			<c:set var="seeAllUrl" value="/backlog/${user.id}"/>
+	        <c:if test="${backlogCropped}">
+				<c:set var="seeAllUrl" value="/backlog/${user.id}"/>
+			</c:if>
 	        <%@ include file="../common/gameList.jsp"%>
 			<c:remove var="seeAllUrl"/>
 	    </div>
 		
 		<c:set var="scoresInPage" value="${scoresInPage}"/>
-		<c:set var="seeAllScoresUrl" value="/users/${user.id}/scores"/>
+		<c:if test="${scoresCropped}">
+			<c:set var="seeAllScoresUrl" value="/users/${user.id}/scores"/>
+		</c:if>
 		<%@ include file="../common/scoresList.jsp"%>
 
 		<c:set var="runsInPage" value="${runsInPage}"/>
-		<c:set var="seeAllRunsUrl" value="/users/${user.id}/runs"/>
+		<c:if test="${runsCropped}">
+			<c:set var="seeAllRunsUrl" value="/users/${user.id}/runs"/>
+		</c:if>
 		<%@ include file="../common/runsList.jsp"%>
 	</div>
 </body>
