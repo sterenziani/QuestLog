@@ -11,7 +11,9 @@
 	    	<spring:message code="index.myBacklog" var="myBacklog"/>
 	        <c:set var="listName" value="${myBacklog}"/>
 	        <c:set var="games" value="${backlogGames}"/>
-			<c:set var="seeAllUrl" value="/backlog"/>
+	        <c:if test="${backlogCropped}">
+				<c:set var="seeAllUrl" value="/backlog"/>
+			</c:if>
 	        <%@ include file="../common/gameList.jsp"%>
 			<c:remove var="seeAllUrl"/>
 	    </div>

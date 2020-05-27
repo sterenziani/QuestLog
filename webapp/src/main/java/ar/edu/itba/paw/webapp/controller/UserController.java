@@ -171,9 +171,12 @@ public class UserController
 			backlogCookieHandlerService.updateWithBacklogDetails(gamesInPage, backlog);
 		}
 		mav.addObject("backlog", gamesInPage);
+		mav.addObject("backlogCropped", gs.countGamesInBacklog(visitedUser) > BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("user", visitedUser);
 		mav.addObject("scoresInPage", scors.findAllUserScores(visitedUser, 1, SCORE_TEASER_PAGE_SIZE));
+		mav.addObject("scoresCropped", scors.countAllUserScores(visitedUser) > SCORE_TEASER_PAGE_SIZE);
 		mav.addObject("runsInPage", rs.findRunsByUser(visitedUser, 1, RUNS_TEASER_PAGE_SIZE));
+		mav.addObject("runsCropped", rs.countRunsByUser(visitedUser) > RUNS_TEASER_PAGE_SIZE);
 		return mav;
 	}
 	
@@ -191,9 +194,12 @@ public class UserController
 		User u = us.getLoggedUser();
 		List<Game> gamesInPage = gs.getGamesInBacklog(u, 1, BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("backlog", gamesInPage);
+		mav.addObject("backlogCropped", gs.countGamesInBacklog() > BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("user", us.findById(u.getId()).orElseThrow(UserNotFoundException::new));
 		mav.addObject("scoresInPage", scors.findAllUserScores(u, 1, SCORE_TEASER_PAGE_SIZE));
+		mav.addObject("scoresCropped", scors.countAllUserScores(u) > SCORE_TEASER_PAGE_SIZE);
 		mav.addObject("runsInPage", rs.findRunsByUser(u, 1, RUNS_TEASER_PAGE_SIZE));
+		mav.addObject("runsCropped", rs.countRunsByUser(u) > RUNS_TEASER_PAGE_SIZE);
 		return mav;
 	}
 	

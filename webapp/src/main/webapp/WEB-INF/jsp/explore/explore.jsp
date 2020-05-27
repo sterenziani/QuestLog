@@ -8,19 +8,27 @@
     <%@include file="../common/navigation.jsp"%>
     <div>
         <div>
-        	<c:set var="seeAllGenresUrl" value="/genres"/>
+	        <c:if test="${genresCropped}">
+				<c:set var="seeAllGenresUrl" value="/genres"/>
+			</c:if>
 	        <%@ include file="genresList.jsp"%>
     	</div>
         <div>
-        	<c:set var="seeAllPlatformsUrl" value="/platforms"/>
+	        <c:if test="${platformsCropped}">
+				<c:set var="seeAllPlatformsUrl" value="/platforms"/>
+			</c:if>
 	        <%@ include file="platformsList.jsp"%>
     	</div>
     	<div>
-    	    <c:set var="seeAllDevsUrl" value="/developers"/>
+    		<c:if test="${developersCropped}">
+				<c:set var="seeAllDevsUrl" value="/developers"/>
+			</c:if>
 	        <%@ include file="developersList.jsp"%>
     	</div>
     	<div>
-    		<c:set var="seeAllPubsUrl" value="/publishers"/>
+    		<c:if test="${publishersCropped}">
+				<c:set var="seeAllPubsUrl" value="/publishers"/>
+			</c:if>
 	        <%@ include file="publishersList.jsp"%>
     	</div>
     </div>
