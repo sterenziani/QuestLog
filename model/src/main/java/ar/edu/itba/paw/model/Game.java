@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.relations.Classification;
+import ar.edu.itba.paw.model.relations.Development;
 import ar.edu.itba.paw.model.relations.GameVersion;
+import ar.edu.itba.paw.model.relations.Publishing;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -29,6 +32,9 @@ public class Game
 
 	@OneToMany(mappedBy = "game")
 	private Set<GameVersion> game_versions;
+
+	@OneToMany(mappedBy = "game")
+	private Set<Development> developments;
 
 	/*
 	private Set<Platform> platforms;
