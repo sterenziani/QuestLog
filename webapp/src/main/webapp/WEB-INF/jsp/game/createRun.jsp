@@ -72,7 +72,7 @@
 					                        </div>
 					                        <div class="modal-footer">
 					                            <button type="button" id="postButKeepInBacklogButton" class="btn btn-light" data-dismiss="modal"><spring:message code="game.postButKeepInBacklog"/></button>
-					                            <a id="postAndRemoveFromBacklogButton" class="btn btn-primary"><spring:message code="game.postAndRemoveFromBacklog"/></a>
+					                            <a id="postAndRemoveFromBacklogButton" class="btn btn-primary text-white"><spring:message code="game.postAndRemoveFromBacklog"/></a>
 					                        </div>
 					                    </div>
 					                </div>

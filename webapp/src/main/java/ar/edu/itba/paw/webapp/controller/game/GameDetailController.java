@@ -72,7 +72,7 @@ public class GameDetailController {
     }
 
     @RequestMapping(value = "/games/scores/{gameId}", method = { RequestMethod.POST })
-    public ModelAndView register(@RequestParam("score") int scoreInput, @RequestParam("game") long gameId)
+    public ModelAndView register(@RequestParam("score") int scoreInput, @RequestParam("game") long gameId, @RequestParam("removeFromBacklog") boolean removeFromBacklog)
     {
         User user = us.getLoggedUser();
         if(user == null)
@@ -85,6 +85,8 @@ public class GameDetailController {
         else
             scors.register(user, game, scoreInput);
         LOGGER.debug("{}'s score for game {} successfully registered.", user.getUsername(), game.getTitle());
+        if(removeFromBacklog)
+        	gs.removeFromBacklog(gameId);
         return new ModelAndView("redirect:/games/{gameId}");
     }
 }
