@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.relations.GameVersion;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -25,6 +27,9 @@ public class Game
 	@Transient
 	private boolean inBacklog;
 
+	@OneToMany(mappedBy = "game")
+	private Set<GameVersion> game_versions;
+
 	/*
 	private Set<Platform> platforms;
 	private Set<Developer> developers;
@@ -32,7 +37,7 @@ public class Game
 	private Set<Genre> genres;
 	private Set<Release> releaseDates;*/
 
-	Game(){
+	public Game(){
 		//Just for Hibernate
 	}
 	
