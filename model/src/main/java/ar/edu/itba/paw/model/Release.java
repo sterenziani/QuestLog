@@ -1,10 +1,32 @@
 package ar.edu.itba.paw.model;
+import ar.edu.itba.paw.model.compositekeys.ReleaseKey;
+
+import javax.persistence.*;
 import java.sql.Date;
 
+@Entity
+@Table(name = "releases")
 public class Release
 {
+	@EmbeddedId
+	private ReleaseKey id;
+
+	@ManyToOne
+	@MapsId("game")
+	@JoinColumn(name = "game")
+	private Game game;
+
+	@ManyToOne
+	@MapsId("region")
+	@JoinColumn(name = "region")
 	private Region region;
+
+	@Column(name = "release_date")
 	private Date date;
+
+	public Release(){
+		// Just for Hibernate
+	}
 	
 	public Release(Region r, Date date)
 	{

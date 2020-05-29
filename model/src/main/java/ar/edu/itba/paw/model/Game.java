@@ -1,10 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.relations.Classification;
-import ar.edu.itba.paw.model.relations.Development;
-import ar.edu.itba.paw.model.relations.GameVersion;
-import ar.edu.itba.paw.model.relations.Publishing;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -30,17 +25,36 @@ public class Game
 	@Transient
 	private boolean inBacklog;
 
-	@OneToMany(mappedBy = "game")
-	private Set<GameVersion> game_versions;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+		name = "game_versions",
+		joinColumns = @JoinColumn(name = "game"),
+		inverseJoinColumns = @JoinColumn(name = "platform"))
+	private Set<Platform> platforms;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "development",
+			joinColumns = @JoinColumn(name = "game"),
+			inverseJoinColumns = @JoinColumn(name = "developer"))
+	private Set<Developer> developers;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "publishing",
+			joinColumns = @JoinColumn(name = "game"),
+			inverseJoinColumns = @JoinColumn(name = "publisher"))
+	private Set<Publisher> publishers;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "classifications",
+			joinColumns = @JoinColumn(name = "game"),
+			inverseJoinColumns = @JoinColumn(name = "genre"))
+	private Set<Genre> genres;
 
 	@OneToMany(mappedBy = "game")
-	private Set<Development> developments;
-
-	@OneToMany(mappedBy = "game")
-	private Set<Publishing> publishings;
-
-	@OneToMany(mappedBy = "game")
-	private Set<Classification> classifications;
+	private Set<Release> releaseDates;
 	
 	@OneToMany(mappedBy = "game")
 	private Set<Score> scores;
@@ -113,6 +127,80 @@ public class Game
 		scores.remove(score);
 	}
 
+	public void addPlatform(Platform p)
+	{
+		platforms.add(p);
+	}
+
+	public void removePlatform(Platform p)
+	{
+		platforms.remove(p);
+	}
+
+	public Set<Platform> getPlatforms()
+	{
+		return platforms;
+	}
+
+	public void addPublisher(Publisher pub)
+	{
+		publishers.add(pub);
+	}
+
+	public void removePublisher(Publisher pub)
+	{
+		publishers.remove(pub);
+	}
+
+	public Set<Publisher> getPublishers()
+	{
+		return publishers;
+	}
+	public void addDeveloper(Developer d)
+	{
+		developers.add(d);
+	}
+
+	public void removeDeveloper(Developer d)
+	{
+		developers.remove(d);
+	}
+
+	public Set<Developer> getDevelopers()
+	{
+		return developers;
+	}
+
+	public void addGenre(Genre g)
+	{
+		genres.add(g);
+	}
+
+	public void removeGenre(Genre g)
+	{
+		genres.remove(g);
+	}
+
+	public Set<Genre> getGenres()
+	{
+		return genres;
+	}
+
+	public void addReleaseDate(Release r)
+	{
+		releaseDates.add(r);
+	}
+
+	public void removeReleaseDate(Release r)
+	{
+		releaseDates.remove(r);
+	}
+
+	public Set<Release> getReleaseDates()
+	{
+		return releaseDates;
+	}
+
 	@Transient
 	public boolean getInBacklog()
 	{
@@ -124,7 +212,7 @@ public class Game
 	{
 		inBacklog = val;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{

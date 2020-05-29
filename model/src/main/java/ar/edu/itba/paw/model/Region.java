@@ -24,7 +24,7 @@ public class Region
 	@Column(name = "region_short", length = 5, nullable = false, unique = true)
 	private String shortName;
 	
-	Region()
+	public Region()
 	{
 		// Let Hibernate do the work
 	}
