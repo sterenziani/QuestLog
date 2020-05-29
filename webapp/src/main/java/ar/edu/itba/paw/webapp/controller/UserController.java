@@ -277,11 +277,11 @@ public class UserController
         LOGGER.debug("User {} automatically logged in.", username);
 	}
 	
-    @RequestMapping("/users/{userId}/scores")
-    public ModelAndView viewScoresByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    @RequestMapping("/users/{id}/scores")
+    public ModelAndView viewScoresByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
         final ModelAndView mav = new ModelAndView("user/fullScoreList");
-        User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
         List<Score> scoresInPage = scors.findAllUserScores(visitedUser, page, SCORES_PAGE_SIZE);
         mav.addObject("scoresInPage", scoresInPage);
         int countResults = scors.countAllUserScores(visitedUser);
@@ -292,11 +292,11 @@ public class UserController
         return mav;
     }
     
-    @RequestMapping("/users/{userId}/runs")
-    public ModelAndView viewRunsByUser(@PathVariable("userId") long userId, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    @RequestMapping("/users/{id}/runs")
+    public ModelAndView viewRunsByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
         final ModelAndView mav = new ModelAndView("user/fullRunsList");
-        User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
         List<Run> runsInPage = rs.findRunsByUser(visitedUser, page, RUNS_PAGE_SIZE);
         mav.addObject("runsInPage", runsInPage);
         int countResults = rs.countRunsByUser(visitedUser);

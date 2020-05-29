@@ -167,48 +167,4 @@ public class ReviewJdbcDao implements ReviewDao {
 
 	}
 	
-	@Override
-	public Optional<Game> getGame(long id)
-	{
-		return jdbcReviewTemplate.query("SELECT * FROM (SELECT * FROM reviews WHERE game = ?) AS g NATURAL JOIN games",
-				new RowMapper<Game>()
-				{
-					@Override
-					public Game mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Game(rs.getInt("game"), rs.getString("title"), rs.getString("cover"), rs.getString("description"));
-					}
-				}, id).stream().findFirst();
-	}
-	
-	@Override
-	public Optional<User> getUser(long id)
-	{
-		Optional <User> user = jdbcReviewTemplate.query("SELECT * FROM (SELECT * FROM reviews WHERE user_id = ?) AS g NATURAL JOIN users",
-				new RowMapper<User>()
-				{
-					@Override
-					public User mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("locale"));
-					}
-				}, id).stream().findFirst();
-		return user;
-	}
-	
-	@Override
-	public Optional<Platform> getPlatform(long id)
-	{
-		Optional <Platform> platform = jdbcReviewTemplate.query("SELECT * FROM (SELECT * FROM reviews WHERE platform = ?) AS g NATURAL JOIN platforms",
-				new RowMapper<Platform>()
-				{
-					@Override
-					public Platform mapRow(ResultSet rs, int rowNum) throws SQLException
-					{
-						return new Platform(rs.getInt("platform"), rs.getString("platform_name"), rs.getString("platform_name_short"), rs.getString("platform_logo"));
-					}
-				}, id).stream().findFirst();
-		return platform;
-	}
-
 }

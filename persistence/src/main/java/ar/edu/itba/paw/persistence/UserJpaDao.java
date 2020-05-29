@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.persistence;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -116,7 +117,8 @@ public class UserJpaDao implements UserDao
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
 		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
-		
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<User> query = em.createQuery("from User where user_id IN :filteredIds ORDER BY username asc", User.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();

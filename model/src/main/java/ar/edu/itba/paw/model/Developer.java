@@ -1,11 +1,16 @@
 package ar.edu.itba.paw.model;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import ar.edu.itba.paw.model.relations.Development;
 
 @Entity
 @Table(name="developers")
@@ -23,6 +28,9 @@ public class Developer
 	
 	@Column(name = "developer_logo")
 	private String logo;
+	
+	@OneToMany(mappedBy = "developer")
+	private Set<Development> developments;
 	
 	Developer()
 	{

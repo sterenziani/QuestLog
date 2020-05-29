@@ -1,11 +1,16 @@
 package ar.edu.itba.paw.model;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import ar.edu.itba.paw.model.relations.Classification;
 
 @Entity
 @Table(name="genres")
@@ -23,6 +28,9 @@ public class Genre
 	
 	@Column(name = "genre_logo")
 	private String logo;
+	
+	@OneToMany(mappedBy = "genre")
+	private Set<Classification> classifications;
 	
 	Genre()
 	{

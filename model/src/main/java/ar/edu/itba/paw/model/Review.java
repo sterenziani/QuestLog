@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -23,12 +24,15 @@ public class Review {
 	private Long review;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "game", referencedColumnName = "game")
 	private Game game;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "platform", referencedColumnName = "platform")
 	private Platform platform;
 	
 	@Column(nullable = false)

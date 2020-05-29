@@ -41,6 +41,12 @@ public class Game
 
 	@OneToMany(mappedBy = "game")
 	private Set<Classification> classifications;
+	
+	@OneToMany(mappedBy = "game")
+	private Set<Score> scores;
+	
+	@OneToMany(mappedBy = "game")
+	private Set<Run> runs;
 
 	/*
 	private Set<Platform> platforms;
@@ -95,6 +101,16 @@ public class Game
 	public String getDescription()
 	{
 		return description;
+	}
+	
+	public void addScore(Score score)
+	{
+		scores.add(score);
+	}
+	
+	public void removeRole(Score score)
+	{
+		scores.remove(score);
 	}
 
 	@Transient

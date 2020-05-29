@@ -20,18 +20,18 @@ public class ScoreJpaDao implements ScoreDao
 	@Override
 	public Optional<Score> findScore(User user, Game game) 
 	{
-		final TypedQuery<Score> query = em.createQuery("from Score as sc where sc.user.id = :user.id and sc.game.id = :game.id", Score.class);
-		query.setParameter("user", user);
-		query.setParameter("game", game);
+		final TypedQuery<Score> query = em.createQuery("from Score as sc where sc.user.id = :userId and sc.game.id = :gameId", Score.class);
+		query.setParameter("userId", user.getId());
+		query.setParameter("gameId", game.getId());
 		return query.getResultList().stream().findFirst();
 	}
 
 	@Override
 	public Optional<Score> changeScore(int new_score, User user, Game game) 
 	{
-		final TypedQuery<Score> query = em.createQuery("from Score as sc where sc.user.id = :user.id and sc.game.id = :game.id", Score.class);
-		query.setParameter("user", user);
-		query.setParameter("game", game);
+		final TypedQuery<Score> query = em.createQuery("from Score as sc where sc.user.id = :userId and sc.game.id = :gameId", Score.class);
+		query.setParameter("userId", user.getId());
+		query.setParameter("gameId", game.getId());
 		Optional<Score> sc = query.getResultList().stream().findFirst();
 		if(sc.isPresent())
 			sc.get().setScore(new_score);
@@ -40,8 +40,12 @@ public class ScoreJpaDao implements ScoreDao
 
 	@Override
 	public Integer findAverageScore(Game game) {
-		final Query query = em.createQuery("SELECT AVG(score) FROM Score WHERE game.id = :gameId", Long.class).setParameter("gameId", game.getId());
-		return ((Number) query.getSingleResult()).intValue();
+		final Query query = em.createNativeQuery("SELECT COALESCE(AVG(score), 666) FROM scores WHERE game = :gameId").setParameter("gameId", game.getId());
+		Integer value = ((Number) query.getSingleResult()).intValue();
+		if(value == 666) {
+			return null;
+		}
+		return value;
 	}
 
 	@Override
@@ -63,7 +67,7 @@ public class ScoreJpaDao implements ScoreDao
 	@Override
 	public List<Score> findAllUserScores(User user, int page, int pageSize) 
 	{
-		final TypedQuery<Score> query = em.createQuery("From Score as sc where sc.user.id = userId", Score.class).setParameter("userId", user.getId());
+		final TypedQuery<Score> query = em.createQuery("From Score as sc where sc.user.id = :userId", Score.class).setParameter("userId", user.getId());
 		query.setFirstResult((page-1) * pageSize); 
 		query.setMaxResults(pageSize);
 		return query.getResultList();
@@ -71,8 +75,9 @@ public class ScoreJpaDao implements ScoreDao
 
 	@Override
 	public int countAllUserScores(User user) {
-		final Query query = em.createQuery("SELECT count(*) FROM Score WHERE user.id = :userId", Long.class).setParameter("userId", user.getId());
-		return ((Number) query.getSingleResult()).intValue();
+		Query nativeQuery = em.createNativeQuery("SELECT COUNT(*) FROM scores WHERE user_id = :userId");
+		nativeQuery.setParameter("userId", user.getId());
+		return ((Number) nativeQuery.getSingleResult()).intValue();
 	}
 
 	@Override

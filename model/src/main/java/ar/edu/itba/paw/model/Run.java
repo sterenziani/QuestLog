@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -16,20 +17,24 @@ public class Run {
 	
 	@Id
 	@Column(name = "run")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "runs_run_id_seq")
-	@SequenceGenerator(allocationSize = 1, sequenceName = "runs_run_id_seq", name = "runs_run_id_seq")
-	private Long run;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "runs_run_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "runs_run_seq", name = "runs_run_seq")
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private User user_id;
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "game", referencedColumnName = "game")
 	private Game game;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "platform", referencedColumnName = "platform")
 	private Platform platform;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "playstyle", referencedColumnName = "playstyle")
 	private Playstyle playstyle;
 	
 	@Column(name = "time", nullable = false)
@@ -42,8 +47,8 @@ public class Run {
 	
 	@Deprecated
 	public Run(long run, User user_id, Game game, Platform platform, Playstyle playstle, long time) {
-		this.run = run;
-		this.user_id = user_id;
+		this.id = run;
+		this.user = user_id;
 		this.game = game;
 		this.platform = platform;
 		this.playstyle = playstle;
@@ -51,19 +56,19 @@ public class Run {
 	}
 	
 	public Run(User user_id, Game game, Platform platform, Playstyle playstle, long time) {
-		this.user_id = user_id;
+		this.user = user_id;
 		this.game = game;
 		this.platform = platform;
 		this.playstyle = playstle;
 		this.time = time;
 	}
-	
+
 	public Long getId() {
-		return run;
+		return id;
 	}
 	
 	public User getUser() {
-		return user_id;
+		return user;
 	}
 	
 	public Game getGame() {
@@ -83,7 +88,7 @@ public class Run {
 	}
 	
 	public void setUser(User u) {
-		user_id = u;
+		user = u;
 	}
 	
 	public void setGame(Game g) {
@@ -106,8 +111,8 @@ public class Run {
 	public int hashCode()
 	{
 		int hashCode = 1;
-		hashCode = (int) (31 * hashCode + run);
-		hashCode = (int) (31 * hashCode + user_id.hashCode());
+		hashCode = (int) (31 * hashCode + id);
+		hashCode = (int) (31 * hashCode + user.hashCode());
 		hashCode = (int) (31 * hashCode + game.hashCode());
 		hashCode = (int) (31 * hashCode + platform.hashCode());
 		hashCode = (int) (31 * hashCode + playstyle.hashCode());
@@ -119,8 +124,8 @@ public class Run {
 	{
 		if(o instanceof Run){
 			Run toCompare = (Run) o;
-			if(this.run == toCompare.getId())
-				return this.game.equals(toCompare.getGame()) && this.user_id.equals(toCompare.getUser()) 
+			if(this.id == toCompare.getId())
+				return this.game.equals(toCompare.getGame()) && this.user.equals(toCompare.getUser()) 
 				&& this.platform.equals(toCompare.getPlatform()) && this.playstyle.equals(toCompare.getPlaystyle());
 		}
 		return false;

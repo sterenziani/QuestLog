@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,15 +52,18 @@ public class RunJpaDao implements RunDao
 	@Override
 	public List<Run> findRunsByUser(User user, int page, int pageSize)
 	{
-		Query nativeQuery = em.createNativeQuery("SELECT run FROM runs WHERE user = :user ORDER BY run asc").setParameter("user", user.getId());
+		Query nativeQuery = em.createNativeQuery("SELECT run FROM runs WHERE user_id = :userId ORDER BY run asc");
+		nativeQuery.setParameter("userId", user.getId());
 		nativeQuery.setFirstResult((page-1) * pageSize);
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
 		List<Integer> list = nativeQuery.getResultList();
+		if(list.isEmpty())
+			return Collections.emptyList();
 		List<Long> filteredIds = new ArrayList<Long>();
 		for(Integer i : list)
 			filteredIds.add(new Long(i));
-		final TypedQuery<Run> query = em.createQuery("from Run where run IN :filteredIds ORDER BY run asc", Run.class);
+		final TypedQuery<Run> query = em.createQuery("from Run where id IN :filteredIds ORDER BY id asc", Run.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
 	}
@@ -67,9 +71,11 @@ public class RunJpaDao implements RunDao
 	@Override
 	public int countRunsByUser(User user)
 	{
-		final Query query = em.createQuery("SELECT count(*) FROM Run WHERE user.id = :userId", Long.class).setParameter("userId", user.getId());
-		return ((Number) query.getSingleResult()).intValue();
+		Query nativeQuery = em.createNativeQuery("SELECT COUNT(*) FROM runs WHERE user_id = :userId");
+		nativeQuery.setParameter("userId", user.getId());
+		return ((Number) nativeQuery.getSingleResult()).intValue();
 	}
+
 
 	@Override
 	public List<Run> findAllGameRuns(Game game)
@@ -101,36 +107,37 @@ public class RunJpaDao implements RunDao
 	@Override
 	public long getAveragePlaytime(Game game)
 	{
-		final Query query = em.createQuery("SELECT AVG(time) FROM Run WHERE game.id = :gameId", Long.class).setParameter("gameId", game.getId());
-		return ((Number) query.getSingleResult()).longValue();
+		final Query query = em.createNativeQuery("SELECT COALESCE(AVG(time),0) FROM runs WHERE game = :gameId").setParameter("gameId", game.getId());
+		return((Number) query.getSingleResult()).longValue();
 	}
+
 
 	@Override
 	public long getAveragePlatformPlaytime(Game game, Platform platform)
 	{
-		final Query query = em.createQuery("SELECT AVG(time) FROM Run WHERE game.id = :gameId and platform.id = :platId", Long.class);
+		final Query query = em.createNativeQuery("SELECT COALESCE(AVG(time),0) FROM runs WHERE game = :gameId and platform = :platId");
 		query.setParameter("gameId", game.getId());
 		query.setParameter("platId", platform.getId());
-		return ((Number) query.getSingleResult()).longValue();
+		return((Number) query.getSingleResult()).longValue();
 	}
 
 	@Override
 	public long getAveragePlaystylePlaytime(Game game, Playstyle playstyle)
 	{
-		final Query query = em.createQuery("SELECT AVG(time) FROM Run WHERE game.id = :gameId and playstyle.id = :playId", Long.class);
+		final Query query = em.createNativeQuery("SELECT COALESCE(AVG(time),0) FROM runs WHERE game = :gameId and playstyle = :playId");
 		query.setParameter("gameId", game.getId());
 		query.setParameter("playId", playstyle.getId());
-		return ((Number) query.getSingleResult()).longValue();
+		return((Number) query.getSingleResult()).longValue();
 	}
 
 	@Override
 	public long getAverageSpecificPlaytime(Game game , Playstyle playstyle, Platform platform)
 	{
-		final Query query = em.createQuery("SELECT AVG(time) FROM Run WHERE game.id = :gameId and platform.id = :platId and playstyle.id = :playId", Long.class);
+		final Query query = em.createNativeQuery("SELECT COALESCE(AVG(time),0) FROM runs WHERE game = :gameId and platform = :platId and playstyle = :playId");
 		query.setParameter("gameId", game.getId());
 		query.setParameter("platId", platform.getId());
 		query.setParameter("playId", playstyle.getId());
-		return ((Number) query.getSingleResult()).longValue();
+		return((Number) query.getSingleResult()).longValue();
 	}
 
 	@Override
@@ -151,7 +158,7 @@ public class RunJpaDao implements RunDao
 	@Override
 	public List<Playstyle> getAllPlaystyles()
 	{
-		final TypedQuery<Playstyle> query = em.createQuery("from Playstyles", Playstyle.class);
+		final TypedQuery<Playstyle> query = em.createQuery("from Playstyle", Playstyle.class);
 		return query.getResultList();
 	}
 
