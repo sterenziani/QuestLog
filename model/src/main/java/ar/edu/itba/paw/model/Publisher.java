@@ -16,12 +16,11 @@ import ar.edu.itba.paw.model.relations.Publishing;
 @Table(name="publishers")
 public class Publisher 
 {
-	
 	@Id
 	@Column(name = "publisher")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "publishers_publisher_seq")
 	@SequenceGenerator(allocationSize = 1, sequenceName = "publishers_publisher_seq", name = "publishers_publisher_seq")
-	private Long publisher;
+	private Long id;
 	
 	@Column(name = "publisher_name", length = 75, nullable = false, unique = true)
 	private String name;
@@ -32,7 +31,7 @@ public class Publisher
 	@OneToMany(mappedBy = "publisher")
 	private Set<Publishing> publishings;
 	
-	Publisher()
+	public Publisher()
 	{
 		
 	}
@@ -40,7 +39,7 @@ public class Publisher
 	@Deprecated
 	public Publisher(long publisher, String name, String logo)
 	{
-		this.publisher = publisher;
+		this.id = publisher;
 		this.name = name;
 		this.logo = logo;
 	}
@@ -53,7 +52,7 @@ public class Publisher
 	
 	public Long getId()
 	{
-		return publisher;
+		return id;
 	}
 
 	public void setName(String s)

@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -70,10 +70,9 @@ public class GenreJpaDao implements GenreDao
 		nativeQuery.setFirstResult((page-1) * pageSize);
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Genre> query = em.createQuery("from Genre where genre IN :filteredIds ORDER BY name asc", Genre.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();

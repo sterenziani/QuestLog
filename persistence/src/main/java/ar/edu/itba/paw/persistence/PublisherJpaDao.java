@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -70,10 +71,9 @@ public class PublisherJpaDao implements PublisherDao
 		nativeQuery.setFirstResult((page-1) * pageSize);
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Publisher> query = em.createQuery("from Publisher where publisher IN :filteredIds ORDER BY name asc", Publisher.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
@@ -92,10 +92,9 @@ public class PublisherJpaDao implements PublisherDao
 		Query nativeQuery = em.createNativeQuery("SELECT publisher FROM (SELECT publisher, count(*) AS g FROM publishing GROUP BY publisher) AS a NATURAL JOIN publishers ORDER BY g DESC");
 		nativeQuery.setMaxResults(amount);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Publisher> query = em.createQuery("from Publisher where publisher IN :filteredIds ORDER BY name", Publisher.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();

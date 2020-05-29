@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -70,10 +70,9 @@ public class DeveloperJpaDao implements DeveloperDao
 		nativeQuery.setFirstResult((page-1) * pageSize);
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Developer> query = em.createQuery("from Developer where developer IN :filteredIds ORDER BY name asc", Developer.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
@@ -92,10 +91,9 @@ public class DeveloperJpaDao implements DeveloperDao
 		Query nativeQuery = em.createNativeQuery("SELECT developer FROM (SELECT developer, count(*) AS g FROM development GROUP BY developer) AS a NATURAL JOIN developers ORDER BY g DESC");
 		nativeQuery.setMaxResults(amount);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Developer> query = em.createQuery("from Developer where developer IN :filteredIds ORDER BY name", Developer.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();

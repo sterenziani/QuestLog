@@ -21,7 +21,7 @@ public class Developer
 	@Column(name = "developer")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "developers_developer_seq")
 	@SequenceGenerator(allocationSize = 1, sequenceName = "developers_developer_seq", name = "developers_developer_seq")
-	private Long developer;
+	private Long id;
 	
 	@Column(name = "developer_name", length = 75, nullable = false, unique = true)
 	private String name;
@@ -32,7 +32,7 @@ public class Developer
 	@OneToMany(mappedBy = "developer")
 	private Set<Development> developments;
 	
-	Developer()
+	public Developer()
 	{
 		
 	}
@@ -40,7 +40,7 @@ public class Developer
 	@Deprecated
 	public Developer(long developer, String name, String logo)
 	{
-		this.developer = developer;
+		this.id = developer;
 		this.name = name;
 		this.logo = logo;
 	}
@@ -53,7 +53,7 @@ public class Developer
 	
 	public Long getId()
 	{
-		return developer;
+		return id;
 	}
 
 	public void setName(String s)

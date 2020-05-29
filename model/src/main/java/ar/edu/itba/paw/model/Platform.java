@@ -1,8 +1,16 @@
 package ar.edu.itba.paw.model;
-import ar.edu.itba.paw.model.relations.GameVersion;
-
-import javax.persistence.*;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import ar.edu.itba.paw.model.relations.GameVersion;
 
 @Entity
 @Table(name="platforms")
@@ -12,7 +20,7 @@ public class Platform
 	@Column(name = "platform")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "platforms_platform_seq")
 	@SequenceGenerator(allocationSize = 1, sequenceName = "platforms_platform_seq", name = "platforms_platform_seq")
-	private Long platform;
+	private Long id;
 	
 	@Column(name = "platform_name", length = 30, nullable = false, unique = true)
 	private String name;
@@ -22,11 +30,11 @@ public class Platform
 	
 	@Column(name = "platform_logo")
 	private String logo;
-
+	
 	@OneToMany(mappedBy = "platform")
 	private Set<GameVersion> game_versions;
 	
-	Platform()
+	public Platform()
 	{
 		// Let Hibernate do the work
 	}
@@ -34,7 +42,7 @@ public class Platform
 	@Deprecated
 	public Platform(long platform, String name, String shortName, String logo)
 	{
-		this.platform = platform;
+		this.id = platform;
 		this.name = name;
 		this.shortName = shortName;
 		this.logo = logo;
@@ -49,7 +57,7 @@ public class Platform
 	
 	public Long getId()
 	{
-		return platform;
+		return id;
 	}
 
 	public void setName(String s)

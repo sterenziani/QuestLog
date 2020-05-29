@@ -21,7 +21,7 @@ public class Genre
 	@Column(name = "genre")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genres_genre_seq")
 	@SequenceGenerator(allocationSize = 1, sequenceName = "genres_genre_seq", name = "genres_genre_seq")
-	private Long genre;
+	private Long id;
 	
 	@Column(name = "genre_name", length = 15, nullable = false, unique = true)
 	private String name;
@@ -32,7 +32,7 @@ public class Genre
 	@OneToMany(mappedBy = "genre")
 	private Set<Classification> classifications;
 	
-	Genre()
+	public Genre()
 	{
 		
 	}
@@ -40,7 +40,7 @@ public class Genre
 	@Deprecated
 	public Genre(long genre, String name, String logo)
 	{
-		this.genre = genre;
+		this.id = genre;
 		this.name = name;
 		this.logo = logo;
 	}
@@ -53,7 +53,7 @@ public class Genre
 	
 	public Long getId()
 	{
-		return genre;
+		return id;
 	}
 
 	public void setName(String s)

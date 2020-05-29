@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -79,10 +79,9 @@ public class PlatformJpaDao implements PlatformDao
 		nativeQuery.setFirstResult((page-1) * pageSize);
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Platform> query = em.createQuery("from Platform where platform IN :filteredIds ORDER BY name asc", Platform.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
@@ -101,10 +100,9 @@ public class PlatformJpaDao implements PlatformDao
 		Query nativeQuery = em.createNativeQuery("SELECT platform FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY g DESC");
 		nativeQuery.setMaxResults(amount);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Platform> query = em.createQuery("from Platform where platform IN :filteredIds ORDER BY name", Platform.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
@@ -115,10 +113,9 @@ public class PlatformJpaDao implements PlatformDao
 	{
 		Query nativeQuery = em.createNativeQuery("SELECT platform FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms ORDER BY platform_name ASC");
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Platform> query = em.createQuery("from Platform where platform IN :filteredIds ORDER BY name ASC", Platform.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
@@ -131,10 +128,9 @@ public class PlatformJpaDao implements PlatformDao
 		nativeQuery.setMaxResults(pageSize);
 		nativeQuery.setFirstResult((page-1)*pageSize);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
 		final TypedQuery<Platform> query = em.createQuery("from Platform where platform IN :filteredIds ORDER BY name ASC", Platform.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
@@ -143,7 +139,6 @@ public class PlatformJpaDao implements PlatformDao
 	@Override
 	public int countPlatformsWithGames()
 	{
-		// TODO: Query no-nativa
 		Query nativeQuery = em.createNativeQuery("SELECT count(*) FROM (SELECT platform, platform_name, platform_name_short, platform_logo FROM (SELECT platform, count(*) AS g FROM game_versions GROUP BY platform) AS a NATURAL JOIN platforms) AS p");
 		return ((Number) nativeQuery.getSingleResult()).intValue();
 	}
