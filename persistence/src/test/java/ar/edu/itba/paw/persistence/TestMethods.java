@@ -1,201 +1,145 @@
 package ar.edu.itba.paw.persistence;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Playstyle;
-import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.Region;
-import ar.edu.itba.paw.model.Review;
-import ar.edu.itba.paw.model.Run;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
+
+import ar.edu.itba.paw.model.*;
+
+import javax.persistence.EntityManager;
 
 public class TestMethods
 {
-	public static Game addGame(String title, String cover, String desc, SimpleJdbcInsert gameInsert)
+	public static Game addGame(String title, String cover, String desc, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("title", title);
-		args.put("cover", cover);
-		args.put("description", desc);
-		return new Game(gameInsert.executeAndReturnKey(args).longValue(), title, cover, desc);
+		Game g = new Game(title, cover, desc);
+		em.persist(g);
+		return g;
 	}
 	
-	public static Developer addDeveloper(String name, String logo, SimpleJdbcInsert devInsert)
+	public static Developer addDeveloper(String name, String logo, EntityManager em)
 	{
-		final Map<String, Object> devArgs = new HashMap<>();
-		devArgs.put("developer_name", name);
-		devArgs.put("developer_logo", logo);
-		return new Developer(devInsert.executeAndReturnKey(devArgs).longValue(), name, logo);
+		Developer d = new Developer(name, logo);
+		em.persist(d);
+		return d;
 	}
 	
-	public static Publisher addPublisher(String name, String logo, SimpleJdbcInsert pubInsert)
+	public static Publisher addPublisher(String name, String logo, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("publisher_name", name);
-		args.put("publisher_logo", logo);
-		return new Publisher(pubInsert.executeAndReturnKey(args).longValue(), name, logo);
+		Publisher p = new Publisher(name, logo);
+		em.persist(p);
+		return p;
 	}
 	
-	public static Genre addGenre(String name, String logo, SimpleJdbcInsert genreInsert)
+	public static Genre addGenre(String name, String logo, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("genre_name", name);
-		args.put("genre_logo", logo);
-		return new Genre(genreInsert.executeAndReturnKey(args).longValue(), name, logo);
+		Genre g = new Genre(name, logo);
+		em.persist(g);
+		return g;
 	}
 	
-	public static Platform addPlatform(String name, String shortName, String logo, SimpleJdbcInsert platformInsert)
+	public static Platform addPlatform(String name, String shortName, String logo, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("platform_name", name);
-		args.put("platform_name_short", shortName);
-		args.put("platform_logo", logo);
-		return new Platform(platformInsert.executeAndReturnKey(args).longValue(), name, shortName, logo);
+		Platform p = new Platform(name, shortName, logo);
+		em.persist(p);
+		return p;
 	}
 	
-	public static Region addRegion(String name, String shortName, SimpleJdbcInsert regionInsert)
+	public static Region addRegion(String name, String shortName, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("region_name", name);
-		args.put("region_short", shortName);
-		return new Region(regionInsert.executeAndReturnKey(args).longValue(), name, shortName);
+		Region r = new Region(name, shortName);
+		em.persist(r);
+		return r;
 	}
 	
-	public static void addRelease(Game g, Region r, Date d, SimpleJdbcInsert releaseInsert)
+	public static void addRelease(Game g, Region r, Date d, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("region", r.getId());
-		args.put("release_date", d);
-		releaseInsert.execute(args);
+		Release realease = new Release(g, r, d);
+		em.persist(realease);
 	}
 	
-	public static User addUser(String username, String password, String email, String locale, SimpleJdbcInsert userInsert)
+	public static User addUser(String username, String password, String email, String locale, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("username", username);
-		args.put("password", password);
-		args.put("email", email);
-		args.put("locale", locale);
-
-		return new User(userInsert.executeAndReturnKey(args).longValue(), username, password, email, locale);
+		User u = new User(username, password, email, locale);
+		em.persist(u);
+		return u;
 	}
 	
-	public static Score addScore(User user, Game game, int score, SimpleJdbcInsert scoreInsert) {
-		final Map<String, Object> args = new HashMap<>();
-		args.put("user_id", user.getId());
-		args.put("game", game.getId());
-		args.put("score", score);
-		scoreInsert.execute(args);
-		return new Score(user, game, score);
+	public static Score addScore(User user, Game game, int score, EntityManager em) {
+		Score s = new Score(user, game, score);
+		em.persist(s);
+		return s;
 	}
 	
-	public static Review addReview(User user, Game game, Platform platform, int score, String body, Date date, SimpleJdbcInsert reviewInsert) {
-		final Map<String, Object> args = new HashMap<>();
-		args.put("user_id", user.getId());
-		args.put("game", game.getId());
-		args.put("platform", platform.getId());
-		args.put("score", score);
-		args.put("body", body);
-		args.put("post_date", date);
-		return new Review(reviewInsert.executeAndReturnKey(args).longValue(), user, game, platform, score, body, date);	
+	public static Review addReview(User user, Game game, Platform platform, int score, String body, Date date, EntityManager em) {
+		Review r = new Review(user, game, platform, score, body, date);
+		em.persist(r);
+		return r;
 	}
 	
-	public static Run addRun(User user, Game game, Platform platform, Playstyle playstyle, long time, SimpleJdbcInsert runInsert) {
-		final Map<String, Object> args = new HashMap<>();
-		args.put("user_id", user.getId());
-		args.put("game", game.getId());
-		args.put("platform", platform.getId());
-		args.put("playstyle", playstyle.getId());
-		args.put("time", time);
-		return new Run(runInsert.executeAndReturnKey(args).longValue(), user, game, platform, playstyle, time);	
+	public static Run addRun(User user, Game game, Platform platform, Playstyle playstyle, long time, EntityManager em) {
+		Run r = new Run(user, game, platform, playstyle, time);
+		em.persist(r);
+		return r;
 	}
 	
-	public static Playstyle addPlaystyle(String name, SimpleJdbcInsert playstyleInsert)
+	public static Playstyle addPlaystyle(String name, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("playstyle_name", name);
-		return new Playstyle (playstyleInsert.executeAndReturnKey(args).longValue(), name);
+		Playstyle p = new Playstyle(name);
+		em.persist(p);
+		return p;
 	}
 	
-	public static Image addImage(String name, byte[] data, SimpleJdbcInsert imageInsert) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put("image_name", name);
-        args.put("image_data", data);
-        return new Image(imageInsert.executeAndReturnKey(args).longValue(), name, data);
-		
+	public static Image addImage(String name, byte[] data, EntityManager em) {
+		Image i = new Image(name, data);
+		em.persist(i);
+		return i;
 	}
 	
-	public static int addRole(String roleName, SimpleJdbcInsert roleInsert)
+	public static int addRole(String roleName, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("role_name", roleName);
-		return roleInsert.executeAndReturnKey(args).intValue();
+		Role r = new Role(roleName);
+		em.persist(r);
+		return r.getRole().intValue();
 	}
 	
-	public static void connectDev(Game g, Developer d, SimpleJdbcInsert developmentInsert)
+	public static void connectDev(Game g, Developer d, EntityManager em)
 	{
-		final Map<String, Object> developmentArgs = new HashMap<>();
-		developmentArgs.put("game", g.getId());
-		developmentArgs.put("developer", d.getId());
-		developmentInsert.execute(developmentArgs);
+		g.addDeveloper(d);
+		em.persist(g);
 	}
 	
-	public static void connectPub(Game g, Publisher p, SimpleJdbcInsert publishingInsert)
+	public static void connectPub(Game g, Publisher p, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("publisher", p.getId());
-		publishingInsert.execute(args);
+		g.addPublisher(p);
+		em.persist(g);
 	}
 	
-	public static void connectGenre(Game g, Genre genre, SimpleJdbcInsert classificationInsert)
+	public static void connectGenre(Game g, Genre genre, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("genre", genre.getId());
-		classificationInsert.execute(args);
+		g.addGenre(genre);
+		em.persist(g);
 	}
 	
-	public static void connectPlatform(Game g, Platform p, SimpleJdbcInsert versionInsert)
+	public static void connectPlatform(Game g, Platform p, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("platform", p.getId());
-		versionInsert.execute(args);
+		g.addPlatform(p);
+		em.persist(g);
 	}
 
-	public static void addBacklog(Game g, User u, SimpleJdbcInsert backlogInsert)
+	public static void addBacklog(Game g, User u, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("game", g.getId());
-		args.put("user_id", u.getId());
-		backlogInsert.execute(args);
+		u.addToBacklog(g);
+		em.persist(u);
 	}
 	
-	public static void connectRoles(User u, int roleId, SimpleJdbcInsert versionInsert)
+	public static void connectRoles(User u, int roleId, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("user_id", u.getId());
-		args.put("role", roleId);
-		versionInsert.execute(args);
+		u.addRole(new Role(roleId));
+		em.persist(u);
 	}
 	
-	public static PasswordResetToken addToken(User u, String token, Date date, SimpleJdbcInsert versionInsert)
+	public static PasswordResetToken addToken(User u, String token, Date date, EntityManager em)
 	{
-		final Map<String, Object> args = new HashMap<>();
-		args.put("user_id", u.getId());
-		args.put("token", token);
-		args.put("expiration", date);
-		versionInsert.execute(args);
-		return new PasswordResetToken(token,u,date);
+		PasswordResetToken prt = new PasswordResetToken(token, u, date);
+		em.persist(prt);
+		return prt;
 	}
 }

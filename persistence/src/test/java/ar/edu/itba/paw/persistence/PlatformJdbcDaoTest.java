@@ -22,7 +22,6 @@ import ar.edu.itba.paw.model.Platform;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Sql(scripts = {"classpath:schema.sql"})
 @Transactional
 public class PlatformJdbcDaoTest
 {
@@ -35,29 +34,17 @@ public class PlatformJdbcDaoTest
 	private	static final String PLATFORM_SHORT_NAME = "PS4";
 	private	static final String PLATFORM_LOGO = "https://i.ytimg.com/vi/56NxUWEFpL0/maxresdefault.jpg";
 	private static final String VERSION_TABLE = "game_versions";
-
-	@Autowired
-	private DataSource ds;
 	
     @PersistenceContext
     private EntityManager em;
 	
 	@Autowired
 	private PlatformJpaDao platformDao;
-	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert gameInsert;
-	private SimpleJdbcInsert versionInsert;
-	
-	private Platform platform = new Platform();
 		
 	@Before
 	public void	setUp()
 	{
-		jdbcTemplate = new JdbcTemplate(ds);
-		gameInsert = new SimpleJdbcInsert(ds).withTableName(GAME_TABLE).usingGeneratedKeyColumns("game");
-		versionInsert = new SimpleJdbcInsert(ds).withTableName(VERSION_TABLE);
-		platform = new Platform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO);
-		em.persist(platform);
+
 	}
 
 	@Test
@@ -73,14 +60,15 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void	testFindPlatformByIdDoesntExist()
 	{
-		Optional<Platform> maybePlatform = platformDao.findById(2);
+		Optional<Platform> maybePlatform = platformDao.findById(1);
 		Assert.assertFalse(maybePlatform.isPresent());
 	}
 
 	@Test
 	public void	testFindPlatformByIdExists()
 	{
-		Optional<Platform> maybePlatform = platformDao.findById(platform.getId());
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
+		Optional<Platform> maybePlatform = platformDao.findById(p.getId());
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
@@ -97,6 +85,7 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void	testFindPlatformByNameExists()
 	{
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Optional<Platform> maybePlatform = platformDao.findByName(PLATFORM_NAME);
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
@@ -107,7 +96,8 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void	testChangePlatformName()
 	{
-		Optional<Platform> maybePlatform = platformDao.changeName(platform.getId(), "La Plei Cuatro");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
+		Optional<Platform> maybePlatform = platformDao.changeName(p.getId(), "La Plei Cuatro");
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals("La Plei Cuatro", maybePlatform.get().getName());
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
@@ -117,7 +107,8 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void	testChangePlatformShortName()
 	{
-		Optional<Platform> maybePlatform = platformDao.changeShortName(platform.getId(), "Play4");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
+		Optional<Platform> maybePlatform = platformDao.changeShortName(p.getId(), "Play4");
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
 		Assert.assertEquals("Play4", maybePlatform.get().getShortName());
@@ -127,7 +118,8 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void	testChangeLogo()
 	{
-		Optional<Platform> maybePlatform = platformDao.changeLogo(platform.getId(), "http://ps4.com/logo.png");
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
+		Optional<Platform> maybePlatform = platformDao.changeLogo(p.getId(), "http://ps4.com/logo.png");
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
 		Assert.assertEquals(PLATFORM_SHORT_NAME, maybePlatform.get().getShortName());
@@ -137,10 +129,11 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void	testGetAllPlatforms()
 	{
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Platform ns = platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
-		myList.add(platform);
+		myList.add(p);
 		
 		List<Platform> platformList = platformDao.getAllPlatforms();
 		Assert.assertFalse(platformList.isEmpty());
@@ -152,19 +145,18 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void testGetBiggestPlatforms()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, VERSION_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Platform ns = platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		Platform snes = platformDao.register("Super Nintendo", "SNES", "http://nintendo.com/snes.png");
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
-		myList.add(platform);
+		myList.add(p);
 		myList.add(snes);
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, gameInsert);
-		TestMethods.connectPlatform(g2, platform, versionInsert);
-		TestMethods.connectPlatform(g1, ns, versionInsert);
-		TestMethods.connectPlatform(g2, ns, versionInsert);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, em);
+		TestMethods.connectPlatform(g2, p, em);
+		TestMethods.connectPlatform(g1, ns, em);
+		TestMethods.connectPlatform(g2, ns, em);
 		
 		
 		List<Platform> platformList1 = platformDao.getBiggestPlatforms(1);
@@ -186,23 +178,22 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void testCountPlatforms()
 	{
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		platformDao.register("Super Nintendo", "SNES", "http://nintendo.com/snes.png");
 		int count = platformDao.countPlatforms();
 		Assert.assertEquals(3, count);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		count = platformDao.countPlatforms();
-		Assert.assertEquals(0, count);
 	}
 	
 	@Test
 	public void testGetPlatforms() 
 	{
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Platform ns = platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		Platform snes = platformDao.register("Super Nintendo", "SNES", "http://nintendo.com/snes.png");
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
-		myList.add(platform);
+		myList.add(p);
 		myList.add(snes);
 		List<Platform> platformList1 = platformDao.getPlatforms(1,2);
 		List<Platform> platformList2 = platformDao.getPlatforms(2,2);
@@ -230,17 +221,14 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void testGetAllPlatformsWithGames()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, VERSION_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		Platform ns = platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
+		Platform ns = TestMethods.addPlatform("Nintendo Switch", "NS", "http://nintendo.com/switch.png", em);
 		
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
-		myList.add(platform);
 
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
 		
-		TestMethods.connectPlatform(g1, ns, versionInsert);
+		TestMethods.connectPlatform(g1, ns, em);
 		
 		List<Platform> platformList = platformDao.getAllPlatformsWithGames();
 		
@@ -252,24 +240,23 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void testGetPlatformsWithGames()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, VERSION_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Platform ns = platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		Platform snes = platformDao.register("Super Nintendo", "SNES", "http://nintendo.com/snes.png");
 		Platform xbox = platformDao.register("XBOX", "XBOX", "http://microsoft.com/xbox.png");
 
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
-		myList.add(platform);
+		myList.add(p);
 		myList.add(snes);
 		myList.add(xbox);
 
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, gameInsert);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, em);
 		
-		TestMethods.connectPlatform(g1, ns, versionInsert);
-		TestMethods.connectPlatform(g2, platform, versionInsert);
-		TestMethods.connectPlatform(g1, snes, versionInsert);
+		TestMethods.connectPlatform(g1, ns, em);
+		TestMethods.connectPlatform(g2, p, em);
+		TestMethods.connectPlatform(g1, snes, em);
 
 		List<Platform> platformList1 = platformDao.getPlatformsWithGames(1,2);
 		List<Platform> platformList2 = platformDao.getPlatformsWithGames(2,2);
@@ -297,21 +284,20 @@ public class PlatformJdbcDaoTest
 	@Test
 	public void testCountPlatformsWithGames()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, VERSION_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Platform ns = platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		Platform snes = platformDao.register("Super Nintendo", "SNES", "http://nintendo.com/snes.png");
 	
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
-		myList.add(platform);
+		myList.add(p);
 		myList.add(snes);
 
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, gameInsert);
-		TestMethods.connectPlatform(g1, ns, versionInsert);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+		TestMethods.connectPlatform(g1, ns, em);
 		int count1 = platformDao.countPlatformsWithGames();
-		TestMethods.connectPlatform(g1, platform, versionInsert);
-		int count2 = platformDao.countPlatformsWithGames();		
+		TestMethods.connectPlatform(g1, p, em);
+		int count2 = platformDao.countPlatformsWithGames();
 		Assert.assertEquals(1, count1);
 		Assert.assertEquals(2, count2);
 	}

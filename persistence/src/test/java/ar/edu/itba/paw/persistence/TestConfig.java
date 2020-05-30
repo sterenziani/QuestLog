@@ -13,7 +13,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-@ComponentScan({"ar.edu.itba.paw.persistence", })
+@ComponentScan({"ar.edu.itba.paw.persistence"})
 @Configuration
 public class TestConfig
 {
@@ -34,12 +34,15 @@ public class TestConfig
 		final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setPackagesToScan("ar.edu.itba.paw.model");
 		factoryBean.setDataSource(dataSource());
+
 		final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		factoryBean.setJpaVendorAdapter(vendorAdapter);
+
 		final Properties properties = new Properties();
 		properties.setProperty("hibernate.hbm2ddl.auto", "update"); // Puede que necesite ser create, pero en ese caso tira excepciones
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-		properties.setProperty("format_sql", "true");
+
+		//properties.setProperty("format_sql", "true");
 		factoryBean.setJpaProperties(properties);
 		return factoryBean;
 	}

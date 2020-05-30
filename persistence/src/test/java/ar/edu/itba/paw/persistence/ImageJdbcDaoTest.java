@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+/*package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ImageDao;
 import ar.edu.itba.paw.model.Image;
@@ -91,3 +91,4 @@ public class ImageJdbcDaoTest {
         Assert.assertEquals(IMAGE_NAME, maybeImage2.get().getImageName());
     }
 }
+*/

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+/*package ar.edu.itba.paw.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -229,4 +229,4 @@ public class DeveloperJdbcDaoTest
 		Assert.assertEquals(developerList2.get(1).getName(), myList.get(1).getName());
 				
 	}
-}
+}*/

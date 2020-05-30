@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+/*package ar.edu.itba.paw.persistence;
 import org.junit.Test;
 
 import java.sql.ResultSet;
@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.junit.Assert;
@@ -31,7 +33,6 @@ import ar.edu.itba.paw.persistence.UserJdbcDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Sql(scripts = {"classpath:schema.sql"})
 public class UserJdbcDaoTest
 {
 	private	static final String USERNAME = "Username";
@@ -45,12 +46,15 @@ public class UserJdbcDaoTest
 	private	static final String TOKEN_TABLE = "tokens";
 	private	static final String TOKEN = "token";
 	private	static final Date DATE = new Date(2323223232L);
+
+	@PersistenceContext
+	EntityManager em;
 	
 	@Autowired
 	private DataSource ds;
 	
 	@Autowired
-	private UserJdbcDao userDao;
+	private UserJpaDao userDao;
 	private JdbcTemplate jdbcTemplate;
 	private SimpleJdbcInsert jdbcInsert;
 	private SimpleJdbcInsert roleInsert;
@@ -63,19 +67,19 @@ public class UserJdbcDaoTest
 	{
 		userDao = new UserJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		
+
 		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("user_id");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
 
-		
+
 		roleInsert = new SimpleJdbcInsert(ds).withTableName(ROLES_TABLE).usingGeneratedKeyColumns("role");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, ROLES_TABLE);
-		
+
 		assignInsert = new SimpleJdbcInsert(ds).withTableName(ASSIGN_TABLE);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, ASSIGN_TABLE);
-		
+
 		tokenInsert = new SimpleJdbcInsert(ds).withTableName(TOKEN_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, TOKEN_TABLE);		
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, TOKEN_TABLE);
 		
 	}
 
@@ -315,3 +319,4 @@ public class UserJdbcDaoTest
 		
 	}
 }
+*/
