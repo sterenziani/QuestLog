@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,37 +31,44 @@ public class Game
 		name = "game_versions",
 		joinColumns = @JoinColumn(name = "game"),
 		inverseJoinColumns = @JoinColumn(name = "platform"))
-	private Set<Platform> platforms;
+	private Set<Platform> platforms = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "development",
 			joinColumns = @JoinColumn(name = "game"),
 			inverseJoinColumns = @JoinColumn(name = "developer"))
-	private Set<Developer> developers;
+	private Set<Developer> developers = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "publishing",
 			joinColumns = @JoinColumn(name = "game"),
 			inverseJoinColumns = @JoinColumn(name = "publisher"))
-	private Set<Publisher> publishers;
+	private Set<Publisher> publishers = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "classifications",
 			joinColumns = @JoinColumn(name = "game"),
 			inverseJoinColumns = @JoinColumn(name = "genre"))
-	private Set<Genre> genres;
+	private Set<Genre> genres = new HashSet<>();
 
-	@OneToMany(mappedBy = "game")
-	private Set<Release> releaseDates;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "backlogs",
+			joinColumns = @JoinColumn(name = "game"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> backlog = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	private Set<Release> releaseDates = new HashSet<>();
 	
-	@OneToMany(mappedBy = "game")
-	private Set<Score> scores;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	private Set<Score> scores = new HashSet<>();
 	
-	@OneToMany(mappedBy = "game")
-	private Set<Run> runs;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	private Set<Run> runs = new HashSet<>();
 
 	/*
 	private Set<Platform> platforms;
@@ -71,6 +79,14 @@ public class Game
 
 	public Game(){
 		//Just for Hibernate
+	}
+
+	public Game(String title, String cover, String description)
+	{
+		this.title = title;
+		this.cover = cover;
+		this.description = description;
+		this.inBacklog = false;
 	}
 	
 	public Game(long game, String title, String cover, String description)

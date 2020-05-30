@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.model;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Platform
 	private String logo;
 	
 	@ManyToMany(mappedBy = "platforms")
-	private Set<Game> games;
+	private Set<Game> games = new HashSet<>();
 	
 	public Platform()
 	{

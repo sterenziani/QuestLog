@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.model;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,11 +23,16 @@ public class Role
 	private String roleName;
 	
 	@ManyToMany(mappedBy = "roles")
-	private Set<User> users;
+	private Set<User> users = new HashSet<>();
 
 	Role()
 	{
 		
+	}
+
+	public Role(Number role_id)
+	{
+		this.role = role_id.longValue();
 	}
 	
 	public Role(String role_name)

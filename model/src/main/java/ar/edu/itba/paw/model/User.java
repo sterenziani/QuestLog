@@ -40,6 +40,9 @@ public class User
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "role_assignments", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role"))
 	private Set<Role> roles = new HashSet<Role>();
+
+	@ManyToMany(mappedBy = "backlog")
+	private Set<Game> backlog = new HashSet<>();
 	
 	User()
 	{
@@ -62,6 +65,24 @@ public class User
 		this.password = password;
 		this.email = email;
 		this.locale = Locale.forLanguageTag(locale);
+	}
+
+	public void addToBacklog(Game g){
+		backlog.add(g);
+	}
+
+	public void removeFromBacklog(Game g){
+		if(!isInBacklog(g))
+			return;
+		backlog.remove(g);
+	}
+
+	public boolean isInBacklog(Game g){
+		return backlog.contains(g);
+	}
+
+	public Set<Game> getBacklog() {
+		return backlog;
 	}
 
 	public Long getId()

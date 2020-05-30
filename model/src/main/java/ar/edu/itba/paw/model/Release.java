@@ -28,7 +28,7 @@ public class Release
 		// Just for Hibernate
 	}
 	
-	public Release(Region r, Date date)
+	public Release(Game g, Region r, Date date)
 	{
 		this.region = r;
 		this.date = date;
