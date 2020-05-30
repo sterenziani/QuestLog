@@ -23,7 +23,7 @@ public interface GameService
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<GameDetail> findByIdWithDetails(long id);
+	Optional<Game> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a game or several games with a given title
@@ -37,7 +37,7 @@ public interface GameService
 	 * @param title The title for the game.
 	 * @return 		The game with that title.
 	 */
-	Optional<GameDetail> findByTitleWithDetails(String title);
+	Optional<Game> findByTitleWithDetails(String title);
 	
 	/**
 	 * Change a game's title

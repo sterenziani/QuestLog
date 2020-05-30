@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
@@ -26,7 +25,7 @@ public interface GameDao
 	 * @param id 	The unique ID for the game.
 	 * @return 		The matched game, or null otherwise.
 	 */
-	Optional<GameDetail> findByIdWithDetails(long id);
+	Optional<Game> findByIdWithDetails(long id);
 	
 	/**
 	 * Finds a game or several games with a given title
@@ -40,7 +39,7 @@ public interface GameDao
 	 * @param title The title for the game.
 	 * @return 		The game with that title.
 	 */
-	Optional<GameDetail> findByTitleWithDetails(String title);
+	Optional<Game> findByTitleWithDetails(String title);
 	
 	/**
 	 * Change a game's title
@@ -86,7 +85,7 @@ public interface GameDao
 	 * Get a list of all available games with the additional details of each game.
 	 * @return 	The list of all games.
 	 */
-	List<GameDetail> getAllGamesWithDetails();
+	List<Game> getAllGamesWithDetails();
 	
 	/**
 	 * Links a game to a specified platform

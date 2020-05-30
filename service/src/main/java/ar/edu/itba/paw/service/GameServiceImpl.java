@@ -20,7 +20,6 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import org.springframework.web.multipart.MultipartFile;
 import ar.edu.itba.paw.model.Developer;
 import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Genre;
 import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Publisher;
@@ -53,9 +52,9 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Optional<GameDetail> findByIdWithDetails(long id)
+	public Optional<Game> findByIdWithDetails(long id)
 	{
-		Optional<GameDetail> g = gameDao.findByIdWithDetails(id);
+		Optional<Game> g = gameDao.findByIdWithDetails(id);
 		if(g.isPresent())
 			g.get().setInBacklog(gameInBacklog(id));
 		return g;
@@ -73,9 +72,9 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Optional<GameDetail> findByTitleWithDetails(String title)
+	public Optional<Game> findByTitleWithDetails(String title)
 	{
-		Optional<GameDetail> g = gameDao.findByTitleWithDetails(title);
+		Optional<Game> g = gameDao.findByTitleWithDetails(title);
 		if(g.isPresent())
 			g.get().setInBacklog(gameInBacklog(g.get().getId()));
 		return g;
