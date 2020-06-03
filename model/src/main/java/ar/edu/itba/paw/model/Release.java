@@ -3,6 +3,7 @@ import ar.edu.itba.paw.model.compositekeys.ReleaseKey;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "releases")
@@ -22,13 +23,13 @@ public class Release
 	private Region region;
 
 	@Column(name = "release_date")
-	private Date date;
+	private LocalDate date;
 
 	public Release(){
 		// Just for Hibernate
 	}
 	
-	public Release(Game g, Region r, Date date)
+	public Release(Game g, Region r, LocalDate date)
 	{
 		this.region = r;
 		this.date = date;
@@ -39,7 +40,7 @@ public class Release
 		return region;
 	}
 	
-	public Date getDate()
+	public LocalDate getDate()
 	{
 		return date;
 	}

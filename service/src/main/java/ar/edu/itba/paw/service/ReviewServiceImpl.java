@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +65,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Transactional
 	@Override
-	public Review register(User user, Game game, Platform platform, int score, String body, Date date) {
+	public Review register(User user, Game game, Platform platform, int score, String body, LocalDate date) {
 		return reviewDao.register(user, game, platform, score, body, date);
 	}
 

@@ -57,7 +57,7 @@ public class GameForm {
         this.publishers   = g.getPublishers().stream().map(Publisher::getId).collect(Collectors.toList());
         this.genres       = g.getGenres().stream().map(Genre::getId).collect(Collectors.toList());
         this.releaseDates = g.getReleaseDates().stream().collect(Collectors.toMap(r -> r.getRegion().getId(), r -> {
-            LocalDate         date          = r.getDate().toLocalDate();
+            LocalDate         date          = r.getDate();
             DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String            plainTextDate = date.format(formatter);
             return LocalDate.parse(plainTextDate, formatter);

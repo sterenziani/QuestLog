@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +72,7 @@ public class ReviewJpaDao implements ReviewDao {
 	}
 
 	@Override
-	public Review register(User user, Game game, Platform platform, int score, String body, Date date) {
+	public Review register(User user, Game game, Platform platform, int score, String body, LocalDate date) {
 		final Review rev = new Review(user, game, platform, score, body, date);
 		em.persist(rev);
 		return rev;

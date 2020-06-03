@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.model;
-import java.sql.Date;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +23,7 @@ public class PasswordResetToken
 	private String token;
 	
 	@Column(name = "expiration")
-	private Date expiryDate;
+	private LocalDate expiryDate;
 	
 	PasswordResetToken()
 	{
@@ -36,7 +36,7 @@ public class PasswordResetToken
 		this.user = u;
 	}
 	
-	public PasswordResetToken(String token, User u, Date d)
+	public PasswordResetToken(String token, User u, LocalDate d)
 	{
 		this.token = token;
 		this.user = u;
@@ -59,11 +59,11 @@ public class PasswordResetToken
 	{
 		this.user = user;
 	}
-	public Date getExpiryDate()
+	public LocalDate getExpiryDate()
 	{
 		return expiryDate;
 	}
-	public void setExpiryDate(Date expiryDate)
+	public void setExpiryDate(LocalDate expiryDate)
 	{
 		this.expiryDate = expiryDate;
 	}

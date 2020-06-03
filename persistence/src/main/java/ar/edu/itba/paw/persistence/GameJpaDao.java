@@ -2,13 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.model.*;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import javax.swing.text.html.Option;
 import java.math.BigInteger;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -290,7 +287,7 @@ public class GameJpaDao implements GameDao {
         for(Map.Entry<Long, LocalDate> date : releaseDates.entrySet()){
             Region r = em.find(Region.class, date.getKey());
             if(r != null)
-                game.addReleaseDate(new Release(game, r, Date.valueOf(date.getValue())));
+                game.addReleaseDate(new Release(game, r, date.getValue()));
         }
     }
 

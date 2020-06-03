@@ -2,7 +2,6 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.Image;
 
-import java.io.InputStream;
 import java.util.Optional;
 
 public interface ImageService {

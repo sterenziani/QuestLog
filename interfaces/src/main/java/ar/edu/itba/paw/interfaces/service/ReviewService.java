@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,5 +81,5 @@ public interface ReviewService {
 	 * @return The review.
 	 */
 	
-	Review register(User user, Game game, Platform platform, int score, String body, Date date);
+	Review register(User user, Game game, Platform platform, int score, String body, LocalDate date);
 }

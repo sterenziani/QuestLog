@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name="reviews")
@@ -42,7 +41,7 @@ public class Review {
 	private String body;
 	
 	@Column
-	private Date post_date;
+	private LocalDate post_date;
 	
 	
 	Review()
@@ -51,7 +50,7 @@ public class Review {
 	}
 	
 	@Deprecated
-	public Review (long review, User user, Game game, Platform platform, int score, String body, Date post_date)
+	public Review (long review, User user, Game game, Platform platform, int score, String body, LocalDate post_date)
 	{
 		this.review = review;
 		this.user = user;
@@ -62,7 +61,7 @@ public class Review {
 		this.post_date = post_date;
 	}
 	
-	public Review (User user, Game game, Platform platform, int score, String body, Date post_date)
+	public Review (User user, Game game, Platform platform, int score, String body, LocalDate post_date)
 	{
 		this.user = user;
 		this.game = game;
@@ -97,7 +96,7 @@ public class Review {
 		return body;
 	}
 	
-	public Date getPostDate() {
+	public LocalDate getPostDate() {
 		return post_date;
 	}
 	
@@ -117,7 +116,7 @@ public class Review {
 		body = b;
 	}
 	
-	public void setPostDate(Date pd) {
+	public void setPostDate(LocalDate pd) {
 		post_date = pd;
 	}
 	

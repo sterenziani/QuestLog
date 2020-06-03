@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+/*package ar.edu.itba.paw.persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -148,4 +148,4 @@ public class UserJdbcDao implements UserDao
 	public void removeAdmin(User u) {
 		jdbcTemplate.update("DELETE FROM role_assignments WHERE user_id = ?", u.getId());	
 	}
-}
+}*/

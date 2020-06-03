@@ -49,7 +49,7 @@ public class GameJpaDaoTest
     private static final String RELEASE_TABLE 			= "releases";
     private static final String REGION_NAME 			= "North America";
     private static final String REGION_SHORT 			= "NA";
-    private static final Date RELEASE_DATE 				= Date.valueOf(LocalDate.now());
+    private static final LocalDate RELEASE_DATE 		= LocalDate.now();
     private static final String USER_TABLE				= "users";
     private static final String BACKLOG_TABLE			= "backlogs";
     private static final String SCORE_TABLE				= "scores";

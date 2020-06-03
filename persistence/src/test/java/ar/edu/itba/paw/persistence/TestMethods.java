@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 import java.sql.Date;
+import java.time.LocalDate;
 
 import ar.edu.itba.paw.model.*;
 
@@ -48,7 +49,7 @@ public class TestMethods
 		return r;
 	}
 	
-	public static void addRelease(Game g, Region r, Date d, EntityManager em)
+	public static void addRelease(Game g, Region r, LocalDate d, EntityManager em)
 	{
 		Release realease = new Release(g, r, d);
 		em.persist(realease);
@@ -67,7 +68,7 @@ public class TestMethods
 		return s;
 	}
 	
-	public static Review addReview(User user, Game game, Platform platform, int score, String body, Date date, EntityManager em) {
+	public static Review addReview(User user, Game game, Platform platform, int score, String body, LocalDate date, EntityManager em) {
 		Review r = new Review(user, game, platform, score, body, date);
 		em.persist(r);
 		return r;
@@ -133,7 +134,7 @@ public class TestMethods
 		u.addRole(new Role(roleId));
 	}
 	
-	public static PasswordResetToken addToken(User u, String token, Date date, EntityManager em)
+	public static PasswordResetToken addToken(User u, String token, LocalDate date, EntityManager em)
 	{
 		PasswordResetToken prt = new PasswordResetToken(token, u, date);
 		em.persist(prt);

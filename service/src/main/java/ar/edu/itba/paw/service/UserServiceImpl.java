@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -128,9 +128,8 @@ public class UserServiceImpl implements UserService{
 	 
 	private boolean isTokenExpired(PasswordResetToken passToken)
 	{
-	    final Calendar cal = Calendar.getInstance();
 	    if(passToken.getExpiryDate() != null)
-	    	return passToken.getExpiryDate().before(cal.getTime());
+	    	return passToken.getExpiryDate().isBefore(LocalDate.now());
 	    return false;
 	}
 
