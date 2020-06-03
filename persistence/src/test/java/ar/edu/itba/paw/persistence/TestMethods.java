@@ -4,7 +4,6 @@ import java.sql.Date;
 import ar.edu.itba.paw.model.*;
 
 import javax.persistence.EntityManager;
-
 public class TestMethods
 {
 	public static Game addGame(String title, String cover, String desc, EntityManager em)
@@ -103,37 +102,35 @@ public class TestMethods
 	public static void connectDev(Game g, Developer d, EntityManager em)
 	{
 		g.addDeveloper(d);
-		em.persist(g);
+		d.addGame(g);
 	}
 	
 	public static void connectPub(Game g, Publisher p, EntityManager em)
 	{
 		g.addPublisher(p);
-		em.persist(g);
+		p.addGame(g);
 	}
 	
 	public static void connectGenre(Game g, Genre genre, EntityManager em)
 	{
 		g.addGenre(genre);
-		em.persist(g);
+		genre.addGame(g);
 	}
 	
 	public static void connectPlatform(Game g, Platform p, EntityManager em)
 	{
 		g.addPlatform(p);
-		em.persist(g);
+		p.addGame(g);
 	}
 
 	public static void addBacklog(Game g, User u, EntityManager em)
 	{
 		u.addToBacklog(g);
-		em.persist(u);
 	}
 	
 	public static void connectRoles(User u, int roleId, EntityManager em)
 	{
 		u.addRole(new Role(roleId));
-		em.persist(u);
 	}
 	
 	public static PasswordResetToken addToken(User u, String token, Date date, EntityManager em)
