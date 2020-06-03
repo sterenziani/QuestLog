@@ -317,7 +317,11 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> searchByTitle(String search, int page, int pageSize) {
-        return null;
+        final TypedQuery<Game> query = em.createQuery("select g from Game as g where lower(g.title) like concat('%', lower(:search),'%')", Game.class);
+        query.setParameter("search", search);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
@@ -498,11 +502,11 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForPlatform(Platform p, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select distinct gv.game from game_versions gv where gv.platform = :p_id");
+        Query nativeQuery = em.createNativeQuery("select distinct cast(gv.game as text) from game_versions gv where gv.platform = :p_id");
         nativeQuery.setParameter("p_id", p.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
-        List<Long> ids = ((List<Long>) nativeQuery.getResultList().stream().map(obj -> ((BigInteger) obj).longValue()).collect(Collectors.toList()));
+        List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
         query.setParameter("filteredIds", ids);
@@ -518,11 +522,11 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForGenre(Genre g, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select distinct c.game from classifications c where c.genre = :gen_id");
+        Query nativeQuery = em.createNativeQuery("select distinct cast(c.game as text) from classifications c where c.genre = :gen_id");
         nativeQuery.setParameter("gen_id", g.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
-        List<Long> ids = ((List<Long>) nativeQuery.getResultList().stream().map(obj -> ((BigInteger) obj).longValue()).collect(Collectors.toList()));
+        List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
         query.setParameter("filteredIds", ids);
@@ -538,11 +542,11 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select distinct d.game from development d where d.developer = :dev_id");
+        Query nativeQuery = em.createNativeQuery("select distinct cast(d.game as text) from development d where d.developer = :dev_id");
         nativeQuery.setParameter("dev_id", d.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
-        List<Long> ids = ((List<Long>) nativeQuery.getResultList().stream().map(obj -> ((BigInteger) obj).longValue()).collect(Collectors.toList()));
+        List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
         query.setParameter("filteredIds", ids);
@@ -558,11 +562,11 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForPublisher(Publisher p, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select distinct p.game from publishing p where p.publisher = :pub_id");
+        Query nativeQuery = em.createNativeQuery("select distinct cast(p.game as text) from publishing p where p.publisher = :pub_id");
         nativeQuery.setParameter("pub_id", p.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
-        List<Long> ids = ((List<Long>) nativeQuery.getResultList().stream().map(obj -> ((BigInteger) obj).longValue()).collect(Collectors.toList()));
+        List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
         query.setParameter("filteredIds", ids);
