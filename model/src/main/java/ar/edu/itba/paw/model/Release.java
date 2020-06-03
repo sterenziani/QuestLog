@@ -31,6 +31,8 @@ public class Release
 	
 	public Release(Game g, Region r, LocalDate date)
 	{
+		this.id = new ReleaseKey(g.getId(), r.getId());
+		this.game = g;
 		this.region = r;
 		this.date = date;
 	}

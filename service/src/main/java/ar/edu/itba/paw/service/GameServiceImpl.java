@@ -489,7 +489,9 @@ public class GameServiceImpl implements GameService
 		gameDao.removeAllDevelopers(g);
 		gameDao.removeAllPublishers(g);
 		gameDao.removeAllGenres(g);
+		System.out.println("Whole new world");
 		gameDao.removeAllReleaseDates(g);
+		System.out.println("Whole new place");
 		gameDao.addPlatforms(id, platforms);
 		gameDao.addDevelopers(id, developers);
 		gameDao.addPublishers(id, publishers);

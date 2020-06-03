@@ -286,8 +286,13 @@ public class GameJpaDao implements GameDao {
         Game game = maybeGame.get();
         for(Map.Entry<Long, LocalDate> date : releaseDates.entrySet()){
             Region r = em.find(Region.class, date.getKey());
-            if(r != null)
-                game.addReleaseDate(new Release(game, r, date.getValue()));
+            if(r != null) {
+                System.out.println("Macarena");
+                System.out.println(date.getValue());
+                Release release = new Release(game, r, date.getValue());
+                em.persist(release);
+                game.addReleaseDate(release);
+            }
         }
     }
 
@@ -295,7 +300,8 @@ public class GameJpaDao implements GameDao {
     public Optional<Game> removeReleaseDate(Game game, Release r) {
         if(game == null || r == null)
             return Optional.empty();
-        game.addReleaseDate(r);
+        game.removeReleaseDate(r);
+        em.remove(r);
         return Optional.of(game);
     }
 
@@ -303,6 +309,9 @@ public class GameJpaDao implements GameDao {
     public void removeAllReleaseDates(Game g) {
         if(g == null)
             return;
+        for(Release release : g.getReleaseDates()){
+            em.remove(release);
+        }
         g.removeReleaseDates();
     }
 
