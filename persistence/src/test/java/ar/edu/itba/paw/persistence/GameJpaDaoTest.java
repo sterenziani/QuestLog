@@ -5,12 +5,15 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import ar.edu.itba.paw.model.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.postgresql.core.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -430,8 +433,8 @@ public class GameJpaDaoTest
 
         gameDao.removePublisher(g, p);
 
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, PUBLISHING_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + ap.getId() + "'"));
+        Assert.assertEquals(1, g.getPublishers().size());
+        Assert.assertEquals(true, g.getPublishers().contains(ap));
     }
 
     @Test
@@ -445,7 +448,7 @@ public class GameJpaDaoTest
 
         gameDao.removeAllPublishers(g);
 
-        //Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(em, PUBLISHING_TABLE));
+        Assert.assertEquals(0, g.getPublishers().size());
     }
 
     @Test
@@ -585,6 +588,11 @@ public class GameJpaDaoTest
 
         List<Game> inBacklog = gameDao.getGamesInBacklog(u);
 
+        TypedQuery<User> query = em.createQuery("from User u where u.username = :username", User.class);
+        query.setParameter("username", u.getUsername());
+        User user = query.getSingleResult();
+        System.out.println(user.getBacklog());
+
         Assert.assertEquals(2, inBacklog.size());
         Iterator<Game> it = inBacklog.iterator();
         Game next = it.next();
@@ -674,6 +682,7 @@ public class GameJpaDaoTest
     @Test
     public void testGetMostBacklogged(){
         Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
         User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, em);
@@ -683,8 +692,12 @@ public class GameJpaDaoTest
         TestMethods.addBacklog(g, au, em);
         TestMethods.addBacklog(g, aau, em);
         TestMethods.addBacklog(g, nu, em);
+        TestMethods.addBacklog(ag, u, em);
 
         List<Game> popular = gameDao.getMostBacklogged();
+        for(Game game : popular){
+            System.out.println(game.getTitle());
+        }
 
         Assert.assertEquals(1, popular.size());
     }
@@ -829,8 +842,12 @@ public class GameJpaDaoTest
         Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
         TestMethods.connectGenre(g, gen, em);
+        System.out.println(g.getGenres().contains(gen));
+
         TestMethods.connectGenre(aag, gen, em);
+        System.out.println(gen.getGames().contains(g));
         TestMethods.connectGenre(aag, agen, em);
+        System.out.println(gen.getGames().contains(g));
         TestMethods.connectGenre(ag, agen, em);
 
         int amount = gameDao.countGamesForGenre(gen);
