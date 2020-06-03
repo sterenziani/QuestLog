@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.controller.game;
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.GameDetail;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
@@ -43,7 +42,7 @@ public class GameDetailController {
     {
         final ModelAndView mav = new ModelAndView("game/game");
         User u = us.getLoggedUser();
-        GameDetail g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
+        Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
         mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
         mav.addObject("averageScore", scors.findAverageScore(g));
         if(u == null)

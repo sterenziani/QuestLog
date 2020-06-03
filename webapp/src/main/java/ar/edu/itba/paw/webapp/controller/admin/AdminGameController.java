@@ -91,10 +91,10 @@ public class AdminGameController
 	public ModelAndView editGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
 	{
 		ModelAndView mav = new ModelAndView("admin/gameForm");
-		Optional<GameDetail> optg 		= gs.findByIdWithDetails(id);
+		Optional<Game> optg 		= gs.findByIdWithDetails(id);
 		if(!optg.isPresent())
 			throw new GameNotFoundException();
-		GameDetail g 						= optg.get();
+		Game g 						= optg.get();
 		gameForm 					= new GameForm(g);
 		List<Platform> 	platforms 	= ps.getAllPlatforms();
 		List<Developer> developers 	= ds.getAllDevelopers();

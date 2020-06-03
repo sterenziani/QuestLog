@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+/*package ar.edu.itba.paw.persistence;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -168,3 +168,4 @@ public class ReviewJdbcDao implements ReviewDao {
 	}
 	
 }
+*/
