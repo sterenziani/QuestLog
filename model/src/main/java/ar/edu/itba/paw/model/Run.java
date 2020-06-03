@@ -40,7 +40,7 @@ public class Run {
 	@Column(name = "time", nullable = false)
 	private long time;
 	
-	Run()
+	public Run()
 	{
 		
 	}

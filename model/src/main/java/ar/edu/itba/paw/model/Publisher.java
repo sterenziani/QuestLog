@@ -21,7 +21,7 @@ public class Publisher
 	@Column(name = "publisher_logo")
 	private String logo;
 
-	@ManyToMany(mappedBy = "publishers")
+	@ManyToMany(mappedBy = "publishers", cascade = CascadeType.PERSIST)
 	private Set<Game> games = new HashSet<>();
 	
 	public Publisher()
@@ -67,6 +67,22 @@ public class Publisher
 	{
 		return logo;
 	}
+
+	public Set<Game> getGames() {
+		return games;
+	}
+
+	public void addGame(Game g){
+		games.add(g);
+	}
+
+	public void removeGame(Game g){
+		games.remove(g);
+	}
+
+	public boolean hasGame(Game g){
+		return games.contains(g);
+	}
 	
 	@Override
 	public int hashCode()
@@ -90,4 +106,5 @@ public class Publisher
 	{
 		return name;
 	}
+
 }

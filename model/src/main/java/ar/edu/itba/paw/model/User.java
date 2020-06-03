@@ -41,7 +41,11 @@ public class User
 	@JoinTable(name = "role_assignments", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role"))
 	private Set<Role> roles = new HashSet<Role>();
 
-	@ManyToMany(mappedBy = "backlog")
+	@ManyToMany
+	@JoinTable(
+			name = "backlogs",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "game"))
 	private Set<Game> backlog = new HashSet<>();
 	
 	User()

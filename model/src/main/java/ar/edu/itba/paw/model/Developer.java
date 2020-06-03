@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.model;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -20,8 +21,8 @@ public class Developer
 	@Column(name = "developer_logo")
 	private String logo;
 
-	@ManyToMany(mappedBy = "developers")
-	private Set<Game> games;
+	@ManyToMany(mappedBy = "developers", cascade = CascadeType.PERSIST)
+	private Set<Game> games = new HashSet<>();
 	
 	public Developer()
 	{
@@ -66,7 +67,23 @@ public class Developer
 	{
 		return logo;
 	}
-	
+
+	public Set<Game> getGames() {
+		return games;
+	}
+
+	public void addGame(Game g){
+		games.add(g);
+	}
+
+	public void removeGame(Game g){
+		games.remove(g);
+	}
+
+	public boolean hasGame(Game g){
+		return games.contains(g);
+	}
+
 	@Override
 	public int hashCode()
 	{

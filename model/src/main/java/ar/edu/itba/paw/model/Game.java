@@ -54,11 +54,7 @@ public class Game
 			inverseJoinColumns = @JoinColumn(name = "genre"))
 	private Set<Genre> genres = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-			name = "backlogs",
-			joinColumns = @JoinColumn(name = "game"),
-			inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "backlog")
 	private Set<User> backlog = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
@@ -69,13 +65,6 @@ public class Game
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
 	private Set<Run> runs = new HashSet<>();
-
-	/*
-	private Set<Platform> platforms;
-	private Set<Developer> developers;
-	private Set<Publisher> publishers;
-	private Set<Genre> genres;
-	private Set<Release> releaseDates;*/
 
 	public Game(){
 		//Just for Hibernate
@@ -97,7 +86,11 @@ public class Game
 		this.description = description;
 		this.inBacklog = false;
 	}
-	
+
+	public Set<User> getBacklog() {
+		return backlog;
+	}
+
 	public long getId()
 	{
 		return game;
@@ -153,6 +146,10 @@ public class Game
 		platforms.remove(p);
 	}
 
+	public void removePlatforms(){
+		platforms.clear();
+	}
+
 	public Set<Platform> getPlatforms()
 	{
 		return platforms;
@@ -168,6 +165,10 @@ public class Game
 		publishers.remove(pub);
 	}
 
+	public void removePublishers(){
+		publishers.clear();
+	}
+
 	public Set<Publisher> getPublishers()
 	{
 		return publishers;
@@ -180,6 +181,10 @@ public class Game
 	public void removeDeveloper(Developer d)
 	{
 		developers.remove(d);
+	}
+
+	public void removeDevelopers(){
+		developers.clear();
 	}
 
 	public Set<Developer> getDevelopers()
@@ -197,6 +202,10 @@ public class Game
 		genres.remove(g);
 	}
 
+	public void removeGenres(){
+		genres.clear();
+	}
+
 	public Set<Genre> getGenres()
 	{
 		return genres;
@@ -210,6 +219,10 @@ public class Game
 	public void removeReleaseDate(Release r)
 	{
 		releaseDates.remove(r);
+	}
+
+	public void removeReleaseDates(){
+		releaseDates.clear();
 	}
 
 	public Set<Release> getReleaseDates()

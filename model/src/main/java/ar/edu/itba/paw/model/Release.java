@@ -43,7 +43,11 @@ public class Release
 	{
 		return date;
 	}
-	
+
+	public Game getGame() {
+		return game;
+	}
+
 	@Override
 	public int hashCode()
 	{

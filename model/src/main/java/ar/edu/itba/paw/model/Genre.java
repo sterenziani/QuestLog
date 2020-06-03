@@ -21,7 +21,7 @@ public class Genre
 	@Column(name = "genre_logo")
 	private String logo;
 
-	@ManyToMany(mappedBy = "genres")
+	@ManyToMany(mappedBy = "genres", cascade = CascadeType.PERSIST)
 	private Set<Game> games = new HashSet<>();
 	
 	public Genre()
@@ -66,6 +66,22 @@ public class Genre
 	public String getName()
 	{
 		return name;
+	}
+
+	public Set<Game> getGames() {
+		return games;
+	}
+
+	public void addGame(Game g){
+		games.add(g);
+	}
+
+	public void removeGame(Game g){
+		games.remove(g);
+	}
+
+	public boolean hasGame(Game g){
+		return games.contains(g);
 	}
 	
 	@Override

@@ -24,7 +24,7 @@ public class Platform
 	@Column(name = "platform_logo")
 	private String logo;
 	
-	@ManyToMany(mappedBy = "platforms")
+	@ManyToMany(mappedBy = "platforms", cascade = CascadeType.PERSIST)
 	private Set<Game> games = new HashSet<>();
 	
 	public Platform()
@@ -81,6 +81,22 @@ public class Platform
 	public String getShortName()
 	{
 		return shortName;
+	}
+
+	public Set<Game> getGames() {
+		return games;
+	}
+
+	public void addGame(Game g){
+		games.add(g);
+	}
+
+	public void removeGame(Game g){
+		games.remove(g);
+	}
+
+	public boolean hasGame(Game g){
+		return games.contains(g);
 	}
 	
 	@Override
