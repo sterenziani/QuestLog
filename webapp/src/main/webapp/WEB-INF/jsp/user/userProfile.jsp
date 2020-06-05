@@ -21,10 +21,12 @@
 		    		<spring:message code="user.averageScore" arguments="${user.scoreAverage}"/><br>
 		    		<spring:message code="user.createdRuns" arguments="${user.runCount}"/><br>
 		    		<spring:message code="user.hoursPlayed" arguments="${user.totalHoursPlayed}"/>
+		    		<c:if test="${user.favoriteGame != null}">
+			    		<c:set var="favGame" value="${user.favoriteGame}"/><br>
+			    		<spring:message code="user.favoriteGame" arguments="${favGame}"/>
+		    		</c:if>
 	        </div>
 	    </div>
-	    
-	    
 	    
 	    <div class="main-game-lists-backlog">
 	    	<spring:message code="user.backlog" arguments="${user.username}" var="myBacklog"/>

@@ -243,4 +243,42 @@ public class User
 		}
 		return total / scores.size();
 	}
+	
+	public Game getFavoriteGame()
+	{
+		if(scores.size() == 0)
+			return null;
+		int maxScore = 0;
+		Game favorite = null;
+		long timeFavoritePlayed = 0;
+		for(Score s : scores)
+		{
+			if(s.getScore() > maxScore)
+			{
+				favorite = s.getGame();
+				maxScore = s.getScore();
+				timeFavoritePlayed = 0;
+				for(Run r : runs)
+				{
+					if(r.getGame().equals(favorite))
+						timeFavoritePlayed += r.getTime();
+				}
+			}
+			if(s.getScore() == maxScore)
+			{
+				Game candidate = s.getGame();
+				int timeCandidatePlayed = 0;
+				for(Run r : runs)
+				{
+					if(r.getGame().equals(candidate))
+						timeCandidatePlayed += r.getTime();
+				}
+				if(timeCandidatePlayed > timeFavoritePlayed)
+				{
+					favorite = candidate;
+				}
+			}
+		}
+		return favorite;
+	}
 }
