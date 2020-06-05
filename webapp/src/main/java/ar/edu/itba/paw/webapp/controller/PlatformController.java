@@ -71,7 +71,7 @@ public class PlatformController {
     }
 
     @RequestMapping(value = "/{platformId}", method = RequestMethod.POST)
-    public ModelAndView platformProfile(@PathVariable("explore/platformId") long platformId, @RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+    public ModelAndView platformProfile(@PathVariable("platformId") long platformId, @RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
         backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
         return new ModelAndView("redirect:/platforms/{platformId}?page="+page);
