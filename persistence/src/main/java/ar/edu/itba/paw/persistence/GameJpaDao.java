@@ -328,7 +328,7 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getUpcomingGames() {
-        final TypedQuery<Release> query = em.createQuery("from Release as r where r.date >= CURRENT_DATE", Release.class);
+        final TypedQuery<Release> query = em.createQuery("select distinct r from Release as r where r.date >= CURRENT_DATE", Release.class);
         final List<Release> list = query.getResultList();
         if(list.isEmpty())
             return Collections.emptyList();
