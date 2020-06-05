@@ -18,15 +18,15 @@
         <div class="d-flex">
             <spring:message code="game.edit" var="edit"/>
             <spring:message code="game.delete" var="delete"/>
-            <a href="<c:url value="/admin/game/${game.id}/edit"/>" class="btn btn-block btn-outline-warning not-rounded-bottom btn-lg">${edit}</a>
+            <a href="<c:url value="/admin/game/${game.id}/edit"/>" class="btn btn-block btn-outline-warning not-rounded-bottom btn-lg"><c:out value="${edit}"/></a>
             <button type="button" class="btn btn-block btn-outline-danger not-rounded-bottom btn-lg mt-0" data-toggle="modal" data-target="#deleteGameModal-${game.id}">
-                ${delete}
+                <c:out value="${delete}"/>
             </button>
             <div class="modal fade" id="deleteGameModal-${game.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="deleteGameModalLabe-${game.id}l"><spring:message code="game.delete"/> ${game.title}</h5>
+                            <h5 class="modal-title" id="deleteGameModalLabe-${game.id}l"><spring:message code="game.delete"/><c:out value="${game.title}"/></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

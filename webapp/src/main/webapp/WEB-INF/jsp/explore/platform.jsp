@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
-    <title>QuestLog - ${platform.name}</title>
+    <title>QuestLog - <c:out value="${platform.name}"/></title>
 </head>
 <body class="background-primary">
     <%@include file="../common/navigation.jsp"%>

@@ -17,7 +17,7 @@
 				<div class="card m-3 d-flex bg-transparent" style="width: 10rem;">
 					<a class="d-flex flex-column flex-grow-1 text-white text-center align-center" href="<c:url value="/publishers/${publisher.id}"/>">
 						<div class="card-body bg-primary flex-grow-1">
-							<h5>${publisher.name}</h5>
+							<h5><c:out value="${publisher.name}"/></h5>
 						</div>
 					</a>
 				</div>

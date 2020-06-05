@@ -35,14 +35,14 @@
             	<form:input value="${gameId}" type="hidden" path="id"/>
                 <div class="form-group">
                     <c:set var="title"><spring:message code="gameForm.title"/></c:set>
-                    <form:label for="title" path="title"><strong>${title}</strong></form:label>
+                    <form:label for="title" path="title"><strong><c:out value="${title}"></c:out></strong></form:label>
                     <form:errors path="title" class="form-error" element="p"/>
                     <form:errors class="form-error" element="p"/>
                     <form:input cssClass="form-control" path="title" name="title" type="text" placeholder="${title}"/>
                 </div>
                 <div class="form-group">
                     <c:set var="description"><spring:message code="gameForm.description"/></c:set>
-                    <form:label for="description" path="description"><strong>${description}</strong></form:label>
+                    <form:label for="description" path="description"><strong><c:out value="${description}"></c:out></strong></form:label>
                     <form:errors path="description" class="form-error" element="p"/>
                     <form:textarea cssClass="form-control" rows="8" path="description" name="description" type="text" placeholder="${description}"/>
                 </div>
@@ -84,7 +84,7 @@
                         <label><strong><spring:message code="gameForm.releaseDates"/></strong></label>
                     </div>
                     <c:forEach var="region" items="${allRegions}">
-                        <label for="region-${region.shortName}">${region.shortName}</label>
+                        <label for="region-${region.shortName}"><c:out value="${region.shortName}"></c:out></label>
                         <div class="input-group date mb-3" id="datetimepicker-${region.shortName}" data-target-input="nearest">
                             <c:choose>
                                 <c:when test="${gameForm.releaseDates.containsKey(region.id)}">

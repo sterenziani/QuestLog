@@ -42,7 +42,7 @@
 	        <tr class="table-for-users-row">
 	       
 	        <td style="text-align: center; vertical-align: middle; padding:10px 10px">
-			<a href ="<c:url value="users/${u.id}"/>" style="font-size:25px">${u.username}</a>
+			<a href ="<c:url value="users/${u.id}"/>" style="font-size:25px"><c:out value="${u.username}"/></a>
 			</td>
             <c:if test="${!empty loggedUser && loggedUser.adminStatus == true}">
 	        <td style="text-align: center; vertical-align:middle; padding:10px 10px">

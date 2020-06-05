@@ -20,7 +20,7 @@
 					<a class="d-flex flex-column flex-grow-1 text-white text-center align-center" href="<c:url value="/platforms/${platform.id}"/>">
 						<div class="m-auto"><img class="platform-icon m-auto card-img-top" src="<c:url value="/images/${platform.logo}"/>" alt="<c:out value="${platform.shortName}"/>"/></div>
 						<div class="card-body bg-primary flex-grow-1">
-							<h5>${platform.name}</h5>
+							<h5><c:out value="${platform.name}"/></h5>
 						</div>
 					</a>
 				</div>

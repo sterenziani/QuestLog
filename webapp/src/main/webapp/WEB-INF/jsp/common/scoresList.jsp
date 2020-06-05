@@ -18,8 +18,8 @@
        	<div class="container">
 		<c:forEach var="element" items="${scoresInPage}">
 			<div class="row">
-				<div class="col text-right"><a href="<c:url value="/games/${element.game.id}"/>">${element.game}</a></div>
-				<div class="col"><p class="">${element.score}</p></div>
+				<div class="col text-right"><a href="<c:url value="/games/${element.game.id}"/>"><c:out value="${element.game}"/></a></div>
+				<div class="col"><p class=""><c:out value="${element.score}"/></p></div>
 			</div>
 		</c:forEach>
 		</div>

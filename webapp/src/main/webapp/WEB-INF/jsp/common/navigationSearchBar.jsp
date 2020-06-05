@@ -17,7 +17,7 @@
 			<option value="<c:url value="/search"/>"><spring:message code="game.game"/></option>
 			<option value="<c:url value="/userSearch"/>"><spring:message code="search.user"/></option>
 		</select>
-    <button class="h-100 btn btn-dark my-2 my-lg-0" type="submit"><i class="fa fa-search mr-2"></i>${search}</button>
+    <button class="h-100 btn btn-dark my-2 my-lg-0" type="submit"><i class="fa fa-search mr-2"></i><c:out value="${search}"/></button>
 </form>
 </div>
 

@@ -3,13 +3,13 @@
 <html>
 <head>
 	<%@include file="../common/commonHead.jsp"%>
-	<title>QuestLog - ${game.title}</title>
+	<title>QuestLog - <c:out value="${game.title}"/></title>
 </head>
 <body>
     <%@ include file="../common/navigation.jsp"%>
 	<div class="card m-5 bg-very-light right-wave left-wave">
 		<div class="card-header bg-very-dark text-white">
-			<h2 class="share-tech-mono">${game.title}</h2>
+			<h2 class="share-tech-mono"><c:out value="${game.title}"/></h2>
 		</div>
 		<div class="card-body d-flex padding-left-wave padding-right-wave">
 			<div>
@@ -27,7 +27,7 @@
 								<p class="score-display badge badge-dark score-display-avg">N/A</p>
 							</c:when>
 							<c:otherwise>
-								<p class="score-display badge badge-dark">${averageScore}</p>
+								<p class="score-display badge badge-dark"><c:out value="${averageScore}"/></p>
 							</c:otherwise>
 						</c:choose>
 					</div>
@@ -64,7 +64,7 @@
 								</c:when>
 								<c:otherwise>
 									<div class="score-number text-center">
-										<p class="score-display badge badge-success" id="scoreText">${user_score.score}</p>
+										<p class="score-display badge badge-success" id="scoreText"><c:out value="${user_score.score}"/></p>
 									</div>
 								</c:otherwise>
 							</c:choose>
@@ -122,7 +122,7 @@
 							<c:forEach var="element" items="${playAverage}">
 								<div class="row">
 									<div class="col text-right"><spring:message code="playstyle.${element.key}"/></div>
-									<div class="col">${element.value}</div>
+									<div class="col"><c:out value="${element.value}"/></div>
 								</div>
 							</c:forEach>
 						</div>

@@ -43,7 +43,7 @@
 									<input type="hidden" value="1" name="page"/>
 									<select class="form-control advanced-select" name="platforms" size="5" id="platforms" class="search-filters" multiple>
 										<c:forEach var="platform" items="${platforms}">
-											<option value="${platform.id}">${platform.name}</option>
+											<option value="${platform.id}"><c:out value="${platform.name}"/></option>
 										</c:forEach>
 									</select>
 								</div>

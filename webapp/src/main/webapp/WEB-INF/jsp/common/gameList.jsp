@@ -8,7 +8,7 @@
 <div class="card m-5 bg-very-light right-wave left-wave">
     <div class="card-header bg-very-dark text-white d-flex">
         <div>
-            <h2 class="share-tech-mono">${listName}</h2>
+            <h2 class="share-tech-mono"><c:out value="${listName}"/></h2>
         </div>
 		<c:choose>
 			<c:when test="${!empty seeAllUrl}">

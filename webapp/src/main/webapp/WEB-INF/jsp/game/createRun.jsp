@@ -33,7 +33,7 @@
 			            	<div class="form-group">
 				               	<select class="form-control" name="platforms" id="platforms" style="padding: 5px">
 				                	<c:forEach var="platform" items="${game.platforms}">
-				                    	<option value="${platform.name}">${platform.name}</option>
+				                    	<option value="${platform.name}"><c:out value="${platform.name}"/></option>
 				                    </c:forEach>
 								</select>
 			            	</div>

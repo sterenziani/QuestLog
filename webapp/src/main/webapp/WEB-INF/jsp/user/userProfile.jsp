@@ -3,7 +3,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
-    <title>QuestLog - ${user.username}</title>
+    <title>QuestLog - <c:out value="${user.username}"/></title>
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>
