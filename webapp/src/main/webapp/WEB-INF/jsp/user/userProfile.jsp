@@ -7,7 +7,25 @@
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>
-    <div class="content">	
+    <div class="content">
+	    <div>
+
+	    </div>
+	    <div class="container text-center align-middle text-white">
+	    	<div class="my-5 py-5 bg-dark border-bottom border-primary rounded-lg">
+	    		<h1 class="align-middle share-tech-mono"><c:out value="${user.username}"/></h1>
+	    		<c:if test="${loggedUser.id == user.id}">
+		    		<h5 class="align-middle">(<c:out value="${user.email}"/>)</h5>
+		    	</c:if>
+		    		<spring:message code="user.gamesRated" arguments="${user.scoreCount}"/><br>
+		    		<spring:message code="user.averageScore" arguments="${user.scoreAverage}"/><br>
+		    		<spring:message code="user.createdRuns" arguments="${user.runCount}"/><br>
+		    		<spring:message code="user.hoursPlayed" arguments="${user.totalHoursPlayed}"/>
+	        </div>
+	    </div>
+	    
+	    
+	    
 	    <div class="main-game-lists-backlog">
 	    	<spring:message code="user.backlog" arguments="${user.username}" var="myBacklog"/>
 	        <c:set var="listName" value="${myBacklog}"/>

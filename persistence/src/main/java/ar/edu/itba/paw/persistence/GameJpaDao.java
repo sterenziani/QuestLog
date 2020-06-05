@@ -382,7 +382,9 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
 		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
-
+        
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();

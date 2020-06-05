@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -48,6 +49,12 @@ public class User
 			inverseJoinColumns = @JoinColumn(name = "game"))
 	private Set<Game> backlog = new HashSet<>();
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private Set<Run> runs = new HashSet<>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private Set<Score> scores = new HashSet<>();
+
 	User()
 	{
 		// Let Hibernate do the work
@@ -187,5 +194,53 @@ public class User
 	public String toString()
 	{
 		return username;
+	}
+	
+	public Set<Run> getRuns() {
+		return runs;
+	}
+
+	public void setRuns(Set<Run> runs) {
+		this.runs = runs;
+	}
+	
+	public int getRunCount()
+	{
+		return runs.size();
+	}
+	
+	public Set<Run> getScores() {
+		return runs;
+	}
+
+	public void setScores(Set<Score> scores) {
+		this.scores = scores;
+	}
+	
+	public int getScoreCount()
+	{
+		return scores.size();
+	}
+	
+	public long getTotalHoursPlayed()
+	{
+		long total = 0;
+		for(Run r : runs)
+		{
+			total += r.getTime();
+		}
+		return total/3600;
+	}
+	
+	public int getScoreAverage()
+	{
+		if(scores.size() == 0)
+			return 0;
+		int total = 0;
+		for(Score s : scores)
+		{
+			total += s.getScore();
+		}
+		return total / scores.size();
 	}
 }
