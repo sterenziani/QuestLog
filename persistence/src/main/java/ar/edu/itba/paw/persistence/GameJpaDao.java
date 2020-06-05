@@ -285,13 +285,15 @@ public class GameJpaDao implements GameDao {
             return;
         Game game = maybeGame.get();
         for(Map.Entry<Long, LocalDate> date : releaseDates.entrySet()){
-            Region r = em.find(Region.class, date.getKey());
-            if(r != null) {
-                System.out.println("Macarena");
-                System.out.println(date.getValue());
-                Release release = new Release(game, r, date.getValue());
-                em.persist(release);
-                game.addReleaseDate(release);
+            if(date.getValue() != null) {
+                Region r = em.find(Region.class, date.getKey());
+                if (r != null) {
+                    System.out.println("Macarena");
+                    System.out.println(date.getValue());
+                    Release release = new Release(game, r, date.getValue());
+                    em.persist(release);
+                    game.addReleaseDate(release);
+                }
             }
         }
     }

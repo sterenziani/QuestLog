@@ -56,7 +56,7 @@ public class Release
 	{
 		int hashCode = 1;
 		hashCode = 31 * hashCode + region.hashCode();
-		hashCode = 31 * hashCode + date.hashCode();
+		hashCode = 31 * hashCode + game.hashCode();
 		return hashCode;
 	}
 	
