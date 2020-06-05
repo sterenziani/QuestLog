@@ -80,18 +80,6 @@ public class GenreController {
     public ModelAndView genreProfile(@PathVariable("genreId") long genreId, @RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
         backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
-        final ModelAndView mav = new ModelAndView("explore/genre");
-        User u = us.getLoggedUser();
-        Genre g = gens.findById(genreId).orElseThrow(GenreNotFoundException::new);
-        List<Game> pageResults = gs.getGamesForGenre(g, page, PAGE_SIZE);
-    	int countResults = gs.countGamesForGenre(g);
-		int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
-        if(u == null)
-            backlogCookieHandlerService.updateWithBacklogDetails(pageResults, backlog);
-        mav.addObject("genre", g);
-		mav.addObject("pages", totalPages);
-		mav.addObject("current", page);
-		mav.addObject("gamesInPage", pageResults);
-        return mav;
+        return new ModelAndView("redirect:/genres/{genreId}?page="+page);
     }
 }
