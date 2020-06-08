@@ -399,25 +399,21 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getSimilarToBacklog(User u) {
-        TypedQuery<Game> query = em.createQuery("select g from User u join u.backlog g group by g " +
-                "having count(u) >= :min_amount_for_popular order by count(u)", Game.class);
-        query.setParameter("min_amount_for_popular", MIN_AMOUNT_FOR_POPULAR);
-        query.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
-        return query.getResultList();
-    	/*
     	Query nativeQuery = em.createNativeQuery("SELECT distinct cast(game as text) FROM (SELECT t2.game AS game FROM backlogs AS t1 JOIN backlogs AS t2 ON t1.user_id = t2.user_id AND t1.user_id != :u_id AND t1.game IN"
-    		    + "(SELECT game FROM backlogs WHERE user_id = :u_id) AND t2.game NOT IN (SELECT game FROM backlogs WHERE user_id = :u_id) GROUP BY t2.game HAVING"
-    		    + "count(*) >= :min_amount_for_overlap ORDER BY count(*) DESC) AS a NATURAL JOIN games");
+    		    + " (SELECT game FROM backlogs WHERE user_id = :u_id) AND t2.game NOT IN (SELECT game FROM backlogs WHERE user_id = :u_id) GROUP BY t2.game HAVING"
+    		    + " count(*) >= :min_amount_for_overlap ORDER BY count(*) DESC) AS a NATURAL JOIN games");
     	nativeQuery.setParameter("u_id", u.getId());
     	nativeQuery.setParameter("min_amount_for_overlap", MIN_AMOUNT_FOR_OVERLAP);
     	nativeQuery.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
     	    	
         @SuppressWarnings("unchecked")
 		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();
-        */
+        
     }
     
 
