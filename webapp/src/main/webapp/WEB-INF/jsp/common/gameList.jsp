@@ -25,7 +25,7 @@
 			</c:otherwise>
 		</c:choose>
     </div>
-    <div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+    <div class="card-body d-flex flex-wrap justify-content-center">
         <c:if test="${empty games}">
             <p><spring:message code="gameList.empty"/></p>
         </c:if>
