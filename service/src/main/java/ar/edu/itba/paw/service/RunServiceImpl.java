@@ -166,4 +166,10 @@ public class RunServiceImpl implements RunService {
 	{
 		return runDao.countRunsByUser(user);
 	}
+	
+	@Override
+	public List<Run> getTopRuns(Game game, int amount)
+	{
+		return runDao.getTopRuns(game, amount);
+	}
 }

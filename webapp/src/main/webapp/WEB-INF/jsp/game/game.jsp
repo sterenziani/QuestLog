@@ -24,7 +24,7 @@
 					<div class="row">
 						<c:choose>
 							<c:when test="${empty averageScore}">
-								<p class="score-display badge badge-dark score-display-avg">N/A</p>
+								<p class="score-display badge badge-dark score-display-avg"><spring:message code="game.notAvailable"/></p>
 							</c:when>
 							<c:otherwise>
 								<p class="score-display badge badge-dark"><c:out value="${averageScore}"/></p>
@@ -58,14 +58,14 @@
 						<div class="col">
 							<c:choose>
 								<c:when test="${empty user_score}">
-									<div class="score-number">
+									<div class="text-center px-5"><div class="score-number">
 										<p class="display-4 score-display badge badge-success" id="scoreText">-</p>
-									</div>
+									</div></div>
 								</c:when>
 								<c:otherwise>
-									<div class="score-number text-center">
+									<div class="text-center px-5"><div class="score-number">
 										<p class="score-display badge badge-success" id="scoreText"><c:out value="${user_score.score}"/></p>
-									</div>
+									</div></div>
 								</c:otherwise>
 							</c:choose>
 							<div class="score-submit px-5">
@@ -122,11 +122,46 @@
 								<c:forEach var="element" items="${playAverage}">
 									<div class="row">
 										<div class="col text-right"><spring:message code="playstyle.${element.key}"/></div>
-										<div class="col"><c:out value="${element.value}"/></div>
+										<div class="col">
+											<c:if test="${element.value != '0 : 00 : 00'}">
+												<c:out value="${element.value}"/>
+											</c:if>
+											<c:if test="${element.value == '0 : 00 : 00'}">
+												<spring:message code="game.notAvailable"/>
+											</c:if>
+										</div>
 									</div>
 								</c:forEach>
 							</div>
 						</div>
+					</div>
+					
+					<div class="card m-5 bg-very-light right-wave left-wave">
+					    <div class="card-header bg-very-dark text-white d-flex">
+					    	<div>
+					            <h2 class="share-tech-mono"><spring:message code="game.fastestRuns"/></h2>
+					        </div>
+						</div>
+						<c:if test="${!empty topRuns}">
+							<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+								<div class="container">
+									<c:forEach var="element" items="${topRuns}">
+										<div class="row">
+											<div class="col text-right"><a href="<c:url value="/users/${element.user.id}"/>"><c:out value="${element.user}"/></a></div>
+											<div class="col text-center"><c:out value="${element.platform.shortName}"/></div>
+											<div class="col text-center"><c:out value="${element}"/></div>
+										</div>
+									</c:forEach>
+								</div>
+							</div>
+						</c:if>
+						<c:if test="${empty topRuns}">
+							<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+								<div class="container text-center">
+									<spring:message code="game.noRuns"/>
+								</div>
+							</div>
+						</c:if>
 					</div>
 					
 					<c:if test="${loggedUser != null && !empty user_runs}">

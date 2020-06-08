@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller.game;
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -44,6 +47,7 @@ public class GameDetailController {
         User u = us.getLoggedUser();
         Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
         mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
+        mav.addObject("topRuns", runs.getTopRuns(g, 5));
         mav.addObject("averageScore", scors.findAverageScore(g));
         mav.addObject("runsEnabled", (g.getPlatforms().size() > 0 && g.hasReleased()));
         if(u == null)

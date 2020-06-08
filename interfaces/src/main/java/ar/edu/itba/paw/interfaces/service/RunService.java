@@ -174,4 +174,6 @@ Optional<Playstyle> findPlaystyleByName(String name);
 
 HashMap<Playstyle, String> getAverageAllPlayStyles(Game g);
 
+List<Run> getTopRuns(Game game, int amount);
+
 }

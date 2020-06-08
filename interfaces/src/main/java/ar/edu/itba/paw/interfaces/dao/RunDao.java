@@ -165,4 +165,5 @@ Playstyle register(String name);
 
 Optional<Playstyle> findPlaystyleByName(String name);
 
+List<Run> getTopRuns(Game game, int amount);
 }

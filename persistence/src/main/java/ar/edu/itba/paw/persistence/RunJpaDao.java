@@ -192,5 +192,14 @@ public class RunJpaDao implements RunDao
 		query.setParameter("name", name);
 		return query.getResultList().stream().findFirst();
 	}
+	
+	@Override
+	public List<Run> getTopRuns(Game game, int amount)
+	{
+		final TypedQuery<Run> query = em.createQuery("from Run as rn where rn.game.id = :gameId order by time", Run.class);
+		query.setParameter("gameId", game.getId());
+		query.setMaxResults(amount);
+		return query.getResultList();
+	}
 
 }
