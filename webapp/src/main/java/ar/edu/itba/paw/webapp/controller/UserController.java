@@ -33,6 +33,7 @@ import ar.edu.itba.paw.model.Game;
 import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.exception.TokenNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.ForgotPasswordForm;
@@ -236,8 +237,8 @@ public class UserController
 	    String result = us.validatePasswordResetToken(token);
 	    if(result != null)
 	    {
-	    	LOGGER.debug("Password Reset Token is invalid. Redirecting to 404 page");
-	    	return new ModelAndView("redirect:/error404");
+	    	LOGGER.debug("Password Reset Token is invalid.");
+	    	throw new TokenNotFoundException();
 	    }
 	    else
 	    {
