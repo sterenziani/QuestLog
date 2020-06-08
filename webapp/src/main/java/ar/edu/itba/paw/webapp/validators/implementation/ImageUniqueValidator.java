@@ -11,7 +11,7 @@ import ar.edu.itba.paw.webapp.validators.anotation.ImageUnique;
 public class ImageUniqueValidator implements ConstraintValidator<ImageUnique, MultipartFile> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageUniqueValidator.class);
     @Autowired
-    ImageService is;
+    private ImageService is;
 
     @Override
     public void initialize(ImageUnique imageUnique) {}

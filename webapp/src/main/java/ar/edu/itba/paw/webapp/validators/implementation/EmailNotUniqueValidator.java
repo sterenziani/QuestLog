@@ -10,7 +10,7 @@ import ar.edu.itba.paw.webapp.validators.anotation.EmailNotUnique;
 public class EmailNotUniqueValidator implements ConstraintValidator<EmailNotUnique, String>
 {
 	@Autowired
-	UserService us;
+	private UserService us;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmailNotUniqueValidator.class);
 	

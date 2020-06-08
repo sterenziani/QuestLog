@@ -3,16 +3,12 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
-import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 
 public class ImageSizeValidator implements ConstraintValidator<ImageSize, MultipartFile>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageSizeValidator.class);
-    @Autowired
-    ImageService is;
     
     private int min;
     private int max;

@@ -59,7 +59,7 @@ public class UserController
 	private BacklogCookieHandlerService backlogCookieHandlerService;
 	
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private static final int USER_PAGE_SIZE = 20;

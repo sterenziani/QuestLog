@@ -1,17 +1,15 @@
 package ar.edu.itba.paw.webapp.validators.implementation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
-import ar.edu.itba.paw.interfaces.service.ImageService;
+
 import ar.edu.itba.paw.webapp.validators.anotation.ImageExists;
 
 public class ImageExistsValidator implements ConstraintValidator<ImageExists, MultipartFile> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageExistsValidator.class);
-    @Autowired
-    ImageService is;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageExistsValidator.class);;
 
     @Override
     public void initialize(ImageExists imageExists) {}

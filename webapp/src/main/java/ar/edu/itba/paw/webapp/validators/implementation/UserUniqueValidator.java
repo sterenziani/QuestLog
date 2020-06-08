@@ -10,7 +10,7 @@ import ar.edu.itba.paw.webapp.validators.anotation.UserUnique;
 public class UserUniqueValidator implements ConstraintValidator<UserUnique, String>
 {
 	@Autowired
-	UserService us;
+	private UserService us;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserUniqueValidator.class);
 	

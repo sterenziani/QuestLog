@@ -22,10 +22,10 @@ import java.util.Optional;
 public class PawBacklogCookieHandlerService implements BacklogCookieHandlerService {
 
     @Autowired
-    UserService us;
+    private UserService us;
 
     @Autowired
-    GameService gs;
+    private GameService gs;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PawBacklogCookieHandlerService.class);
 

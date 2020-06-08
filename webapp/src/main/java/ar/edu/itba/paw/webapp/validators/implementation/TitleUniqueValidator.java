@@ -13,7 +13,7 @@ import ar.edu.itba.paw.webapp.validators.anotation.TitleUnique;
 public class TitleUniqueValidator implements ConstraintValidator<TitleUnique, Object>
 {
 	@Autowired
-	GameService gs;
+	private GameService gs;
 	
 	private String gameId;
 	private String gameTitle;
