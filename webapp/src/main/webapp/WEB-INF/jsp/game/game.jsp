@@ -105,56 +105,72 @@
 			</div>
 			</div>
 
-
-				
-				<div class="card m-5 bg-very-light right-wave left-wave">
-				    <div class="card-header bg-very-dark text-white d-flex">
-				    	<div>
-				            <h2 class="share-tech-mono"><spring:message code="game.averageTime"/></h2>
-				        </div>
-					</div>
-					<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-						<div class="container">
-							<div class="row">
-								<div class="col text-right bg-primary text-white"><strong><spring:message code="game.playstyle"/></strong></div>
-								<div class="col bg-primary text-white"><strong><spring:message code="game.averageTime"/></strong></div>
-							</div>
-							<c:forEach var="element" items="${playAverage}">
+			<c:choose>
+				<c:when test="${runsEnabled}">
+					<div class="card m-5 bg-very-light right-wave left-wave">
+					    <div class="card-header bg-very-dark text-white d-flex">
+					    	<div>
+					            <h2 class="share-tech-mono"><spring:message code="game.averageTime"/></h2>
+					        </div>
+						</div>
+						<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+							<div class="container">
 								<div class="row">
-									<div class="col text-right"><spring:message code="playstyle.${element.key}"/></div>
-									<div class="col"><c:out value="${element.value}"/></div>
+									<div class="col text-right bg-primary text-white"><strong><spring:message code="game.playstyle"/></strong></div>
+									<div class="col bg-primary text-white"><strong><spring:message code="game.averageTime"/></strong></div>
 								</div>
-							</c:forEach>
+								<c:forEach var="element" items="${playAverage}">
+									<div class="row">
+										<div class="col text-right"><spring:message code="playstyle.${element.key}"/></div>
+										<div class="col"><c:out value="${element.value}"/></div>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
-				</div>
-				
-				<c:if test="${loggedUser != null && !empty user_runs}">
-				<div class="card m-5 bg-very-light right-wave left-wave">
-				    <div class="card-header bg-very-dark text-white d-flex">
-				    	<div>
-				            <h2 class="share-tech-mono"><spring:message code="game.yourRuns"/></h2>
-				        </div>
-					</div>
-					<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-						<div class="container">
-							<div class="row">
-								<div class="col text-center bg-primary text-white"><strong><spring:message code="game.platform"/></strong></div>
-								<div class="col text-center bg-primary text-white"><strong><spring:message code="game.playstyle"/></strong></div>
-								<div class="col text-center bg-primary text-white"><strong><spring:message code="game.yourTime"/></strong></div>
+					
+					<c:if test="${loggedUser != null && !empty user_runs}">
+						<div class="card m-5 bg-very-light right-wave left-wave">
+						    <div class="card-header bg-very-dark text-white d-flex">
+						    	<div>
+						            <h2 class="share-tech-mono"><spring:message code="game.yourRuns"/></h2>
+						        </div>
 							</div>
-							<c:forEach var="element" items="${user_runs}">
-								<div class="row">
-									<div class="col text-center"><c:out value="${element.platform.shortName}"/></div>
-									<div class="col text-center"><spring:message code="playstyle.${element.playstyle.name}"/></div>
-									<div class="col text-center"><c:out value="${element}"/></div>
+							<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+								<div class="container">
+									<div class="row">
+										<div class="col text-center bg-primary text-white"><strong><spring:message code="game.platform"/></strong></div>
+										<div class="col text-center bg-primary text-white"><strong><spring:message code="game.playstyle"/></strong></div>
+										<div class="col text-center bg-primary text-white"><strong><spring:message code="game.yourTime"/></strong></div>
+									</div>
+									<c:forEach var="element" items="${user_runs}">
+										<div class="row">
+											<div class="col text-center"><c:out value="${element.platform.shortName}"/></div>
+											<div class="col text-center"><spring:message code="playstyle.${element.playstyle.name}"/></div>
+											<div class="col text-center"><c:out value="${element}"/></div>
+										</div>
+									</c:forEach>
 								</div>
-							</c:forEach>
+							</div>
+						</div>
+					</c:if>
+					<a class="btn btn-primary btn-block create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+				</c:when>
+				<c:otherwise>
+					<div class="card m-5 bg-very-light right-wave left-wave">
+					    <div class="card-header bg-very-dark text-white d-flex">
+					    	<div>
+					            <h2 class="share-tech-mono"><spring:message code="game.averageTime"/></h2>
+					        </div>
+						</div>
+						<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+							<div class="container text-center">
+								<spring:message code="error.runNotAvailable"/>
+							</div>
 						</div>
 					</div>
-				</div>
-				</c:if>
-				<a class="btn btn-primary btn-block create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+				</c:otherwise>
+			</c:choose>
 			</div>
 		</div>
 	</div>

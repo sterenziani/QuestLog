@@ -20,6 +20,7 @@ import ar.edu.itba.paw.model.Platform;
 import ar.edu.itba.paw.model.Playstyle;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import ar.edu.itba.paw.webapp.exception.RunsNotEnabledException;
 
 @Controller
 public class GameRunController
@@ -68,6 +69,8 @@ public class GameRunController
             return new ModelAndView("redirect:/games/{gameId}");
         final ModelAndView mav = new ModelAndView("game/createRun");
         Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
+        if(g.getPlatforms().size() == 0 || !g.hasReleased())
+        	throw new RunsNotEnabledException();
         mav.addObject("game", g);
         mav.addObject("playstyles",runs.getAllPlaystyles());
         return mav;

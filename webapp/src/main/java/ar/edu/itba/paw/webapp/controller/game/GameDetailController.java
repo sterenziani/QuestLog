@@ -45,6 +45,7 @@ public class GameDetailController {
         Game g = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
         mav.addObject("playAverage", runs.getAverageAllPlayStyles(g));
         mav.addObject("averageScore", scors.findAverageScore(g));
+        mav.addObject("runsEnabled", (g.getPlatforms().size() > 0 && g.hasReleased()));
         if(u == null)
         {
             g.setInBacklog(backlogCookieHandlerService.gameInBacklog(gameId, backlog));

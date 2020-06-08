@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -228,6 +230,16 @@ public class Game
 	public Set<Release> getReleaseDates()
 	{
 		return releaseDates;
+	}
+	
+	public boolean hasReleased()
+	{
+		for(Release r : releaseDates)
+		{
+			if (r.getDate().isBefore(LocalDate.now()))
+				return true;
+		}
+		return false;
 	}
 
 	@Transient

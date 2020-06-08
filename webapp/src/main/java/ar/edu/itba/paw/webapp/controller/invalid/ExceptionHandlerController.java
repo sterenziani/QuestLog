@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.exception.DeveloperNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
+import ar.edu.itba.paw.webapp.exception.RunsNotEnabledException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -46,6 +47,16 @@ public class ExceptionHandlerController
 	{
 		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.gameNotExists");
+		m.addObject("loggedUser", us.getLoggedUser());
+		return m;
+	}
+	
+	@ExceptionHandler(RunsNotEnabledException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView PageNotAvailable()
+	{
+		ModelAndView m = new ModelAndView("error/errorException");
+		m.addObject("msg", "error.runNotAvailable");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
 	}
