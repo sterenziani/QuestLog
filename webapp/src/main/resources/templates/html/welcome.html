@@ -29,6 +29,7 @@
     	<h4 th:text="#{email.register.body(${username})}"></h4>
     	<p th:text="#{email.register.tip.reviews}"></p>
     	<p th:text="#{email.register.tip.notifications}"></p>
+    	<h4><a th:href="@{{path}(path=${path})}" th:text="#{email.register.explore}"></a></h4>
     </div>
   </body>
 </html>

@@ -326,7 +326,8 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getUpcomingGames() {
-        Query nativeQuery = em.createNativeQuery("select distinct cast(game as text) from releases r group by game having min(release_date) >= CURRENT_DATE");
+        Query nativeQuery = em.createNativeQuery("select g from (select distinct cast(game as text) as g, min(release_date) as d from releases r group by game having min(release_date) >= CURRENT_DATE ORDER BY d) as x");
+        nativeQuery.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
         @SuppressWarnings("unchecked")
 		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
         final TypedQuery<Game> query = em.createQuery("from Game as g where g.game in :ids", Game.class);

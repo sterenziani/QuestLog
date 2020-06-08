@@ -52,8 +52,10 @@ public class EmailServiceImpl implements EmailService
 	{
 		if(u == null)
 			return;
+		String url = WEBSITE_PATH + "explore/";
 		Locale locale = u.getLocale();
 		final Context ctx = new Context(locale);
+		ctx.setVariable("path", url);
 		ctx.setVariable("username", u.getUsername());
 
 	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
