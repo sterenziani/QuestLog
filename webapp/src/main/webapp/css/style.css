@@ -24,6 +24,10 @@ body {
     height: 340px;
 }
 
+.cover-wide {
+    height: 400px;
+}
+
 .right-wave {
     border-bottom-right-radius: 4em !important;
 }

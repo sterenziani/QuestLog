@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.game;
 import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.RunService;
@@ -46,15 +49,17 @@ public class GameRunController
         User user = us.getLoggedUser();
         if(user == null)
             return new ModelAndView("redirect:/games/{gameId}");
-        Optional<Game> game = gs.findByIdWithDetails(gameId);
+        Game game = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
+        if(game.getPlatforms().size() == 0 || !game.hasReleased())
+        	throw new RunsNotEnabledException();
         Optional <Platform> plat = ps.findByName(platform);
         long time = hours*3600 + mins*60 + secs;
         Optional <Playstyle> play = runs.findPlaystyleByName(playst);
-        if(game.isPresent() && plat.isPresent() && play.isPresent())
+        if(plat.isPresent() && play.isPresent())
         {
-            LOGGER.debug("Registering run of {} seconds in style {} from user {} for game {} on platform {}.", time, play.get().getName(), user.getUsername(), game.get().getTitle(), plat.get().getShortName());
-            runs.register(user, game.get(), plat.get(), play.get(), time);
-            LOGGER.debug("Registration of run of {} by user {} successful.", game.get().getTitle(), user.getUsername());
+            LOGGER.debug("Registering run of {} seconds in style {} from user {} for game {} on platform {}.", time, play.get().getName(), user.getUsername(), game.getTitle(), plat.get().getShortName());
+            runs.register(user, game, plat.get(), play.get(), time);
+            LOGGER.debug("Registration of run of {} by user {} successful.", game.getTitle(), user.getUsername());
         }
         if(removeFromBacklog)
         	gs.removeFromBacklog(gameId);

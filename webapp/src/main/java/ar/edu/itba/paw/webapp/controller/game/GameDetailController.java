@@ -1,23 +1,27 @@
 package ar.edu.itba.paw.webapp.controller.game;
-
-import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Run;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-
-import java.util.List;
-import java.util.Optional;
+import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
+import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.RunService;
+import ar.edu.itba.paw.interfaces.service.ScoreService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Score;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
+import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 
 @Controller
 @ComponentScan("ar.edu.itba.paw.webapp.component")
@@ -82,6 +86,8 @@ public class GameDetailController {
         if(user == null)
             return new ModelAndView("redirect:/games/{gameId}");
         Game game = gs.findByIdWithDetails(gameId).orElseThrow(GameNotFoundException::new);
+        if(game.getPlatforms().size() == 0 || !game.hasReleased())
+        	throw new ScoresNotEnabledException();
         Optional<Score> score = scors.findScore(user, game);
         LOGGER.debug("Registering score {} from user {} for game {}.", scoreInput, user.getUsername(), game.getTitle());
         if (score.isPresent())

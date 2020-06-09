@@ -11,6 +11,7 @@ import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.GenreNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exception.RunsNotEnabledException;
+import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 import ar.edu.itba.paw.webapp.exception.TokenNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
@@ -64,10 +65,20 @@ public class ExceptionHandlerController
 	
 	@ExceptionHandler(RunsNotEnabledException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView PageNotAvailable()
+	public ModelAndView RunsDisabled()
 	{
 		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.runNotAvailable");
+		m.addObject("msg", "error.interactionDisabled");
+		m.addObject("loggedUser", us.getLoggedUser());
+		return m;
+	}
+	
+	@ExceptionHandler(ScoresNotEnabledException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView ScoresDisabled()
+	{
+		ModelAndView m = new ModelAndView("error/errorException");
+		m.addObject("msg", "error.interactionDisabled");
 		m.addObject("loggedUser", us.getLoggedUser());
 		return m;
 	}
