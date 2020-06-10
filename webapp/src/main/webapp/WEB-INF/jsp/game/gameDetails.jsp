@@ -8,12 +8,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="card m-3 d-flex bg-transparent" style="width: 18rem;">
-    <form method="post" onsubmit="var buttons = document.getElementsByClassName('button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].disabled=true;}">
-        <input type="hidden" name="gameId" value="<c:out value="${game.id}"/>">
-        <spring:message code="game.addToBacklog" var="addToBacklog"/>
-        <spring:message code="game.addingToBacklog" var="addingToBacklog"/>
-        <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
-        <spring:message code="game.removingFromBacklog" var="removingFromBacklog"/>
     <c:if test="${loggedUser != null && loggedUser.adminStatus == true}">
         <div class="d-flex">
             <spring:message code="game.edit" var="edit"/>
@@ -36,13 +30,23 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="game.delete.dismiss"/></button>
-                            <a href="<c:url value="/admin/game/${game.id}/delete/fromdetails"/>" class="btn btn-danger"><spring:message code="game.delete.confirm"/></a>
+							<c:url value="/admin/game/${game.id}/delete/fromdetails" var="post_url"/>
+						    <form method="post" action="${post_url}">
+						    	<spring:message code="game.delete" var="deleteReview"/>
+						    	<input class="btn btn-danger" type="submit" value="<spring:message code="game.delete.confirm"/>"/>
+						    </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </c:if>
+    <form method="post" onsubmit="var buttons = document.getElementsByClassName('button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].disabled=true;}">
+    <input type="hidden" name="gameId" value="<c:out value="${game.id}"/>">
+    <spring:message code="game.addToBacklog" var="addToBacklog"/>
+    <spring:message code="game.addingToBacklog" var="addingToBacklog"/>
+    <spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+    <spring:message code="game.removingFromBacklog" var="removingFromBacklog"/>
         <c:choose>
             <c:when test="${game.inBacklog}">
                 <input class="btn btn-block btn-outline-danger btn-lg not-rounded-bottom button-${game.id} remove-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${removingFromBacklog}';}" value="${removeFromBacklog}"/>

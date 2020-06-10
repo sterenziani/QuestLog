@@ -67,18 +67,21 @@ public class DeveloperServiceImpl implements DeveloperService
 		return developerDao.getAllDevelopers();
 	}
 
+	@Transactional
 	@Override
 	public List<Developer> getDevelopers(int page, int pageSize)
 	{
 		return developerDao.getDevelopers(page, pageSize);
 	}
 
+	@Transactional
 	@Override
 	public int countDevelopers()
 	{
 		return developerDao.countDevelopers();
 	}
 
+	@Transactional
 	@Override
 	public List<Developer> getBiggestDevelopers(int amount)
 	{

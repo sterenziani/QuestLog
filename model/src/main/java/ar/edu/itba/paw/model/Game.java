@@ -59,14 +59,17 @@ public class Game
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "backlog")
 	private Set<User> backlog = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game", orphanRemoval=true)
 	private Set<Release> releaseDates = new HashSet<>();
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game", orphanRemoval=true)
 	private Set<Score> scores = new HashSet<>();
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game", orphanRemoval=true)
 	private Set<Run> runs = new HashSet<>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "game", orphanRemoval=true)
+	private Set<Review> reviews = new HashSet<>();
 
 	public Game(){
 		//Just for Hibernate

@@ -29,7 +29,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="game.delete.dismiss"/></button>
-                            <a href="<c:url value="/admin/game/${game.id}/delete"/>" class="btn btn-danger"><spring:message code="game.delete.confirm"/></a>
+							<c:url value="/admin/game/${game.id}/delete" var="post_url"/>
+						    <form method="post" action="${post_url}">
+						    	<spring:message code="game.delete" var="deleteReview"/>
+						    	<input class="btn btn-danger" type="submit" value="<spring:message code="game.delete.confirm"/>"/>
+						    </form>
                         </div>
                     </div>
                 </div>

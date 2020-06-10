@@ -1,12 +1,9 @@
 package ar.edu.itba.paw.service;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.itba.paw.interfaces.dao.ReviewDao;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.model.Game;
@@ -32,6 +29,12 @@ public class ReviewServiceImpl implements ReviewService {
 	public List<Review> findGameReviews(Game game) {
 		return reviewDao.findGameReviews(game);
 	}
+	
+	@Transactional
+	@Override
+	public List<Review> findGameReviews(Game game, int page, int pageSize){
+		return reviewDao.findGameReviews(game, page, pageSize);
+	}
 
 	@Transactional
 	@Override
@@ -44,11 +47,23 @@ public class ReviewServiceImpl implements ReviewService {
 	public List<Review> findUserReviews(User user) {
 		return reviewDao.findUserReviews(user);
 	}
+	
+	@Transactional
+	@Override
+	public List<Review> findUserReviews(User user, int page, int pageSize){
+		return reviewDao.findUserReviews(user, page, pageSize);
+	}
 
 	@Transactional
 	@Override
 	public List<Review> findUserAndGameReviews(User user, Game game) {
 		return reviewDao.findUserAndGameReviews(user, game);
+	}
+	
+	@Transactional
+	@Override
+	public List<Review> findUserAndGameReviews(User user, Game game, int page, int pageSize){
+		return reviewDao.findUserAndGameReviews(user, game, page, pageSize);
 	}
 
 	@Transactional
@@ -69,4 +84,28 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.register(user, game, platform, score, body, date);
 	}
 
+	@Transactional
+	@Override
+	public int countReviewsByUser(User user) {
+		return reviewDao.countReviewsByUser(user);
+	}
+
+	@Transactional
+	@Override
+	public int countReviewsByUserAndGame(User user, Game game) {
+		return reviewDao.countReviewsByUserAndGame(user, game);
+	}
+
+	@Transactional
+	@Override
+	public int countReviewsForGame(Game game) {
+		return reviewDao.countReviewsForGame(game);
+	}
+	
+	@Transactional
+	@Override
+	public void deleteReview(Review r)
+	{
+		reviewDao.deleteReview(r);
+	}
 }

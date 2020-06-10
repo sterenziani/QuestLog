@@ -26,10 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Review;
 import ar.edu.itba.paw.model.Run;
 import ar.edu.itba.paw.model.Score;
 import ar.edu.itba.paw.model.User;
@@ -54,6 +56,9 @@ public class UserController
 	
     @Autowired
     private ScoreService scors;
+    
+    @Autowired
+    private ReviewService revs;
 	
 	@Autowired
 	private BacklogCookieHandlerService backlogCookieHandlerService;
@@ -66,8 +71,10 @@ public class UserController
 	private static final int BACKLOG_TEASER_PAGE_SIZE = 5;
 	private static final int SCORE_TEASER_PAGE_SIZE = 10;
 	private static final int RUNS_TEASER_PAGE_SIZE = 10;
+	private static final int REVIEWS_TEASER_PAGE_SIZE = 3;
 	private static final int SCORES_PAGE_SIZE = 25;
 	private static final int RUNS_PAGE_SIZE = 25;
+	private static final int REVIEWS_PAGE_SIZE = 10;
 	
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm, HttpServletRequest request)
@@ -174,10 +181,7 @@ public class UserController
 		mav.addObject("backlog", gamesInPage);
 		mav.addObject("backlogCropped", gs.countGamesInBacklog(visitedUser) > BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("user", visitedUser);
-		mav.addObject("scoresInPage", scors.findAllUserScores(visitedUser, 1, SCORE_TEASER_PAGE_SIZE));
-		mav.addObject("scoresCropped", scors.countAllUserScores(visitedUser) > SCORE_TEASER_PAGE_SIZE);
-		mav.addObject("runsInPage", rs.findRunsByUser(visitedUser, 1, RUNS_TEASER_PAGE_SIZE));
-		mav.addObject("runsCropped", rs.countRunsByUser(visitedUser) > RUNS_TEASER_PAGE_SIZE);
+		loadUserScoresRunsAndReviews(mav, visitedUser);
 		return mav;
 	}
 	
@@ -197,11 +201,18 @@ public class UserController
 		mav.addObject("backlog", gamesInPage);
 		mav.addObject("backlogCropped", gs.countGamesInBacklog() > BACKLOG_TEASER_PAGE_SIZE);
 		mav.addObject("user", us.findById(u.getId()).orElseThrow(UserNotFoundException::new));
+		loadUserScoresRunsAndReviews(mav, u);
+		return mav;
+	}
+	
+	private void loadUserScoresRunsAndReviews(ModelAndView mav, User u)
+	{
 		mav.addObject("scoresInPage", scors.findAllUserScores(u, 1, SCORE_TEASER_PAGE_SIZE));
 		mav.addObject("scoresCropped", scors.countAllUserScores(u) > SCORE_TEASER_PAGE_SIZE);
 		mav.addObject("runsInPage", rs.findRunsByUser(u, 1, RUNS_TEASER_PAGE_SIZE));
 		mav.addObject("runsCropped", rs.countRunsByUser(u) > RUNS_TEASER_PAGE_SIZE);
-		return mav;
+		mav.addObject("reviewsInPage", revs.findUserReviews(u, 1, REVIEWS_TEASER_PAGE_SIZE));
+		mav.addObject("reviewsCropped", revs.countReviewsByUser(u) > REVIEWS_TEASER_PAGE_SIZE);
 	}
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
@@ -269,7 +280,7 @@ public class UserController
         return new ModelAndView("redirect:/");
 	}
 
-	public void authWithAuthManager(HttpServletRequest request, String username, String password)
+	private void authWithAuthManager(HttpServletRequest request, String username, String password)
 	{
 	    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 	    authToken.setDetails(new WebAuthenticationDetails(request));
@@ -279,7 +290,7 @@ public class UserController
 	}
 	
     @RequestMapping("/users/{id}/scores")
-    public ModelAndView viewScoresByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    public ModelAndView viewScoresByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
         final ModelAndView mav = new ModelAndView("user/fullScoreList");
         User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
@@ -294,7 +305,7 @@ public class UserController
     }
     
     @RequestMapping("/users/{id}/runs")
-    public ModelAndView viewRunsByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    public ModelAndView viewRunsByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
         final ModelAndView mav = new ModelAndView("user/fullRunsList");
         User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
@@ -302,6 +313,21 @@ public class UserController
         mav.addObject("runsInPage", runsInPage);
         int countResults = rs.countRunsByUser(visitedUser);
         int totalPages = (countResults + RUNS_PAGE_SIZE - 1)/RUNS_PAGE_SIZE;
+		mav.addObject("pages", totalPages);
+		mav.addObject("current", page);
+		mav.addObject("user", visitedUser);
+        return mav;
+    }
+    
+    @RequestMapping("/users/{id}/reviews")
+    public ModelAndView viewReviewsByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page)
+    {
+        final ModelAndView mav = new ModelAndView("user/fullReviewsList");
+        User visitedUser = us.findById(id).orElseThrow(UserNotFoundException::new);
+        List<Review> reviewsInPage = revs.findUserReviews(visitedUser, page, REVIEWS_PAGE_SIZE);
+        mav.addObject("reviewsInPage", reviewsInPage);
+        int countResults = revs.countReviewsByUser(visitedUser);
+        int totalPages = (countResults + REVIEWS_PAGE_SIZE - 1)/REVIEWS_PAGE_SIZE;
 		mav.addObject("pages", totalPages);
 		mav.addObject("current", page);
 		mav.addObject("user", visitedUser);

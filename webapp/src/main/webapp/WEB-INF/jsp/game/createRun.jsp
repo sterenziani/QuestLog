@@ -17,7 +17,7 @@
 		
 			<div class="game-details">
 				<div class="game-details-cover">
-	        		<img src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>">
+	        		<img class="cover" src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>">
 	    		</div>
     		</div>
     	</div>	

@@ -50,6 +50,14 @@
 			<c:set var="seeAllRunsUrl" value="/users/${user.id}/runs"/>
 		</c:if>
 		<%@ include file="../common/runsList.jsp"%>
+		
+		<c:set var="reviewsInPage" value="${reviewsInPage}"/>
+		<c:if test="${reviewsCropped}">
+			<c:set var="seeAllReviewsUrl" value="/users/${user.id}/reviews"/>
+		</c:if>
+		<spring:message code="user.reviews" arguments="${user.username}" var="reviewsListName"/>
+		<spring:message code="user.noReviews" var="emptyListMessage"/>
+		<%@ include file="../common/reviewsList.jsp"%>
 	</div>
 </body>
 </html>

@@ -20,6 +20,14 @@ body {
     background-color: #263137;
 }
 
+.bg-dark-white {
+    background-color: #f5f5f5;
+}
+
+.bg-light-grey {
+    background-color: #e2e2e2;
+}
+
 .cover {
     height: 340px;
 }
@@ -131,4 +139,20 @@ body {
 .checkboxes{
     height: 15em !important;
     overflow-y: scroll;
+}
+
+/*   Change Color for Active Tabs     */
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li>a:hover,
+.nav>li>a:hover {
+  color: #FFC107;
+  border-color: #FFFFFF;
+}
+
+/*   Change Color for Inactive Tabs     */
+.nav-tabs>li>a {
+  color: #CFD8DC;
+  border-color: #FFFFFF;
 }

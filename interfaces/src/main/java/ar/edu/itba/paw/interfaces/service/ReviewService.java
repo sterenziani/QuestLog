@@ -27,6 +27,7 @@ public interface ReviewService {
 	 */
 	
 	List<Review> findGameReviews(Game game);
+	List<Review> findGameReviews(Game game, int page, int pageSize);
 	
 	/**
 	 * Find the reviews for a certain game and platform.
@@ -44,6 +45,7 @@ public interface ReviewService {
 	 */
 	
 	List<Review> findUserReviews(User user);
+	List<Review> findUserReviews(User user, int page, int pageSize);
 	
 	/**
 	 * Find the reviews for a certain game written by a certain user.
@@ -53,6 +55,7 @@ public interface ReviewService {
 	 */
 	
 	List<Review> findUserAndGameReviews(User user, Game game);
+	List<Review> findUserAndGameReviews(User user, Game game, int page, int pageSize);
 	
 	/**
 	 * Change the body of a review
@@ -82,4 +85,11 @@ public interface ReviewService {
 	 */
 	
 	Review register(User user, Game game, Platform platform, int score, String body, LocalDate date);
+
+	int countReviewsByUser(User user);
+	int countReviewsByUserAndGame(User user, Game game);
+	int countReviewsForGame(Game game);
+
+	void deleteReview(Review r);
+	
 }

@@ -155,18 +155,21 @@ public class RunServiceImpl implements RunService {
 		return map;
 	}
 
+	@Transactional
 	@Override
 	public List<Run> findRunsByUser(User user, int page, int pageSize)
 	{
 		return runDao.findRunsByUser(user, page, pageSize);
 	}
 
+	@Transactional
 	@Override
 	public int countRunsByUser(User user)
 	{
 		return runDao.countRunsByUser(user);
 	}
 	
+	@Transactional
 	@Override
 	public List<Run> getTopRuns(Game game, int amount)
 	{

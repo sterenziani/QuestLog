@@ -1,8 +1,4 @@
 package ar.edu.itba.paw.webapp.controller.admin;
-import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exception.BadFormatException;
-import ar.edu.itba.paw.webapp.exception.BadImageException;
-import ar.edu.itba.paw.webapp.form.GameForm;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +20,13 @@ import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.PublisherService;
 import ar.edu.itba.paw.interfaces.service.RegionService;
+import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.model.exception.BadFormatException;
 import ar.edu.itba.paw.webapp.exception.BadImageException;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.form.GameForm;
@@ -147,7 +150,7 @@ public class AdminGameController
 		}
 	}
 
-	@RequestMapping(value = "/admin/game/{id}/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/game/{id}/delete", method = RequestMethod.POST)
 	public ModelAndView deleteGame(@PathVariable("id") final long id, HttpServletRequest request)
 	{
 		gs.removeById(id);
@@ -158,7 +161,7 @@ public class AdminGameController
 		return new ModelAndView("redirect:" + referer);
 	}
 
-	@RequestMapping(value = "/admin/game/{id}/delete/fromdetails", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/game/{id}/delete/fromdetails", method = RequestMethod.POST)
 	public ModelAndView deleteFromDetailsGame(@PathVariable("id") final long id, HttpServletRequest request)
 	{
 		gs.removeById(id);

@@ -80,6 +80,7 @@ public class EmailServiceImpl implements EmailService
 	@Async
 	@Scheduled(cron = "00 00 09 * * *")
 	@Override
+	@Transactional
 	public void sendDailyEmails()
 	{
 		LOGGER.debug("Sending daily emails to all users");
@@ -117,6 +118,7 @@ public class EmailServiceImpl implements EmailService
 
 	@Async
 	@Override
+	@Transactional
 	public void sendAccountRecoveryEmail(User u, String token)
 	{
 		String url = WEBSITE_PATH + "changePassword/";

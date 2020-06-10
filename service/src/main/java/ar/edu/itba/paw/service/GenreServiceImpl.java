@@ -66,12 +66,14 @@ public class GenreServiceImpl implements GenreService {
 		return genreDao.getAllGenres();
 	}
 
+	@Transactional
 	@Override
 	public List<Genre> getGenres(int page, int pageSize)
 	{
 		return genreDao.getGenres(page, pageSize);
 	}
 
+	@Transactional
 	@Override
 	public int countGenres()
 	{

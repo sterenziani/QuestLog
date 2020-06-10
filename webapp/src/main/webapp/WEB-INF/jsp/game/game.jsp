@@ -17,178 +17,67 @@
 			</div>
 			<div class="p-3 flex-grow-1">
 				<c:choose>
-				<c:when test="${runsEnabled}">
-				<div class="container">	
-				<div class="row">
-					<div class="col-sm-3">
-						<div class="row"><strong class="score-title"><spring:message code="game.averageUserScore"/></strong></div>
-						<div class="row">
-							<c:choose>
-								<c:when test="${empty averageScore}">
-									<p class="score-display badge badge-dark score-display-avg"><spring:message code="game.notAvailable"/></p>
-								</c:when>
-								<c:otherwise>
-									<p class="score-display badge badge-dark"><c:out value="${averageScore}"/></p>
-								</c:otherwise>
-							</c:choose>
-						</div>
-					</div>
-					<div class="col-sm-9">
-					<form:form name="scores" method="POST" action="scores/${game.id}">
-						<div class="row">
-							<div class="col-sm-7 my-auto">
-									<input id="removeFromBacklogInput" type="hidden" value="false" name="removeFromBacklog"/>
-									<div class="row m-auto">
-										<strong class="score-title"><spring:message code="game.yourScore"/></strong>
-									</div>
-									<spring:message code="game.yourScore" var="score"/>
-									<c:choose>
-										<c:when test="${empty user_score}">
-											<div class="score-slider">
-												<input class="slider mt-3 mb-3" id="range-slider" type="range" name="score" min="0" max="100" oninput="scoreText.innerHTML = document.getElementById('range-slider').value" value="50">
-											</div>
-										</c:when>
-										<c:otherwise>
-											<div class="score-slider">
-												<input class="slider mt-3 mb-3" id="range-slider" type="range" name="score" min="0" max="100" oninput="scoreText.innerHTML = document.getElementById('range-slider').value" value="${user_score.score}">
-											</div>
-										</c:otherwise>
-									</c:choose>
-									<input type="hidden" value="${game.id}" name="game"/>
+				<c:when test="${interactionEnabled}">
+					<%@include file="scoreForm.jsp"%>
+					
+					<div class="mt-4 bg-very-light pb-5">
+						<ul class="nav nav-tabs bg-dark">
+						  <li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><spring:message code="game.tabs.runs"/></a></li>
+						  <c:if test="${!empty loggedUser && !empty user_runs}">
+						  	<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><spring:message code="game.tabs.myRuns"/></a></li>
+						  </c:if>
+						  <li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><spring:message code="game.tabs.reviews"/></a></li>
+						  <c:if test="${!empty loggedUser && !empty userReviews}">
+						  	<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><spring:message code="game.tabs.myReviews"/></a></li>
+						  </c:if>
+						</ul>
+						
+						<div class="tab-content">
+							<div id="time-tab" class="tab-pane fade show active">
+								<div class="col text-center mt-4">
+									<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+		  						</div>
+								<%@include file="averageTimes.jsp"%>
+								<%@include file="topRuns.jsp"%>
 							</div>
-							<div class="col">
-								<c:choose>
-									<c:when test="${empty user_score}">
-										<div class="text-center px-5"><div class="score-number">
-											<p class="display-4 score-display badge badge-success" id="scoreText">-</p>
-										</div></div>
-									</c:when>
-									<c:otherwise>
-										<div class="text-center px-5"><div class="score-number">
-											<p class="score-display badge badge-success" id="scoreText"><c:out value="${user_score.score}"/></p>
-										</div></div>
-									</c:otherwise>
-								</c:choose>
-								<div class="score-submit px-5">
-						            <c:choose>
-						                <c:when test="${game.inBacklog && loggedUser != null}">
-											<input type="button" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>" data-toggle="modal" data-target="#removeGameFromBacklogModal-${game.id}"/>
-								            
-								            <div class="modal fade" id="removeGameFromBacklogModal-${game.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								                <div class="modal-dialog modal-dialog-centered" role="document">
-								                    <div class="modal-content">
-								                        <div class="modal-header">
-								                            <h5 class="modal-title" id="removeGameFromBacklogLabel-${game.id}"><spring:message code="game.removeFromBacklogAsk" arguments="${game.title}"/></h5>
-								                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								                                <span aria-hidden="true">&times;</span>
-								                            </button>
-								                        </div>
-								                        <div class="modal-body">
-								                            <spring:message code="game.removeFromBacklogExplain"/>
-								                        </div>
-								                        <div class="modal-footer">
-								                            <button type="button" id="postButKeepInBacklogButton" class="btn btn-light" data-dismiss="modal"><spring:message code="game.postButKeepInBacklog"/></button>
-								                            <a id="postAndRemoveFromBacklogButton" class="btn btn-primary text-white"><spring:message code="game.postAndRemoveFromBacklog"/></a>
-								                        </div>
-								                    </div>
-								                </div>
-								            </div>
-						                </c:when>
-						                <c:otherwise>
-											<input type="submit" class="btn btn-primary btn-block score-submit-button button" value="<spring:message code="game.rate"/>"/>
-						                </c:otherwise>
-						            </c:choose>
-								</div>
-							</div>
-						</div>
-					</form:form>
-					</div>
-				</div>
-				</div>
+		  					
+		  					<div id="user-run-tab" class="tab-pane fade">
+		  						<div class="col text-center mt-4">
+									<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+		  						</div>
+								<c:if test="${loggedUser != null && !empty user_runs}">
+									<%@include file="userRuns.jsp"%>
+								</c:if>
+		  					</div>
 	
-				<div class="card m-5 bg-very-light right-wave left-wave">
-				    <div class="card-header bg-very-dark text-white d-flex">
-				    	<div>
-				            <h2 class="share-tech-mono"><spring:message code="game.averageTime"/></h2>
-				        </div>
-					</div>
-					<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-						<div class="container">
-							<div class="row">
-								<div class="col text-right bg-primary text-white"><strong><spring:message code="game.playstyle"/></strong></div>
-								<div class="col bg-primary text-white"><strong><spring:message code="game.averageTime"/></strong></div>
+							<div id="review-tab" class="tab-pane fade">
+								<div class="col text-center mt-4">
+									<a class="btn btn-success create-run-button button" href="<c:url value="/createReview/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+		  						</div>
+								<c:if test="${reviewsCropped}">
+									<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
+								</c:if>
+								<spring:message code="game.reviews" arguments="${game}" var="reviewsListName"/>
+								<spring:message code="game.noReviews" var="emptyListMessage"/>
+								<%@ include file="../common/reviewsList.jsp"%>
 							</div>
-							<c:forEach var="element" items="${playAverage}">
-								<div class="row">
-									<div class="col text-right"><spring:message code="playstyle.${element.key}"/></div>
-									<div class="col">
-										<c:if test="${element.value != '0 : 00 : 00'}">
-											<c:out value="${element.value}"/>
-										</c:if>
-										<c:if test="${element.value == '0 : 00 : 00'}">
-											<spring:message code="game.notAvailable"/>
-										</c:if>
-									</div>
-								</div>
-							</c:forEach>
-						</div>
-					</div>
-				</div>
-			
-				<div class="card m-5 bg-very-light right-wave left-wave">
-				    <div class="card-header bg-very-dark text-white d-flex">
-				    	<div>
-				            <h2 class="share-tech-mono"><spring:message code="game.fastestRuns"/></h2>
-				        </div>
-					</div>
-					<c:if test="${!empty topRuns}">
-						<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-							<div class="container">
-								<c:forEach var="element" items="${topRuns}">
-									<div class="row">
-										<div class="col text-right"><a href="<c:url value="/users/${element.user.id}"/>"><c:out value="${element.user}"/></a></div>
-										<div class="col text-center"><c:out value="${element.platform.shortName}"/></div>
-										<div class="col text-center"><c:out value="${element}"/></div>
-									</div>
-								</c:forEach>
-							</div>
-						</div>
-					</c:if>
-					<c:if test="${empty topRuns}">
-						<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-							<div class="container text-center">
-								<spring:message code="game.noRuns"/>
-							</div>
-						</div>
-					</c:if>
-				</div>
-			
-				<c:if test="${loggedUser != null && !empty user_runs}">
-					<div class="card m-5 bg-very-light right-wave left-wave">
-					    <div class="card-header bg-very-dark text-white d-flex">
-					    	<div>
-					            <h2 class="share-tech-mono"><spring:message code="game.yourRuns"/></h2>
-					        </div>
-						</div>
-						<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
-							<div class="container">
-								<div class="row">
-									<div class="col text-center bg-primary text-white"><strong><spring:message code="game.platform"/></strong></div>
-									<div class="col text-center bg-primary text-white"><strong><spring:message code="game.playstyle"/></strong></div>
-									<div class="col text-center bg-primary text-white"><strong><spring:message code="game.yourTime"/></strong></div>
-								</div>
-								<c:forEach var="element" items="${user_runs}">
-									<div class="row">
-										<div class="col text-center"><c:out value="${element.platform.shortName}"/></div>
-										<div class="col text-center"><spring:message code="playstyle.${element.playstyle.name}"/></div>
-										<div class="col text-center"><c:out value="${element}"/></div>
-									</div>
-								</c:forEach>
+							
+							<div id="user-review-tab" class="tab-pane fade">
+								<div class="col text-center mt-4">
+									<a class="btn btn-success create-run-button button" href="<c:url value="/createReview/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+		  						</div>							
+								<c:if test="${!empty loggedUser}">
+									<c:if test="${userReviewsCropped}">
+										<c:set var="seeAllReviewsUrl" value="/users/${loggedUser.id}/reviews"/>
+									</c:if>
+									<spring:message code="game.yourReviews" var="reviewsListName"/>
+									<spring:message code="game.yourReviews.empty" var="emptyListMessage"/>
+									<c:set var="reviewsInPage" value="${userReviews}"/>
+									<%@ include file="../common/reviewsList.jsp"%>
+								</c:if>
 							</div>
 						</div>
 					</div>
-				</c:if>
-				<a class="btn btn-primary btn-block create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
 				</c:when>
 				<c:otherwise>
 				    <div class="container text-center align-middle">

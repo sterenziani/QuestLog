@@ -28,6 +28,7 @@ public class ImageServiceImpl implements ImageService {
         return imageDao.uploadImage(image_name, image_data);
     }
 
+    @Transactional
     @Override
     public void removeByName(String image_name) {
         imageDao.removeByName(image_name);
