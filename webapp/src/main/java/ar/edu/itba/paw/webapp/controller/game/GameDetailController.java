@@ -56,7 +56,7 @@ public class GameDetailController {
     private static final int REVIEWS_PAGE_SIZE = 10;
 
     @RequestMapping("/games/{gameId}")
-    public ModelAndView gameProfile(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+    public ModelAndView gameProfile(@PathVariable("gameId") long gameId, @RequestParam(required = false, defaultValue = "false", value = "reviews") boolean reviewTab, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
         final ModelAndView mav = new ModelAndView("game/game");
         User u = us.getLoggedUser();
@@ -67,6 +67,7 @@ public class GameDetailController {
         mav.addObject("reviewsInPage", revs.findGameReviews(g, 1, REVIEW_SHOWCASE_SIZE));
         mav.addObject("reviewsCropped", revs.countReviewsForGame(g) > REVIEW_SHOWCASE_SIZE);
         mav.addObject("interactionEnabled", (g.getPlatforms().size() > 0 && g.hasReleased()));
+        mav.addObject("reviewInterest", reviewTab);
         if(u == null)
         {
             g.setInBacklog(backlogCookieHandlerService.gameInBacklog(gameId, backlog));

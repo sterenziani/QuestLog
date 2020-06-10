@@ -37,7 +37,7 @@ public class Review {
 	@Column(nullable = false)
 	private int score;
 	
-	@Column(length = 2000)
+	@Column(length = 15000)
 	private String body;
 	
 	@Column

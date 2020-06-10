@@ -56,7 +56,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 		http.sessionManagement().invalidSessionUrl("/")
 			.and().authorizeRequests()
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/profile", "/games/scores/**", "/createRun/**").authenticated()
+				.antMatchers("/profile", "/games/scores/**", "/createRun/**", "/reviews/**").authenticated()
 				.antMatchers("/**").permitAll()
 			.and().formLogin()
 				.usernameParameter("username")

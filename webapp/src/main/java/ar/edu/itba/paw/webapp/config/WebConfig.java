@@ -102,8 +102,8 @@ public class WebConfig
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
 		
 		// ESTAS DOS SON SOLO PARA DEPLOYMENT. BORRAR ANTES DE DEPLOYAR
-		properties.setProperty("hibernate.show_sql", "true");
-		properties.setProperty("format_sql", "true");
+		//properties.setProperty("hibernate.show_sql", "true");
+		//properties.setProperty("format_sql", "true");
 		
 		factoryBean.setJpaProperties(properties);
 		return factoryBean;

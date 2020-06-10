@@ -94,7 +94,7 @@ public class AdminGameController
 	public ModelAndView editGame(@PathVariable("game_id") long id, @ModelAttribute("gameForm") GameForm gameForm)
 	{
 		ModelAndView mav = new ModelAndView("admin/gameForm");
-		Optional<Game> optg 		= gs.findByIdWithDetails(id);
+		Optional<Game> optg 		= gs.findById(id);
 		if(!optg.isPresent())
 			throw new GameNotFoundException();
 		Game g 						= optg.get();

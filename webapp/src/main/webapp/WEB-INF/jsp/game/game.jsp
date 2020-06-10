@@ -22,61 +22,126 @@
 					
 					<div class="mt-4 bg-very-light pb-5">
 						<ul class="nav nav-tabs bg-dark">
-						  <li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><spring:message code="game.tabs.runs"/></a></li>
-						  <c:if test="${!empty loggedUser && !empty user_runs}">
-						  	<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><spring:message code="game.tabs.myRuns"/></a></li>
-						  </c:if>
-						  <li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><spring:message code="game.tabs.reviews"/></a></li>
-						  <c:if test="${!empty loggedUser && !empty userReviews}">
-						  	<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><spring:message code="game.tabs.myReviews"/></a></li>
-						  </c:if>
+						<c:choose>
+						<c:when test="${reviewInterest}">
+							<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><spring:message code="game.tabs.runs"/></a></li>
+							<c:if test="${!empty loggedUser && !empty user_runs}">
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><spring:message code="game.tabs.myRuns"/></a></li>
+							</c:if>
+							<li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><spring:message code="game.tabs.reviews"/></a></li>
+							<c:if test="${!empty loggedUser && !empty userReviews}">
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><spring:message code="game.tabs.myReviews"/></a></li>
+							</c:if>
+						</c:when>
+						<c:otherwise>
+							<li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><spring:message code="game.tabs.runs"/></a></li>
+							<c:if test="${!empty loggedUser && !empty user_runs}">
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><spring:message code="game.tabs.myRuns"/></a></li>
+							</c:if>
+							<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><spring:message code="game.tabs.reviews"/></a></li>
+							<c:if test="${!empty loggedUser && !empty userReviews}">
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><spring:message code="game.tabs.myReviews"/></a></li>
+							</c:if>
+						</c:otherwise>
+						</c:choose>
 						</ul>
 						
-						<div class="tab-content">
-							<div id="time-tab" class="tab-pane fade show active">
-								<div class="col text-center mt-4">
-									<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
-		  						</div>
-								<%@include file="averageTimes.jsp"%>
-								<%@include file="topRuns.jsp"%>
-							</div>
-		  					
-		  					<div id="user-run-tab" class="tab-pane fade">
-		  						<div class="col text-center mt-4">
-									<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
-		  						</div>
-								<c:if test="${loggedUser != null && !empty user_runs}">
-									<%@include file="userRuns.jsp"%>
-								</c:if>
-		  					</div>
-	
-							<div id="review-tab" class="tab-pane fade">
-								<div class="col text-center mt-4">
-									<a class="btn btn-success create-run-button button" href="<c:url value="/createReview/${game.id}"/>"><spring:message code="review.writeReview"/></a>
-		  						</div>
-								<c:if test="${reviewsCropped}">
-									<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
-								</c:if>
-								<spring:message code="game.reviews" arguments="${game}" var="reviewsListName"/>
-								<spring:message code="game.noReviews" var="emptyListMessage"/>
-								<%@ include file="../common/reviewsList.jsp"%>
-							</div>
-							
-							<div id="user-review-tab" class="tab-pane fade">
-								<div class="col text-center mt-4">
-									<a class="btn btn-success create-run-button button" href="<c:url value="/createReview/${game.id}"/>"><spring:message code="review.writeReview"/></a>
-		  						</div>							
-								<c:if test="${!empty loggedUser}">
-									<c:if test="${userReviewsCropped}">
-										<c:set var="seeAllReviewsUrl" value="/users/${loggedUser.id}/reviews"/>
+						<c:choose>
+						<c:when test="${reviewInterest}">
+							<div class="tab-content">
+								<div id="time-tab" class="tab-pane fade">
+									<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+			  						</div>
+									<%@include file="averageTimes.jsp"%>
+									<%@include file="topRuns.jsp"%>
+								</div>
+			  					
+			  					<div id="user-run-tab" class="tab-pane fade">
+			  						<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+			  						</div>
+									<c:if test="${loggedUser != null && !empty user_runs}">
+										<%@include file="userRuns.jsp"%>
 									</c:if>
-									<spring:message code="game.yourReviews" var="reviewsListName"/>
-									<spring:message code="game.yourReviews.empty" var="emptyListMessage"/>
-									<c:set var="reviewsInPage" value="${userReviews}"/>
+			  					</div>
+		
+								<div id="review-tab" class="tab-pane fade show active">
+									<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+			  						</div>
+									<c:if test="${reviewsCropped}">
+										<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
+									</c:if>
+									<spring:message code="game.reviews" arguments="${game}" var="reviewsListName"/>
+									<spring:message code="game.noReviews" var="emptyListMessage"/>
 									<%@ include file="../common/reviewsList.jsp"%>
-								</c:if>
+								</div>
+								
+								<div id="user-review-tab" class="tab-pane fade">
+									<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+			  						</div>							
+									<c:if test="${!empty loggedUser}">
+										<c:if test="${userReviewsCropped}">
+											<c:set var="seeAllReviewsUrl" value="/users/${loggedUser.id}/reviews"/>
+										</c:if>
+										<spring:message code="game.yourReviews" var="reviewsListName"/>
+										<spring:message code="game.yourReviews.empty" var="emptyListMessage"/>
+										<c:set var="reviewsInPage" value="${userReviews}"/>
+										<%@ include file="../common/reviewsList.jsp"%>
+									</c:if>
+								</div>
 							</div>
-						</div>
+						</c:when>
+						<c:otherwise>
+							<div class="tab-content">
+								<div id="time-tab" class="tab-pane fade show active">
+									<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+			  						</div>
+									<%@include file="averageTimes.jsp"%>
+									<%@include file="topRuns.jsp"%>
+								</div>
+			  					
+			  					<div id="user-run-tab" class="tab-pane fade">
+			  						<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+			  						</div>
+									<c:if test="${loggedUser != null && !empty user_runs}">
+										<%@include file="userRuns.jsp"%>
+									</c:if>
+			  					</div>
+		
+								<div id="review-tab" class="tab-pane fade">
+									<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+			  						</div>
+									<c:if test="${reviewsCropped}">
+										<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
+									</c:if>
+									<spring:message code="game.reviews" arguments="${game}" var="reviewsListName"/>
+									<spring:message code="game.noReviews" var="emptyListMessage"/>
+									<%@ include file="../common/reviewsList.jsp"%>
+								</div>
+								
+								<div id="user-review-tab" class="tab-pane fade">
+									<div class="col text-center mt-4">
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+			  						</div>							
+									<c:if test="${!empty loggedUser}">
+										<c:if test="${userReviewsCropped}">
+											<c:set var="seeAllReviewsUrl" value="/users/${loggedUser.id}/reviews"/>
+										</c:if>
+										<spring:message code="game.yourReviews" var="reviewsListName"/>
+										<spring:message code="game.yourReviews.empty" var="emptyListMessage"/>
+										<c:set var="reviewsInPage" value="${userReviews}"/>
+										<%@ include file="../common/reviewsList.jsp"%>
+									</c:if>
+								</div>
+							</div>
+						</c:otherwise>
+						</c:choose>
 					</div>
 				</c:when>
 				<c:otherwise>
