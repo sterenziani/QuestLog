@@ -6,7 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<div class="card m-3 d-flex bg-transparent" style="width: 16rem;">
+<div class="card m-3 d-flex bg-transparent" style="width: 250px;">
     <c:if test="${loggedUser != null && loggedUser.adminStatus == true}">
         <div class="d-flex">
             <spring:message code="game.edit" var="edit"/>
