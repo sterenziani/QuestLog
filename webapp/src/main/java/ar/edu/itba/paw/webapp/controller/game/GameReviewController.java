@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.game;
 import java.time.LocalDate;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -29,6 +26,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exception.ReviewsNotEnabledException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 
 @RequestMapping("/reviews")
@@ -71,6 +69,8 @@ public class GameReviewController
 	{
 		ModelAndView mav = new ModelAndView("game/reviewForm");
 		Game game = gs.findById(id).orElseThrow(GameNotFoundException::new);
+        if(game.getPlatforms().size() == 0 || !game.hasReleased())
+        	throw new ReviewsNotEnabledException();
 		User user = us.getLoggedUser();
 		Optional<Score> optScore = ss.findScore(user, game);
 		Score score = null;
@@ -90,6 +90,8 @@ public class GameReviewController
 		}
 		User u = us.getLoggedUser();
 		Game g = gs.findById(id).orElseThrow(GameNotFoundException::new);
+        if(g.getPlatforms().size() == 0 || !g.hasReleased())
+        	throw new ReviewsNotEnabledException();
 		Platform p = ps.findById(reviewForm.getPlatform()).orElseThrow(PlatformNotFoundException::new);
 		Optional<Score> optScore = ss.findScore(u, g);
 		if(optScore.isPresent())

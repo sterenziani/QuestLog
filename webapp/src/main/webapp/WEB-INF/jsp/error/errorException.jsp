@@ -13,6 +13,6 @@
 	        <h2 class="align-middle"><spring:message code="error.title"/></h2>
 	        <h5 class="align-middle"><spring:message code="${msg}"/></h5>
         </div>
-    </div>>
+    </div>
 </body>
 </html>

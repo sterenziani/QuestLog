@@ -15,6 +15,7 @@ import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 import ar.edu.itba.paw.webapp.exception.TokenNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
+import ar.edu.itba.paw.webapp.exception.ReviewsNotEnabledException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @ControllerAdvice
@@ -65,7 +66,7 @@ public class ExceptionHandlerController
 	
 	@ExceptionHandler(RunsNotEnabledException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView RunsDisabled()
+	public ModelAndView runsDisabled()
 	{
 		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.interactionDisabled");
@@ -75,7 +76,17 @@ public class ExceptionHandlerController
 	
 	@ExceptionHandler(ScoresNotEnabledException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView ScoresDisabled()
+	public ModelAndView scoresDisabled()
+	{
+		ModelAndView m = new ModelAndView("error/errorException");
+		m.addObject("msg", "error.interactionDisabled");
+		m.addObject("loggedUser", us.getLoggedUser());
+		return m;
+	}
+	
+	@ExceptionHandler(ReviewsNotEnabledException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ModelAndView reviewsDisabled()
 	{
 		ModelAndView m = new ModelAndView("error/errorException");
 		m.addObject("msg", "error.interactionDisabled");
