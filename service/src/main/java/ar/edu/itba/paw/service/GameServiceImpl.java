@@ -29,6 +29,8 @@ import ar.edu.itba.paw.model.User;
 @Service
 public class GameServiceImpl implements GameService
 {
+
+
 	@Autowired
 	private GameDao gameDao;
 
@@ -39,6 +41,7 @@ public class GameServiceImpl implements GameService
 	private ImageService is;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
+	public static final String DEFAULT_GAME_COVER = "default-game-cover.png";
 
 	@Transactional
 	@Override
@@ -110,18 +113,22 @@ public class GameServiceImpl implements GameService
 	{
 		LOGGER.debug("Registering new game {} with cover {}, platforms {}", title, cover, platforms);
 		Game g = gameDao.register(title, null, description);
-		g.setCover(getCoverName(g.getId(), cover));
-		gameDao.update(g);
 		gameDao.addPlatforms(g.getId(), platforms);
 		gameDao.addDevelopers(g.getId(), developers);
 		gameDao.addPublishers(g.getId(), publishers);
 		gameDao.addGenres(g.getId(), genres);
 		gameDao.addReleaseDates(g.getId(), releaseDates);
-		try {
-			is.uploadImage(g.getCover(), cover.getBytes());
-		} catch (IOException e){
-			throw new BadFormatException();
+		if(!cover.isEmpty()) {
+			g.setCover(getCoverName(g.getId(), cover));
+			try {
+				is.uploadImage(g.getCover(), cover.getBytes());
+			} catch (IOException e){
+				throw new BadFormatException();
+			}
+		} else {
+			g.setCover(DEFAULT_GAME_COVER);
 		}
+		gameDao.update(g);
 		return g;
 	}
 
@@ -514,6 +521,6 @@ public class GameServiceImpl implements GameService
 	}
 
 	private String getCoverName(long id, MultipartFile cover){
-		return "cover-game-"+ id + FilenameUtils.getExtension(cover.getOriginalFilename());
+		return "cover-game-"+ id + "." + FilenameUtils.getExtension(cover.getOriginalFilename());
 	}
 }
