@@ -28,6 +28,12 @@
 			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 		</init-param>
 	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/images/static/*</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
@@ -40,11 +46,6 @@
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ico</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.png</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
