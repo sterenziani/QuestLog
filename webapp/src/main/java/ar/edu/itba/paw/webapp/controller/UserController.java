@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +88,12 @@ public class UserController
 			}
 			return new ModelAndView("redirect:" + referer);
 		}
+		String referrer = request.getHeader("Referer");
+		if(referrer == null)
+			request.getSession().setAttribute("url_prior_login", "/");
+		else if(!referrer.contains("login") && !referrer.contains("create")) {
+			request.getSession().setAttribute("url_prior_login", referrer);
+		}
 		return new ModelAndView("user/register");
 	}
 	
@@ -107,7 +114,18 @@ public class UserController
 		final User u = us.register(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail(), LocaleContextHolder.getLocale());
 		LOGGER.debug("User {} successfully created.", registerForm.getUsername());
 		authWithAuthManager(request, u.getUsername(), registerForm.getPassword());
-		return new ModelAndView("redirect:/");
+		String redirectUrl = "/";
+		HttpSession session = request.getSession();
+		if (session != null) {
+			redirectUrl = (String) session.getAttribute("url_prior_login");
+			if (redirectUrl != null) {
+				session.removeAttribute("url_prior_login");
+				if(redirectUrl.contains("create") || redirectUrl.contains("login")) {
+					redirectUrl = "/";
+				}
+			} else redirectUrl = "/";
+		}
+		return new ModelAndView("redirect:" + redirectUrl);
 	}
 	
 	@RequestMapping("/login")
@@ -120,6 +138,12 @@ public class UserController
 				return new ModelAndView("redirect:/");
 			}
 			return new ModelAndView("redirect:" + referer);
+		}
+		String referrer = request.getHeader("Referer");
+		if(referrer == null)
+			request.getSession().setAttribute("url_prior_login", "/");
+		else if(!referrer.contains("login") && !referrer.contains("create")) {
+			request.getSession().setAttribute("url_prior_login", referrer);
 		}
 		return new ModelAndView("user/login");
 	}
@@ -286,6 +310,7 @@ public class UserController
 	    authToken.setDetails(new WebAuthenticationDetails(request));
 	    Authentication authentication = authenticationManager.authenticate(authToken);
 	    SecurityContextHolder.getContext().setAuthentication(authentication);
+
         LOGGER.debug("User {} automatically logged in.", username);
 	}
 	

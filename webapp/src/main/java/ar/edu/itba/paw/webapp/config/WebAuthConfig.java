@@ -1,4 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
+import ar.edu.itba.paw.webapp.auth.RefererRedirectionAuthenticationSuccessHandler;
+import ar.edu.itba.paw.webapp.auth.RefererRedirectionLogoutSuccessHandler;
 import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +26,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 {
 	@Autowired
 	private PawUserDetailsService userDetails;
+
+	@Autowired
+	private RefererRedirectionAuthenticationSuccessHandler authSuccessHandler;
+
+	@Autowired
+	private RefererRedirectionLogoutSuccessHandler logoutSuccessHandler;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
@@ -59,9 +67,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 				.antMatchers("/profile", "/games/scores/**", "/createRun/**", "/reviews/**").authenticated()
 				.antMatchers("/**").permitAll()
 			.and().formLogin()
+				.successHandler(new RefererRedirectionAuthenticationSuccessHandler())
 				.usernameParameter("username")
 				.passwordParameter("password")
-				.defaultSuccessUrl("/", false)
 				.failureUrl("/login_error")
 				.loginPage("/login")
 			.and().rememberMe()
@@ -72,7 +80,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 			.and().logout()
 				.logoutUrl("/logout")
 				.deleteCookies("JSESSIONID")
-				.logoutSuccessUrl("/")
+				.logoutSuccessHandler(logoutSuccessHandler)
 			.and().exceptionHandling()
 				.accessDeniedPage("/error403")
 			.and().csrf().disable();
