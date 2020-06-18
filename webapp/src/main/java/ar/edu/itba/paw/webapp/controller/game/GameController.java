@@ -144,6 +144,9 @@ public class GameController {
                 return mav;
             }
 			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+            if(countResults == 1){
+                return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
+            }
 			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("games", filteredResults);
 
@@ -156,6 +159,9 @@ public class GameController {
                 return mav;
             }
 			List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+            if(countResults == 1){
+                return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
+            }
 			mav.addObject("games", filteredResults);
 		}
         LOGGER.debug("Search results for {} with advanced filters successfully extracted.", search);
@@ -204,6 +210,9 @@ public class GameController {
                 return mav;
             }
     		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+            if(countResults == 1){
+                return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
+            }
 			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("games", filteredResults);
             
@@ -216,6 +225,9 @@ public class GameController {
                 return mav;
             }
     		List<Game> filteredResults = gs.getFilteredGames(search, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE);
+            if(countResults == 1){
+                return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
+            }
 			mav.addObject("games", filteredResults);
 		}
 		return mav;
