@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,7 +47,7 @@ public class Review {
 	private boolean enabled;
 	
 	
-	Review()
+	public Review()
 	{
 		
 	}

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.dao.GameDao;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.entity.*;
 import org.springframework.stereotype.Repository;
 import javax.persistence.*;
 import java.time.LocalDate;

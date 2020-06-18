@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.constraints.Size;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.entity.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;

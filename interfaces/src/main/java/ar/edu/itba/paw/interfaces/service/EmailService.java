@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.User;
 
 public interface EmailService
 {

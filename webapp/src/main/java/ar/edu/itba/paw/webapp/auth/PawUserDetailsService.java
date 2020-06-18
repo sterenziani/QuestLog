@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.User;
 
 @Component
 public class PawUserDetailsService implements UserDetailsService

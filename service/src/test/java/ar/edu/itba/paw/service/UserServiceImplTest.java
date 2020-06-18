@@ -11,7 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.User;
 
 @RunWith (MockitoJUnitRunner.class)
 public class UserServiceImplTest

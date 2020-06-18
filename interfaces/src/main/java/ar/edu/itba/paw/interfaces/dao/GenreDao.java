@@ -2,7 +2,7 @@ package ar.edu.itba.paw.interfaces.dao;
 import java.util.List;
 import java.util.Optional;
 
-import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.entity.Genre;
 
 public interface GenreDao {
 	/**

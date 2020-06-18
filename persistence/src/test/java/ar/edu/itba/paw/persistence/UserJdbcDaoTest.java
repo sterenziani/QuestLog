@@ -26,9 +26,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.Run;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
+import ar.edu.itba.paw.model.entity.Run;
+import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.persistence.UserJdbcDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)

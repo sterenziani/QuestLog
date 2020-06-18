@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
 import ar.edu.itba.paw.interfaces.service.DeveloperService;
-import ar.edu.itba.paw.model.Developer;
+import ar.edu.itba.paw.model.entity.Developer;
 
 import org.springframework.transaction.annotation.Transactional;
 

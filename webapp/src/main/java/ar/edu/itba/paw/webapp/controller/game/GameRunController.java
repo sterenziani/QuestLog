@@ -18,10 +18,10 @@ import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Playstyle;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Platform;
+import ar.edu.itba.paw.model.entity.Playstyle;
+import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.RunsNotEnabledException;
 

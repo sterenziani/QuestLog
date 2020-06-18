@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Review;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Platform;
+import ar.edu.itba.paw.model.entity.Review;
+import ar.edu.itba.paw.model.entity.User;
 
 public interface ReviewDao {
 	

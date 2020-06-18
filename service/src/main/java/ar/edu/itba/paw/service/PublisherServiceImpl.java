@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
 import ar.edu.itba.paw.interfaces.service.PublisherService;
-import ar.edu.itba.paw.model.Publisher;
+import ar.edu.itba.paw.model.entity.Publisher;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 import java.util.List;
 import java.util.Optional;
-import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.entity.Platform;
 
 public interface PlatformService
 {

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ public class Role
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users = new HashSet<>();
 
-	Role()
+	public Role()
 	{
 		
 	}

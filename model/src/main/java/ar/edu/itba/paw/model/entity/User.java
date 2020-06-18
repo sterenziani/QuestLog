@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -55,7 +55,7 @@ public class User
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Score> scores = new HashSet<>();
 
-	User()
+	public User()
 	{
 		// Let Hibernate do the work
 	}

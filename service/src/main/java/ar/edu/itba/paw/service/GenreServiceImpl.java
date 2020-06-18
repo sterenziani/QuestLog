@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.GenreDao;
 import ar.edu.itba.paw.interfaces.service.GenreService;
-import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.entity.Genre;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

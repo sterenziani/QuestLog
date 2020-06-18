@@ -3,8 +3,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
+import ar.edu.itba.paw.model.entity.User;
 
 public interface UserDao
 {

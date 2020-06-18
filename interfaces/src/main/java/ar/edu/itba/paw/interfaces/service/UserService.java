@@ -2,7 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.User;
 
 public interface UserService
 {

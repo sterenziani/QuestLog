@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.model.entity.Region;
 
 import java.util.List;
 

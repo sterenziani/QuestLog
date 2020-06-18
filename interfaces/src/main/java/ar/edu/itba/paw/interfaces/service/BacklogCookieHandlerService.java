@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.User;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;

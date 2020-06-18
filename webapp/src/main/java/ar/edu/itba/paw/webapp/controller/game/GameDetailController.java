@@ -22,10 +22,10 @@ import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Review;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Review;
+import ar.edu.itba.paw.model.entity.Score;
+import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 

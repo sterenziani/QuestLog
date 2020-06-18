@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Score;
+import ar.edu.itba.paw.model.entity.User;
 
 @Service
 public class ScoreServiceImpl implements ScoreService{

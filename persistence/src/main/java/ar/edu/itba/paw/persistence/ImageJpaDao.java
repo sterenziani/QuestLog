@@ -7,7 +7,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.dao.ImageDao;
-import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.entity.Image;
 
 @Repository
 public class ImageJpaDao implements ImageDao

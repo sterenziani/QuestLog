@@ -3,11 +3,11 @@ package ar.edu.itba.paw.interfaces.dao;
 import java.util.List;
 import java.util.Optional;
 
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Playstyle;
-import ar.edu.itba.paw.model.Run;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Platform;
+import ar.edu.itba.paw.model.entity.Playstyle;
+import ar.edu.itba.paw.model.entity.Run;
+import ar.edu.itba.paw.model.entity.User;
 
 public interface RunDao {
 	

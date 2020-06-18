@@ -9,9 +9,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.Role;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
+import ar.edu.itba.paw.model.entity.Role;
+import ar.edu.itba.paw.model.entity.User;
 
 @Repository
 public class UserJpaDao implements UserDao

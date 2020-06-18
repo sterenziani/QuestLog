@@ -1,8 +1,6 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name="regions")

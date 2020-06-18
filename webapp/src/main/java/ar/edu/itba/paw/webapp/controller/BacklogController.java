@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @RequestMapping("/backlog")

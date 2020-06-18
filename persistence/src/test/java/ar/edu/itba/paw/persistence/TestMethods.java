@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.persistence;
-import java.sql.Date;
 import java.time.LocalDate;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.entity.*;
 
 import javax.persistence.EntityManager;
 public class TestMethods

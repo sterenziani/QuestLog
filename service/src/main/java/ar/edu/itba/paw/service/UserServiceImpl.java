@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
+import ar.edu.itba.paw.model.entity.User;
 
 @Service
 public class UserServiceImpl implements UserService{

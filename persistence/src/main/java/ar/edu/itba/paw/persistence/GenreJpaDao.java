@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.GenreDao;
-import ar.edu.itba.paw.model.Genre;
+import ar.edu.itba.paw.model.entity.Genre;
 
 @Repository
 public class GenreJpaDao implements GenreDao

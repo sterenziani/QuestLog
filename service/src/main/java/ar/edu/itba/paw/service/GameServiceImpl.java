@@ -18,13 +18,13 @@ import ar.edu.itba.paw.interfaces.dao.GameDao;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import org.springframework.web.multipart.MultipartFile;
-import ar.edu.itba.paw.model.Developer;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Genre;
-import ar.edu.itba.paw.model.Platform;
-import ar.edu.itba.paw.model.Publisher;
-import ar.edu.itba.paw.model.Release;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Developer;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Genre;
+import ar.edu.itba.paw.model.entity.Platform;
+import ar.edu.itba.paw.model.entity.Publisher;
+import ar.edu.itba.paw.model.entity.Release;
+import ar.edu.itba.paw.model.entity.User;
 
 @Service
 public class GameServiceImpl implements GameService

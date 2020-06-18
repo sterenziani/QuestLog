@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +23,7 @@ public class Image
 	@Column(name = "image_data")
     private byte[] imageData;
 
-    Image()
+    public Image()
     {
     	
     }

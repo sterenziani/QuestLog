@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -31,7 +31,7 @@ public class Score {
 	@Column(name = "score", nullable = false)
 	private int score;
 	
-	Score()
+	public Score()
 	{
 		
 	}

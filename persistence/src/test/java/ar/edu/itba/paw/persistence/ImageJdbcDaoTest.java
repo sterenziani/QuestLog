@@ -1,8 +1,8 @@
 /*package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ImageDao;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Image;
+import ar.edu.itba.paw.model.entity.User;
 import org.hsqldb.types.BinaryData;
 import org.junit.Assert;
 import org.junit.Before;

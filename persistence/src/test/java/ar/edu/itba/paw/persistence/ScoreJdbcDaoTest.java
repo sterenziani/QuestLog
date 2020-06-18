@@ -17,9 +17,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Score;
+import ar.edu.itba.paw.model.entity.User;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

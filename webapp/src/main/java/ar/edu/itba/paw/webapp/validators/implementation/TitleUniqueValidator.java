@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.edu.itba.paw.interfaces.service.GameService;
-import ar.edu.itba.paw.model.Game;
+import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.webapp.validators.anotation.TitleUnique;
 
 public class TitleUniqueValidator implements ConstraintValidator<TitleUnique, Object>

@@ -2,9 +2,9 @@ package ar.edu.itba.paw.interfaces.dao;
 import java.util.List;
 import java.util.Optional;
 
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Score;
+import ar.edu.itba.paw.model.entity.User;
 
 public interface ScoreDao {
 	/**

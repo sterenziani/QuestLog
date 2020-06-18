@@ -7,9 +7,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.ScoreDao;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.Score;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Score;
+import ar.edu.itba.paw.model.entity.User;
 
 @Repository
 public class ScoreJpaDao implements ScoreDao

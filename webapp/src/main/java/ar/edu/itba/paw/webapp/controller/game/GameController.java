@@ -19,8 +19,8 @@ import ar.edu.itba.paw.interfaces.service.GenreService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.PublisherService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Game;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.User;
 
 @Controller
 @ComponentScan("ar.edu.itba.paw.webapp.component")

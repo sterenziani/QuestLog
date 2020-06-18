@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.entity.*;
 import ar.edu.itba.paw.model.exception.BadFormatException;
 import org.springframework.web.multipart.MultipartFile;
 

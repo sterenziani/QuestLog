@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
-import ar.edu.itba.paw.model.Platform;
+import ar.edu.itba.paw.model.entity.Platform;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

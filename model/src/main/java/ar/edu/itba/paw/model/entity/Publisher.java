@@ -1,43 +1,43 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 
+
 @Entity
-@Table(name="developers")
-public class Developer 
+@Table(name="publishers")
+public class Publisher 
 {
-	
 	@Id
-	@Column(name = "developer")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "developers_developer_seq")
-	@SequenceGenerator(allocationSize = 1, sequenceName = "developers_developer_seq", name = "developers_developer_seq")
+	@Column(name = "publisher")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "publishers_publisher_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "publishers_publisher_seq", name = "publishers_publisher_seq")
 	private Long id;
 	
-	@Column(name = "developer_name", length = 75, nullable = false, unique = true)
+	@Column(name = "publisher_name", length = 75, nullable = false, unique = true)
 	private String name;
 	
-	@Column(name = "developer_logo")
+	@Column(name = "publisher_logo")
 	private String logo;
 
-	@ManyToMany(mappedBy = "developers", cascade = CascadeType.PERSIST)
+	@ManyToMany(mappedBy = "publishers", cascade = CascadeType.PERSIST)
 	private Set<Game> games = new HashSet<>();
 	
-	public Developer()
+	public Publisher()
 	{
 		
 	}
 	
 	@Deprecated
-	public Developer(long developer, String name, String logo)
+	public Publisher(long publisher, String name, String logo)
 	{
-		this.id = developer;
+		this.id = publisher;
 		this.name = name;
 		this.logo = logo;
 	}
 	
-	public Developer(String name, String logo)
+	public Publisher(String name, String logo)
 	{
 		this.name = name;
 		this.logo = logo;
@@ -83,7 +83,7 @@ public class Developer
 	public boolean hasGame(Game g){
 		return games.contains(g);
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
@@ -93,9 +93,9 @@ public class Developer
 	@Override
 	public boolean equals(Object o)
 	{
-		if(o instanceof Developer)
+		if(o instanceof Publisher)
 		{
-			Developer toCompare = (Developer) o;
+			Publisher toCompare = (Publisher) o;
 			return this.getName().equals(toCompare.getName());
 		}
 		return false;
@@ -106,4 +106,5 @@ public class Developer
 	{
 		return name;
 	}
+
 }

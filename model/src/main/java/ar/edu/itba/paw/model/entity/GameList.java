@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;

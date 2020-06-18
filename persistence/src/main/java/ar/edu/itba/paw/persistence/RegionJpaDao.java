@@ -5,7 +5,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.RegionDao;
-import ar.edu.itba.paw.model.Region;
+import ar.edu.itba.paw.model.entity.Region;
 
 @Repository
 public class RegionJpaDao implements RegionDao

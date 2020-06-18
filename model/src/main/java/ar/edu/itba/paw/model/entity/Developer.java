@@ -1,43 +1,43 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="genres")
-public class Genre
+@Table(name="developers")
+public class Developer 
 {
-
+	
 	@Id
-	@Column(name = "genre")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genres_genre_seq")
-	@SequenceGenerator(allocationSize = 1, sequenceName = "genres_genre_seq", name = "genres_genre_seq")
+	@Column(name = "developer")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "developers_developer_seq")
+	@SequenceGenerator(allocationSize = 1, sequenceName = "developers_developer_seq", name = "developers_developer_seq")
 	private Long id;
 	
-	@Column(name = "genre_name", length = 15, nullable = false, unique = true)
+	@Column(name = "developer_name", length = 75, nullable = false, unique = true)
 	private String name;
 	
-	@Column(name = "genre_logo")
+	@Column(name = "developer_logo")
 	private String logo;
 
-	@ManyToMany(mappedBy = "genres", cascade = CascadeType.PERSIST)
+	@ManyToMany(mappedBy = "developers", cascade = CascadeType.PERSIST)
 	private Set<Game> games = new HashSet<>();
 	
-	public Genre()
+	public Developer()
 	{
 		
 	}
 	
 	@Deprecated
-	public Genre(long genre, String name, String logo)
+	public Developer(long developer, String name, String logo)
 	{
-		this.id = genre;
+		this.id = developer;
 		this.name = name;
 		this.logo = logo;
 	}
 	
-	public Genre(String name, String logo)
+	public Developer(String name, String logo)
 	{
 		this.name = name;
 		this.logo = logo;
@@ -53,6 +53,11 @@ public class Genre
 		name = s;
 	}
 	
+	public String getName()
+	{
+		return name;
+	}
+	
 	public void setLogo(String link)
 	{
 		logo = link;
@@ -61,11 +66,6 @@ public class Genre
 	public String getLogo()
 	{
 		return logo;
-	}
-	
-	public String getName()
-	{
-		return name;
 	}
 
 	public Set<Game> getGames() {
@@ -83,7 +83,7 @@ public class Genre
 	public boolean hasGame(Game g){
 		return games.contains(g);
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -93,14 +93,14 @@ public class Genre
 	@Override
 	public boolean equals(Object o)
 	{
-		if(o instanceof Genre)
+		if(o instanceof Developer)
 		{
-			Genre toCompare = (Genre) o;
+			Developer toCompare = (Developer) o;
 			return this.getName().equals(toCompare.getName());
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString()
 	{

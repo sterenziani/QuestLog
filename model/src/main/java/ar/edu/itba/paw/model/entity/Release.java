@@ -1,8 +1,7 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.entity;
 import ar.edu.itba.paw.model.compositekeys.ReleaseKey;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
