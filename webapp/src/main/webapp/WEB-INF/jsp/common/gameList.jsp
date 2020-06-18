@@ -21,6 +21,11 @@
 	                <div class="m-auto"><img class="list-icon page-header-image" src="<c:url value="/images/${listIcon}"/>"/></div>
 	            </div>
 			</c:when>
+			<c:when test="${!empty amountResults}">
+				<div class="ml-auto my-auto">
+					<span class="text-white"><strong><c:out value="${amountResults}"/></strong> <spring:message code="search.resultsLabel"/></span>
+				</div>
+			</c:when>
 			<c:otherwise>
 			</c:otherwise>
 		</c:choose>

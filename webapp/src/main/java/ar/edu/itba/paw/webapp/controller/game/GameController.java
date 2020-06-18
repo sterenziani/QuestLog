@@ -147,6 +147,7 @@ public class GameController {
             if(countResults == 1){
                 return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
             }
+            mav.addObject("amountResults", countResults);
 			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("games", filteredResults);
 
@@ -162,6 +163,7 @@ public class GameController {
             if(countResults == 1){
                 return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
             }
+            mav.addObject("amountResults", countResults);
 			mav.addObject("games", filteredResults);
 		}
         LOGGER.debug("Search results for {} with advanced filters successfully extracted.", search);
@@ -213,6 +215,7 @@ public class GameController {
             if(countResults == 1){
                 return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
             }
+            mav.addObject("amountResults", countResults);
 			backlogCookieHandlerService.updateWithBacklogDetails(filteredResults, backlog);
 			mav.addObject("games", filteredResults);
             
@@ -228,6 +231,7 @@ public class GameController {
             if(countResults == 1){
                 return new ModelAndView("redirect:/games/" + filteredResults.stream().findFirst().get().getId());
             }
+            mav.addObject("amountResults", countResults);
 			mav.addObject("games", filteredResults);
 		}
 		return mav;
