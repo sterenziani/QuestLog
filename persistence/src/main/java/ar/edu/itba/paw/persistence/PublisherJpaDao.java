@@ -6,9 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+
+import ar.edu.itba.paw.model.entity.Publisher;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
-import ar.edu.itba.paw.model.Publisher;
 
 @Repository
 public class PublisherJpaDao implements PublisherDao

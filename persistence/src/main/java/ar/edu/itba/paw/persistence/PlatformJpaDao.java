@@ -6,9 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+
+import ar.edu.itba.paw.model.entity.Platform;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PlatformDao;
-import ar.edu.itba.paw.model.Platform;
 
 @Repository
 public class PlatformJpaDao implements PlatformDao
