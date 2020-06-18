@@ -50,9 +50,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	{
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
-	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception
 	{
 	      return super.authenticationManagerBean();
@@ -67,7 +66,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 				.antMatchers("/profile", "/games/scores/**", "/createRun/**", "/reviews/**").authenticated()
 				.antMatchers("/**").permitAll()
 			.and().formLogin()
-				.successHandler(new RefererRedirectionAuthenticationSuccessHandler())
+				.successHandler(authSuccessHandler)
 				.usernameParameter("username")
 				.passwordParameter("password")
 				.failureUrl("/login_error")
