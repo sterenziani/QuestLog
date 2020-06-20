@@ -25,6 +25,7 @@ public class PlatformJdbcDaoTest
 	private static final String GAME_TITLE = "Example Game";
 	private static final String GAME_COVER = "http://sega.com/game.jpg";
 	private static final String GAME_DESC = "Explore the world!";
+	private static final String GAME_TRAILER			= "DpHDJRGuL7w";
 	private	static final String PLATFORM_TABLE = "platforms";
 	private	static final String PLATFORM_NAME = "PlayStation 4";
 	private	static final String PLATFORM_SHORT_NAME = "PS4";
@@ -148,8 +149,8 @@ public class PlatformJdbcDaoTest
 		myList.add(ns);
 		myList.add(p);
 		myList.add(snes);
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, em);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, GAME_TRAILER, em);
 		TestMethods.connectPlatform(g2, p, em);
 		TestMethods.connectPlatform(g1, ns, em);
 		TestMethods.connectPlatform(g2, ns, em);
@@ -222,7 +223,7 @@ public class PlatformJdbcDaoTest
 		List<Platform> myList = new ArrayList<Platform>();
 		myList.add(ns);
 
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
 		
 		TestMethods.connectPlatform(g1, ns, em);
 		
@@ -247,8 +248,8 @@ public class PlatformJdbcDaoTest
 		myList.add(snes);
 		myList.add(xbox);
 
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, em);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+		Game g2 = TestMethods.addGame("game2", GAME_COVER, GAME_DESC, GAME_TRAILER, em);
 		
 		TestMethods.connectPlatform(g1, ns, em);
 		TestMethods.connectPlatform(g2, p, em);
@@ -289,7 +290,7 @@ public class PlatformJdbcDaoTest
 		myList.add(p);
 		myList.add(snes);
 
-		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+		Game g1 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
 		TestMethods.connectPlatform(g1, ns, em);
 		int count1 = platformDao.countPlatformsWithGames();
 		TestMethods.connectPlatform(g1, p, em);

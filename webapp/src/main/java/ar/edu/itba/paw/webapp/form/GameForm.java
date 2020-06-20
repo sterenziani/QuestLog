@@ -34,6 +34,8 @@ public class GameForm {
     @ImageSize(max=256000)
     private MultipartFile       cover;
 
+    private String              trailer;
+
     private List<Long>          platforms;
 
     private List<Long>          developers;
@@ -52,6 +54,7 @@ public class GameForm {
     	this.id = g.getId();
         this.title        = g.getTitle();
         this.description  = g.getDescription();
+        this.trailer      = g.getTrailer();
         this.platforms    = g.getPlatforms().stream().map(Platform::getId).collect(Collectors.toList());
         this.developers   = g.getDevelopers().stream().map(Developer::getId).collect(Collectors.toList());
         this.publishers   = g.getPublishers().stream().map(Publisher::getId).collect(Collectors.toList());
@@ -126,5 +129,13 @@ public class GameForm {
 
     public void setReleaseDates(Map<Long, LocalDate> releaseDates) {
         this.releaseDates = releaseDates;
+    }
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
     }
 }

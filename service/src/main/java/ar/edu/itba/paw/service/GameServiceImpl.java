@@ -109,10 +109,15 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public Game register(String title, MultipartFile cover, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException
+	public Game register(String title, MultipartFile cover, String description, String trailer, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException
 	{
 		LOGGER.debug("Registering new game {} with cover {}, platforms {}", title, cover, platforms);
-		Game g = gameDao.register(title, null, description);
+		Game g;
+		if(trailer != null && !trailer.isEmpty()) {
+			g = gameDao.register(title, null, description, trailer);
+		} else {
+			g = gameDao.register(title, null, description, null);
+		}
 		gameDao.addPlatforms(g.getId(), platforms);
 		gameDao.addDevelopers(g.getId(), developers);
 		gameDao.addPublishers(g.getId(), publishers);
@@ -487,11 +492,16 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public void update(long id, String title, MultipartFile cover, String description, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException {
+	public void update(long id, String title, MultipartFile cover, String description, String trailer, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException {
 		Optional<Game> optg = gameDao.findById(id);
 		Game		   g    = optg.get();
 		g.setTitle(title);
 		g.setDescription(description);
+		if(trailer != null && !trailer.isEmpty()) {
+			g.setTrailer(trailer);
+		} else {
+			g.setTrailer(null);
+		}
 		gameDao.removeAllPlatforms(g);
 		gameDao.removeAllDevelopers(g);
 		gameDao.removeAllPublishers(g);

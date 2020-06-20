@@ -25,6 +25,9 @@ public class Game
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "trailer")
+	private String trailer;
+
 	@Transient
 	private boolean inBacklog;
 
@@ -75,12 +78,13 @@ public class Game
 		//Just for Hibernate
 	}
 
-	public Game(String title, String cover, String description)
+	public Game(String title, String cover, String description, String trailer)
 	{
 		this.title = title;
 		this.cover = cover;
 		this.description = description;
 		this.inBacklog = false;
+		this.trailer = trailer;
 	}
 	
 	public Game(long game, String title, String cover, String description)
@@ -234,7 +238,15 @@ public class Game
 	{
 		return releaseDates;
 	}
-	
+
+	public String getTrailer() {
+		return trailer;
+	}
+
+	public void setTrailer(String trailer) {
+		this.trailer = trailer;
+	}
+
 	public boolean hasReleased()
 	{
 		for(Release r : releaseDates)

@@ -6,9 +6,9 @@ import ar.edu.itba.paw.model.entity.*;
 import javax.persistence.EntityManager;
 public class TestMethods
 {
-	public static Game addGame(String title, String cover, String desc, EntityManager em)
+	public static Game addGame(String title, String cover, String desc, String trailer, EntityManager em)
 	{
-		Game g = new Game(title, cover, desc);
+		Game g = new Game(title, cover, desc, trailer);
 		em.persist(g);
 		return g;
 	}

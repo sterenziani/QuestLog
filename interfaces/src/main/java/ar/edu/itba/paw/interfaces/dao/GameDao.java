@@ -73,7 +73,7 @@ public interface GameDao
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, String cover, String description);
+	Game register(String title, String cover, String description, String trailer);
 	
 	/**
 	 * Get a list of all available games.

@@ -79,7 +79,7 @@ public class AdminGameController
 		try
 		{
 			LOGGER.debug("Registering game {} to the database. Using file {} as cover.", gameForm.getTitle(), gameForm.getCover().getOriginalFilename());
-			final Game g = gs.register(gameForm.getTitle(), gameForm.getCover(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
+			final Game g = gs.register(gameForm.getTitle(), gameForm.getCover(), gameForm.getDescription(), gameForm.getTrailer(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 			LOGGER.debug("Game {} successfully registered!", gameForm.getTitle());
 			return new ModelAndView("redirect:/games/" + g.getId());
 		}
@@ -140,7 +140,7 @@ public class AdminGameController
 			return errorEditGame(id, gameForm);
 		try
 		{
-			gs.update(id, gameForm.getTitle(), gameForm.getCover(), gameForm.getDescription(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
+			gs.update(id, gameForm.getTitle(), gameForm.getCover(), gameForm.getDescription(), gameForm.getTrailer(), gameForm.getPlatforms(), gameForm.getDevelopers(), gameForm.getPublishers(), gameForm.getGenres(), gameForm.getReleaseDates());
 			return new ModelAndView("redirect:/games/" + id);
 		}
 		catch (BadFormatException e)

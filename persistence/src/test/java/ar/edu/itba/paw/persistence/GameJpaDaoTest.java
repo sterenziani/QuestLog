@@ -26,6 +26,7 @@ public class GameJpaDaoTest
     private static final String GAME_TITLE 				= "Example Game";
     private static final String GAME_COVER 				= "http://sega.com/game.jpg";
     private static final String GAME_DESC 				= "Explore the world!";
+    private static final String GAME_TRAILER			= "DpHDJRGuL7w";
     private	static final String DEVELOPER_TABLE 		= "developers";
     private	static final String DEVELOPER_NAME 			= "ITBA Studios";
     private	static final String DEVELOPER_LOGO 			= "https://itba.com/itba.jpg";
@@ -74,17 +75,17 @@ public class GameJpaDaoTest
     @Test
     public void	testFindGameByIdExists()
     {
-        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Optional<Game> maybeGame = gameDao.findById(g.getId());
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
         Assert.assertEquals(GAME_COVER, maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
     }
 
     @Test
     public void testFindGameByIdWithDetailsGetsPlatform(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 						= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         TestMethods.connectPlatform(g, p, em);
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
@@ -97,7 +98,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByIdWithDetailsGetsDevelopers(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d 					= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         TestMethods.connectDev(g, d, em);
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
@@ -109,7 +110,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByIdWithDetailsGetsPublishers(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p 					= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         TestMethods.connectPub(g, p, em);
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
@@ -121,7 +122,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByIdWithDetailsGetsGenres(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen 						= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         TestMethods.connectGenre(g, gen, em);
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
@@ -133,7 +134,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByIdWithDetailsGetsReleaseDates(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Region region 					= TestMethods.addRegion(REGION_NAME, REGION_SHORT, em);
         TestMethods.addRelease(g, region, RELEASE_DATE, em);
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
@@ -155,17 +156,17 @@ public class GameJpaDaoTest
     @Test
     public void	testFindGameByTitleExists()
     {
-        TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Optional<Game> maybeGame = gameDao.findByTitle(GAME_TITLE);
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
         Assert.assertEquals(GAME_COVER, maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
     }
 
     @Test
     public void testFindGameByTitleWithDetailsGetsPlatform(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 						= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         TestMethods.connectPlatform(g, p, em);
         Optional<Game> maybeGame 	= gameDao.findByTitleWithDetails(GAME_TITLE);
@@ -178,7 +179,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByTitleWithDetailsGetsDevelopers(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d 					= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         TestMethods.connectDev(g, d, em);
         Optional<Game> maybeGame 	= gameDao.findByTitleWithDetails(GAME_TITLE);
@@ -190,7 +191,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByTitleWithDetailsGetsPublishers(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p 					= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         TestMethods.connectPub(g, p, em);
         Optional<Game> maybeGame 	= gameDao.findByTitleWithDetails(GAME_TITLE);
@@ -202,7 +203,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByTitleWithDetailsGetsGenres(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen 						= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         TestMethods.connectGenre(g, gen, em);
         Optional<Game> maybeGame 	= gameDao.findByTitleWithDetails(GAME_TITLE);
@@ -214,7 +215,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testFindGameByTitleWithDetailsGetsReleaseDates(){
-        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Region region 					= TestMethods.addRegion(REGION_NAME, REGION_SHORT, em);
         TestMethods.addRelease(g, region, RELEASE_DATE, em);
         Optional<Game> maybeGame 	= gameDao.findByTitleWithDetails(GAME_TITLE);
@@ -229,29 +230,29 @@ public class GameJpaDaoTest
     @Test
     public void	testChangeGameTitle()
     {
-        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Optional<Game> maybeGame = gameDao.changeTitle(g.getId(), "Zenobureido");
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals("Zenobureido", maybeGame.get().getTitle());
         Assert.assertEquals(GAME_COVER, maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
     }
 
     @Test
     public void	testChangeGameCover()
     {
-        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Optional<Game> maybeGame = gameDao.changeCover(g.getId(), "http://fake.com/image.png");
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
         Assert.assertEquals("http://fake.com/image.png", maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
     }
 
     @Test
     public void	testChangeGameDesc()
     {
-        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Optional<Game> maybeGame = gameDao.changeDescription(g.getId(), "This is a new description!");
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
@@ -261,7 +262,7 @@ public class GameJpaDaoTest
 
     public void testRegister()
     {
-        gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC);
+        gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER);
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, GAME_TABLE, "title ='" + GAME_TITLE +"' AND cover = '"
         //        + GAME_COVER + "' AND description = '" + GAME_DESC + "'"));
     }
@@ -269,8 +270,8 @@ public class GameJpaDaoTest
     @Test
     public void	testGetAllGames()
     {
-        Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, em);
+        Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, GAME_TRAILER, em);
 
         List<Game> gamesList = gameDao.getAllGames();
         List<Game> myList = new ArrayList<Game>();
@@ -285,7 +286,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddPlatform(){
-        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 	= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         gameDao.addPlatform(g, p);
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + p.getId() + "'"));
@@ -297,7 +298,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddPlatforms(){
-        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 	= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         Platform ap	= TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, em);
 
@@ -312,7 +313,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveSpecificPlatform(){
-        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 	= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         Platform ap	= TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, em);
 
@@ -327,7 +328,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveAllPlatforms(){
-        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 	= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         Platform ap	= TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, em);
 
@@ -341,7 +342,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddDeveloper(){
-        Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         gameDao.addDeveloper(g, d);
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + d.getId() + "'"));
@@ -352,7 +353,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddDevelopers(){
-        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d  = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         Developer ad = TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, em);
 
@@ -367,7 +368,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveSpecificDeveloper(){
-        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d  = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         Developer ad = TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, em);
 
@@ -382,7 +383,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveAllDevelopers(){
-        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d  = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         Developer ad = TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, em);
 
@@ -396,7 +397,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddPublisher(){
-        Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         gameDao.addPublisher(g, p);
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + p.getId() + "'"));
@@ -407,7 +408,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddPublishers(){
-        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p  = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         Publisher ap = TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, em);
 
@@ -422,7 +423,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveSpecificPublisher(){
-        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p  = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         Publisher ap = TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, em);
 
@@ -437,7 +438,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveAllPublishers(){
-        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p  = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         Publisher ap = TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, em);
 
@@ -451,7 +452,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddGenre(){
-        Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         gameDao.addGenre(g, gen);
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + gen.getId() + "'"));
@@ -462,7 +463,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testAddGenres(){
-        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen  	= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Genre agen 	= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
@@ -477,7 +478,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveSpecificGenre(){
-        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen  	= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Genre agen 	= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
@@ -492,7 +493,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemoveAllGenres(){
-        Game g 	 	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g 	 	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen  	= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Genre agen 	= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
@@ -511,8 +512,8 @@ public class GameJpaDaoTest
 
     @Test
     public void testSearchByTitle(){
-        TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         List<Game> matches 			= gameDao.searchByTitle(SEARCH_TERM, 1, 2);
         Assert.assertEquals(1, matches.size());
         Optional<Game> maybeMatch 	= matches.stream().findFirst();
@@ -532,7 +533,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testIsInBacklogWhenItIs(){
-        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         TestMethods.addBacklog(g, u, em);
         Assert.assertTrue(gameDao.isInBacklog(g.getId(), u));
@@ -540,7 +541,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testIsInBacklogWhenItIsNot(){
-        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         User u = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         Assert.assertFalse(gameDao.isInBacklog(g.getId(), u));
     }
@@ -551,8 +552,8 @@ public class GameJpaDaoTest
 
     @Test
     public void removeFromBacklog(){
-        Game g 	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	= TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         TestMethods.addBacklog(g, u, em);
         TestMethods.addBacklog(ag, u, em);
@@ -573,9 +574,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesInBacklog(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
 
@@ -603,9 +604,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesInBacklogPaginated(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
 
@@ -625,9 +626,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testCountGamesInBacklog(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
 
@@ -654,8 +655,8 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetSimilarToBacklog(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
         User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, em);
@@ -679,8 +680,8 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetMostBacklogged(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
         User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, em);
@@ -702,10 +703,10 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetFiltered(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game sw  = TestMethods.addGame("Star Wars Republic", ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game sw  = TestMethods.addGame("Star Wars Republic", ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         Genre gen  = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
@@ -725,17 +726,17 @@ public class GameJpaDaoTest
 
     @Test
     public void testCountSearchResults(){
-        TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        TestMethods.addGame(NON_MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        TestMethods.addGame(MATCHING_GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         int matches 			= gameDao.countSearchResults(SEARCH_TERM);
         Assert.assertEquals(1, matches);
     }
 
     @Test
     public void testGetGamesForPlatformAllGamesSinglePage(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         Platform ap = TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, em);
 
@@ -754,9 +755,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForPlatformAllGamesSingleTwoPages(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         Platform ap = TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, em);
 
@@ -774,9 +775,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testCountGamesForPlatform(){
-        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag = TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         Platform ap = TestMethods.addPlatform(ALTERNATIVE_PLATFORM_NAME, ALTERNATIVE_PLATFORM_SHORT_NAME, ALTERNATIVE_PLATFORM_LOGO, em);
 
@@ -793,9 +794,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForGenreAllGamesSinglePage(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
@@ -814,9 +815,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForGenreAllGamesSingleTwoPages(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
@@ -833,9 +834,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testCountGetGamesForGenre(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
@@ -855,9 +856,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForDeveloperAllGamesSinglePage(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         Developer ad	= TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, em);
 
@@ -876,9 +877,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForDeveloperAllGamesSingleTwoPages(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         Developer ad	= TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, em);
 
@@ -895,9 +896,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testCountGetGamesForDeveloper(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         Developer ad	= TestMethods.addDeveloper(ALTERNATIVE_DEVELOPER_NAME, ALTERNATIVE_DEVELOPER_LOGO, em);
 
@@ -913,9 +914,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForPublisherAllGamesSinglePage(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         Publisher ap	= TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, em);
 
@@ -934,9 +935,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testGetGamesForPublisherAllGamesSingleTwoPages(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         Publisher ap	= TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, em);
 
@@ -953,9 +954,9 @@ public class GameJpaDaoTest
 
     @Test
     public void testCountGetGamesForPublisher(){
-        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
-        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g 	 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag  		= TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
+        Game aag 		= TestMethods.addGame(ANOTHER_ALTERNATIVE_GAME_TITLE, ANOTHER_ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         Publisher ap	= TestMethods.addPublisher(ALTERNATIVE_PUBLISHER_NAME, ALTERNATIVE_PUBLISHER_LOGO, em);
 
@@ -971,8 +972,8 @@ public class GameJpaDaoTest
 
     @Test
     public void testRemove(){
-        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, em);
+        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         gameDao.remove(g);
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, GAME_TABLE));
         //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, GAME_TABLE, "game = '" + ag.getId() + "'"));
@@ -980,7 +981,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testUpdate(){
-        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         g.setTitle(ALTERNATIVE_GAME_TITLE);
         g.setCover(ALTERNATIVE_GAME_COVER);
         g.setDescription(ALTERNATIVE_GAME_DESC);
@@ -992,7 +993,7 @@ public class GameJpaDaoTest
 
     @Test
     public void testUpdateWithoutCover(){
-        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
+        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         g.setTitle(ALTERNATIVE_GAME_TITLE);
         g.setCover(ALTERNATIVE_GAME_COVER);
         g.setDescription(ALTERNATIVE_GAME_DESC);
@@ -1005,8 +1006,8 @@ public class GameJpaDaoTest
     @Test
     public void	testGetAllGamesSimplified()
     {
-        Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, em);
-        Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, em);
+        Game example = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
+        Game botw = TestMethods.addGame("The Legend of Zelda: Breath of the Wild", GAME_COVER, GAME_DESC, GAME_TRAILER, em);
 
         List<Game> gamesList = gameDao.getAllGames();
         List<Game> myList = new ArrayList<Game>();

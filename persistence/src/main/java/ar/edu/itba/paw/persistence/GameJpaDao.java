@@ -90,8 +90,8 @@ public class GameJpaDao implements GameDao {
     }
 
     @Override
-    public Game register(String title, String cover, String description) {
-        Game g = new Game(title, cover, description);
+    public Game register(String title, String cover, String description, String trailer) {
+        Game g = new Game(title, cover, description, trailer);
         em.persist(g);
         return g;
     }

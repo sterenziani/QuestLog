@@ -52,6 +52,26 @@
                     <form:input path="cover" name="file" type="file" accept="image/png, image/jpeg" class="form-control-file"/>
                 </div>
                 <div class="form-group">
+                    <form:label for="trailer" path="trailer" ><strong><spring:message code="gameForm.trailer"/></strong></form:label>
+                    <form:errors path="trailer" class="form-error" element="p"/>
+                    <c:set var="trailer"><spring:message code="gameForm.trailerPlaceholder"/></c:set>
+                    <form:input onchange="updatePreview(this.value)" cssClass="form-control" path="trailer" name="trailer" type="text" placeholder="${trailer}"/>
+
+                </div>
+                <div class="form-group">
+                    <div class="mb-2">
+                        <strong><spring:message code="gameForm.trailer.preview"/></strong>
+                    </div>
+                    <iframe id="preview" width="286" height="161" src="https://www.youtube.com/embed/<c:out value="${gameForm.trailer}"/>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <script>
+
+                        function updatePreview(val){
+                            document.getElementById("preview").src = "https://www.youtube.com/embed/" + val;
+                        }
+                    </script>
+                </div>
+
+                <div class="form-group">
                     <c:set var="path" value="platforms"/>
                     <form:label path="${path}"><strong><spring:message code="gameForm.platforms"/></strong></form:label>
 
