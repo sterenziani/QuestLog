@@ -107,12 +107,12 @@ public class TestMethods
 		return i;
 	}
 	
-	public static int addRole(String roleName, EntityManager em)
+	public static Role addRole(String roleName, EntityManager em)
 	{
 		Role r = new Role(roleName);
 		em.persist(r);
 		em.flush();
-		return r.getRole().intValue();
+		return r;
 	}
 	
 	public static void connectDev(Game g, Developer d, EntityManager em)
@@ -149,9 +149,9 @@ public class TestMethods
 		em.flush();
 	}
 	
-	public static void connectRoles(User u, int roleId, EntityManager em)
+	public static void connectRoles(User u, Role role, EntityManager em)
 	{
-		u.addRole(new Role(roleId));
+		u.addRole(role);
 		em.flush();
 	}
 	

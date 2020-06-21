@@ -1,39 +1,32 @@
-/*package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence;
+import ar.edu.itba.paw.model.entity.Role;
 import org.junit.Test;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-import org.hsqldb.jdbc.JDBCDriver;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.model.entity.PasswordResetToken;
-import ar.edu.itba.paw.model.entity.Run;
 import ar.edu.itba.paw.model.entity.User;
-import ar.edu.itba.paw.persistence.UserJdbcDao;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-public class UserJdbcDaoTest
+@Transactional
+public class UserJpaDaoTest
 {
 	private	static final String USERNAME = "Username";
 	private	static final String PASSWORD = "password";
@@ -45,7 +38,7 @@ public class UserJdbcDaoTest
 	private	static final String ASSIGN_TABLE = "role_assignments";
 	private	static final String TOKEN_TABLE = "tokens";
 	private	static final String TOKEN = "token";
-	private	static final Date DATE = new Date(2323223232L);
+	private	static final LocalDate DATE = LocalDate.of(1976,6, 25);
 
 	@PersistenceContext
 	EntityManager em;
@@ -56,30 +49,12 @@ public class UserJdbcDaoTest
 	@Autowired
 	private UserJpaDao userDao;
 	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert jdbcInsert;
-	private SimpleJdbcInsert roleInsert;
-	private SimpleJdbcInsert assignInsert;
-	private SimpleJdbcInsert tokenInsert;
 
 	
 	@Before
 	public void	setUp()
 	{
-		userDao = new UserJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-
-		jdbcInsert = new SimpleJdbcInsert(ds).withTableName(USER_TABLE).usingGeneratedKeyColumns("user_id");
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
-
-
-		roleInsert = new SimpleJdbcInsert(ds).withTableName(ROLES_TABLE).usingGeneratedKeyColumns("role");
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, ROLES_TABLE);
-
-		assignInsert = new SimpleJdbcInsert(ds).withTableName(ASSIGN_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, ASSIGN_TABLE);
-
-		tokenInsert = new SimpleJdbcInsert(ds).withTableName(TOKEN_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, TOKEN_TABLE);
 		
 	}
 
@@ -103,7 +78,7 @@ public class UserJdbcDaoTest
 	@Test
 	public void	testFindByIdUserExists ()
 	{
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		
 		Optional<User> maybeUser = userDao.findById(u.getId());
 		Assert.assertTrue(maybeUser.isPresent());
@@ -120,7 +95,7 @@ public class UserJdbcDaoTest
 	@Test
 	public void	testFindByUsernameExists ()
 	{
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		
 		Optional<User> maybeUser = userDao.findByUsername(u.getUsername());
 		Assert.assertTrue(maybeUser.isPresent());
@@ -139,7 +114,7 @@ public class UserJdbcDaoTest
 	@Test
 	public void	testFindByEmailExists ()
 	{
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		
 		Optional<User> maybeUser = userDao.findByEmail(u.getEmail());
 		Assert.assertTrue(maybeUser.isPresent());
@@ -149,8 +124,8 @@ public class UserJdbcDaoTest
 	@Test
 	public void	testGetAllUsers ()
 	{
-		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		User u2 = TestMethods.addUser("user2", PASSWORD, "user2@aol.com", LOCALE, jdbcInsert);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
+		User u2 = TestMethods.addUser("user2", PASSWORD, "user2@aol.com", LOCALE, em);
 
 		List<User> users = userDao.getAllUsers();
 		List<User> myList = new ArrayList<User>();
@@ -168,7 +143,7 @@ public class UserJdbcDaoTest
 	@Test
 	public void testChangePassword()
 	{
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		userDao.changePassword(u, "NewPass");
 		Optional<User> user = userDao.findById(u.getId());
 		
@@ -179,9 +154,9 @@ public class UserJdbcDaoTest
 	@Test
 	public void testCountUserSearchResults()
 	{
-		TestMethods.addUser("UsER1", PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		TestMethods.addUser("PoouS", PASSWORD, EMAIL + "ar", LOCALE, jdbcInsert);
-		TestMethods.addUser("hola", PASSWORD, EMAIL + "uk", LOCALE, jdbcInsert);
+		TestMethods.addUser("UsER1", PASSWORD, EMAIL, LOCALE, em);
+		TestMethods.addUser("PoouS", PASSWORD, EMAIL + "ar", LOCALE, em);
+		TestMethods.addUser("hola", PASSWORD, EMAIL + "uk", LOCALE, em);
 		
 		int count1 = userDao.countUserSearchResults("us");
 		int count2 = userDao.countUserSearchResults("");
@@ -196,8 +171,8 @@ public class UserJdbcDaoTest
 	@Test
 	public void testFindTokenByToken()
 	{
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		TestMethods.addToken(u, TOKEN, DATE, tokenInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
+		TestMethods.addToken(u, TOKEN, DATE, em);
 		Optional<PasswordResetToken> tok = userDao.findTokenByToken(TOKEN);
 		
 		Assert.assertTrue(tok.isPresent());
@@ -206,8 +181,8 @@ public class UserJdbcDaoTest
 	
 	@Test
 	public void testDeleteTokenForUser() {
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		TestMethods.addToken(u, TOKEN, DATE, tokenInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
+		TestMethods.addToken(u, TOKEN, DATE, em);
 		Optional<PasswordResetToken> tok = userDao.findTokenByToken(TOKEN);
 		
 		Assert.assertTrue(tok.isPresent());
@@ -222,7 +197,7 @@ public class UserJdbcDaoTest
 	
 	@Test
 	public void testUpdateLocale() {
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		userDao.updateLocale(u, LOCALE_LOC);
 		Optional<User> user = userDao.findById(u.getId());
 		Assert.assertEquals(user.get().getLocale(), LOCALE_LOC);
@@ -232,8 +207,8 @@ public class UserJdbcDaoTest
 	@Test
 	public void testAddAdmin()
 	{
-		int role = TestMethods.addRole("Admin", roleInsert);
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
+		Role role = TestMethods.addRole("Admin", em);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		userDao.addAdmin(u);
 		Optional<User> user = userDao.findById(u.getId());
 		Assert.assertTrue(user.get().getAdminStatus());	
@@ -242,9 +217,9 @@ public class UserJdbcDaoTest
 	@Test
 	public void testDeleteAdmin()
 	{
-		int role = TestMethods.addRole("Admin", roleInsert);
-		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		TestMethods.connectRoles(u, role, assignInsert);
+		Role role = TestMethods.addRole("Admin", em);
+		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
+		TestMethods.connectRoles(u, role, em);
 
 		userDao.removeAdmin(u);
 		Optional<User> user = userDao.findById(u.getId());
@@ -255,12 +230,12 @@ public class UserJdbcDaoTest
 	@Test
 	public void testFindUserByToken()
 	{
-		int role = TestMethods.addRole("Admin", roleInsert);
-		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		TestMethods.connectRoles(u1, role, assignInsert);
-		User u2 = TestMethods.addUser("user2", PASSWORD, EMAIL + ".ar", LOCALE, jdbcInsert);
-		TestMethods.addToken(u1, TOKEN, DATE, tokenInsert);
-		TestMethods.addToken(u2, TOKEN + "2", DATE, tokenInsert);
+		Role role = TestMethods.addRole("Admin", em);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
+		TestMethods.connectRoles(u1, role, em);
+		User u2 = TestMethods.addUser("user2", PASSWORD, EMAIL + ".ar", LOCALE, em);
+		TestMethods.addToken(u1, TOKEN, DATE, em);
+		TestMethods.addToken(u2, TOKEN + "2", DATE, em);
 		Optional<User> user1 = userDao.findUserByToken(TOKEN);
 		Optional<User> user2 = userDao.findUserByToken(TOKEN + "2");
 		Optional<User> user3 = userDao.findUserByToken(TOKEN + "3");
@@ -279,12 +254,12 @@ public class UserJdbcDaoTest
 	@Test
 	public void	searchByUsernamePaged()
 	{	
-		int role = TestMethods.addRole("Admin", roleInsert);
-		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, jdbcInsert);
-		TestMethods.connectRoles(u1, role, assignInsert);
-		User u2 = TestMethods.addUser("user2", PASSWORD, "user2@aol.com", LOCALE, jdbcInsert);
-		User u3 = TestMethods.addUser("uSer3", PASSWORD, "user3@aol.com", LOCALE, jdbcInsert);
-		User u4 = TestMethods.addUser("pepe1234", PASSWORD, "user4@aol.com", LOCALE, jdbcInsert);
+		Role role = TestMethods.addRole("Admin", em);
+		User u1 = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
+		TestMethods.connectRoles(u1, role, em);
+		User u2 = TestMethods.addUser("user2", PASSWORD, "user2@aol.com", LOCALE, em);
+		User u3 = TestMethods.addUser("uSer3", PASSWORD, "user3@aol.com", LOCALE, em);
+		User u4 = TestMethods.addUser("pepe1234", PASSWORD, "user4@aol.com", LOCALE, em);
 
 		List<User> users1 = userDao.searchByUsernamePaged("", 2,2);
 		List<User> users2 = userDao.searchByUsernamePaged("us", 2,2);
@@ -306,17 +281,20 @@ public class UserJdbcDaoTest
 		Assert.assertEquals(1, users2.size());
 		Assert.assertEquals(3, users3.size());
 
-		Assert.assertEquals(users1.get(0).getId(), myList.get(2).getId());
-		Assert.assertEquals(users1.get(1).getId(), myList.get(3).getId());
-		
-		Assert.assertEquals(users2.get(0).getId(), myList.get(2).getId());
-		
-		Assert.assertEquals(users3.get(0).getId(), myList.get(0).getId());
-		Assert.assertEquals(users3.get(1).getId(), myList.get(1).getId());
-		Assert.assertEquals(users3.get(2).getId(), myList.get(2).getId());
-		Assert.assertTrue(users3.get(0).getAdminStatus());
-		Assert.assertFalse(users3.get(1).getAdminStatus());
+		Assert.assertTrue(myList.subList(1, 3).containsAll(users1));
+
+        System.out.println(myList.subList(1, 2));
+        System.out.println(users2);
+		Assert.assertTrue(myList.subList(1, 2).containsAll(users2));
+
+
+		Assert.assertTrue(myList.subList(0,3).containsAll(users3));
+		User adminUser = users3.stream().filter(user -> USERNAME.equals(user.getUsername())).findAny().orElse(null);
+        Assert.assertNotNull(adminUser);
+        Assert.assertTrue(adminUser.getAdminStatus());
+        User normalUser = users3.stream().filter(user -> "uSer3".equals(user.getUsername())).findAny().orElse(null);
+        Assert.assertNotNull(normalUser);
+        Assert.assertFalse(normalUser.getAdminStatus());
 		
 	}
 }
-*/
