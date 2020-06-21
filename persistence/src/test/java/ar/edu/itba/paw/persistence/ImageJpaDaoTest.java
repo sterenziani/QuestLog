@@ -1,50 +1,43 @@
-/*package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.dao.ImageDao;
 import ar.edu.itba.paw.model.entity.Image;
-import ar.edu.itba.paw.model.entity.User;
-import org.hsqldb.types.BinaryData;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Sql(scripts = {"classpath:schema.sql"})
-public class ImageJdbcDaoTest {
+@Transactional
+public class ImageJpaDaoTest {
 
     private static final String IMAGE_TABLE         = "images";
     private static final String IMAGE_KEY_COLUMN    = "image";
+    
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private DataSource ds;
 
     @Autowired
-    private ImageJdbcDao        imageJdbcDao;
+    private ImageJpaDao         imageJdbcDao;
     private JdbcTemplate        jdbcTemplate;
-    private SimpleJdbcInsert    jdbcInsert;
 
     @Before
     public void setUp(){
-        imageJdbcDao    = new ImageJdbcDao(ds);
         jdbcTemplate    = new JdbcTemplate(ds);
-        jdbcInsert      = new SimpleJdbcInsert(ds).withTableName(IMAGE_TABLE).usingGeneratedKeyColumns(IMAGE_KEY_COLUMN);
     }
 
     private static final String      IMAGE_NAME      = "sample.jpg";
@@ -64,7 +57,7 @@ public class ImageJdbcDaoTest {
     {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
 
-        TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, jdbcInsert);
+        TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, em);
 
         Optional<Image> maybeImage = imageJdbcDao.findByImageName(IMAGE_NAME);
         Assert.assertTrue(maybeImage.isPresent());
@@ -77,8 +70,8 @@ public class ImageJdbcDaoTest {
     public void testRemoveByName()
     {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
-        TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, jdbcInsert);
-        Image image2 = TestMethods.addImage("pic", IMAGE_DATA, jdbcInsert);
+        TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, em);
+        Image image2 = TestMethods.addImage("pic", IMAGE_DATA, em);
         
         imageJdbcDao.removeByName(image2.getImageName());
 
@@ -91,4 +84,3 @@ public class ImageJdbcDaoTest {
         Assert.assertEquals(IMAGE_NAME, maybeImage2.get().getImageName());
     }
 }
-*/
