@@ -19,7 +19,7 @@ import ar.edu.itba.paw.model.entity.Platform;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
-public class PlatformJdbcDaoTest
+public class PlatformJpaDaoTest
 {
 	private	static final String GAME_TABLE = "games";
 	private static final String GAME_TITLE = "Example Game";
