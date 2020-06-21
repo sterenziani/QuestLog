@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.service;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.interfaces.dao.ReviewDao;
@@ -69,7 +72,9 @@ public class ReviewServiceImpl implements ReviewService {
 	@Transactional
 	@Override
 	public Optional<Review> changeReviewBody(long review, String body) {
-		return reviewDao.changeReviewBody(review, body);
+		body = body.replace("\r", "");
+		List<String> lines = Arrays.stream(body.split("\n")).collect(Collectors.toList());
+		return reviewDao.changeReviewBody(review, lines);
 	}
 
 	@Transactional
@@ -81,7 +86,9 @@ public class ReviewServiceImpl implements ReviewService {
 	@Transactional
 	@Override
 	public Review register(User user, Game game, Platform platform, int score, String body, LocalDate date) {
-		return reviewDao.register(user, game, platform, score, body, date);
+		body = body.replace("\r", "");
+		List<String> lines = Arrays.stream(body.split("\n")).collect(Collectors.toList());
+		return reviewDao.register(user, game, platform, score, lines, date);
 	}
 
 	@Transactional

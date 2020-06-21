@@ -131,7 +131,7 @@ public class ReviewJpaDao implements ReviewDao {
 	}
 
 	@Override
-	public Optional<Review> changeReviewBody(long review, String body) {
+	public Optional<Review> changeReviewBody(long review, List<String> body) {
 		Review rev = em.find(Review.class, review);
 		if(rev != null)
 			rev.setBody(body);
@@ -145,7 +145,7 @@ public class ReviewJpaDao implements ReviewDao {
 	}
 
 	@Override
-	public Review register(User user, Game game, Platform platform, int score, String body, LocalDate date) {
+	public Review register(User user, Game game, Platform platform, int score, List<String> body, LocalDate date) {
 		final Review rev = new Review(user, game, platform, score, body, date);
 		em.persist(rev);
 		return rev;

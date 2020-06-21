@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 import java.time.LocalDate;
+import java.util.List;
 
 import ar.edu.itba.paw.model.entity.*;
 
@@ -67,7 +68,7 @@ public class TestMethods
 		return s;
 	}
 	
-	public static Review addReview(User user, Game game, Platform platform, int score, String body, LocalDate date, EntityManager em) {
+	public static Review addReview(User user, Game game, Platform platform, int score, List<String> body, LocalDate date, EntityManager em) {
 		Review r = new Review(user, game, platform, score, body, date);
 		em.persist(r);
 		return r;

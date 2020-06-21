@@ -1,16 +1,8 @@
 package ar.edu.itba.paw.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="reviews")
@@ -36,9 +28,9 @@ public class Review {
 	
 	@Column(nullable = false)
 	private int score;
-	
-	@Column(length = 15000)
-	private String body;
+
+	@ElementCollection
+	private List<String> body;
 	
 	@Column
 	private LocalDate post_date;
@@ -53,7 +45,7 @@ public class Review {
 	}
 	
 	@Deprecated
-	public Review (long review, User user, Game game, Platform platform, int score, String body, LocalDate post_date)
+	public Review (long review, User user, Game game, Platform platform, int score, List<String> body, LocalDate post_date)
 	{
 		this.id = review;
 		this.user = user;
@@ -65,7 +57,7 @@ public class Review {
 		this.enabled = true;
 	}
 	
-	public Review (User user, Game game, Platform platform, int score, String body, LocalDate post_date)
+	public Review (User user, Game game, Platform platform, int score, List<String> body, LocalDate post_date)
 	{
 		this.user = user;
 		this.game = game;
@@ -96,11 +88,11 @@ public class Review {
 	public int getScore() {
 		return score;
 	}
-	
-	public String getBody() {
+
+	public List<String> getBody() {
 		return body;
 	}
-	
+
 	public LocalDate getPostDate() {
 		return post_date;
 	}
@@ -116,11 +108,11 @@ public class Review {
 	public void setPlatform(Platform p) {
 		platform = p;
 	}
-	
-	public void setBody(String b) {
-		body = b;
+
+	public void setBody(List<String> body) {
+		this.body = body;
 	}
-	
+
 	public void setPostDate(LocalDate pd) {
 		post_date = pd;
 	}
@@ -165,6 +157,10 @@ public class Review {
 	
 	@Override
 	public String toString() {
-		return body;	
+		StringBuilder str = new StringBuilder();
+		for(String line : body){
+			str.append(line).append("\r\n");
+		}
+		return str.toString();
 	}
 }

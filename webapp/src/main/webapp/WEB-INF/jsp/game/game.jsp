@@ -120,6 +120,7 @@
 									<c:if test="${reviewsCropped}">
 										<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
 									</c:if>
+									<c:set var="listId" value="all-reviews"/>
 									<spring:message code="game.reviews" arguments="${game}" var="reviewsListName"/>
 									<spring:message code="game.noReviews" var="emptyListMessage"/>
 									<%@ include file="../common/reviewsList.jsp"%>
@@ -134,12 +135,14 @@
 											<c:set var="seeAllReviewsUrl" value="/users/${loggedUser.id}/reviews"/>
 										</c:if>
 										<spring:message code="game.yourReviews" var="reviewsListName"/>
+										<c:set var="listId" value="your-reviews"/>
 										<spring:message code="game.yourReviews.empty" var="emptyListMessage"/>
 										<c:set var="reviewsInPage" value="${userReviews}"/>
 										<%@ include file="../common/reviewsList.jsp"%>
 									</c:if>
 								</div>
 							</div>
+
 						</c:otherwise>
 						</c:choose>
 					</div>
@@ -155,6 +158,7 @@
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>
 

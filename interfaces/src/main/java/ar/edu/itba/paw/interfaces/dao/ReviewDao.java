@@ -62,7 +62,7 @@ public interface ReviewDao {
 	 * @return New review
 	 */
 	
-	Optional<Review> changeReviewBody(long review, String body);
+	Optional<Review> changeReviewBody(long review, List<String> body);
 	
 	/**
 	 * Get a list of all review
@@ -82,7 +82,7 @@ public interface ReviewDao {
 	 * @return The review.
 	 */
 	
-	Review register(User user, Game game, Platform platform, int score, String body, LocalDate date);
+	Review register(User user, Game game, Platform platform, int score, List<String> body, LocalDate date);
 
 	int countReviewsByUser(User user);
 	int countReviewsByUserAndGame(User user, Game game);
