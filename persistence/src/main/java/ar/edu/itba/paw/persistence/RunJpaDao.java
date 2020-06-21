@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -57,14 +58,11 @@ public class RunJpaDao implements RunDao
 		nativeQuery.setFirstResult((page-1) * pageSize);
 		nativeQuery.setMaxResults(pageSize);
 		@SuppressWarnings("unchecked")
-		List<Integer> list = nativeQuery.getResultList();
-		if(list.isEmpty())
+		List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
+		if(ids.isEmpty())
 			return Collections.emptyList();
-		List<Long> filteredIds = new ArrayList<Long>();
-		for(Integer i : list)
-			filteredIds.add(new Long(i));
 		final TypedQuery<Run> query = em.createQuery("from Run where id IN :filteredIds ORDER BY id asc", Run.class);
-		query.setParameter("filteredIds", filteredIds);
+		query.setParameter("filteredIds", ids);
 		return query.getResultList();
 	}
 
@@ -142,7 +140,7 @@ public class RunJpaDao implements RunDao
 
 	@Override
 	public List<Run> getAllRuns(){
-		final TypedQuery<Run> query = em.createQuery("from Runs", Run.class);
+		final TypedQuery<Run> query = em.createQuery("from Run", Run.class);
 		return query.getResultList();
 	}
 
