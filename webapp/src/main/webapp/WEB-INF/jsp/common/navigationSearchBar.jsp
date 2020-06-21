@@ -4,7 +4,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <div class="form-inline my-2 my-lg-0 d-flex flex-column flex-lg-row align-items-stretch flex-grow-1">
 <form class="d-flex flex-grow-1 flex-lg-row flex-column" id="search-form" action="<c:url value="/search"/>">

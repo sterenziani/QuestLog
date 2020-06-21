@@ -18,6 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +34,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 
 	@Autowired
 	private RefererRedirectionLogoutSuccessHandler logoutSuccessHandler;
+
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
@@ -44,6 +47,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	{
 		web.ignoring().antMatchers("/images/**", "/css/**", "/js/**", "/img/**", "/favicon.ico", "/403");
 	}
+
 	
 	@Bean
 	public PasswordEncoder passwordEncoder()
@@ -60,6 +64,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception
 	{
+		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+		encodingFilter.setEncoding("UTF-8");
+		encodingFilter.setForceEncoding(true);
+		http.addFilterBefore(encodingFilter, CsrfFilter.class);
 		http.sessionManagement().invalidSessionUrl("/")
 			.and().authorizeRequests()
 				.antMatchers("/admin/**").hasRole("ADMIN")
