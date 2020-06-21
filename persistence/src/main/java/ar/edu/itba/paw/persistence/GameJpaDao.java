@@ -27,11 +27,11 @@ public class GameJpaDao implements GameDao {
         Optional<Game> maybeGame = Optional.ofNullable(em.find(Game.class, id));
         if (maybeGame.isPresent()){
             Game g = maybeGame.get();
-            g.getGenres();
-            g.getDevelopers();
-            g.getPublishers();
-            g.getPlatforms();
-            g.getReleaseDates();
+            g.getGenres().size();
+            g.getDevelopers().size();
+            g.getPublishers().size();
+            g.getPlatforms().size();
+            g.getReleaseDates().size();
         }
         return maybeGame;
     }
@@ -107,11 +107,11 @@ public class GameJpaDao implements GameDao {
         final TypedQuery<Game> query = em.createQuery("from Game", Game.class);
         final List<Game> list = query.getResultList();
         for(Game g : list){
-            g.getGenres();
-            g.getDevelopers();
-            g.getPublishers();
-            g.getPlatforms();
-            g.getReleaseDates();
+            g.getGenres().size();
+            g.getDevelopers().size();
+            g.getPublishers().size();
+            g.getPlatforms().size();
+            g.getReleaseDates().size();
         }
         return list;
     }
@@ -121,6 +121,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || p == null)
             return Optional.empty();
         g.addPlatform(p);
+        p.addGame(g);
         em.flush();
         return Optional.of(g);
     }
@@ -135,8 +136,10 @@ public class GameJpaDao implements GameDao {
         Game game = maybeGame.get();
         for(Long p_id : platforms_ids){
             Platform p = em.find(Platform.class, p_id);
-            if(p != null)
+            if(p != null) {
                 game.addPlatform(p);
+                p.addGame(game);
+            }
         }
         em.flush();
     }
@@ -146,6 +149,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || p == null)
             return Optional.empty();
         g.removePlatform(p);
+        p.removeGame(g);
         em.flush();
         return Optional.of(g);
     }
@@ -154,6 +158,9 @@ public class GameJpaDao implements GameDao {
     public void removeAllPlatforms(Game g) {
         if(g == null)
             return;
+        for (Platform platform : g.getPlatforms()){
+            platform.removeGame(g);
+        }
         g.removePlatforms();
         em.flush();
     }
@@ -163,6 +170,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || d == null)
             return Optional.empty();
         g.addDeveloper(d);
+        d.addGame(g);
         em.flush();
         return Optional.of(g);
     }
@@ -177,8 +185,10 @@ public class GameJpaDao implements GameDao {
         Game game = maybeGame.get();
         for(Long d_id : devs_ids){
             Developer d = em.find(Developer.class, d_id);
-            if(d != null)
+            if(d != null) {
                 game.addDeveloper(d);
+                d.addGame(game);
+            }
         }
         em.flush();
     }
@@ -188,6 +198,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || d == null)
             return Optional.empty();
         g.removeDeveloper(d);
+        d.removeGame(g);
         em.flush();
         return Optional.of(g);
     }
@@ -196,6 +207,9 @@ public class GameJpaDao implements GameDao {
     public void removeAllDevelopers(Game g) {
         if(g == null)
             return;
+        for(Developer dev : g.getDevelopers()){
+            dev.removeGame(g);
+        }
         g.removeDevelopers();
         em.flush();
     }
@@ -205,6 +219,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || pub == null)
             return Optional.empty();
         g.addPublisher(pub);
+        pub.addGame(g);
         em.flush();
         return Optional.of(g);
     }
@@ -214,6 +229,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || pub == null)
             return Optional.empty();
         g.removePublisher(pub);
+        pub.removeGame(g);
         em.flush();
         return Optional.of(g);
     }
@@ -228,8 +244,10 @@ public class GameJpaDao implements GameDao {
         Game game = maybeGame.get();
         for(Long p_id : publisher_ids){
             Publisher p = em.find(Publisher.class, p_id);
-            if(p != null)
+            if(p != null) {
                 game.addPublisher(p);
+                p.addGame(game);
+            }
         }
         em.flush();
     }
@@ -238,6 +256,9 @@ public class GameJpaDao implements GameDao {
     public void removeAllPublishers(Game g) {
         if(g == null)
             return;
+        for(Publisher pub : g.getPublishers()){
+            pub.removeGame(g);
+        }
         g.removePublishers();
         em.flush();
     }
@@ -247,6 +268,7 @@ public class GameJpaDao implements GameDao {
         if(game == null || genre == null)
             return Optional.empty();
         game.addGenre(genre);
+        genre.addGame(game);
         em.flush();
         return Optional.of(game);
     }
@@ -261,8 +283,10 @@ public class GameJpaDao implements GameDao {
         Game game = maybeGame.get();
         for(Long gen_id : genres_ids){
             Genre gen = em.find(Genre.class, gen_id);
-            if(gen != null)
+            if(gen != null) {
                 game.addGenre(gen);
+                gen.addGame(game);
+            }
         }
         em.flush();
     }
@@ -272,6 +296,7 @@ public class GameJpaDao implements GameDao {
         if(game == null || genre == null)
             return Optional.empty();
         game.removeGenre(genre);
+        genre.removeGame(game);
         em.flush();
         return Optional.of(game);
     }
@@ -280,6 +305,9 @@ public class GameJpaDao implements GameDao {
     public void removeAllGenres(Game g) {
         if(g == null)
             return;
+        for(Genre gen : g.getGenres()){
+            gen.removeGame(g);
+        }
         g.removeGenres();
         em.flush();
     }
@@ -289,6 +317,7 @@ public class GameJpaDao implements GameDao {
         if(game == null || r == null)
             return Optional.empty();
         game.addReleaseDate(r);
+        em.flush();
         return Optional.of(game);
     }
 
@@ -310,6 +339,7 @@ public class GameJpaDao implements GameDao {
                 }
             }
         }
+        em.flush();
     }
 
     @Override
@@ -318,6 +348,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         game.removeReleaseDate(r);
         em.remove(r);
+        em.flush();
         return Optional.of(game);
     }
 
@@ -329,6 +360,7 @@ public class GameJpaDao implements GameDao {
             em.remove(release);
         }
         g.removeReleaseDates();
+        em.flush();
     }
 
     @Override
