@@ -54,6 +54,7 @@ public class DeveloperJpaDao implements DeveloperDao
 	{
 		final Developer dev = new Developer(name, logo);
 		em.persist(dev);
+		em.flush();
 		return dev;
 	}
 
