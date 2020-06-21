@@ -523,11 +523,8 @@ public class GameServiceImpl implements GameService
 				throw new BadFormatException();
 			}
 			g.setCover(coverName);
-			gameDao.update(g);
-		} else {
-			gameDao.updateWithoutCover(g);
 		}
-
+		gameDao.update(g);
 	}
 
 	private String getCoverName(long id, MultipartFile cover){

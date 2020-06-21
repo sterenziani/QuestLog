@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -20,8 +21,9 @@ public class TestConfig
 	@Bean
 	public DataSource dataSource()
 	{
-    	final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-    	ds.setDriverClass(JDBCDriver.class);
+    	final SingleConnectionDataSource ds = new SingleConnectionDataSource();
+    	ds.setSuppressClose(true);
+		ds.setDriverClassName("org.hsqldb.jdbcDriver");
     	ds.setUrl("jdbc:hsqldb:mem:paw");
     	ds.setUsername("ha");
     	ds.setPassword("");

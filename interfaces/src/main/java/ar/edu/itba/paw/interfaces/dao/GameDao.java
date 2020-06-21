@@ -327,6 +327,4 @@ public interface GameDao
 	void remove(Game g);
 
 	void update(Game g);
-
-	void updateWithoutCover(Game g);
 }

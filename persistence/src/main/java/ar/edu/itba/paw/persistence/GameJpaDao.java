@@ -53,11 +53,11 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         Game g = list.get(0);
         if(g != null) {
-            g.getGenres();
-            g.getDevelopers();
-            g.getPublishers();
-            g.getPlatforms();
-            g.getReleaseDates();
+            g.getGenres().size();
+            g.getDevelopers().size();
+            g.getPublishers().size();
+            g.getPlatforms().size();
+            g.getReleaseDates().size();
         }
         return Optional.ofNullable(g);
     }
@@ -121,6 +121,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || p == null)
             return Optional.empty();
         g.addPlatform(p);
+        em.flush();
         return Optional.of(g);
     }
 
@@ -137,6 +138,7 @@ public class GameJpaDao implements GameDao {
             if(p != null)
                 game.addPlatform(p);
         }
+        em.flush();
     }
 
     @Override
@@ -144,6 +146,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || p == null)
             return Optional.empty();
         g.removePlatform(p);
+        em.flush();
         return Optional.of(g);
     }
 
@@ -152,6 +155,7 @@ public class GameJpaDao implements GameDao {
         if(g == null)
             return;
         g.removePlatforms();
+        em.flush();
     }
 
     @Override
@@ -159,6 +163,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || d == null)
             return Optional.empty();
         g.addDeveloper(d);
+        em.flush();
         return Optional.of(g);
     }
 
@@ -175,13 +180,15 @@ public class GameJpaDao implements GameDao {
             if(d != null)
                 game.addDeveloper(d);
         }
+        em.flush();
     }
 
     @Override
     public Optional<Game> removeDeveloper(Game g, Developer d) {
         if(g == null || d == null)
             return Optional.empty();
-        g.addDeveloper(d);
+        g.removeDeveloper(d);
+        em.flush();
         return Optional.of(g);
     }
 
@@ -190,6 +197,7 @@ public class GameJpaDao implements GameDao {
         if(g == null)
             return;
         g.removeDevelopers();
+        em.flush();
     }
 
     @Override
@@ -197,6 +205,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || pub == null)
             return Optional.empty();
         g.addPublisher(pub);
+        em.flush();
         return Optional.of(g);
     }
 
@@ -205,6 +214,7 @@ public class GameJpaDao implements GameDao {
         if(g == null || pub == null)
             return Optional.empty();
         g.removePublisher(pub);
+        em.flush();
         return Optional.of(g);
     }
 
@@ -221,6 +231,7 @@ public class GameJpaDao implements GameDao {
             if(p != null)
                 game.addPublisher(p);
         }
+        em.flush();
     }
 
     @Override
@@ -228,6 +239,7 @@ public class GameJpaDao implements GameDao {
         if(g == null)
             return;
         g.removePublishers();
+        em.flush();
     }
 
     @Override
@@ -235,6 +247,7 @@ public class GameJpaDao implements GameDao {
         if(game == null || genre == null)
             return Optional.empty();
         game.addGenre(genre);
+        em.flush();
         return Optional.of(game);
     }
 
@@ -251,13 +264,15 @@ public class GameJpaDao implements GameDao {
             if(gen != null)
                 game.addGenre(gen);
         }
+        em.flush();
     }
 
     @Override
     public Optional<Game> removeGenre(Game game, Genre genre) {
         if(game == null || genre == null)
             return Optional.empty();
-        game.addGenre(genre);
+        game.removeGenre(genre);
+        em.flush();
         return Optional.of(game);
     }
 
@@ -266,6 +281,7 @@ public class GameJpaDao implements GameDao {
         if(g == null)
             return;
         g.removeGenres();
+        em.flush();
     }
 
     @Override
@@ -326,10 +342,10 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getUpcomingGames() {
-        Query nativeQuery = em.createNativeQuery("select g from (select distinct cast(game as text) as g, min(release_date) as d from releases r group by game having min(release_date) >= CURRENT_DATE ORDER BY d) as x");
+        Query nativeQuery = em.createNativeQuery("select g from (select distinct game as g, min(release_date) as d from releases r group by game having min(release_date) >= CURRENT_DATE ORDER BY d) as x");
         nativeQuery.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
         final TypedQuery<Game> query = em.createQuery("from Game as g where g.game in :ids", Game.class);
         query.setParameter("ids", ids);
         return query.getResultList();
@@ -363,6 +379,7 @@ public class GameJpaDao implements GameDao {
         if(g == null)
             return;
         u.removeFromBacklog(g);
+        em.flush();
     }
 
     @Override
@@ -377,12 +394,12 @@ public class GameJpaDao implements GameDao {
         if(u == null || pageSize == 0 || page == 0) {
             return Collections.emptyList();
         }
-        Query nativeQuery = em.createNativeQuery("select distinct cast(b.game as text) from backlogs b where b.user_id = :u_id");
+        Query nativeQuery = em.createNativeQuery("select distinct b.game from backlogs b where b.user_id = :u_id");
         nativeQuery.setParameter("u_id", u.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
         
         if(ids.isEmpty())
         	return Collections.emptyList();
@@ -400,7 +417,7 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getSimilarToBacklog(User u) {
-    	Query nativeQuery = em.createNativeQuery("SELECT distinct cast(game as text) FROM (SELECT t2.game AS game FROM backlogs AS t1 JOIN backlogs AS t2 ON t1.user_id = t2.user_id AND t1.user_id != :u_id AND t1.game IN"
+    	Query nativeQuery = em.createNativeQuery("SELECT distinct game FROM (SELECT t2.game AS game FROM backlogs AS t1 JOIN backlogs AS t2 ON t1.user_id = t2.user_id AND t1.user_id != :u_id AND t1.game IN"
     		    + " (SELECT game FROM backlogs WHERE user_id = :u_id) AND t2.game NOT IN (SELECT game FROM backlogs WHERE user_id = :u_id) GROUP BY t2.game HAVING"
     		    + " count(*) >= :min_amount_for_overlap ORDER BY count(*) DESC) AS a NATURAL JOIN games");
     	nativeQuery.setParameter("u_id", u.getId());
@@ -408,7 +425,7 @@ public class GameJpaDao implements GameDao {
     	nativeQuery.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
     	    	
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
         if(ids.isEmpty())
         	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds", Game.class);
@@ -445,13 +462,13 @@ public class GameJpaDao implements GameDao {
         if(timeLeft != 0 || timeRight != 35999999)
             timeFilter = " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT game FROM runs WHERE playstyle = 1 GROUP BY game HAVING AVG(time) >= " + timeLeft + " AND AVG(time) <= " + timeRight + ") AS a) AS d";
 
-        Query nativeQuery = em.createNativeQuery("SELECT game FROM (SELECT distinct cast(z.game as text), title FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',:searchTerm,'%'))) as z" + genreFilter + platformFilter + scoreFilter + timeFilter
+        Query nativeQuery = em.createNativeQuery("SELECT game FROM (SELECT distinct game, title FROM (SELECT * FROM games WHERE LOWER(title) LIKE LOWER(CONCAT('%',:searchTerm,'%'))) as z" + genreFilter + platformFilter + scoreFilter + timeFilter
                 + " ORDER BY title) AS w");
         nativeQuery.setParameter("searchTerm", searchTerm);
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
@@ -486,7 +503,7 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public int countSearchResults(String searchTerm) {
-        final TypedQuery<Game> query = em.createQuery("from Game as g where title ilike concat('%',:searchTerm, '%')", Game.class);
+        final Query query = em.createNativeQuery("select * from games as g where lower(g.title) like '%' || lower(:searchTerm) || '%'");
         query.setParameter("searchTerm", searchTerm);
         return query.getResultList().size();
     }
@@ -516,12 +533,12 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForPlatform(Platform p, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select cast(game as text) from (select distinct game, title from game_versions natural join games where platform = :p_id order by title) as foo");
+        Query nativeQuery = em.createNativeQuery("select foo.game from (select distinct game, title from game_versions natural join games where platform = :p_id order by title) as foo");
         nativeQuery.setParameter("p_id", p.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
@@ -537,12 +554,12 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForGenre(Genre g, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select cast(game as text) from (select distinct game, title from classifications natural join games where genre = :gen_id order by title) as foo");
+        Query nativeQuery = em.createNativeQuery("select foo.game from (select distinct game, title from classifications natural join games where genre = :gen_id order by title) as foo");
         nativeQuery.setParameter("gen_id", g.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+		List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
@@ -558,12 +575,12 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForDeveloper(Developer d, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select cast(game as text) from (select distinct game, title from development natural join games where developer = :dev_id order by title) as foo");
+        Query nativeQuery = em.createNativeQuery("select foo.game from (select distinct game, title from development natural join games where developer = :dev_id order by title) as foo");
         nativeQuery.setParameter("dev_id", d.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
@@ -579,12 +596,12 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesForPublisher(Publisher p, int page, int pageSize) {
-        Query nativeQuery = em.createNativeQuery("select cast(game as text) from (select distinct game, title from publishing natural join games where publisher = :pub_id order by title) as foo");
+        Query nativeQuery = em.createNativeQuery("select foo.game from (select distinct game, title from publishing natural join games where publisher = :pub_id order by title) as foo");
         nativeQuery.setParameter("pub_id", p.getId());
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
-		List<Long> ids = (List<Long>) nativeQuery.getResultList().stream().map((id) -> Long.parseLong(id.toString())).collect(Collectors.toList());
+        List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
 
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
@@ -601,15 +618,11 @@ public class GameJpaDao implements GameDao {
     @Override
     public void remove(Game g) {
         em.remove(g);
-    }
-
-    @Override
-    public void update(Game g) {
         em.flush();
     }
 
     @Override
-    public void updateWithoutCover(Game g) {
+    public void update(Game g) {
         em.flush();
     }
 }

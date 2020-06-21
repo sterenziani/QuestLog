@@ -6,15 +6,20 @@ import java.util.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.sql.DataSource;
 
 import ar.edu.itba.paw.model.entity.*;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -59,10 +64,21 @@ public class GameJpaDaoTest
     @Autowired
     private GameJpaDao gameDao;
 
+    @Autowired
+    private DataSource ds;
+
+    private JdbcTemplate jdbcTemplate;
+
     @Before
     public void	setUp()
     {
-
+        jdbcTemplate = new JdbcTemplate(ds);
+    }
+    
+    @After
+    public void cleanTables(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, SCORE_TABLE, PUBLISHING_TABLE, CLASSIFICATION_TABLE, VERSION_TABLE, RELEASE_TABLE, DEVELOPMENT_TABLE,
+                BACKLOG_TABLE, GENRE_TABLE, DEVELOPER_TABLE, PUBLISHER_TABLE, PLATFORM_TABLE, REGION_TABLE, USER_TABLE, GAME_TABLE);
     }
 
     @Test
@@ -80,7 +96,7 @@ public class GameJpaDaoTest
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
         Assert.assertEquals(GAME_COVER, maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
     }
 
     @Test
@@ -137,6 +153,7 @@ public class GameJpaDaoTest
         Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Region region 					= TestMethods.addRegion(REGION_NAME, REGION_SHORT, em);
         TestMethods.addRelease(g, region, RELEASE_DATE, em);
+        System.out.println(g.getId());
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertTrue(maybeGame.get().getReleaseDates().stream().findFirst().isPresent());
@@ -161,7 +178,7 @@ public class GameJpaDaoTest
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
         Assert.assertEquals(GAME_COVER, maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
     }
 
     @Test
@@ -235,7 +252,7 @@ public class GameJpaDaoTest
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals("Zenobureido", maybeGame.get().getTitle());
         Assert.assertEquals(GAME_COVER, maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
     }
 
     @Test
@@ -246,7 +263,7 @@ public class GameJpaDaoTest
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertEquals(GAME_TITLE, maybeGame.get().getTitle());
         Assert.assertEquals("http://fake.com/image.png", maybeGame.get().getCover());
-        Assert.assertEquals(GAME_DESC, GAME_TRAILER, maybeGame.get().getDescription());
+        Assert.assertEquals(GAME_DESC, maybeGame.get().getDescription());
     }
 
     @Test
@@ -262,9 +279,9 @@ public class GameJpaDaoTest
 
     public void testRegister()
     {
-        gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, GAME_TABLE, "title ='" + GAME_TITLE +"' AND cover = '"
-        //        + GAME_COVER + "' AND description = '" + GAME_DESC + "'"));
+        Game g = gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER);
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "title ='" + GAME_TITLE +"' AND cover = '"
+                + GAME_COVER + "' AND description = '" + GAME_DESC + "'" + " AND trailer = '" + GAME_TRAILER + "'"));
     }
 
     @Test
@@ -289,7 +306,7 @@ public class GameJpaDaoTest
         Game g 		= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Platform p 	= TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         gameDao.addPlatform(g, p);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + p.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + p.getId() + "'"));
     }
 
     final static String ALTERNATIVE_PLATFORM_NAME 		= "ps4";
@@ -306,9 +323,9 @@ public class GameJpaDaoTest
 
         gameDao.addPlatforms(g.getId(), p_ids);
 
-        //Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(em, VERSION_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + p.getId() + "'"));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + ap.getId() + "'"));
+        Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, VERSION_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + p.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + ap.getId() + "'"));
     }
 
     @Test
@@ -322,8 +339,8 @@ public class GameJpaDaoTest
 
         gameDao.removePlatform(g, p);
 
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, VERSION_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + ap.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, VERSION_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, VERSION_TABLE, "game ='" + g.getId() +"' AND platform = '" + ap.getId() + "'"));
     }
 
     @Test
@@ -337,7 +354,7 @@ public class GameJpaDaoTest
 
         gameDao.removeAllPlatforms(g);
 
-        //Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(em, VERSION_TABLE));
+        Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, VERSION_TABLE));
     }
 
     @Test
@@ -345,7 +362,7 @@ public class GameJpaDaoTest
         Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Developer d 	= TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
         gameDao.addDeveloper(g, d);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + d.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + d.getId() + "'"));
     }
 
     final static String ALTERNATIVE_DEVELOPER_NAME 		= "Monolith Soft";
@@ -361,9 +378,9 @@ public class GameJpaDaoTest
 
         gameDao.addDevelopers(g.getId(), d_ids);
 
-        //Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(em, DEVELOPMENT_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + d.getId() + "'"));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + ad.getId() + "'"));
+        Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, DEVELOPMENT_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + d.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + ad.getId() + "'"));
     }
 
     @Test
@@ -377,8 +394,8 @@ public class GameJpaDaoTest
 
         gameDao.removeDeveloper(g, d);
 
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, DEVELOPMENT_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + ad.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, DEVELOPMENT_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEVELOPMENT_TABLE, "game ='" + g.getId() +"' AND developer = '" + ad.getId() + "'"));
     }
 
     @Test
@@ -392,7 +409,7 @@ public class GameJpaDaoTest
 
         gameDao.removeAllDevelopers(g);
 
-        //Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(em, DEVELOPMENT_TABLE));
+        Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, DEVELOPMENT_TABLE));
     }
 
     @Test
@@ -400,7 +417,7 @@ public class GameJpaDaoTest
         Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Publisher p 	= TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
         gameDao.addPublisher(g, p);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + p.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + p.getId() + "'"));
     }
 
     final static String ALTERNATIVE_PUBLISHER_NAME 		= "SEGA";
@@ -416,9 +433,9 @@ public class GameJpaDaoTest
 
         gameDao.addPublishers(g.getId(), p_ids);
 
-        //Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(em, PUBLISHING_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + p.getId() + "'"));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + ap.getId() + "'"));
+        Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, PUBLISHING_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + p.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + ap.getId() + "'"));
     }
 
     @Test
@@ -432,8 +449,8 @@ public class GameJpaDaoTest
 
         gameDao.removePublisher(g, p);
 
-        Assert.assertEquals(1, g.getPublishers().size());
-        Assert.assertEquals(true, g.getPublishers().contains(ap));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, PUBLISHING_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, PUBLISHING_TABLE, "game ='" + g.getId() +"' AND publisher = '" + ap.getId() + "'"));
     }
 
     @Test
@@ -447,7 +464,7 @@ public class GameJpaDaoTest
 
         gameDao.removeAllPublishers(g);
 
-        Assert.assertEquals(0, g.getPublishers().size());
+        Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, PUBLISHING_TABLE));
     }
 
     @Test
@@ -455,7 +472,7 @@ public class GameJpaDaoTest
         Game g 			= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Genre gen 		= TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
         gameDao.addGenre(g, gen);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + gen.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + gen.getId() + "'"));
     }
 
     final static String ALTERNATIVE_GENRE_NAME 	= "fps";
@@ -471,9 +488,9 @@ public class GameJpaDaoTest
 
         gameDao.addGenres(g.getId(), gen_ids);
 
-        //Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(em, CLASSIFICATION_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + gen.getId() + "'"));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + agen.getId() + "'"));
+        Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, CLASSIFICATION_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + gen.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + agen.getId() + "'"));
     }
 
     @Test
@@ -487,8 +504,8 @@ public class GameJpaDaoTest
 
         gameDao.removeGenre(g, gen);
 
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, CLASSIFICATION_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + agen.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, CLASSIFICATION_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, CLASSIFICATION_TABLE, "game ='" + g.getId() +"' AND genre = '" + agen.getId() + "'"));
     }
 
     @Test
@@ -502,7 +519,7 @@ public class GameJpaDaoTest
 
         gameDao.removeAllGenres(g);
 
-        //Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(em, CLASSIFICATION_TABLE));
+        Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, CLASSIFICATION_TABLE));
     }
 
     static final String NON_MATCHING_GAME_TITLE = "Hello";
@@ -558,9 +575,9 @@ public class GameJpaDaoTest
         TestMethods.addBacklog(g, u, em);
         TestMethods.addBacklog(ag, u, em);
         gameDao.removeFromBacklog(g.getId(), u);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, BACKLOG_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, BACKLOG_TABLE, "game ='" + ag.getId()
-        //        + "' AND user_id = '" + u.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, BACKLOG_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + ag.getId()
+                + "' AND user_id = '" + u.getId() + "'"));
     }
 
     private static final String ALTERNATIVE_USER_NAME 		= "admin";
@@ -587,19 +604,14 @@ public class GameJpaDaoTest
 
         List<Game> inBacklog = gameDao.getGamesInBacklog(u);
 
-        TypedQuery<User> query = em.createQuery("from User u where u.username = :username", User.class);
-        query.setParameter("username", u.getUsername());
-        User user = query.getSingleResult();
-        System.out.println(user.getBacklog());
-
         Assert.assertEquals(2, inBacklog.size());
         Iterator<Game> it = inBacklog.iterator();
         Game next = it.next();
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, BACKLOG_TABLE, "game ='" + next.getId()
-        //        + "' AND user_id = '" + u.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + next.getId()
+                + "' AND user_id = '" + u.getId() + "'"));
         next = it.next();
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, BACKLOG_TABLE, "game ='" + next.getId()
-        //        + "' AND user_id = '" + u.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + next.getId()
+                + "' AND user_id = '" + u.getId() + "'"));
     }
 
     @Test
@@ -620,8 +632,8 @@ public class GameJpaDaoTest
         Assert.assertEquals(1, inBacklog.size());
         Iterator<Game> it = inBacklog.iterator();
         Game next = it.next();
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, BACKLOG_TABLE, "game ='" + next.getId()
-        //        + "' AND user_id = '" + u.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, BACKLOG_TABLE, "game ='" + next.getId()
+                + "' AND user_id = '" + u.getId() + "'"));
     }
 
     @Test
@@ -681,7 +693,6 @@ public class GameJpaDaoTest
     @Test
     public void testGetMostBacklogged(){
         Game g 	 = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
-        Game ag  = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         User u 	 = TestMethods.addUser(USER_NAME, USER_PASSWORD, USER_EMAIL, USER_LOCALE, em);
         User au  = TestMethods.addUser(ALTERNATIVE_USER_NAME, ALTERNATIVE_USER_PASSWORD, ALTERNATIVE_USER_EMAIL, ALTERNATIVE_USER_LOCALE, em);
         User aau  = TestMethods.addUser(ANOTHER_ALTERNATIVE_USER_NAME, ANOTHER_ALTERNATIVE_USER_PASSWORD, ANOTHER_ALTERNATIVE_USER_EMAIL, ANOTHER_ALTERNATIVE_USER_LOCALE, em);
@@ -691,12 +702,8 @@ public class GameJpaDaoTest
         TestMethods.addBacklog(g, au, em);
         TestMethods.addBacklog(g, aau, em);
         TestMethods.addBacklog(g, nu, em);
-        TestMethods.addBacklog(ag, u, em);
 
         List<Game> popular = gameDao.getMostBacklogged();
-        for(Game game : popular){
-            System.out.println(game.getTitle());
-        }
 
         Assert.assertEquals(1, popular.size());
     }
@@ -712,12 +719,14 @@ public class GameJpaDaoTest
         Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
         TestMethods.connectGenre(g, gen, em);
         TestMethods.connectGenre(ag, gen, em);
+        TestMethods.connectGenre(aag, gen, em);
         TestMethods.connectGenre(sw, gen, em);
         TestMethods.connectPlatform(g, p, em);
         TestMethods.connectPlatform(ag, p, em);
         TestMethods.connectPlatform(aag, p, em);
+        TestMethods.connectPlatform(sw, p, em);
         TestMethods.addScore(u, g, 7, em);
-        TestMethods.addScore(u, ag, 2, em);
+        TestMethods.addScore(u, ag, 5, em);
         TestMethods.addScore(u, aag, 6, em);
         TestMethods.addScore(u, sw, 9, em);
         List<Game> games = gameDao.getFilteredGames("", Collections.singletonList(gen.getId() + ""),Collections.singletonList(p.getId() + ""), 6, 8, 0, 9999*3600+59*60+59, 1, 4 );
@@ -841,12 +850,8 @@ public class GameJpaDaoTest
         Genre agen		= TestMethods.addGenre(ALTERNATIVE_GENRE_NAME, ALTERNATIVE_GENRE_LOGO, em);
 
         TestMethods.connectGenre(g, gen, em);
-        System.out.println(g.getGenres().contains(gen));
-
         TestMethods.connectGenre(aag, gen, em);
-        System.out.println(gen.getGames().contains(g));
         TestMethods.connectGenre(aag, agen, em);
-        System.out.println(gen.getGames().contains(g));
         TestMethods.connectGenre(ag, agen, em);
 
         int amount = gameDao.countGamesForGenre(gen);
@@ -975,8 +980,8 @@ public class GameJpaDaoTest
         Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Game ag = TestMethods.addGame(ALTERNATIVE_GAME_TITLE, ALTERNATIVE_GAME_COVER, ALTERNATIVE_GAME_DESC, GAME_TRAILER, em);
         gameDao.remove(g);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(em, GAME_TABLE));
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, GAME_TABLE, "game = '" + ag.getId() + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, GAME_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "game = '" + ag.getId() + "'"));
     }
 
     @Test
@@ -986,21 +991,9 @@ public class GameJpaDaoTest
         g.setCover(ALTERNATIVE_GAME_COVER);
         g.setDescription(ALTERNATIVE_GAME_DESC);
         gameDao.update(g);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, GAME_TABLE, "game = '" + g.getId()
-        //        + "' AND title = '" + ALTERNATIVE_GAME_TITLE + "' AND description = '" + ALTERNATIVE_GAME_DESC
-        //        + "' AND cover = '" + ALTERNATIVE_GAME_COVER + "'"));
-    }
-
-    @Test
-    public void testUpdateWithoutCover(){
-        Game g  = TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
-        g.setTitle(ALTERNATIVE_GAME_TITLE);
-        g.setCover(ALTERNATIVE_GAME_COVER);
-        g.setDescription(ALTERNATIVE_GAME_DESC);
-        gameDao.updateWithoutCover(g);
-        //Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(em, GAME_TABLE, "game = '" + g.getId()
-        //        + "' AND title = '" + ALTERNATIVE_GAME_TITLE + "' AND description = '" + ALTERNATIVE_GAME_DESC
-        //        + "' AND cover = '" + GAME_COVER + "'"));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, GAME_TABLE, "game = '" + g.getId()
+                + "' AND title = '" + ALTERNATIVE_GAME_TITLE + "' AND description = '" + ALTERNATIVE_GAME_DESC
+                + "' AND cover = '" + ALTERNATIVE_GAME_COVER + "'"));
     }
 
     @Test
