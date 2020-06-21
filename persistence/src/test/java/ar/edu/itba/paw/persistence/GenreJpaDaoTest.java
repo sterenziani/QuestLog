@@ -1,8 +1,10 @@
-/*package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.junit.Assert;
@@ -11,38 +13,38 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.model.entity.Genre;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Sql(scripts = {"classpath:schema.sql"})
-public class GenreJdbcDaoTest
+@Transactional
+public class GenreJpaDaoTest
 {
 	private static final String GAME_TABLE = "games";
 	private	static final String GENRE_TABLE = "genres";
 	private	static final String GENRE_NAME = "Adventure";
 	private	static final String GENRE_LOGO = "https://example/icon.jpg";
 	
+	@PersistenceContext
+    private EntityManager em;
+	
 	@Autowired
 	private DataSource ds;
 	
 	@Autowired
-	private GenreJdbcDao genreDao;
+	private GenreJpaDao genreDao;
+	
 	private JdbcTemplate jdbcTemplate;
-	private SimpleJdbcInsert genreInsert;
 	
 	@Before
 	public void	setUp()
 	{
-		genreDao = new GenreJdbcDao(ds);
 		jdbcTemplate = new JdbcTemplate(ds);
-		genreInsert = new SimpleJdbcInsert(ds).withTableName(GENRE_TABLE).usingGeneratedKeyColumns("genre");
 	}
 	
 	@Test
@@ -69,7 +71,7 @@ public class GenreJdbcDaoTest
 	public void	testFindGenreByIdExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.findById(g.getId());
 		Assert.assertTrue(maybeGenre.isPresent());
 		Assert.assertEquals(GENRE_NAME, maybeGenre.get().getName());
@@ -88,7 +90,7 @@ public class GenreJdbcDaoTest
 	public void	testFindGenreByNameExists()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.findByName(GENRE_NAME);
 		Assert.assertTrue(maybeGenre.isPresent());
 		Assert.assertEquals(GENRE_NAME, maybeGenre.get().getName());
@@ -99,7 +101,7 @@ public class GenreJdbcDaoTest
 	public void	testChangeGenreName()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.changeName(g.getId(), "Noentiendo");
 		Assert.assertTrue(maybeGenre.isPresent());
 		Assert.assertEquals("Noentiendo", maybeGenre.get().getName());
@@ -110,7 +112,7 @@ public class GenreJdbcDaoTest
 	public void	testChangeLogo()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
+		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.changeLogo(g.getId(), "http://sega.com/logo.png");
 		Assert.assertTrue(maybeGenre.isPresent());
 		Assert.assertEquals(GENRE_NAME, maybeGenre.get().getName());
@@ -121,8 +123,8 @@ public class GenreJdbcDaoTest
 	public void	testGetAllGenres()
 	{
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, genreInsert);
+		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
+		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, em);
 		List<Genre> myList = new ArrayList<Genre>();
 		myList.add(g1);
 		myList.add(g2);
@@ -130,16 +132,15 @@ public class GenreJdbcDaoTest
 		List<Genre> genreList = genreDao.getAllGenres();
 		Assert.assertFalse(genreList.isEmpty());
 		Assert.assertEquals(2, genreList.size());
-		Assert.assertEquals(genreList.get(0).getName(), myList.get(0).getName());
-		Assert.assertEquals(genreList.get(1).getName(), myList.get(1).getName());
+		Assert.assertTrue(genreList.containsAll(myList));
 	}
 	
 	@Test
 	public void testGetGenres() {
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, genreInsert);
-		Genre g3 = TestMethods.addGenre("Action", GENRE_LOGO, genreInsert);
+		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
+		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, em);
+		Genre g3 = TestMethods.addGenre("Action", GENRE_LOGO, em);
 		
 		List<Genre> myList = new ArrayList<Genre>();
 		myList.add(g1);
@@ -158,26 +159,23 @@ public class GenreJdbcDaoTest
 		Assert.assertEquals(3, genreList3.size());
 
 
-		Assert.assertEquals(genreList1.get(0).getName(), myList.get(0).getName());
-		Assert.assertEquals(genreList1.get(1).getName(), myList.get(1).getName());
-		
-		Assert.assertEquals(genreList2.get(0).getName(), myList.get(2).getName());
-		
-		Assert.assertEquals(genreList3.get(0).getName(), myList.get(0).getName());
-		Assert.assertEquals(genreList3.get(1).getName(), myList.get(1).getName());
-		Assert.assertEquals(genreList3.get(2).getName(), myList.get(2).getName());
+		Assert.assertTrue(myList.containsAll(genreList1));
+
+		Assert.assertTrue(myList.containsAll(genreList2));
+
+		Assert.assertTrue(myList.containsAll(genreList3));
 	}
 	
 	@Test
 	public void testCountGenres() {
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
-		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, genreInsert);
-		TestMethods.addGenre("Puzzle", GENRE_LOGO, genreInsert);
+		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
+		TestMethods.addGenre("Puzzle", GENRE_LOGO, em);
 		
 		int count = genreDao.countGenres();
 		Assert.assertEquals(2, count);
 		
-		TestMethods.addGenre("Action", GENRE_LOGO, genreInsert);
+		TestMethods.addGenre("Action", GENRE_LOGO, em);
 		
 		count = genreDao.countGenres();
 		Assert.assertEquals(3, count);
@@ -188,4 +186,3 @@ public class GenreJdbcDaoTest
 		Assert.assertEquals(0, count);
 	}
 }
-*/
