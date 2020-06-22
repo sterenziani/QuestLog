@@ -17,7 +17,7 @@ public class Image
 	@SequenceGenerator(allocationSize = 1, sequenceName = "images_image_seq", name = "images_image_seq")
     private Long id;
 	
-	@Column(name = "image_name", length = 60, nullable = false, unique = true)
+	@Column(name = "image_name", length = 100, nullable = false, unique = true)
     private String imageName;
 	
 	@Column(name = "image_data")

@@ -528,6 +528,8 @@ public class GameServiceImpl implements GameService
 	}
 
 	private String getCoverName(long id, MultipartFile cover){
-		return "cover-game-"+ id + "." + FilenameUtils.getExtension(cover.getOriginalFilename());
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("games/").append("cover-game-").append(id).append('.').append(FilenameUtils.getExtension(cover.getOriginalFilename()));
+		return stringBuilder.toString();
 	}
 }
