@@ -41,7 +41,6 @@ public class GameServiceImpl implements GameService
 	private ImageService is;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
-	public static final String DEFAULT_GAME_COVER = "default-game-cover.png";
 
 	@Transactional
 	@Override
@@ -131,7 +130,7 @@ public class GameServiceImpl implements GameService
 				throw new BadFormatException();
 			}
 		} else {
-			g.setCover(DEFAULT_GAME_COVER);
+			g.setCover(null);
 		}
 		gameDao.update(g);
 		return g;
@@ -523,6 +522,8 @@ public class GameServiceImpl implements GameService
 				throw new BadFormatException();
 			}
 			g.setCover(coverName);
+		} else {
+			g.setCover(null);
 		}
 		gameDao.update(g);
 	}

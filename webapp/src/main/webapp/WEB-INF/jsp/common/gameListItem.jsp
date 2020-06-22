@@ -57,7 +57,14 @@
     </form>
 
     <a class="d-flex flex-column flex-grow-1 text-white" href="<c:url value="/games/${game.id}"/>">
-        <img class="card-img-top cover" src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>"/>
+        <c:choose>
+            <c:when test="${ game.cover != null }">
+                <img class="card-img-top cover" src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>"/>
+            </c:when>
+            <c:otherwise>
+                <img class="card-img-top cover" src="<c:url value="/images/static/games/default_game_cover.png"/>" alt="<c:out value="${game.title}"/>"/>
+            </c:otherwise>
+        </c:choose>
         <div class="card-body bg-primary flex-grow-1">
             <h5><c:out value="${game.title}"/></h5>
         </div>
