@@ -5,11 +5,7 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
-     <c:choose>
-         <c:when test="${! empty editMode && editMode == true}">
-             <title>QuestLog - <spring:message code="review.writeReview"/></title>
-         </c:when>
-     </c:choose>
+	 <title>QuestLog - <spring:message code="review.writeReview"/></title>
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>
