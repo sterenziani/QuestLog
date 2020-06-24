@@ -62,24 +62,6 @@ public class WebConfig
 	}
 	
 	@Bean
-	public String explorePath()
-	{
-		return baseUrl() + "explore/";
-	}
-	
-	@Bean
-	public String gamePath()
-	{
-		return baseUrl() + "games/";
-	}
-	
-	@Bean
-	public String changePasswordPath()
-	{
-		return baseUrl() + "changePassword";
-	}
-	
-	@Bean
 	public DataSourceInitializer dataSourceInitializer(final DataSource ds)
 	{
 		final DataSourceInitializer dsi = new DataSourceInitializer();

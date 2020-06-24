@@ -40,13 +40,7 @@ public class EmailServiceImpl implements EmailService
 	private GameService gs;
 	
 	@Autowired
-	private String explorePath;
-	
-	@Autowired
-	private String gamePath;
-	
-	@Autowired
-	private String changePasswordPath;
+	private String baseUrl;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
@@ -57,10 +51,9 @@ public class EmailServiceImpl implements EmailService
 	{
 		if(u == null)
 			return;
-		String url = explorePath;
 		Locale locale = u.getLocale();
 		final Context ctx = new Context(locale);
-		ctx.setVariable("path", url);
+		ctx.setVariable("path", baseUrl);
 		ctx.setVariable("username", u.getUsername());
 
 	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
@@ -89,7 +82,6 @@ public class EmailServiceImpl implements EmailService
 	public void sendDailyEmails()
 	{
 		LOGGER.debug("Sending daily emails to all users");
-		String url = gamePath;
 		List<User> userList = us.getAllUsers();
 		for(User u : userList)
 		{
@@ -98,7 +90,7 @@ public class EmailServiceImpl implements EmailService
 			{
 				final Context ctx = new Context(u.getLocale());
 				ctx.setVariable("games", backlog);
-				ctx.setVariable("path", url);
+				ctx.setVariable("path", baseUrl);
 				final MimeMessage mimeMessage = emailSender.createMimeMessage();
 				MimeMessageHelper message;
 				LOGGER.debug("Sending daily email to {}, who has {} games releasing tomorrow they should know about.", u.getUsername(), backlog.size());
@@ -126,13 +118,12 @@ public class EmailServiceImpl implements EmailService
 	@Transactional
 	public void sendAccountRecoveryEmail(User u, String token)
 	{
-		String url = changePasswordPath;
 		if(u == null)
 			return;
 		Locale locale = u.getLocale();
 		final Context ctx = new Context(locale);
 		ctx.setVariable("username", u.getUsername());
-		ctx.setVariable("path", url);
+		ctx.setVariable("path", baseUrl);
 		ctx.setVariable("token", token);
 		
 	    final MimeMessage mimeMessage = emailSender.createMimeMessage();
