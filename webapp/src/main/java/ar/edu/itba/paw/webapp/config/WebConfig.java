@@ -53,7 +53,7 @@ public class WebConfig
 	@Value("classpath:add_games.sql")
 	private Resource addGamesSql;
 	
-	public static final int MAX_IMAGE_SIZE_MB = 5;
+	public static final int MAX_IMAGE_SIZE = -1;
 	
 	@Bean
 	public DataSourceInitializer dataSourceInitializer(final DataSource ds)
@@ -161,7 +161,7 @@ public class WebConfig
 	@Bean
 	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(MAX_IMAGE_SIZE_MB*1024*1024);
+		multipartResolver.setMaxUploadSize(MAX_IMAGE_SIZE);
 		return multipartResolver;
 	}
 	
