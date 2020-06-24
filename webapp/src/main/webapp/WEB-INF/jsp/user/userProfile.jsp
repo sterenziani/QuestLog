@@ -35,18 +35,17 @@
 						<h5><spring:message code="user.hoursPlayed" arguments="${user.totalHoursPlayed}"/></h5>
 					</div>
 				</div>
-				<div class="mb-0 m-3 py-3 px-5 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
-					<c:if test="${user.favoriteGame != null}">
+				<c:if test="${user.favoriteGame != null}">
+					<div class="mb-0 m-3 py-3 px-5 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
 						<c:set var="favGame" value="${user.favoriteGame.title}"/>
 						<h5 class="pr-3"><spring:message code="user.favoriteGame" arguments="${favGame}"/></h5>
 						<a href="<c:url value="/games/${user.favoriteGame.id}"/>" class="text-white">
 							<div class="bg-primary d-flex flex-row align-items-center">
 								<img width="100px" src="<c:url value="/images/${user.favoriteGame.cover}"/>" alt="${favGame}"/>
-								<h4 class="p-3"><c:out value="${favGame}"/></h4>
 							</div>
 						</a>
-					</c:if>
-				</div>
+					</div>
+				</c:if>
 			</div>
 	    </div>
 		<div class="m-5 bg-very-light right-wave left-wave pb-1">
