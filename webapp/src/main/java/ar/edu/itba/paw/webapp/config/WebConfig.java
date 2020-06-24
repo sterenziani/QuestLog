@@ -107,7 +107,7 @@ public class WebConfig
 		properties.setProperty("hibernate.hbm2ddl.auto", "update");
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
 		
-		// ESTAS DOS SON SOLO PARA DEPLOYMENT. BORRAR ANTES DE DEPLOYAR
+		// ESTAS DOS SON SOLO PARA DEBUG. BORRAR ANTES DE DEPLOYAR
 		//properties.setProperty("hibernate.show_sql", "true");
 		//properties.setProperty("format_sql", "true");
 		
@@ -120,15 +120,15 @@ public class WebConfig
 	{
 		final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 		ds.setDriverClass(org.postgresql.Driver.class);
-		/*
+		
         ds.setUrl("jdbc:postgresql://localhost/paw-2020a-4");
         ds.setUsername("paw-2020a-4");
         ds.setPassword("z5xN1hSaw");
-        */
+        /*
         ds.setUrl("jdbc:postgresql://localhost/paw");
         ds.setUsername("root");
         ds.setPassword("root");
-        
+        */
         return ds;
     }
 	
