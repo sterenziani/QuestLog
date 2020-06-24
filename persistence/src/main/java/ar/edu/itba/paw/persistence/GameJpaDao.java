@@ -122,7 +122,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         g.addPlatform(p);
         p.addGame(g);
-        em.flush();
+        
         return Optional.of(g);
     }
 
@@ -141,7 +141,7 @@ public class GameJpaDao implements GameDao {
                 p.addGame(game);
             }
         }
-        em.flush();
+        
     }
 
     @Override
@@ -150,7 +150,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         g.removePlatform(p);
         p.removeGame(g);
-        em.flush();
+        
         return Optional.of(g);
     }
 
@@ -162,7 +162,7 @@ public class GameJpaDao implements GameDao {
             platform.removeGame(g);
         }
         g.removePlatforms();
-        em.flush();
+        
     }
 
     @Override
@@ -171,7 +171,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         g.addDeveloper(d);
         d.addGame(g);
-        em.flush();
+        
         return Optional.of(g);
     }
 
@@ -190,7 +190,7 @@ public class GameJpaDao implements GameDao {
                 d.addGame(game);
             }
         }
-        em.flush();
+        
     }
 
     @Override
@@ -199,7 +199,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         g.removeDeveloper(d);
         d.removeGame(g);
-        em.flush();
+        
         return Optional.of(g);
     }
 
@@ -211,7 +211,7 @@ public class GameJpaDao implements GameDao {
             dev.removeGame(g);
         }
         g.removeDevelopers();
-        em.flush();
+        
     }
 
     @Override
@@ -220,7 +220,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         g.addPublisher(pub);
         pub.addGame(g);
-        em.flush();
+        
         return Optional.of(g);
     }
 
@@ -230,7 +230,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         g.removePublisher(pub);
         pub.removeGame(g);
-        em.flush();
+        
         return Optional.of(g);
     }
 
@@ -249,7 +249,7 @@ public class GameJpaDao implements GameDao {
                 p.addGame(game);
             }
         }
-        em.flush();
+        
     }
 
     @Override
@@ -260,7 +260,7 @@ public class GameJpaDao implements GameDao {
             pub.removeGame(g);
         }
         g.removePublishers();
-        em.flush();
+        
     }
 
     @Override
@@ -269,7 +269,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         game.addGenre(genre);
         genre.addGame(game);
-        em.flush();
+        
         return Optional.of(game);
     }
 
@@ -288,7 +288,7 @@ public class GameJpaDao implements GameDao {
                 gen.addGame(game);
             }
         }
-        em.flush();
+        
     }
 
     @Override
@@ -297,7 +297,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         game.removeGenre(genre);
         genre.removeGame(game);
-        em.flush();
+        
         return Optional.of(game);
     }
 
@@ -309,7 +309,7 @@ public class GameJpaDao implements GameDao {
             gen.removeGame(g);
         }
         g.removeGenres();
-        em.flush();
+        
     }
 
     @Override
@@ -317,7 +317,7 @@ public class GameJpaDao implements GameDao {
         if(game == null || r == null)
             return Optional.empty();
         game.addReleaseDate(r);
-        em.flush();
+        
         return Optional.of(game);
     }
 
@@ -339,7 +339,7 @@ public class GameJpaDao implements GameDao {
                 }
             }
         }
-        em.flush();
+        
     }
 
     @Override
@@ -348,7 +348,7 @@ public class GameJpaDao implements GameDao {
             return Optional.empty();
         game.removeReleaseDate(r);
         em.remove(r);
-        em.flush();
+        
         return Optional.of(game);
     }
 
@@ -360,7 +360,7 @@ public class GameJpaDao implements GameDao {
             em.remove(release);
         }
         g.removeReleaseDates();
-        em.flush();
+        
     }
 
     @Override
@@ -411,7 +411,7 @@ public class GameJpaDao implements GameDao {
         if(g == null)
             return;
         u.removeFromBacklog(g);
-        em.flush();
+        
     }
 
     @Override
@@ -650,11 +650,10 @@ public class GameJpaDao implements GameDao {
     @Override
     public void remove(Game g) {
         em.remove(g);
-        em.flush();
     }
 
     @Override
     public void update(Game g) {
-        em.flush();
+        em.merge(g);
     }
 }

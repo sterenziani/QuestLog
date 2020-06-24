@@ -7,6 +7,22 @@ import ar.edu.itba.paw.model.entity.*;
 import javax.persistence.EntityManager;
 public class TestMethods
 {
+	public static int countRowsInTable(String table, EntityManager em){
+		return ((Number) em.createNativeQuery("SELECT COUNT(*) FROM " + table).getSingleResult()).intValue();
+	}
+
+	public static int countRowsInTableWhere(String table, String where, EntityManager em){
+		return ((Number) em.createNativeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + where).getSingleResult()).intValue();
+	}
+
+	public static int deleteFromTable(String table, EntityManager em){
+		return em.createNativeQuery("DELETE FROM " + table).executeUpdate();
+	}
+
+	public static int deleteFromTableWhere(String table, String where, EntityManager em){
+		return em.createNativeQuery("DELETE FROM " + table + " WHERE " + where).executeUpdate();
+	}
+
 	public static Game addGame(String title, String cover, String desc, String trailer, EntityManager em)
 	{
 		Game g = new Game(title, cover, desc, trailer);
