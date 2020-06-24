@@ -5,17 +5,14 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.Score;
@@ -44,11 +41,6 @@ public class ScoreJpaDaoTest {
 	
 	@PersistenceContext
     private EntityManager em;
-	
-	@Autowired
-	private DataSource ds;
-
-	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	private ScoreJpaDao scoreDao;
@@ -56,10 +48,9 @@ public class ScoreJpaDaoTest {
 	@Before
 	public void	setUp()
 	{
-        jdbcTemplate = new JdbcTemplate(ds);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, SCORE_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+        TestMethods.deleteFromTable(GAME_TABLE, em);
+        TestMethods.deleteFromTable(SCORE_TABLE, em);
+        TestMethods.deleteFromTable(USER_TABLE, em);
 		TestMethods.addRole("Admin", em);
 	}
 	
