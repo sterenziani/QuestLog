@@ -46,7 +46,7 @@ public class UserJpaDao implements UserDao
 	{
 		final User user = new User(username, password, email, locale.toLanguageTag());
 		em.persist(user);
-		em.flush();
+		
 		return user;
 	}
 

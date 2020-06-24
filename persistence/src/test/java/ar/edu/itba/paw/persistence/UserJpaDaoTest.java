@@ -9,15 +9,11 @@ import java.util.Locale;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.model.entity.PasswordResetToken;
 import ar.edu.itba.paw.model.entity.User;
@@ -44,28 +40,16 @@ public class UserJpaDaoTest
 	EntityManager em;
 	
 	@Autowired
-	private DataSource ds;
-	
-	@Autowired
 	private UserJpaDao userDao;
-	private JdbcTemplate jdbcTemplate;
-
-	
-	@Before
-	public void	setUp()
-	{
-		jdbcTemplate = new JdbcTemplate(ds);
-		
-	}
 
 	@Test
 	public void	testCreateUser()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+		TestMethods.deleteFromTable(USER_TABLE, em);
 		final User user = userDao.create(USERNAME,PASSWORD,EMAIL,LOCALE_LOC);
         Assert.assertNotNull(user);
         Assert.assertEquals(USERNAME, user.getUsername());
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
+        Assert.assertEquals(1, TestMethods.countRowsInTable(USER_TABLE, em));
 	}
 
 	@Test
