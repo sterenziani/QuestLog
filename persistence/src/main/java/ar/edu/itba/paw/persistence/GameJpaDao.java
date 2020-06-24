@@ -378,6 +378,8 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         final TypedQuery<Game> query = em.createQuery("from Game as g where g.game in :ids", Game.class);
         query.setParameter("ids", ids);
         return query.getResultList();
@@ -501,7 +503,8 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
-
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();
@@ -572,7 +575,8 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
-
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();
@@ -593,7 +597,8 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
 		List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
-
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();
@@ -614,7 +619,8 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
-
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();
@@ -635,7 +641,8 @@ public class GameJpaDao implements GameDao {
         nativeQuery.setMaxResults(pageSize);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) nativeQuery.getResultList()).stream().map((num) -> ((Number) num).longValue()).collect(Collectors.toList());
-
+        if(ids.isEmpty())
+        	return Collections.emptyList();
         TypedQuery<Game> query = em.createQuery("from Game g where g.game in :filteredIds order by title", Game.class);
         query.setParameter("filteredIds", ids);
         return query.getResultList();
