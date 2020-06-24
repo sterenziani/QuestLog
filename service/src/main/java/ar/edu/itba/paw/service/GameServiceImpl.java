@@ -522,8 +522,6 @@ public class GameServiceImpl implements GameService
 				throw new BadFormatException();
 			}
 			g.setCover(coverName);
-		} else {
-			g.setCover(null);
 		}
 		gameDao.update(g);
 	}
