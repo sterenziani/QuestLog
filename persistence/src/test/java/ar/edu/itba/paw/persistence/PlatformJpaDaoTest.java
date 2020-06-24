@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,28 +20,19 @@ import ar.edu.itba.paw.model.entity.Platform;
 @Transactional
 public class PlatformJpaDaoTest
 {
-	private	static final String GAME_TABLE = "games";
 	private static final String GAME_TITLE = "Example Game";
 	private static final String GAME_COVER = "http://sega.com/game.jpg";
 	private static final String GAME_DESC = "Explore the world!";
 	private static final String GAME_TRAILER			= "DpHDJRGuL7w";
-	private	static final String PLATFORM_TABLE = "platforms";
 	private	static final String PLATFORM_NAME = "PlayStation 4";
 	private	static final String PLATFORM_SHORT_NAME = "PS4";
 	private	static final String PLATFORM_LOGO = "https://i.ytimg.com/vi/56NxUWEFpL0/maxresdefault.jpg";
-	private static final String VERSION_TABLE = "game_versions";
 	
     @PersistenceContext
     private EntityManager em;
 	
 	@Autowired
 	private PlatformJpaDao platformDao;
-		
-	@Before
-	public void	setUp()
-	{
-
-	}
 
 	@Test
 	public void	testRegisterPlatform()
