@@ -4,16 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import ar.edu.itba.paw.model.entity.Publisher;
 import ar.edu.itba.paw.model.entity.Game;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,35 +31,25 @@ public class PublisherJpaDaoTest
 
 	@PersistenceContext
     private EntityManager em;
-
-	@Autowired
-	private DataSource ds;
 	
 	@Autowired
 	private PublisherJpaDao publisherDao;
-	private JdbcTemplate jdbcTemplate;
-	
-	@Before
-	public void	setUp()
-	{
-		jdbcTemplate = new JdbcTemplate(ds);
-	}
 	
 	@Test
 	public void	testRegisterPublisher()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		final Publisher d = publisherDao.register(PUBLISHER_NAME, PUBLISHER_LOGO);
         Assert.assertNotNull(d);
         Assert.assertEquals(PUBLISHER_NAME, d.getName());
         Assert.assertEquals(PUBLISHER_LOGO, d.getLogo());
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, PUBLISHER_TABLE));
+        Assert.assertEquals(1, TestMethods.countRowsInTable(PUBLISHER_TABLE, em));
 	}
 	
 	@Test
 	public void	testFindPublisherByIdDoesntExist()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		Optional<Publisher> maybePublisher = publisherDao.findById(1);
 		Assert.assertFalse(maybePublisher.isPresent());
 	}
@@ -71,7 +57,7 @@ public class PublisherJpaDaoTest
 	@Test
 	public void	testFindPublisherByIdExists()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
 		Optional<Publisher> maybePublisher = publisherDao.findById(p.getId());
 		Assert.assertTrue(maybePublisher.isPresent());
@@ -82,7 +68,7 @@ public class PublisherJpaDaoTest
 	@Test
 	public void	testFindPublisherByNameDoesntExist()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		Optional<Publisher> maybePublisher = publisherDao.findByName(PUBLISHER_NAME);
 		Assert.assertFalse(maybePublisher.isPresent());
 	}
@@ -90,7 +76,7 @@ public class PublisherJpaDaoTest
 	@Test
 	public void	testFindPublisherByNameExists()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
 		Optional<Publisher> maybePublisher = publisherDao.findByName(PUBLISHER_NAME);
 		Assert.assertTrue(maybePublisher.isPresent());
@@ -101,7 +87,7 @@ public class PublisherJpaDaoTest
 	@Test
 	public void	testChangePublisherName()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
 		Optional<Publisher> maybePublisher = publisherDao.changeName(p.getId(), "Noentiendo");
 		Assert.assertTrue(maybePublisher.isPresent());
@@ -112,7 +98,7 @@ public class PublisherJpaDaoTest
 	@Test
 	public void	testChangeLogo()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		Publisher p = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
 		Optional<Publisher> maybePublisher = publisherDao.changeLogo(p.getId(), "http://sega.com/logo.png");
 		Assert.assertTrue(maybePublisher.isPresent());
@@ -123,9 +109,9 @@ public class PublisherJpaDaoTest
 	@Test
 	public void	testGetAllPublishers()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHING_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
+		TestMethods.deleteFromTable(PUBLISHING_TABLE, em);
+		TestMethods.deleteFromTable(GAME_TABLE, em);
 		Publisher nintendo = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
 		Publisher sega = TestMethods.addPublisher("Sega", "http://sega.com/logo.png", em);
 		Publisher konami = TestMethods.addPublisher("Konami", PUBLISHER_LOGO, em);
@@ -148,9 +134,9 @@ public class PublisherJpaDaoTest
 	
 	@Test
 	public void testGetBiggestPublishers() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHING_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
+		TestMethods.deleteFromTable(PUBLISHING_TABLE, em);
+		TestMethods.deleteFromTable(GAME_TABLE, em);
 		
 		Publisher konami = TestMethods.addPublisher("Konami", PUBLISHER_LOGO, em);
 		Publisher nintendo = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
@@ -183,7 +169,7 @@ public class PublisherJpaDaoTest
 	
 	@Test
 	public void testGetPublishers() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		
 		Publisher konami = TestMethods.addPublisher("Konami", PUBLISHER_LOGO, em);
 		Publisher nintendo = TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
@@ -219,7 +205,7 @@ public class PublisherJpaDaoTest
 	@Test
 	public void testCountPublishers()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		TestMethods.addPublisher(PUBLISHER_NAME, PUBLISHER_LOGO, em);
 		TestMethods.addPublisher("Sega", PUBLISHER_LOGO, em);
 		int count = publisherDao.countPublishers();
@@ -227,7 +213,7 @@ public class PublisherJpaDaoTest
 		TestMethods.addPublisher("Gamefreak", PUBLISHER_LOGO, em);
 		count = publisherDao.countPublishers();
 		Assert.assertEquals(3, count);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PUBLISHER_TABLE);
+		TestMethods.deleteFromTable(PUBLISHER_TABLE, em);
 		count = publisherDao.countPublishers();
 		Assert.assertEquals(0, count);
 	}

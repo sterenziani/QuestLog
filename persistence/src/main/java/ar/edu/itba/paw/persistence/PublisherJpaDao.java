@@ -54,7 +54,7 @@ public class PublisherJpaDao implements PublisherDao
 	{
 		final Publisher pub = new Publisher(name, logo);
 		em.persist(pub);
-		em.flush();
+		
 		return pub;
 	}
 
