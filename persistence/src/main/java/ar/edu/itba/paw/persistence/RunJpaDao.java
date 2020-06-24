@@ -1,18 +1,13 @@
 package ar.edu.itba.paw.persistence;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
 import org.springframework.stereotype.Repository;
-
 import ar.edu.itba.paw.interfaces.dao.RunDao;
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.Platform;
