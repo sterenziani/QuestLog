@@ -56,6 +56,30 @@ public class WebConfig
 	public static final int MAX_IMAGE_SIZE = -1;
 	
 	@Bean
+	public String baseUrl()
+	{
+		return "http://pawserver.it.itba.edu.ar/paw-2020a-4/";
+	}
+	
+	@Bean
+	public String explorePath()
+	{
+		return baseUrl() + "explore/";
+	}
+	
+	@Bean
+	public String gamePath()
+	{
+		return baseUrl() + "games/";
+	}
+	
+	@Bean
+	public String changePasswordPath()
+	{
+		return baseUrl() + "changePassword";
+	}
+	
+	@Bean
 	public DataSourceInitializer dataSourceInitializer(final DataSource ds)
 	{
 		final DataSourceInitializer dsi = new DataSourceInitializer();

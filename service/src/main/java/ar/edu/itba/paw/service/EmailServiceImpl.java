@@ -39,8 +39,15 @@ public class EmailServiceImpl implements EmailService
 	@Autowired
 	private GameService gs;
 	
-	private static final String WEBSITE_PATH = "http://pawserver.it.itba.edu.ar/paw-2020a-4/";
-	//private static final String WEBSITE_PATH = "http://localhost:8080/webapp/";
+	@Autowired
+	private String explorePath;
+	
+	@Autowired
+	private String gamePath;
+	
+	@Autowired
+	private String changePasswordPath;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
 	@Transactional
@@ -50,7 +57,7 @@ public class EmailServiceImpl implements EmailService
 	{
 		if(u == null)
 			return;
-		String url = WEBSITE_PATH + "explore/";
+		String url = explorePath;
 		Locale locale = u.getLocale();
 		final Context ctx = new Context(locale);
 		ctx.setVariable("path", url);
@@ -82,7 +89,7 @@ public class EmailServiceImpl implements EmailService
 	public void sendDailyEmails()
 	{
 		LOGGER.debug("Sending daily emails to all users");
-		String url = WEBSITE_PATH + "games/";
+		String url = gamePath;
 		List<User> userList = us.getAllUsers();
 		for(User u : userList)
 		{
@@ -119,7 +126,7 @@ public class EmailServiceImpl implements EmailService
 	@Transactional
 	public void sendAccountRecoveryEmail(User u, String token)
 	{
-		String url = WEBSITE_PATH + "changePassword/";
+		String url = changePasswordPath;
 		if(u == null)
 			return;
 		Locale locale = u.getLocale();
