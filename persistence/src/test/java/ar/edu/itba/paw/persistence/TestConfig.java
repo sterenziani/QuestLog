@@ -43,7 +43,6 @@ public class TestConfig
 		properties.setProperty("hibernate.hbm2ddl.auto", "update"); // Puede que necesite ser create, pero en ese caso tira excepciones
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
 
-		properties.setProperty("format_sql", "true");
 		factoryBean.setJpaProperties(properties);
 		return factoryBean;
 	}
