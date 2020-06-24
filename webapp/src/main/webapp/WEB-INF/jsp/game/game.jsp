@@ -16,7 +16,7 @@
 			<div>
 				<%@include file="gameDetails.jsp"%>
 			</div>
-			<div class="p-3 flex-grow-1">
+			<div class="p-3 col-9">
 				<c:choose>
 				<c:when test="${interactionEnabled}">
 					<%@include file="scoreForm.jsp"%>
