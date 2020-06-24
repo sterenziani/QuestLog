@@ -13,10 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.model.entity.Developer;
 import ar.edu.itba.paw.model.entity.Game;
@@ -39,36 +37,25 @@ public class DeveloperJpaDaoTest
 
 	@PersistenceContext
     private EntityManager em;
-
-	@Autowired
-	private DataSource ds;
 	
 	@Autowired
 	private DeveloperJpaDao developerDao;
-
-	private JdbcTemplate jdbcTemplate;
-	
-	@Before
-	public void	setUp()
-	{
-		jdbcTemplate = new JdbcTemplate(ds);
-	}
 	
 	@Test
 	public void	testRegisterDeveloper()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		final Developer d = developerDao.register(DEVELOPER_NAME, DEVELOPER_LOGO);
         Assert.assertNotNull(d);
         Assert.assertEquals(DEVELOPER_NAME, d.getName());
         Assert.assertEquals(DEVELOPER_LOGO, d.getLogo());
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, DEVELOPER_TABLE));
+        Assert.assertEquals(1, TestMethods.countRowsInTable(DEVELOPER_TABLE, em));
 	}
 	
 	@Test
 	public void	testFindDeveloperByIdDoesntExist()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Optional<Developer> maybeDeveloper = developerDao.findById(1);
 		Assert.assertFalse(maybeDeveloper.isPresent());
 	}
@@ -76,7 +63,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void	testFindDeveloperByIdExists()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Optional<Developer> maybeDeveloper = developerDao.findById(d.getId());
 		Assert.assertTrue(maybeDeveloper.isPresent());
@@ -87,7 +74,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void	testFindDeveloperByNameDoesntExist()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Optional<Developer> maybeDeveloper = developerDao.findByName(DEVELOPER_NAME);
 		Assert.assertFalse(maybeDeveloper.isPresent());
 	}
@@ -95,7 +82,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void	testFindDeveloperByNameExists()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Optional<Developer> maybeDeveloper = developerDao.findByName(DEVELOPER_NAME);
 		Assert.assertTrue(maybeDeveloper.isPresent());
@@ -106,7 +93,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void	testChangeDeveloperName()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Optional<Developer> maybeDeveloper = developerDao.changeName(d.getId(), "Noentiendo");
 		Assert.assertTrue(maybeDeveloper.isPresent());
@@ -117,7 +104,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void	testChangeLogo()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Developer d = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Optional<Developer> maybeDeveloper = developerDao.changeLogo(d.getId(), "http://sega.com/logo.png");
 		Assert.assertTrue(maybeDeveloper.isPresent());
@@ -128,7 +115,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void	testGetAllDevelopers()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Developer nintendo = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Developer sega = TestMethods.addDeveloper("Sega", DEVELOPER_LOGO, em);
 		List<Developer> myList = new ArrayList<Developer>();
@@ -145,7 +132,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void testCountDevelopers()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		TestMethods.addDeveloper("Sega", DEVELOPER_LOGO, em);
 		int count = developerDao.countDevelopers();
@@ -153,7 +140,7 @@ public class DeveloperJpaDaoTest
 		TestMethods.addDeveloper("Gamefreak", DEVELOPER_LOGO, em);
 		count = developerDao.countDevelopers();
 		Assert.assertEquals(3, count);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		count = developerDao.countDevelopers();
 		Assert.assertEquals(0, count);
 	}
@@ -161,7 +148,7 @@ public class DeveloperJpaDaoTest
 	@Test
 	public void testgetDevelopers() 
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
 		Developer gamefreak = TestMethods.addDeveloper("Gamefreak", DEVELOPER_LOGO, em);
 		Developer nintendo = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Developer sega = TestMethods.addDeveloper("Sega", DEVELOPER_LOGO, em);
@@ -194,9 +181,9 @@ public class DeveloperJpaDaoTest
 	
 	@Test
 	public void testGetBiggestDevelopers() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPER_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, DEVELOPMENT_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
+		TestMethods.deleteFromTable(DEVELOPER_TABLE, em);
+		TestMethods.deleteFromTable(DEVELOPMENT_TABLE, em);
+		TestMethods.deleteFromTable(GAME_TABLE, em);
 		Developer gamefreak = TestMethods.addDeveloper("Gamefreak", DEVELOPER_LOGO, em);
 		Developer nintendo = TestMethods.addDeveloper(DEVELOPER_NAME, DEVELOPER_LOGO, em);
 		Developer sega = TestMethods.addDeveloper("Sega", DEVELOPER_LOGO, em);
