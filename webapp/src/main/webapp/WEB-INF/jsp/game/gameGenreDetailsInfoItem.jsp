@@ -6,7 +6,9 @@
     <div class="bg-primary text-center">
         <ul>
             <c:forEach var="item" items="${items}">
-                <spring:message code="genres.${item}"/><br>
+                <spring:message code="genres.${item}" var="genreItem"/>
+                <c:out value="${genreItem}"/>
+                <br>
             </c:forEach>
         </ul>
     </div>

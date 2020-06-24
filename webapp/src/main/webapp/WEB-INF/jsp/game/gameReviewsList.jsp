@@ -7,13 +7,15 @@
         </div>
 	    <c:if test="${!empty seeAllReviewsUrl}">
 	        <div class="ml-auto">
-	            <a class="btn btn-link text-white" href="<c:url value="${seeAllReviewsUrl}"/>"><spring:message code="explore.seeAll"/></a>
+				<spring:message code="explore.seeAll" var="exploreSeeAll"/>
+	            <a class="btn btn-link text-white" href="<c:url value="${seeAllReviewsUrl}"/>"><c:out value="${exploreSeeAll}"/></a>
 	        </div>
 	    </c:if>
 	</div>
 	<div class="card-body d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
 		<c:if test="${empty reviewsInPage}">
-           	<div class="justify-content-center text-center mx-auto"><spring:message code="user.noReviews"/></div>
+			<spring:message code="user.noReviews" var="noReviews"/>
+           	<div class="justify-content-center text-center mx-auto"><c:out value="${noReviews}"/></div>
        	</c:if>
        	<div class="container">
 		<c:forEach var="element" items="${reviewsInPage}">

@@ -5,7 +5,8 @@
 <html>
 <head>
     <%@include file="../common/commonHead.jsp"%>
-	 <title>QuestLog - <spring:message code="review.writeReview"/></title>
+	<spring:message code="review.writeReview" var="title"/>
+	 <title>QuestLog - <c:out value="${title}"/></title>
 </head>
 <body>
     <%@include file="../common/navigation.jsp"%>
@@ -13,7 +14,8 @@
         <div class="card-header bg-very-dark text-white d-flex">
             <div>
                 <h2 class="share-tech-mono">
-                	<spring:message code="review.forGame" arguments="${game.title}"/>
+                	<spring:message code="review.forGame" arguments="${game.title}" var="forGame"/>
+					<c:out value="${forGame}"/>
                 </h2>
             </div>
         </div>
@@ -24,7 +26,8 @@
 					<div class="row">
 						<div class="col-9 my-auto">
 								<div class="row m-auto">
-									<form:label for="score" path="score"><strong><spring:message code="game.yourScore"/></strong></form:label>
+									<spring:message code="game.yourScore" var="yourScore"/>
+									<form:label for="score" path="score"><strong><c:out value="${yourScore}"/></strong></form:label>
 								</div>
 								<spring:message code="game.yourScore" var="score"/>
 								<c:choose>
@@ -39,7 +42,7 @@
 										</div>
 									</c:otherwise>
 								</c:choose>
-								<input type="hidden" value="${game.id}" name="game"/>
+								<input type="hidden" value="<c:out value="${game.id}"/>" name="game"/>
 						</div>
 						<div class="col-3 mt-5">
 							<c:choose>
@@ -59,49 +62,56 @@
 				</div>
                 
                 <div class="form-group">
-                    <form:label for="platform" path="platform"><strong><spring:message code="game.platform"/></strong></form:label>
+					<spring:message code="game.platform" var="platformTitle"/>
+                    <form:label for="platform" path="platform"><strong><c:out value="${platformTitle}"/></strong></form:label>
 	               	<select class="form-control" name="platform" id="platforms" style="padding: 5px">
 	                	<c:forEach var="element" items="${game.platforms}">
-	                    	<option value="${element.id}"><c:out value="${element.name}"/></option>
+	                    	<option value="<c:out value="${element.id}"/>"><c:out value="${element.name}"/></option>
 	                    </c:forEach>
 					</select>
                 </div>
                 
                 <div class="form-group">
                 	<form:errors path="body" class="form-error" element="p"/>
-                    <form:label for="body" path="body"><strong><spring:message code="review.body"/></strong></form:label>
+					<spring:message code="review.body" var="reviewBody"/>
+                    <form:label for="body" path="body"><strong><c:out value="${reviewBody}"/></strong></form:label>
                     <form:textarea cssClass="form-control" rows="8" path="body" name="body" type="text"/>
                 </div>
 				<c:choose>
 					<c:when test="${!game.inBacklog}">
 						<button type="submit" class="btn btn-primary btn-block mt-5">
-							<spring:message code="review.submit"/>
+							<spring:message code="review.submit" var="submit"/>
+							<c:out value="${submit}"/>
 						</button>
 					</c:when>
 					<c:otherwise>
 						<button type="button" class="btn btn-primary btn-block mt-5" data-toggle="modal" data-target="#removeFromBacklogBecauseReview">
-							<spring:message code="review.submit"/>
+							<spring:message code="review.submit" var="submit"/>
+							<c:out value="${submit}"/>
 						</button>
 						<div class="modal fade" id="removeFromBacklogBecauseReview" tabindex="-1" role="dialog" aria-labelledby="removeFromBacklogBecauseReviewModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h5 class="modal-title" id="removeFromBacklogBecauseReviewModalLabel"><spring:message code="review.create"/></h5>
+										<spring:message code="review.create" var="reviewCreate"/>
+										<h5 class="modal-title" id="removeFromBacklogBecauseReviewModalLabel"><c:out value="${reviewCreate}"/></h5>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">&times;</span>
 										</button>
 									</div>
 									<div class="modal-body">
-										<spring:message code="review.create.message"/>
+										<spring:message code="review.create.message" var="createMessage"/>
+										<c:out value="${createMessage}"/>
 									</div>
 									<div class="modal-footer">
 										<c:url value="/reviews/create/${game.id}" var="post_url"/>
 										<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
 										<form:input type="hidden" path="removeFromBacklog" id="removeFromBacklog" value="${false}"/>
-										<button type="submit" class="btn btn-light"><spring:message code="review.create.dismiss"/></button>
+										<spring:message code="review.create.dismiss" var="createDismiss"/>
+										<button type="submit" class="btn btn-light"><c:out value="${createDismiss}"/></button>
 
 										<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
-										<input class="btn btn-danger" type="submit" onclick="document.getElementById('removeFromBacklog').value = true" value="${removeFromBacklog}"/>
+										<input class="btn btn-danger" type="submit" onclick="document.getElementById('removeFromBacklog').value = true" value="<c:out value="${removeFromBacklog}"/>"/>
 									</div>
 								</div>
 							</div>

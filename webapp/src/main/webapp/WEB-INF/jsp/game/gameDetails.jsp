@@ -13,27 +13,31 @@
             <spring:message code="game.edit" var="edit"/>
             <spring:message code="game.delete" var="delete"/>
             <a href="<c:url value="/admin/game/${game.id}/edit"/>" class="btn btn-block btn-outline-warning not-rounded-bottom btn-lg"><c:out value="${edit}"/></a>
-            <button type="button" class="btn btn-block btn-outline-danger not-rounded-bottom btn-lg mt-0" data-toggle="modal" data-target="#deleteGameModal-${game.id}">
+            <button type="button" class="btn btn-block btn-outline-danger not-rounded-bottom btn-lg mt-0" data-toggle="modal" data-target="#deleteGameModal-<c:out value="${game.id}"/>">
                 <c:out value="${delete}"/>
             </button>
-            <div class="modal fade" id="deleteGameModal-${game.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteGameModal-<c:out value="${game.id}"/>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="deleteGameModalLabe-${game.id}l"><spring:message code="game.delete"/><c:out value="${game.title}"/></h5>
+                            <spring:message code="game.delete" var="gameDelete"/>
+                            <h5 class="modal-title" id="deleteGameModalLabel-<c:out value="${game.id}"/>"><c:out value="${gameDelete}"/><c:out value="${game.title}"/></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <spring:message code="game.delete.message"/>
+                            <spring:message code="game.delete.message" var="deleteMessage"/>
+                            <c:out value="${deleteMessage}"/>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="game.delete.dismiss"/></button>
+                            <spring:message code="game.delete.dismiss" var="deleteDismiss"/>
+                            <button type="button" class="btn btn-light" data-dismiss="modal"><c:out value="${deleteDismiss}"/></button>
 							<c:url value="/admin/game/${game.id}/delete/fromdetails" var="post_url"/>
-						    <form method="post" action="${post_url}">
+						    <form method="post" action="<c:out value="${post_url}"/>">
 						    	<spring:message code="game.delete" var="deleteReview"/>
-						    	<input class="btn btn-danger" type="submit" value="<spring:message code="game.delete.confirm"/>"/>
+                                <spring:message code="game.delete.confirm" var="confirmDelete"/>
+						    	<input class="btn btn-danger" type="submit" value="<c:out value="${confirmDelete}"/>"/>
 						    </form>
                         </div>
                     </div>
@@ -41,7 +45,7 @@
             </div>
         </div>
     </c:if>
-    <form method="post" onsubmit="var buttons = document.getElementsByClassName('button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].disabled=true;}">
+    <form method="post" onsubmit="var buttons = document.getElementsByClassName('button-<c:out value="${game.id}"/>'); for(var i=0; i < buttons.length; i++){buttons[i].disabled=true;}">
     <input type="hidden" name="gameId" value="<c:out value="${game.id}"/>">
     <spring:message code="game.addToBacklog" var="addToBacklog"/>
     <spring:message code="game.addingToBacklog" var="addingToBacklog"/>
@@ -49,10 +53,10 @@
     <spring:message code="game.removingFromBacklog" var="removingFromBacklog"/>
         <c:choose>
             <c:when test="${game.inBacklog}">
-                <input class="btn btn-block btn-outline-danger btn-lg not-rounded-bottom button-${game.id} remove-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${removingFromBacklog}';}" value="${removeFromBacklog}"/>
+                <input class="btn btn-block btn-outline-danger btn-lg not-rounded-bottom button-<c:out value="${game.id}"/> remove-button-<c:out value="${game.id}"/>" type="submit" onclick="var buttons = document.getElementsByClassName('remove-button-<c:out value="${game.id}"/>'); for(var i=0; i < buttons.length; i++){buttons[i].value = '<c:out value="${removingFromBacklog}"/>';}" value="<c:out value="${removeFromBacklog}"/>"/>
             </c:when>
             <c:otherwise>
-                <input class="btn btn-block btn-outline-success btn-lg not-rounded-bottom button-${game.id} add-button-${game.id}" type="submit" onclick="var buttons = document.getElementsByClassName('add-button-${game.id}'); for(var i=0; i < buttons.length; i++){buttons[i].value = '${addingToBacklog}';}" value="${addToBacklog}"/>
+                <input class="btn btn-block btn-outline-success btn-lg not-rounded-bottom button-<c:out value="${game.id}"/> add-button-<c:out value="${game.id}"/>" type="submit" onclick="var buttons = document.getElementsByClassName('add-button-<c:out value="${game.id}"/>'); for(var i=0; i < buttons.length; i++){buttons[i].value = '<c:out value="${addingToBacklog}"/>';}" value="<c:out value="${addToBacklog}"/>"/>
             </c:otherwise>
         </c:choose>
     </form>

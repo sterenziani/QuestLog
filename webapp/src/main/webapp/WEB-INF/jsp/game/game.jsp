@@ -25,23 +25,31 @@
 						<ul class="nav nav-tabs bg-dark">
 						<c:choose>
 						<c:when test="${reviewInterest}">
-							<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><spring:message code="game.tabs.runs"/></a></li>
+							<spring:message code="game.tabs.runs" var="tabsRun"/>
+							<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><c:out value="${tabsRun}"/></a></li>
 							<c:if test="${!empty loggedUser && !empty user_runs}">
-								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><spring:message code="game.tabs.myRuns"/></a></li>
+								<spring:message code="game.tabs.myRuns" var="tabsMyRuns"/>
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><c:out value="${tabsMyRuns}"/></a></li>
 							</c:if>
-							<li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><spring:message code="game.tabs.reviews"/></a></li>
+							<spring:message code="game.tabs.reviews" var="tabsReviews"/>
+							<li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><c:out value="${tabsReviews}"/></a></li>
 							<c:if test="${!empty loggedUser && !empty userReviews}">
-								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><spring:message code="game.tabs.myReviews"/></a></li>
+								<spring:message code="game.tabs.myReviews" var="tabsMyReviews"/>
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><c:out value="${tabsMyReviews}"/></a></li>
 							</c:if>
 						</c:when>
 						<c:otherwise>
-							<li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><spring:message code="game.tabs.runs"/></a></li>
+							<spring:message code="game.tabs.runs" var="tabsRun"/>
+							<li class="active py-2 px-5 mx-auto"><a data-toggle="tab" href="#time-tab"><c:out value="${tabsRun}"/></a></li>
 							<c:if test="${!empty loggedUser && !empty user_runs}">
-								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><spring:message code="game.tabs.myRuns"/></a></li>
+								<spring:message code="game.tabs.myRuns" var="tabsMyRuns"/>
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-run-tab"><c:out value="${tabsMyRuns}"/></a></li>
 							</c:if>
-							<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><spring:message code="game.tabs.reviews"/></a></li>
+							<spring:message code="game.tabs.reviews" var="tabsReviews"/>
+							<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#review-tab"><c:out value="${tabsReviews}"/></a></li>
 							<c:if test="${!empty loggedUser && !empty userReviews}">
-								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><spring:message code="game.tabs.myReviews"/></a></li>
+								<spring:message code="game.tabs.myReviews" var="tabsMyReviews"/>
+								<li class="py-2 px-5 mx-auto"><a data-toggle="tab" href="#user-review-tab"><c:out value="${tabsReviews}"/></a></li>
 							</c:if>
 						</c:otherwise>
 						</c:choose>
@@ -52,7 +60,8 @@
 							<div class="tab-content">
 								<div id="time-tab" class="tab-pane fade">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+										<spring:message code="game.addRun" var="addRun"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><c:out value="${addRun}"/></a>
 			  						</div>
 									<%@include file="averageTimes.jsp"%>
 									<%@include file="topRuns.jsp"%>
@@ -60,7 +69,8 @@
 			  					
 			  					<div id="user-run-tab" class="tab-pane fade">
 			  						<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+										<spring:message code="game.addRun" var="addRun"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><c:out value="${addRun}"/></a>
 			  						</div>
 									<c:if test="${loggedUser != null && !empty user_runs}">
 										<%@include file="userRuns.jsp"%>
@@ -69,7 +79,8 @@
 		
 								<div id="review-tab" class="tab-pane fade show active">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+										<spring:message code="review.writeReview" var="writeReview"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><c:out value="${writeReview}"/></a>
 			  						</div>
 									<c:if test="${reviewsCropped}">
 										<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
@@ -81,7 +92,8 @@
 								
 								<div id="user-review-tab" class="tab-pane fade">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+										<spring:message code="review.writeReview" var="writeReview"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><c:out value="${writeReview}"/></a>
 			  						</div>							
 									<c:if test="${!empty loggedUser}">
 										<c:if test="${userReviewsCropped}">
@@ -99,7 +111,8 @@
 							<div class="tab-content">
 								<div id="time-tab" class="tab-pane fade show active">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+										<spring:message code="game.addRun" var="addRun"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><c:out value="${addRun}"/></a>
 			  						</div>
 									<%@include file="averageTimes.jsp"%>
 									<%@include file="topRuns.jsp"%>
@@ -107,7 +120,8 @@
 			  					
 			  					<div id="user-run-tab" class="tab-pane fade">
 			  						<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><spring:message code="game.addRun"/></a>
+										<spring:message code="game.addRun" var="addRun"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/createRun/${game.id}"/>"><c:out value="${addRun}"/></a>
 			  						</div>
 									<c:if test="${loggedUser != null && !empty user_runs}">
 										<%@include file="userRuns.jsp"%>
@@ -116,7 +130,8 @@
 		
 								<div id="review-tab" class="tab-pane fade">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+										<spring:message code="review.writeReview" var="writeReview"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><c:out value="${writeReview}"/></a>
 									</div>
 									<c:if test="${reviewsCropped}">
 										<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
@@ -129,7 +144,8 @@
 								
 								<div id="user-review-tab" class="tab-pane fade">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+										<spring:message code="review.writeReview" var="writeReview"/>
+										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><c:out value="${writeReview}"/></a>
 			  						</div>							
 									<c:if test="${!empty loggedUser}">
 										<c:if test="${userReviewsCropped}">
@@ -151,7 +167,8 @@
 				<c:otherwise>
 				    <div class="container text-center align-middle">
 				    	<div class="my-5 py-5 bg-light border-bottom border-primary rounded-lg">
-					        <h5 class="align-middle"><spring:message code="error.interactionDisabled"/></h5>
+							<spring:message code="error.interactionDisabled" var="interactionDisabled"/>
+					        <h5 class="align-middle"><c:out value="${interactionDisabled}"/></h5>
 				        </div>
 				    </div>
 				</c:otherwise>
