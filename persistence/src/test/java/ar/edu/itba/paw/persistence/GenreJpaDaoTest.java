@@ -5,17 +5,13 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.model.entity.Genre;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,35 +30,24 @@ public class GenreJpaDaoTest
     private EntityManager em;
 	
 	@Autowired
-	private DataSource ds;
-	
-	@Autowired
 	private GenreJpaDao genreDao;
-	
-	private JdbcTemplate jdbcTemplate;
-	
-	@Before
-	public void	setUp()
-	{
-		jdbcTemplate = new JdbcTemplate(ds);
-	}
-	
+
 	@Test
 	public void	testRegisterGenre()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		final Genre g = genreDao.register(GENRE_NAME, GENRE_LOGO);
         Assert.assertNotNull(g);
         Assert.assertEquals(GENRE_NAME, g.getName());
         Assert.assertEquals(GENRE_LOGO, g.getLogo());
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, GENRE_TABLE));
+        Assert.assertEquals(1, TestMethods.countRowsInTable(GENRE_TABLE, em));
 	}
 	
 
 	@Test
 	public void	testFindGenreByIdDoesntExist()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Optional<Genre> maybeGenre = genreDao.findById(1);
 		Assert.assertFalse(maybeGenre.isPresent());
 	}
@@ -70,7 +55,7 @@ public class GenreJpaDaoTest
 	@Test
 	public void	testFindGenreByIdExists()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.findById(g.getId());
 		Assert.assertTrue(maybeGenre.isPresent());
@@ -81,7 +66,7 @@ public class GenreJpaDaoTest
 	@Test
 	public void	testFindGenreByNameDoesntExist()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Optional<Genre> maybeGenre = genreDao.findByName(GENRE_NAME);
 		Assert.assertFalse(maybeGenre.isPresent());
 	}
@@ -89,7 +74,7 @@ public class GenreJpaDaoTest
 	@Test
 	public void	testFindGenreByNameExists()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.findByName(GENRE_NAME);
 		Assert.assertTrue(maybeGenre.isPresent());
@@ -100,7 +85,7 @@ public class GenreJpaDaoTest
 	@Test
 	public void	testChangeGenreName()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.changeName(g.getId(), "Noentiendo");
 		Assert.assertTrue(maybeGenre.isPresent());
@@ -111,7 +96,7 @@ public class GenreJpaDaoTest
 	@Test
 	public void	testChangeLogo()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Genre g = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Optional<Genre> maybeGenre = genreDao.changeLogo(g.getId(), "http://sega.com/logo.png");
 		Assert.assertTrue(maybeGenre.isPresent());
@@ -122,7 +107,7 @@ public class GenreJpaDaoTest
 	@Test
 	public void	testGetAllGenres()
 	{
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, em);
 		List<Genre> myList = new ArrayList<Genre>();
@@ -137,7 +122,7 @@ public class GenreJpaDaoTest
 	
 	@Test
 	public void testGetGenres() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		Genre g1 = TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		Genre g2 = TestMethods.addGenre("Puzzle", GENRE_LOGO, em);
 		Genre g3 = TestMethods.addGenre("Action", GENRE_LOGO, em);
@@ -168,7 +153,7 @@ public class GenreJpaDaoTest
 	
 	@Test
 	public void testCountGenres() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		TestMethods.addGenre(GENRE_NAME, GENRE_LOGO, em);
 		TestMethods.addGenre("Puzzle", GENRE_LOGO, em);
 		
@@ -180,7 +165,7 @@ public class GenreJpaDaoTest
 		count = genreDao.countGenres();
 		Assert.assertEquals(3, count);
 		
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GENRE_TABLE);
+		TestMethods.deleteFromTable(GENRE_TABLE, em);
 		
 		count = genreDao.countGenres();
 		Assert.assertEquals(0, count);

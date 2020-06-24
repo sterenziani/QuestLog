@@ -53,7 +53,7 @@ public class GenreJpaDao implements GenreDao
 	{
 		final Genre gen = new Genre(name, logo);
 		em.persist(gen);
-		em.flush();
+		
 		return gen;
 	}
 
