@@ -59,10 +59,10 @@
     <div class="d-flex flex-column flex-grow-1 text-white">
         <c:choose>
             <c:when test="${ game.cover != null }">
-                <img class="card-img-top cover" src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>"/>
+                <img class="card-img-top" src="<c:url value="/images/${game.cover}"/>" alt="<c:out value="${game.title}"/>"/>
             </c:when>
             <c:otherwise>
-                <img class="card-img-top cover" src="<c:url value="/images/static/games/default_game_cover.png"/>" alt="<c:out value="${game.title}"/>"/>
+                <img class="card-img-top" src="<c:url value="/images/static/games/default_game_cover.png"/>" alt="<c:out value="${game.title}"/>"/>
             </c:otherwise>
         </c:choose>
         <c:if test="${ game.trailer != null}">
