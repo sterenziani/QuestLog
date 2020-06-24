@@ -23,29 +23,19 @@ import java.util.Optional;
 public class ImageJpaDaoTest {
 
     private static final String IMAGE_TABLE         = "images";
-    private static final String IMAGE_KEY_COLUMN    = "image";
     
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
-    private DataSource ds;
-
-    @Autowired
     private ImageJpaDao         imageJdbcDao;
-    private JdbcTemplate        jdbcTemplate;
-
-    @Before
-    public void setUp(){
-        jdbcTemplate    = new JdbcTemplate(ds);
-    }
 
     private static final String      IMAGE_NAME      = "sample.jpg";
     private static final byte[] IMAGE_DATA      = null;
 
     @Test
     public void testUploadImage(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
+        TestMethods.deleteFromTable(IMAGE_TABLE, em);
         final Image image = imageJdbcDao.uploadImage(IMAGE_NAME, IMAGE_DATA);
         Assert.assertNotNull(image);
         Assert.assertEquals(image.getImageName(), IMAGE_NAME);
@@ -55,7 +45,7 @@ public class ImageJpaDaoTest {
     @Test
     public void	testFindByImageName()
     {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
+        TestMethods.deleteFromTable(IMAGE_TABLE, em);
 
         TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, em);
 
@@ -69,7 +59,7 @@ public class ImageJpaDaoTest {
     @Test
     public void testRemoveByName()
     {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, IMAGE_TABLE);
+        TestMethods.deleteFromTable(IMAGE_TABLE, em);
         TestMethods.addImage(IMAGE_NAME, IMAGE_DATA, em);
         Image image2 = TestMethods.addImage("pic", IMAGE_DATA, em);
         
