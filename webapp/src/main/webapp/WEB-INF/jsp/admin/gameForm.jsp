@@ -7,10 +7,12 @@
     <%@include file="../common/commonHead.jsp"%>
      <c:choose>
          <c:when test="${! empty editMode && editMode == true}">
-             <title>QuestLog - <spring:message code="navigation.editGame"/></title>
+            <spring:message code="navigation.editGame" var="title"/>
+             <title>QuestLog - <c:out value="${title}"/></title>
          </c:when>
          <c:otherwise>
-             <title>QuestLog - <spring:message code="navigation.addGame"/></title>
+             <spring:message code="navigation.addGame" var="title"/>
+             <title>QuestLog - <c:out value="${title}"/></title>
          </c:otherwise>
      </c:choose>
 </head>
@@ -22,10 +24,12 @@
                 <h2 class="share-tech-mono">
                     <c:choose>
                         <c:when test="${! empty editMode && editMode == true}">
-                            <spring:message code="navigation.editGame"/>
+                            <spring:message code="navigation.editGame" var="editGame"/>
+                            <c:out value="${editGame}"/>
                         </c:when>
                         <c:otherwise>
-                            <spring:message code="navigation.addGame"/>
+                            <spring:message code="navigation.addGame" var="addGame"/>
+                            <c:out value="${addGame}"/>
                         </c:otherwise>
                     </c:choose>
                 </h2>
@@ -36,14 +40,14 @@
             	<form:input value="${gameId}" type="hidden" path="id"/>
                 <div class="form-group">
                     <c:set var="title"><spring:message code="gameForm.title"/></c:set>
-                    <form:label for="title" path="title"><strong><c:out value="${title}"></c:out></strong></form:label>
+                    <form:label for="title" path="title"><strong><c:out value="${title}"/></strong></form:label>
                     <form:errors path="title" class="form-error" element="p"/>
                     <form:errors class="form-error" element="p"/>
                     <form:input cssClass="form-control" path="title" name="title" type="text" placeholder="${title}"/>
                 </div>
                 <div class="form-group">
                     <c:set var="description"><spring:message code="gameForm.description"/></c:set>
-                    <form:label for="description" path="description"><strong><c:out value="${description}"></c:out></strong></form:label>
+                    <form:label for="description" path="description"><strong><c:out value="${description}"/></strong></form:label>
                     <form:errors path="description" class="form-error" element="p"/>
                     <form:textarea cssClass="form-control" rows="8" path="description" name="description" type="text" placeholder="${description}"/>
                 </div>
@@ -61,7 +65,8 @@
                 </div>
                 <div class="form-group">
                     <div class="mb-2">
-                        <strong><spring:message code="gameForm.trailer.preview"/></strong>
+                        <spring:message code="gameForm.trailer.preview" var="preview"/>
+                        <strong><c:out value="${preview}"/></strong>
                     </div>
                     <iframe id="preview" width="286" height="161" src="https://www.youtube.com/embed/<c:out value="${gameForm.trailer}"/>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <script>
@@ -74,28 +79,32 @@
 
                 <div class="form-group">
                     <c:set var="path" value="platforms"/>
-                    <form:label path="${path}"><strong><spring:message code="gameForm.platforms"/></strong></form:label>
+                    <spring:message code="gameForm.platforms" var="platforms"/>
+                    <form:label path="${path}"><strong><c:out value="${platforms}"/></strong></form:label>
 
                     <c:set var="items" value="${allPlatforms}"/>
                     <%@include file="../common/listOfCheckableOptions.jsp"%>
                 </div>
                 <div class="form-group">
                     <c:set var="path" value="developers"/>
-                    <form:label path="${path}"><strong><spring:message code="gameForm.developers"/></strong></form:label>
+                    <spring:message code="gameForm.developers" var="devs"/>
+                    <form:label path="${path}"><strong><c:out value="${devs}"/></strong></form:label>
 
                     <c:set var="items" value="${allDevelopers}"/>
                     <%@include file="../common/listOfCheckableOptions.jsp"%>
                 </div>
                 <div class="form-group">
                     <c:set var="path" value="publishers"/>
-                    <form:label path="${path}"><strong><spring:message code="gameForm.publishers"/></strong></form:label>
+                    <spring:message code="gameForm.publishers" var="pubs"/>
+                    <form:label path="${path}"><strong><c:out value="${pubs}"/></strong></form:label>
 
                     <c:set var="items" value="${allPublishers}"/>
                     <%@include file="../common/listOfCheckableOptions.jsp"%>
                 </div>
                 <div class="form-group">
                     <c:set var="path" value="genres"/>
-                    <form:label path="${path}"><strong><spring:message code="gameForm.genres"/></strong></form:label>
+                    <spring:message code="gameForm.genres" var="gens"/>
+                    <form:label path="${path}"><strong><c:out value="${gens}"/></strong></form:label>
 
                     <c:set var="items" value="${allGenres}"/>
                     <%@include file="listOfCheckableGenreOptions.jsp"%>
@@ -105,23 +114,23 @@
                         <label><strong><spring:message code="gameForm.releaseDates"/></strong></label>
                     </div>
                     <c:forEach var="region" items="${allRegions}">
-                        <label for="region-${region.shortName}"><c:out value="${region.shortName}"></c:out></label>
-                        <div class="input-group date mb-3" id="datetimepicker-${region.shortName}" data-target-input="nearest">
+                        <label for="region-<c:out value="${region.shortName}"/>"><c:out value="${region.shortName}"/></label>
+                        <div class="input-group date mb-3" id="datetimepicker-<c:out value="${region.shortName}"/>" data-target-input="nearest">
                             <c:choose>
                                 <c:when test="${gameForm.releaseDates.containsKey(region.id)}">
-                                    <input id="region-${region.shortName}" name="releaseDates['${region.id}']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-${region.shortName}" value="${gameForm.releaseDates.get(region.id)}"/>
+                                    <input id="region-<c:out value="${region.shortName}"/>" name="releaseDates['<c:out value="${region.id}"/>']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-<c:out value="${region.shortName}"/>" value="<c:out value="${gameForm.releaseDates.get(region.id)}"/>"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <input id="region-${region.shortName}" name="releaseDates['${region.id}']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-${region.shortName}" />
+                                    <input id="region-<c:out value="${region.shortName}"/>" name="releaseDates['<c:out value="${region.id}"/>']" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker-<c:out value="${region.shortName}"/>" />
                                 </c:otherwise>
                             </c:choose>
-                            <div class="input-group-append" data-target="#datetimepicker-${region.shortName}" data-toggle="datetimepicker">
+                            <div class="input-group-append" data-target="#datetimepicker-<c:out value="${region.shortName}"/>" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
                         <script type="text/javascript">
                             $(function () {
-                                $('#datetimepicker-${region.shortName}').datetimepicker({
+                                $('#datetimepicker-<c:out value="${region.shortName}"/>').datetimepicker({
                                     format: 'YYYY-MM-DD'
                                 });
                             });
@@ -130,13 +139,14 @@
                 </div>
                 <c:choose>
                     <c:when test="${! empty editMode && editMode == true}">
-                        <input type="submit" class="btn btn-primary btn-block mt-5" value="<spring:message code="gameForm.editSubmit"/>"/>
+                        <spring:message code="gameForm.editSubmit" var="editSubmit"/>
+                        <input type="submit" class="btn btn-primary btn-block mt-5" value="<c:out value="${editSubmit}"/>"/>
                     </c:when>
                     <c:otherwise>
-                        <input type="submit" class="btn btn-primary btn-block mt-5" value="<spring:message code="gameForm.addSubmit"/>"/>
+                        <spring:message code="gameForm.addSubmit" var="addSubmit"/>
+                        <input type="submit" class="btn btn-primary btn-block mt-5" value="<c:out value="${addSubmit}"/>"/>
                     </c:otherwise>
                 </c:choose>
-
             </form:form>
         </div>
     </div>
