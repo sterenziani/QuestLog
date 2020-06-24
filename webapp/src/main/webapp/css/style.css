@@ -156,3 +156,15 @@ body {
   color: #CFD8DC;
   border-color: #FFFFFF;
 }
+
+.game-search-results > div {
+    margin-left: 0 !important;
+}
+
+.min-width-5 {
+    min-width: 5em;
+}
+
+.min-width-4 {
+    min-width: 4em;
+}
