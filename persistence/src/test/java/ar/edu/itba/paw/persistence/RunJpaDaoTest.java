@@ -53,23 +53,17 @@ public class RunJpaDaoTest {
     private EntityManager em;
 	
 	@Autowired
-	private DataSource ds;
-	
-	@Autowired
 	private RunJpaDao runDao;
-	private JdbcTemplate jdbcTemplate;
 
 	@Before
 	public void	setUp()
 	{
-		jdbcTemplate = new JdbcTemplate(ds);
-		
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, RUN_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLAYSTYLE_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, ROLES_TABLE);
+		TestMethods.deleteFromTable(RUN_TABLE, em);
+		TestMethods.deleteFromTable(GAME_TABLE, em);
+		TestMethods.deleteFromTable(USER_TABLE, em);
+		TestMethods.deleteFromTable(PLATFORM_TABLE, em);
+		TestMethods.deleteFromTable(PLAYSTYLE_TABLE, em);
+		TestMethods.deleteFromTable(ROLES_TABLE, em);
 	}
 	
 	
@@ -469,9 +463,7 @@ public class RunJpaDaoTest {
 	
 	@Test
 	public void testRegisterPlaystyle()
-	{	
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLAYSTYLE_TABLE);
-		
+	{
 		final Playstyle ps = runDao.register(PLAYSTYLE_NAME);
 		Assert.assertNotNull(ps);
 		Assert.assertEquals(ps.getName(), PLAYSTYLE_NAME);
