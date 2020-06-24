@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
@@ -65,10 +62,13 @@ public class GameReviewController
 	}
 
 	@RequestMapping(value = "/create/{game_id}", method = RequestMethod.GET)
-	public ModelAndView writeReview(@PathVariable("game_id") long id, @ModelAttribute("reviewForm") final ReviewForm reviewForm, HttpServletRequest request)
+	public ModelAndView writeReview(@PathVariable("game_id") long id, @RequestParam("remove_backlog") final boolean removeFromBacklog, @ModelAttribute("reviewForm") final ReviewForm reviewForm, HttpServletRequest request)
 	{
 		ModelAndView mav = new ModelAndView("game/reviewForm");
 		Game game = gs.findById(id).orElseThrow(GameNotFoundException::new);
+		if (removeFromBacklog){
+			gs.removeFromBacklog(id);
+		}
         if(game.getPlatforms().size() == 0 || !game.hasReleased())
         	throw new ReviewsNotEnabledException();
 		User user = us.getLoggedUser();
@@ -86,7 +86,7 @@ public class GameReviewController
 	{
 		if(errors.hasErrors())
 		{
-			return writeReview(id, reviewForm, request);
+			return writeReview(id, false, reviewForm, request);
 		}
 		User u = us.getLoggedUser();
 		Game g = gs.findById(id).orElseThrow(GameNotFoundException::new);

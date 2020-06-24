@@ -116,7 +116,49 @@
 		
 								<div id="review-tab" class="tab-pane fade">
 									<div class="col text-center mt-4">
-										<a class="btn btn-success create-run-button button" href="<c:url value="/reviews/create/${game.id}"/>"><spring:message code="review.writeReview"/></a>
+										<c:choose>
+										<c:when test="${loggedUser != null}">
+											<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#removeFromBacklogBecauseReview">
+												<spring:message code="review.writeReview"/>
+											</button>
+											<div class="modal fade" id="removeFromBacklogBecauseReview" tabindex="-1" role="dialog" aria-labelledby="removeFromBacklogBecauseReviewModalLabel" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="removeFromBacklogBecauseReviewModalLabel"><spring:message code="review.create"/></h5>
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+															<spring:message code="review.create.message"/>
+														</div>
+														<div class="modal-footer">
+															<c:url value="/reviews/create/${game.id}" var="post_url"/>
+															<form method="get" action="${post_url}">
+																<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+																<input type="hidden" name="remove_backlog" value="<c:out value="${false}"/>">
+																<button type="submit" class="btn btn-light"><spring:message code="review.create.dismiss"/></button>
+															</form>
+															<form method="get" action="${post_url}">
+																<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+																<input type="hidden" name="remove_backlog" value="<c:out value="${true}"/>">
+																<input class="btn btn-danger" type="submit" value="${removeFromBacklog}"/>
+															</form>
+														</div>
+													</div>
+												</div>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<c:url value="/reviews/create/${game.id}" var="post_url"/>
+											<form method="get" action="${post_url}">
+												<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+												<input type="hidden" name="remove_backlog" value="<c:out value="${false}"/>">
+												<button type="submit" class="btn btn-danger"><spring:message code="review.writeReview"/></button>
+											</form>
+										</c:otherwise>
+										</c:choose>
 			  						</div>
 									<c:if test="${reviewsCropped}">
 										<c:set var="seeAllReviewsUrl" value="/games/${game.id}/reviews"/>
