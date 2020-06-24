@@ -17,19 +17,20 @@
 			background-color:#CFD8DC;
 			color:black;
 			text-align: center;
-			padding:10px;
+			padding:30px;
 		}
   	</style>
   </head>
   <body>
+<body>
     <div class="title-box">
-    	<h1 th:text="#{email.register.title}"></h1>
+      <h1 th:text="#{email.register.title}"></h1>
     </div>
     <div class="body-box">
-    	<h4 th:text="#{email.register.body(${username})}"></h4>
-    	<p th:text="#{email.register.tip.reviews}"></p>
-    	<p th:text="#{email.register.tip.notifications}"></p>
-    	<h4><a th:href="@{{path}(path=${path})}" th:text="#{email.register.explore}"></a></h4>
+      <h4 th:text="#{email.register.body(${username})}"></h4>
+      <p th:text="#{email.register.tip.reviews}"></p>
+      <p th:text="#{email.register.tip.notifications}"></p>
+      <h4><a th:href="@{{path}(path=${path})}" th:text="#{email.register.explore}"></a></h4>
     </div>
   </body>
 </html>
