@@ -29,7 +29,8 @@ public class Review {
 	@Column(nullable = false)
 	private int score;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(length = 15000)
 	private List<String> body;
 	
 	@Column
