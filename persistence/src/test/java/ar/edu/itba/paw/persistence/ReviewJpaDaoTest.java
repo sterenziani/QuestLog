@@ -54,19 +54,15 @@ public class ReviewJpaDaoTest {
     private EntityManager em;
 	
 	@Autowired
-	private DataSource ds;
-	
-	@Autowired
 	private ReviewJpaDao reviewDao;
 
     @Before
 	public void	setUp()
 	{
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, REVIEW_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, GAME_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, PLATFORM_TABLE);
+		TestMethods.deleteFromTable(REVIEW_TABLE, em);
+		TestMethods.deleteFromTable(GAME_TABLE, em);
+		TestMethods.deleteFromTable(USER_TABLE, em);
+		TestMethods.deleteFromTable(PLATFORM_TABLE, em);
 	}
 	
 	@Test
