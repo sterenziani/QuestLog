@@ -522,13 +522,14 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getGamesInBacklogReleasingTomorrow(User u) {
-        final TypedQuery<Release> query = em.createQuery("select u.backlog from User as u", Release.class);
+        final TypedQuery<Release> query = em.createQuery("from Release as r where r.date = CURRENT_DATE + 1", Release.class);
         final List<Release> list = query.getResultList();
         if(list.isEmpty())
             return Collections.emptyList();
         List<Game> games = new ArrayList<>();
         for(Release r : list){
-            games.add(r.getGame());
+        	if(u.isInBacklog(r.getGame()))
+        		games.add(r.getGame());
         }
         return games;
     }
