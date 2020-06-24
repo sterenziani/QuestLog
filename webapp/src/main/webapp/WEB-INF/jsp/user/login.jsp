@@ -39,6 +39,9 @@
 					</div>
 				</form:form>
 				<div class="form-field mt-3">
+					<a class="btn btn-dark" href="<c:url value="/create"/>"><spring:message code="loginForm.signup"/></a>
+				</div>
+				<div class="form-field mt-3">
 					<a class="default-primary-color" href="<c:url value="/forgotPassword"/>"><spring:message code="login.forgotPassword"/></a>
 				</div>
 	        </div>

@@ -53,6 +53,9 @@
 						<input type="submit" class="btn btn-dark" value="<spring:message code="registerForm.submit"/>"/>
 					</div>
 				</form:form>
+				<div class="form-field form-field mt-3">
+					<a class="btn btn-dark" href="<c:url value="/login"/>"><spring:message code="registerForm.login"/></a>
+				</div>
 			</div>
 		</div>
 	</div>
