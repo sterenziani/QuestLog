@@ -62,13 +62,10 @@ public class GameReviewController
 	}
 
 	@RequestMapping(value = "/create/{game_id}", method = RequestMethod.GET)
-	public ModelAndView writeReview(@PathVariable("game_id") long id, @RequestParam("remove_backlog") final boolean removeFromBacklog, @ModelAttribute("reviewForm") final ReviewForm reviewForm, HttpServletRequest request)
+	public ModelAndView writeReview(@PathVariable("game_id") long id, @ModelAttribute("reviewForm") final ReviewForm reviewForm, HttpServletRequest request)
 	{
 		ModelAndView mav = new ModelAndView("game/reviewForm");
 		Game game = gs.findById(id).orElseThrow(GameNotFoundException::new);
-		if (removeFromBacklog){
-			gs.removeFromBacklog(id);
-		}
         if(game.getPlatforms().size() == 0 || !game.hasReleased())
         	throw new ReviewsNotEnabledException();
 		User user = us.getLoggedUser();
@@ -86,12 +83,15 @@ public class GameReviewController
 	{
 		if(errors.hasErrors())
 		{
-			return writeReview(id, false, reviewForm, request);
+			return writeReview(id, reviewForm, request);
 		}
 		User u = us.getLoggedUser();
 		Game g = gs.findById(id).orElseThrow(GameNotFoundException::new);
         if(g.getPlatforms().size() == 0 || !g.hasReleased())
         	throw new ReviewsNotEnabledException();
+        if (reviewForm.isRemoveFromBacklog()){
+        	gs.removeFromBacklog(id);
+		}
 		Platform p = ps.findById(reviewForm.getPlatform()).orElseThrow(PlatformNotFoundException::new);
 		Optional<Score> optScore = ss.findScore(u, g);
 		if(optScore.isPresent())

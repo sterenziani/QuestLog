@@ -14,6 +14,8 @@ public class ReviewForm {
 
     private long platform;
 
+    private boolean removeFromBacklog;
+
     public String getBody() {
         return body;
     }
@@ -36,5 +38,13 @@ public class ReviewForm {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setRemoveFromBacklog(boolean removeFromBacklog) {
+        this.removeFromBacklog = removeFromBacklog;
+    }
+
+    public boolean isRemoveFromBacklog() {
+        return removeFromBacklog;
     }
 }

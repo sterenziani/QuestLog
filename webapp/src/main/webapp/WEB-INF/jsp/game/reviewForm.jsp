@@ -72,9 +72,42 @@
                     <form:label for="body" path="body"><strong><spring:message code="review.body"/></strong></form:label>
                     <form:textarea cssClass="form-control" rows="8" path="body" name="body" type="text"/>
                 </div>
+				<c:choose>
+					<c:when test="${!game.inBacklog}">
+						<button type="submit" class="btn btn-primary btn-block mt-5">
+							<spring:message code="review.submit"/>
+						</button>
+					</c:when>
+					<c:otherwise>
+						<button type="button" class="btn btn-primary btn-block mt-5" data-toggle="modal" data-target="#removeFromBacklogBecauseReview">
+							<spring:message code="review.submit"/>
+						</button>
+						<div class="modal fade" id="removeFromBacklogBecauseReview" tabindex="-1" role="dialog" aria-labelledby="removeFromBacklogBecauseReviewModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="removeFromBacklogBecauseReviewModalLabel"><spring:message code="review.create"/></h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<spring:message code="review.create.message"/>
+									</div>
+									<div class="modal-footer">
+										<c:url value="/reviews/create/${game.id}" var="post_url"/>
+										<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+										<form:input type="hidden" path="removeFromBacklog" id="removeFromBacklog" value="${false}"/>
+										<button type="submit" class="btn btn-light"><spring:message code="review.create.dismiss"/></button>
 
-				<input type="submit" class="btn btn-primary btn-block mt-5" value="<spring:message code="review.submit"/>"/>
-
+										<spring:message code="game.removeFromBacklog" var="removeFromBacklog"/>
+										<input class="btn btn-danger" type="submit" onclick="document.getElementById('removeFromBacklog').value = true" value="${removeFromBacklog}"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:otherwise>
+				</c:choose>
             </form:form>
         </div>
     </div>
