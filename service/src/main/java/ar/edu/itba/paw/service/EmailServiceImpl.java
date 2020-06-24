@@ -3,12 +3,10 @@ import java.util.List;
 import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -100,7 +98,7 @@ public class EmailServiceImpl implements EmailService
 				try
 				{
 					message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-					Locale locale = LocaleContextHolder.getLocale();
+					Locale locale = u.getLocale();
 					message.setSubject(messageSource.getMessage("email.upcoming.subject", null, locale));
 					message.setFrom("no.reply.paw.questlog@gmail.com");
 					message.setTo(u.getEmail());
