@@ -135,5 +135,12 @@ public class UserJpaDao implements UserDao
 	public void removeAdmin(User u)
 	{
 		u.removeRole(new Role("Admin"));
+	}
+
+	@Override
+	public void deleteById(long id) {
+		User user = em.find(User.class, id);
+		if (user != null)
+			em.remove(user);
 	}		
 }

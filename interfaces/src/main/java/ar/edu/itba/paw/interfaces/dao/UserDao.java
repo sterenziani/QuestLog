@@ -68,8 +68,6 @@ public interface UserDao
 	void addAdmin(User u);
 	
 	void removeAdmin(User u);
-	
-	
 
-	
+	void deleteById(long id);	
 }

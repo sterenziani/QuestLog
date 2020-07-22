@@ -209,8 +209,8 @@ public class User
 		return runs.size();
 	}
 	
-	public Set<Run> getScores() {
-		return runs;
+	public Set<Score> getScores() {
+		return scores;
 	}
 
 	public void setScores(Set<Score> scores) {
