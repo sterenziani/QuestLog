@@ -268,6 +268,18 @@ public class Game
 	{
 		inBacklog = val;
 	}
+	
+	public int getAverageScore()
+	{
+		if(scores.size() == 0)
+			return 0;
+		int total = 0;
+		for(Score s : scores)
+		{
+			total += s.getScore();
+		}
+		return total / scores.size();
+	}
 
 	@Override
 	public int hashCode()

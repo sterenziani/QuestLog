@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -55,13 +54,13 @@ import ar.edu.itba.paw.model.entity.Review;
 import ar.edu.itba.paw.model.entity.Run;
 import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.exception.TokenNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.form.ForgotPasswordForm;
-import ar.edu.itba.paw.webapp.form.UserForm;
 
 /*
 @Controller
@@ -121,17 +120,6 @@ public class UserController
 		return resp.build();
 	}
 	
-	@GET
-	@Path("{userId}/scores")
-	public Response listAssignedIssues(@PathParam("userId") long userId)
-	{
-		final Optional<User> maybeUser = us.findById(userId);
-		if(!maybeUser.isPresent())
-			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		final List<ScoreDto> scores = maybeUser.get().getScores().stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());
-		return Response.ok(new GenericEntity<List<ScoreDto>>(scores) {}).build();
-	}
-	
 	@POST
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
 	public Response createUser(final UserDto userDto) {
@@ -143,7 +131,7 @@ public class UserController
 	@GET
 	@Path("/{userId}")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getById(@PathParam("userId") long userId)
+	public Response getUserById(@PathParam("userId") long userId)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
@@ -154,13 +142,51 @@ public class UserController
 	@DELETE
 	@Path("/{userId}")
 	@Produces(value = { MediaType.APPLICATION_JSON})
-	public Response deleteById(@PathParam("userId") final long id) {
+	public Response deleteUserById(@PathParam("userId") final long id) {
 		us.deleteById(id);
 		return Response.noContent().build(); // Da código 204 en vez de 404
 	}
 	
-	///////////////////////////////////////////////////////////////////////
+	@GET
+	@Path("{userId}/scores")
+	public Response listScoresByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<ScoreDto> scores = scors.findAllUserScores(maybeUser.get(), page, SCORES_PAGE_SIZE).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = 1 + scors.countAllUserScores(maybeUser.get()) / SCORES_PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+		return resp.build();
+	}
 	
+	@GET
+	@Path("{userId}/runs")
+	public Response listRunsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<RunDto> runs = rs.findRunsByUser(maybeUser.get(), page, RUNS_PAGE_SIZE).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = 1 + rs.countRunsByUser(maybeUser.get()) / RUNS_PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+		return resp.build();
+	}
+	
+	///////////////////////////////////////////////////////////////////////
+	/*
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm registerForm, HttpServletRequest request)
 	{
@@ -211,6 +237,7 @@ public class UserController
 		}
 		return new ModelAndView("redirect:" + redirectUrl);
 	}
+	*/
 	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request)
