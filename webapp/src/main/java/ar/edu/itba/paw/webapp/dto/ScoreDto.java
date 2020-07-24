@@ -4,24 +4,24 @@ import ar.edu.itba.paw.model.entity.Score;
 
 public class ScoreDto
 {
-	private long game;
+	private GameDto game;
 	private UserDto user;
 	private int score;
 	
 	public static ScoreDto fromScore(final Score score, UriInfo uriInfo)
 	{
 		final ScoreDto dto = new ScoreDto();
-		dto.game = score.getGame().getId();
+		dto.game = GameDto.fromGame(score.getGame(), uriInfo);
 		dto.user = UserDto.fromUser(score.getUser(), uriInfo);
 		dto.score = score.getScore();
 		return dto;
 	}
 
-	public long getGame() {
+	public GameDto getGame() {
 		return game;
 	}
 
-	public void setGame(long game) {
+	public void setGame(GameDto game) {
 		this.game = game;
 	}
 

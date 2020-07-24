@@ -17,6 +17,24 @@ public class UserDto
 	private int runs_total;
 	private long runs_hours_played;
 	
+	public static UserDto fromUser(User user, UriInfo uriInfo)
+	{
+		final UserDto dto = new UserDto();
+		dto.id = user.getId();
+		dto.username = user.getUsername();
+		dto.email = user.getEmail();
+		dto.locale = user.getLocale().toString();
+		
+		dto.score_total = user.getScoreCount();
+		dto.score_average = user.getScoreAverage();
+		dto.scores = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("scores").build();
+		
+		dto.runs_total = user.getRunCount();
+		dto.runs_hours_played = user.getTotalHoursPlayed();
+		dto.runs = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("runs").build();
+		return dto;
+	}
+	
 	public String getPassword() {
 		return password;
 	}
@@ -63,24 +81,6 @@ public class UserDto
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public static UserDto fromUser(User user, UriInfo uriInfo)
-	{
-		final UserDto dto = new UserDto();
-		dto.id = user.getId();
-		dto.username = user.getUsername();
-		dto.email = user.getEmail();
-		dto.locale = user.getLocale().toString();
-		
-		dto.score_total = user.getScoreCount();
-		dto.score_average = user.getScoreAverage();
-		dto.scores = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("scores").build();
-		
-		dto.runs_total = user.getRunCount();
-		dto.runs_hours_played = user.getTotalHoursPlayed();
-		dto.runs = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("runs").build();
-		return dto;
 	}
 
 	public String getEmail() {
