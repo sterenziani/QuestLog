@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.dto;
 import java.net.URI;
+
 import javax.ws.rs.core.UriInfo;
+
 import ar.edu.itba.paw.model.entity.User;
 
 public class UserDto
@@ -10,12 +12,14 @@ public class UserDto
 	private String password;
 	private String email;
 	private String locale;
-	private URI scores;
+	private URI scores_url;
 	private int score_total;
 	private int score_average;
-	private URI runs;
+	private URI runs_url;
 	private int runs_total;
 	private long runs_hours_played;
+	private URI reviews_url;
+	private int reviews_total;
 	
 	public static UserDto fromUser(User user, UriInfo uriInfo)
 	{
@@ -27,11 +31,14 @@ public class UserDto
 		
 		dto.score_total = user.getScoreCount();
 		dto.score_average = user.getScoreAverage();
-		dto.scores = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("scores").build();
+		dto.scores_url = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("scores").build();
 		
 		dto.runs_total = user.getRunCount();
 		dto.runs_hours_played = user.getTotalHoursPlayed();
-		dto.runs = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("runs").build();
+		dto.runs_url = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("runs").build();
+		
+		dto.reviews_total = user.getReviewCount();
+		dto.reviews_url = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("reviews").build();
 		return dto;
 	}
 	
@@ -53,14 +60,6 @@ public class UserDto
 
 	public void setScore_average(int score_average) {
 		this.score_average = score_average;
-	}
-
-	public URI getRuns() {
-		return runs;
-	}
-
-	public void setRuns(URI runs) {
-		this.runs = runs;
 	}
 
 	public int getRuns_total() {
@@ -99,14 +98,6 @@ public class UserDto
 		this.locale = locale;
 	}
 
-	public URI getScores() {
-		return scores;
-	}
-
-	public void setScores(URI scores) {
-		this.scores = scores;
-	}
-
 	public long getId() {
 		return id;
 	}
@@ -121,5 +112,37 @@ public class UserDto
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public URI getScores_url() {
+		return scores_url;
+	}
+
+	public void setScores_url(URI scores_url) {
+		this.scores_url = scores_url;
+	}
+
+	public URI getRuns_url() {
+		return runs_url;
+	}
+
+	public void setRuns_url(URI runs_url) {
+		this.runs_url = runs_url;
+	}
+
+	public URI getReviews_url() {
+		return reviews_url;
+	}
+
+	public void setReviews_url(URI reviews_url) {
+		this.reviews_url = reviews_url;
+	}
+
+	public int getReviews_total() {
+		return reviews_total;
+	}
+
+	public void setReviews_total(int reviews_total) {
+		this.reviews_total = reviews_total;
 	}
 }

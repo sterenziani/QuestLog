@@ -54,6 +54,9 @@ public class User
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Score> scores = new HashSet<>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private Set<Review> reviews = new HashSet<>();
 
 	public User()
 	{
@@ -220,6 +223,19 @@ public class User
 	public int getScoreCount()
 	{
 		return scores.size();
+	}
+	
+	public Set<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	public int getReviewCount()
+	{
+		return reviews.size();
 	}
 	
 	public long getTotalHoursPlayed()

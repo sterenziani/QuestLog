@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -54,6 +55,7 @@ import ar.edu.itba.paw.model.entity.Review;
 import ar.edu.itba.paw.model.entity.Run;
 import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
@@ -176,6 +178,25 @@ public class UserController
 		final List<RunDto> runs = rs.findRunsByUser(maybeUser.get(), page, RUNS_PAGE_SIZE).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = 1 + rs.countRunsByUser(maybeUser.get()) / RUNS_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+		return resp.build();
+	}
+	
+	@GET
+	@Path("{userId}/reviews")
+	public Response listReviewsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<ReviewDto> reviews = revs.findUserReviews(maybeUser.get(), page, REVIEWS_PAGE_SIZE).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
+		int amount_of_pages = 1 + revs.countReviewsByUser(maybeUser.get()) / REVIEWS_PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)

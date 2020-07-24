@@ -1,17 +1,25 @@
 package ar.edu.itba.paw.webapp.controller.game;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +30,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
-import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Playstyle;
 import ar.edu.itba.paw.model.entity.Review;
 import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.webapp.dto.AvgTimeDto;
 import ar.edu.itba.paw.webapp.dto.DeveloperDto;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 import ar.edu.itba.paw.webapp.dto.GenreDto;
 import ar.edu.itba.paw.webapp.dto.PlatformDto;
 import ar.edu.itba.paw.webapp.dto.PublisherDto;
+import ar.edu.itba.paw.webapp.dto.ReviewDto;
+import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 
@@ -53,9 +65,6 @@ public class GameDetailController {
 
     @Autowired
     private GameService                 gs;
-    
-    @Autowired
-    private PlatformService				ps;
 
     @Autowired
     private RunService                  runs;
@@ -131,6 +140,54 @@ public class GameDetailController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<DeveloperDto> developers = maybeGame.get().getDevelopers().stream().map(d -> DeveloperDto.fromDeveloper(d, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<DeveloperDto>>(developers) {}).build();
+	}
+	
+	@GET
+	@Path("/{gameId}/average_times")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getAvgTimesByGame(@PathParam("gameId") long gameId)
+	{
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		HashMap<Playstyle, String> mapa = runs.getAverageAllPlayStyles(maybeGame.get());
+		List<AvgTimeDto> times = new ArrayList<AvgTimeDto>();
+		for(Playstyle style : mapa.keySet())
+		{
+			times.add(AvgTimeDto.fromAvgTime(style, mapa.get(style), uriInfo));
+		}
+		return Response.ok(new GenericEntity<List<AvgTimeDto>>(times) {}).build();
+	}
+	
+	@GET
+	@Path("/{gameId}/top_runs")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getTopRunsByGame(@PathParam("gameId") long gameId, @QueryParam("top") @DefaultValue("5") int top)
+	{
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<RunDto> topRuns = runs.getTopRuns(maybeGame.get(), top).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
+		return Response.ok(new GenericEntity<List<RunDto>>(topRuns) {}).build();
+	}
+	
+	@GET
+	@Path("{gameId}/reviews")
+	public Response listReviewsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<ReviewDto> reviews = revs.findGameReviews(maybeGame.get(), page, REVIEWS_PAGE_SIZE).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
+		int amount_of_pages = 1 + revs.countReviewsForGame(maybeGame.get()) / REVIEWS_PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+		return resp.build();
 	}
     
     ///////////////////////////////////////////////////////////////////////////////////////////////
