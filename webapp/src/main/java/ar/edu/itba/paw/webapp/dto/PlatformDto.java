@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import java.net.URI;
+
 import javax.ws.rs.core.UriInfo;
 
 import ar.edu.itba.paw.model.entity.Platform;
@@ -10,6 +12,7 @@ public class PlatformDto
 	private String name;
 	private String shortName;
 	private String logo;
+	private URI games_url;
 	
 	public static PlatformDto fromPlatform(Platform p, UriInfo uriInfo)
 	{
@@ -18,6 +21,7 @@ public class PlatformDto
 		dto.name = p.getName();
 		dto.shortName = p.getShortName();
 		dto.logo = p.getLogo();
+		dto.games_url = uriInfo.getBaseUriBuilder().path("platforms").path(String.valueOf(dto.platformId)).path("games").build();
 		return dto;
 	}
 
@@ -51,5 +55,13 @@ public class PlatformDto
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	
+	public URI getGames_url() {
+		return games_url;
+	}
+
+	public void setGames_url(URI games_url) {
+		this.games_url = games_url;
 	}
 }

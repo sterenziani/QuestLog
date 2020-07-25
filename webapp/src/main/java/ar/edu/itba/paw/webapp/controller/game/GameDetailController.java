@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.game;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -19,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -86,7 +82,6 @@ public class GameDetailController {
     private static final int SCORES_PAGE_SIZE = 20;
     private static final int RUNS_PAGE_SIZE = 20;
 
-    
 	@GET
 	@Path("/{gameId}")
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -171,9 +166,9 @@ public class GameDetailController {
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
 	
@@ -190,9 +185,9 @@ public class GameDetailController {
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
 	
@@ -238,9 +233,9 @@ public class GameDetailController {
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
     

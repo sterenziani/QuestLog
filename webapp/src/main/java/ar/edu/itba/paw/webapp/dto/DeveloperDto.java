@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import java.net.URI;
+
 import javax.ws.rs.core.UriInfo;
 
 import ar.edu.itba.paw.model.entity.Developer;
@@ -8,6 +10,7 @@ public class DeveloperDto {
 	private long devId;
 	private String name;
 	private String logo;
+	private URI games_url;
 	
 	public static DeveloperDto fromDeveloper(Developer dev, UriInfo uriInfo)
 	{
@@ -15,6 +18,7 @@ public class DeveloperDto {
 		dto.devId = dev.getId();
 		dto.name = dev.getName();
 		dto.logo = dev.getLogo();
+		dto.games_url = uriInfo.getBaseUriBuilder().path("developers").path(String.valueOf(dto.devId)).path("games").build();
 		return dto;
 	}
 
@@ -40,5 +44,13 @@ public class DeveloperDto {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+
+	public URI getGames_url() {
+		return games_url;
+	}
+
+	public void setGames_url(URI games_url) {
+		this.games_url = games_url;
 	}
 }

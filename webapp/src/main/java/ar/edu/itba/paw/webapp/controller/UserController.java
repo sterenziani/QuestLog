@@ -116,9 +116,9 @@ public class UserController
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
 	
@@ -162,9 +162,9 @@ public class UserController
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
 	
@@ -181,9 +181,9 @@ public class UserController
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
 	
@@ -200,9 +200,9 @@ public class UserController
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
 	}
 	
