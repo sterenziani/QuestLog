@@ -20,7 +20,7 @@ public class GameDto
 	private URI developers_url;
 	private URI publishers_url;
 	private URI genres_url;
-	private URI releaseDates_url;
+	private URI release_dates_url;
 	private URI reviews_url;
 	private URI average_times_url;
 	private URI top_runs_url;
@@ -39,7 +39,7 @@ public class GameDto
 		dto.developers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("developers").build();
 		dto.publishers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("publishers").build();
 		dto.genres_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("genres").build();
-		dto.releaseDates_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("releaseDates").build();
+		dto.release_dates_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("release_dates").build();
 		dto.reviews_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("reviews").build();
 		dto.average_times_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("average_times").build();
 		dto.top_runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("top_runs").build();
@@ -126,12 +126,12 @@ public class GameDto
 		this.genres_url = genres_url;
 	}
 
-	public URI getReleaseDates_url() {
-		return releaseDates_url;
+	public URI getRelease_dates_url() {
+		return release_dates_url;
 	}
 
-	public void setReleaseDates_url(URI releaseDates_url) {
-		this.releaseDates_url = releaseDates_url;
+	public void setRelease_dates_url(URI releaseDates_url) {
+		this.release_dates_url = releaseDates_url;
 	}
 
 	public URI getReviews_url() {

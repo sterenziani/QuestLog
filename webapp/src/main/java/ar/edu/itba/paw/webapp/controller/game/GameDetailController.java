@@ -48,6 +48,7 @@ import ar.edu.itba.paw.webapp.dto.GameDto;
 import ar.edu.itba.paw.webapp.dto.GenreDto;
 import ar.edu.itba.paw.webapp.dto.PlatformDto;
 import ar.edu.itba.paw.webapp.dto.PublisherDto;
+import ar.edu.itba.paw.webapp.dto.ReleaseDto;
 import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
@@ -140,6 +141,18 @@ public class GameDetailController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<DeveloperDto> developers = maybeGame.get().getDevelopers().stream().map(d -> DeveloperDto.fromDeveloper(d, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<DeveloperDto>>(developers) {}).build();
+	}
+	
+	@GET
+	@Path("/{gameId}/release_dates")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getReleasesByGame(@PathParam("gameId") long gameId)
+	{
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<ReleaseDto> releaseDates = maybeGame.get().getReleaseDates().stream().map(r -> ReleaseDto.fromRelease(r, uriInfo)).collect(Collectors.toList());
+		return Response.ok(new GenericEntity<List<ReleaseDto>>(releaseDates) {}).build();
 	}
 	
 	@GET
