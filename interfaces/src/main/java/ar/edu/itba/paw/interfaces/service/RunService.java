@@ -29,7 +29,9 @@ Optional<Run> findRunById (long run);
  * @return	The list of runs
  */
 
-List<Run> findGameRuns(Game game, User user);
+List<Run> findAllGameRuns(Game game);
+List<Run> findAllGameRuns(Game game, int page, int pageSize);
+int countRunsByGame(Game game);
 
 /**
  * Find all runs by a user
@@ -40,15 +42,6 @@ List<Run> findGameRuns(Game game, User user);
 List<Run> findAllUserRuns(User user);
 List<Run> findRunsByUser(User user, int page, int pageSize);
 int countRunsByUser(User user);
-
-/**
- * Find all runs of a game
- * @param game	The game
- * @return The list of runs
- */
-
-List<Run> findAllGameRuns(Game game);
-
 
 /**
  * Find all runs of a game of a specific playstyle
@@ -175,5 +168,7 @@ Optional<Playstyle> findPlaystyleByName(String name);
 HashMap<Playstyle, String> getAverageAllPlayStyles(Game g);
 
 List<Run> getTopRuns(Game game, int amount);
+
+List<Run> findGameRuns(Game game, User user);
 
 }

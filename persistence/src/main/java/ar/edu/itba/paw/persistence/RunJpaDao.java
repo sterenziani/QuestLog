@@ -69,15 +69,6 @@ public class RunJpaDao implements RunDao
 		return ((Number) nativeQuery.getSingleResult()).intValue();
 	}
 
-
-	@Override
-	public List<Run> findAllGameRuns(Game game)
-	{
-		final TypedQuery<Run> query = em.createQuery("from Run as rn where rn.game.id = :gameId", Run.class);
-		query.setParameter("gameId", game.getId());
-		return query.getResultList();
-	}
-
 	@Override
 	public List<Run> findPlaystyleAndGameRuns(Game game, Playstyle playstyle)
 	{
@@ -193,6 +184,30 @@ public class RunJpaDao implements RunDao
 		query.setParameter("gameId", game.getId());
 		query.setMaxResults(amount);
 		return query.getResultList();
+	}
+
+	@Override
+	public List<Run> findAllGameRuns(Game game)
+	{
+		final TypedQuery<Run> query = em.createQuery("from Run as rn where rn.game.id = :gameId", Run.class);
+		query.setParameter("gameId", game.getId());
+		return query.getResultList();
+	}
+	
+	@Override
+	public List<Run> findAllGameRuns(Game game, int page, int pageSize) {
+		final TypedQuery<Run> query = em.createQuery("from Run as rn where rn.game.id = :gameId", Run.class).setParameter("gameId", game.getId());
+		query.setFirstResult((page-1) * pageSize); 
+		query.setMaxResults(pageSize);
+		return query.getResultList();
+	}
+
+
+	@Override
+	public int countRunsByGame(Game game) {
+		Query nativeQuery = em.createNativeQuery("SELECT COUNT(*) FROM runs WHERE game = :gameId");
+		nativeQuery.setParameter("gameId", game.getId());
+		return ((Number) nativeQuery.getSingleResult()).intValue();
 	}
 
 }

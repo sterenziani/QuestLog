@@ -50,4 +50,8 @@ public interface ScoreService {
 	List<Score> findAllUserScores(User user);
 	List<Score> findAllUserScores(User user, int page, int pageSize);
 	int countAllUserScores(User user);
+	
+	List<Score> findAllGameScores(Game game);
+	List<Score> findAllGameScores(Game game, int page, int pageSize);
+	int countAllGameScores(Game game);
 }

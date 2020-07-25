@@ -74,4 +74,22 @@ public class ScoreServiceImpl implements ScoreService{
 	{
 		return scoreDao.countAllUserScores(user);
 	}
+
+	@Transactional
+	@Override
+	public List<Score> findAllGameScores(Game game) {
+		return scoreDao.findAllGameScores(game);
+	}
+
+	@Transactional
+	@Override
+	public List<Score> findAllGameScores(Game game, int page, int pageSize) {
+		return scoreDao.findAllGameScores(game, page, pageSize);
+	}
+
+	@Transactional
+	@Override
+	public int countAllGameScores(Game game) {
+		return scoreDao.countAllGameScores(game);
+	}
 }

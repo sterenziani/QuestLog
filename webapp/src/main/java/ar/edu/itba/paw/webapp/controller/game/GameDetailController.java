@@ -51,6 +51,7 @@ import ar.edu.itba.paw.webapp.dto.PublisherDto;
 import ar.edu.itba.paw.webapp.dto.ReleaseDto;
 import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
+import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 
@@ -82,6 +83,8 @@ public class GameDetailController {
     private static final Logger         LOGGER = LoggerFactory.getLogger(GameDetailController.class);
     private static final int REVIEW_SHOWCASE_SIZE = 5;
     private static final int REVIEWS_PAGE_SIZE = 10;
+    private static final int SCORES_PAGE_SIZE = 20;
+    private static final int RUNS_PAGE_SIZE = 20;
 
     
 	@GET
@@ -153,6 +156,44 @@ public class GameDetailController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ReleaseDto> releaseDates = maybeGame.get().getReleaseDates().stream().map(r -> ReleaseDto.fromRelease(r, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<ReleaseDto>>(releaseDates) {}).build();
+	}
+	
+	@GET
+	@Path("{gameId}/scores")
+	public Response listScoresByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<ScoreDto> scores = scors.findAllGameScores(maybeGame.get(), page, SCORES_PAGE_SIZE).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());;
+		int amount_of_pages = 1 + scors.countAllGameScores(maybeGame.get()) / SCORES_PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+		return resp.build();
+	}
+	
+	@GET
+	@Path("{gameId}/runs")
+	public Response listRunsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<RunDto> runList = runs.findAllGameRuns(maybeGame.get(), page, RUNS_PAGE_SIZE).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());;
+		int amount_of_pages = 1 + scors.countAllGameScores(maybeGame.get()) / RUNS_PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runList) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link((page > 1)? uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build() : URI.create(""), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link((page < amount_of_pages)? uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build() : URI.create(""), "next");
+		return resp.build();
 	}
 	
 	@GET

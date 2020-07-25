@@ -48,6 +48,8 @@ int countRunsByUser(User user);
  */
 
 List<Run> findAllGameRuns(Game game);
+List<Run> findAllGameRuns(Game game, int page, int pageSize);
+int countRunsByGame(Game game);
 
 /**
  * Find all runs of a game of a specific playstyle

@@ -46,12 +46,6 @@ public class RunServiceImpl implements RunService {
 
 	@Transactional
 	@Override
-	public List<Run> findAllGameRuns(Game game) {
-		return runDao.findAllGameRuns(game);
-	}
-
-	@Transactional
-	@Override
 	public List<Run> findPlaystyleAndGameRuns(Game game, Playstyle playstyle) {
 		return runDao.findPlaystyleAndGameRuns(game, playstyle);
 	}
@@ -174,5 +168,23 @@ public class RunServiceImpl implements RunService {
 	public List<Run> getTopRuns(Game game, int amount)
 	{
 		return runDao.getTopRuns(game, amount);
+	}
+
+	@Transactional
+	@Override
+	public List<Run> findAllGameRuns(Game game) {
+		return runDao.findAllGameRuns(game);
+	}
+	
+	@Transactional
+	@Override
+	public List<Run> findAllGameRuns(Game game, int page, int pageSize) {
+		return runDao.findAllGameRuns(game, page, pageSize);
+	}
+
+	@Transactional
+	@Override
+	public int countRunsByGame(Game game) {
+		return runDao.countRunsByGame(game);
 	}
 }

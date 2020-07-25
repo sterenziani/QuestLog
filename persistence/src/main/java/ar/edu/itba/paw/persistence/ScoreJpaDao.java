@@ -84,5 +84,26 @@ public class ScoreJpaDao implements ScoreDao
 	public List<Score> getAllScores() {
 		final TypedQuery<Score> query = em.createQuery("from Score", Score.class);
 		return query.getResultList();
+	}
+
+	@Override
+	public List<Score> findAllGameScores(Game game) {
+		final TypedQuery<Score> query = em.createQuery("From Score as sc where sc.game.id = :gameId", Score.class).setParameter("gameId", game.getId());
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Score> findAllGameScores(Game game, int page, int pageSize) {
+		final TypedQuery<Score> query = em.createQuery("From Score as sc where sc.game.id = :gameId", Score.class).setParameter("gameId", game.getId());
+		query.setFirstResult((page-1) * pageSize); 
+		query.setMaxResults(pageSize);
+		return query.getResultList();
+	}
+
+	@Override
+	public int countAllGameScores(Game game){
+		Query nativeQuery = em.createNativeQuery("SELECT COUNT(*) FROM scores WHERE game = :gameId");
+		nativeQuery.setParameter("gameId", game.getId());
+		return ((Number) nativeQuery.getSingleResult()).intValue();
 	}		
 }

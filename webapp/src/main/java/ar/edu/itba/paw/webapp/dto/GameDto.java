@@ -21,6 +21,8 @@ public class GameDto
 	private URI publishers_url;
 	private URI genres_url;
 	private URI release_dates_url;
+	private URI scores_url;
+	private URI runs_url;
 	private URI reviews_url;
 	private URI average_times_url;
 	private URI top_runs_url;
@@ -34,12 +36,14 @@ public class GameDto
 		dto.description = game.getDescription();
 		dto.trailer = game.getTrailer();
 		dto.score = game.getAverageScore();
-		
+
 		dto.platforms_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("platforms").build();
 		dto.developers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("developers").build();
 		dto.publishers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("publishers").build();
 		dto.genres_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("genres").build();
 		dto.release_dates_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("release_dates").build();
+		dto.scores_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("scores").build();
+		dto.runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("runs").build();
 		dto.reviews_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("reviews").build();
 		dto.average_times_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("average_times").build();
 		dto.top_runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("top_runs").build();
@@ -157,4 +161,21 @@ public class GameDto
 	public void setTop_runs_url(URI top_runs_url) {
 		this.top_runs_url = top_runs_url;
 	}
+
+	public URI getScores_url() {
+		return scores_url;
+	}
+
+	public void setScores_url(URI scores_url) {
+		this.scores_url = scores_url;
+	}
+
+	public URI getRuns_url() {
+		return runs_url;
+	}
+
+	public void setRuns_url(URI runs_url) {
+		this.runs_url = runs_url;
+	}
+	
 }
