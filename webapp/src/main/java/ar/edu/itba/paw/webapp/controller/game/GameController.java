@@ -1,11 +1,28 @@
 package ar.edu.itba.paw.webapp.controller.game;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.ResponseBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +38,16 @@ import ar.edu.itba.paw.interfaces.service.PublisherService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.webapp.dto.GameDto;
+import ar.edu.itba.paw.webapp.dto.UserDto;
 
-@Controller
-@ComponentScan("ar.edu.itba.paw.webapp.component")
+@Path("games")
+@Component
 public class GameController {
 
+	@Context
+	private UriInfo uriInfo;
+	
     @Autowired
     private GameService                 gs;
 
@@ -55,6 +77,58 @@ public class GameController {
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
 
+	@GET
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page,
+							@QueryParam("searchTerm") @DefaultValue("") String searchTerm,
+							@QueryParam("hoursRight") @DefaultValue("9999") int hoursRight,
+							@QueryParam("minsRight") @DefaultValue("59") int minsRight, 
+							@QueryParam("secsRight") @DefaultValue("59") int secsRight,
+							@QueryParam("hoursLeft") @DefaultValue("0") int hoursLeft,
+							@QueryParam("minsLeft") @DefaultValue("0") int minsLeft,
+							@QueryParam("secsLeft") @DefaultValue("0") int secsLeft,
+							@QueryParam("scoreRight") @DefaultValue("100") int scoreRight,
+							@QueryParam("scoreLeft") @DefaultValue("0") int scoreLeft,
+							@QueryParam("platforms") List<String> platforms, 
+							@QueryParam("genres") List<String> genres)
+	{
+		int timeLeft = hoursLeft*3600 + minsLeft*60 + secsLeft;
+		int timeRight = hoursRight*3600 + minsRight*60 + secsRight;
+		int countResults = gs.countSearchResultsFiltered(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
+		final List<GameDto> searchResults = gs.getFilteredGames(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, PAGE_SIZE)
+				.stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+		
+		int amount_of_pages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(searchResults) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+		return resp.build();
+	}
+	
+	@GET
+	@Path("/upcoming")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getUpcomingGames()
+	{
+        List<GameDto> list = gs.getUpcomingGames().stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        return Response.ok(new GenericEntity<List<GameDto>>(list) {}).build();
+	}
+	
+	@GET
+	@Path("/popular")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getPopularGames()
+	{
+        List<GameDto> list = gs.getPopularGames().stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        return Response.ok(new GenericEntity<List<GameDto>>(list) {}).build();
+	}
+    
+    ///////////////////////////////////////////////////////////////////////
+	/*
     @RequestMapping("/")
     public ModelAndView index(@CookieValue(value="backlog", defaultValue="") String backlog)
     {
@@ -78,6 +152,7 @@ public class GameController {
         }
         return mav;
     }
+    
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ModelAndView addToBacklogAndShowIndex(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
@@ -85,6 +160,7 @@ public class GameController {
         backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
         return new ModelAndView("redirect:/");
     }
+    */
 
     @RequestMapping("/explore")
     public ModelAndView explore()
@@ -102,7 +178,7 @@ public class GameController {
     }
 
 	
-
+/*
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView filteredSearch(@RequestParam(required = false, defaultValue = "9999", value ="hoursRight") int hoursRight, @RequestParam(required = false, defaultValue = "59", value ="minsRight") int minsRight, 
 			@RequestParam(required = false, defaultValue = "59", value ="secsRight") int secsRight,
@@ -250,4 +326,5 @@ public class GameController {
         backlogCookieHandlerService.updateWithBacklogDetails(list, backlog);
         return list;
     }
+    */
 }

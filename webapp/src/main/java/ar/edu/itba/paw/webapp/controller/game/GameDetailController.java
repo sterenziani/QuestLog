@@ -51,7 +51,7 @@ import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ScoresNotEnabledException;
 
-@Path("/games")
+@Path("games")
 @Component
 public class GameDetailController {
 
@@ -161,7 +161,7 @@ public class GameDetailController {
 		if(!maybeGame.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ScoreDto> scores = scors.findAllGameScores(maybeGame.get(), page, SCORES_PAGE_SIZE).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());;
-		int amount_of_pages = 1 + scors.countAllGameScores(maybeGame.get()) / SCORES_PAGE_SIZE;
+		int amount_of_pages = (scors.countAllGameScores(maybeGame.get()) + SCORES_PAGE_SIZE - 1) / SCORES_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -180,7 +180,7 @@ public class GameDetailController {
 		if(!maybeGame.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<RunDto> runList = runs.findAllGameRuns(maybeGame.get(), page, RUNS_PAGE_SIZE).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());;
-		int amount_of_pages = 1 + scors.countAllGameScores(maybeGame.get()) / RUNS_PAGE_SIZE;
+		int amount_of_pages = (scors.countAllGameScores(maybeGame.get()) + RUNS_PAGE_SIZE - 1) / RUNS_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runList) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -228,7 +228,7 @@ public class GameDetailController {
 		if(!maybeGame.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ReviewDto> reviews = revs.findGameReviews(maybeGame.get(), page, REVIEWS_PAGE_SIZE).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
-		int amount_of_pages = 1 + revs.countReviewsForGame(maybeGame.get()) / REVIEWS_PAGE_SIZE;
+		int amount_of_pages = (revs.countReviewsForGame(maybeGame.get()) + REVIEWS_PAGE_SIZE - 1) / REVIEWS_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -240,7 +240,7 @@ public class GameDetailController {
 	}
     
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    
+    /*
     @RequestMapping("/games/{gameId}")
     public ModelAndView gameProfile(@PathVariable("gameId") long gameId, @RequestParam(required = false, defaultValue = "false", value = "reviews") boolean reviewTab, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {
@@ -273,7 +273,8 @@ public class GameDetailController {
         }
         return mav;
     }
-
+    */
+	
     @RequestMapping(value = "/games/{gameId}", method = RequestMethod.POST)
     public ModelAndView addToBacklogAndShowGameProfile(@PathVariable("gameId") long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {

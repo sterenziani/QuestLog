@@ -340,7 +340,7 @@ public class GameServiceImpl implements GameService
 
 	@Transactional
 	@Override
-	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List <String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize)
+	public List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize)
 	{
 		List<Game> results = gameDao.getFilteredGames(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, pageSize);
 		updateBacklogDetails(results);

@@ -33,6 +33,7 @@ public class BacklogController {
     
     private static final int PAGE_SIZE = 15;
 
+    // Esto fue movido a UserController
     @RequestMapping("")
     public ModelAndView backlog(@RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
     {

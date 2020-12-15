@@ -31,6 +31,15 @@ public class UserServiceImpl implements UserService{
 	private PasswordEncoder encoder;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+	
+	private boolean allowed(User u) {
+		if(u == null)
+			return false;
+		User requester = getLoggedUser();
+		if(requester.getAdminStatus() || requester.equals(u))
+			return true;
+		return false;
+	}
 
 	@Transactional
 	@Override
@@ -67,7 +76,7 @@ public class UserServiceImpl implements UserService{
 	public User register(String username, String password, String email, Locale locale)
 	{
 		LOGGER.debug("Registering new user {} with email {} and language {}", username, email, locale.toLanguageTag());
-		if(findByUsername(username).isPresent())
+		if(findByUsername(username).isPresent() || findByEmail(email).isPresent())
 			return null;
 		String encodedPassword = encoder.encode(password);
 		User u = userDao.create(username, encodedPassword, email, locale);
