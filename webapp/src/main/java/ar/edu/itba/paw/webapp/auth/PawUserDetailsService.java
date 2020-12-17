@@ -35,9 +35,8 @@ public class PawUserDetailsService implements UserDetailsService
 		final Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		if(user.getAdminStatus())
-		{
 			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-		}
+		
 		final String password;
 		if(user.getPassword() == null || !BCRYPT_PATTERN.matcher(user.getPassword()).matches())
 		{

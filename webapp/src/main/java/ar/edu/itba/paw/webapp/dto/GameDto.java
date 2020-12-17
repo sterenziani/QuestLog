@@ -15,7 +15,6 @@ public class GameDto
 	private String description;
 	private String trailer;
 	private int score;
-	private int score_voters;
 	
 	private URI platforms_url;
 	private URI developers_url;

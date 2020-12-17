@@ -3,7 +3,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +30,6 @@ public class UserServiceImpl implements UserService{
 	private PasswordEncoder encoder;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-	
-	private boolean allowed(User u) {
-		if(u == null)
-			return false;
-		User requester = getLoggedUser();
-		if(requester.getAdminStatus() || requester.equals(u))
-			return true;
-		return false;
-	}
 
 	@Transactional
 	@Override

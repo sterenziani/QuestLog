@@ -3,17 +3,19 @@ import java.net.URI;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,51 +26,39 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.entity.Game;
-import ar.edu.itba.paw.model.entity.Review;
-import ar.edu.itba.paw.model.entity.Run;
-import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
+import ar.edu.itba.paw.webapp.dto.EditUserLocaleDto;
+import ar.edu.itba.paw.webapp.dto.EditUserPasswordDto;
+import ar.edu.itba.paw.webapp.dto.FormErrorDto;
+import ar.edu.itba.paw.webapp.dto.GameDto;
+import ar.edu.itba.paw.webapp.dto.RegisterDto;
 import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
-import ar.edu.itba.paw.webapp.exception.TokenNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.ChangePasswordForm;
-import ar.edu.itba.paw.webapp.form.ForgotPasswordForm;
 
 /*
 @Controller
 @ComponentScan("ar.edu.itba.paw.webapp.component")
 */
-@Path("/users")
+@Path("users")
 @Component
 public class UserController
 {
@@ -93,9 +83,13 @@ public class UserController
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+    @Autowired
+    private Validator validator;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private static final int USER_PAGE_SIZE = 20;
 	private static final int BACKLOG_TEASER_PAGE_SIZE = 5;
+	private static final int BACKLOG_PAGE_SIZE = 15;
 	private static final int SCORE_TEASER_PAGE_SIZE = 10;
 	private static final int RUNS_TEASER_PAGE_SIZE = 10;
 	private static final int REVIEWS_TEASER_PAGE_SIZE = 3;
@@ -108,10 +102,10 @@ public class UserController
 	
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response listUsers(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("searchTerm") @DefaultValue("") String searchTerm)
+	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("searchTerm") @DefaultValue("") String searchTerm)
 	{
 		final List<UserDto> allUsers = us.searchByUsernamePaged(searchTerm, page, USER_PAGE_SIZE).stream().map(u -> UserDto.fromUser(u, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = 1 + us.countUserSearchResults(searchTerm)/USER_PAGE_SIZE;
+		int amount_of_pages = (us.countUserSearchResults(searchTerm) + USER_PAGE_SIZE - 1) / USER_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<UserDto>>(allUsers) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -123,13 +117,45 @@ public class UserController
 	}
 	
 	@POST
+	@Path("/register")
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
-	public Response createUser(final UserDto userDto) {
-		final User registeredUser = us.register(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), Locale.forLanguageTag(userDto.getLocale()));
+	public Response createUser(@Valid RegisterDto registerDto)
+	{
+        Set<ConstraintViolation<RegisterDto>> violations = validator.validate(registerDto);
+        if (!violations.isEmpty())
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
+        Locale l = Locale.forLanguageTag(registerDto.getLocale());
+        if(l.toLanguageTag().equals("und"))
+        	l = Locale.ENGLISH;
+		final User registeredUser = us.register(registerDto.getUsername(), registerDto.getPassword(), registerDto.getEmail(), l);
+		if(registeredUser == null)
+		{
+			// Si hubo error al registrar, buscar la causa y notificarlo
+			boolean emailInUse = false;
+			boolean usernameInUse = false;
+			int size = 0;
+			int index = 0;
+			if(us.findByEmail(registerDto.getEmail()).isPresent())
+			{
+				emailInUse = true;
+				size++;
+			}
+			if(us.findByUsername(registerDto.getUsername()).isPresent())
+			{
+				usernameInUse = true;
+				size++;
+			}
+			FormErrorDto[] errors = new FormErrorDto[size];
+			if(emailInUse)
+				errors[index++] = new FormErrorDto("email", "EmailUnique.registerForm.email");
+			if(usernameInUse)
+				errors[index++] = new FormErrorDto("username", "UserUnique.registerForm.username");
+			return Response.status(Response.Status.CONFLICT).entity(errors.length > 1 ? errors : errors[0]).build();
+		}
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(registeredUser.getId())).build();
 		return Response.created(uri).build();
 	}
-
+	
 	@GET
 	@Path("/{userId}")
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -141,13 +167,93 @@ public class UserController
 		return Response.ok(maybeUser.map(u -> UserDto.fromUser(u, uriInfo)).get()).build();
 	}
 	
+    @PUT
+    @Path("/{userId}/password")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response updateUserPassword(@PathParam("userId") final long userId, @Valid EditUserPasswordDto editPasswordDto)
+    {
+        Set<ConstraintViolation<EditUserPasswordDto>> violations = validator.validate(editPasswordDto);
+        if(!violations.isEmpty())
+        	return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
+        if(!us.findById(userId).isPresent())
+        	return Response.status(Response.Status.NOT_FOUND).build();
+        User loggedUser = us.getLoggedUser();
+        if(loggedUser == null || loggedUser.getId() != userId)
+        	return Response.status(Response.Status.UNAUTHORIZED).build();
+        us.changeUserPassword(loggedUser, editPasswordDto.getPassword());
+        return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    }
+    
+    @PUT
+    @Path("/{userId}/locale")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response updateUserLocale(@PathParam("userId") final long userId, @Valid EditUserLocaleDto editLocaleDto)
+    {   	
+        Set<ConstraintViolation<EditUserLocaleDto>> violations = validator.validate(editLocaleDto);
+        if(!violations.isEmpty())
+        	return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
+        if(!us.findById(userId).isPresent())
+        	return Response.status(Response.Status.NOT_FOUND).build();
+        User loggedUser = us.getLoggedUser();
+        if(loggedUser == null || loggedUser.getId() != userId)
+        	return Response.status(Response.Status.UNAUTHORIZED).build();
+        System.out.println("Updating Locale!");
+        us.updateLocale(loggedUser, Locale.forLanguageTag(editLocaleDto.getLocale()));
+        return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    }
+	
 	@DELETE
 	@Path("/{userId}")
-	@Produces(value = { MediaType.APPLICATION_JSON})
-	public Response deleteUserById(@PathParam("userId") final long id) {
-		us.deleteById(id);
+	@Produces(value = { MediaType.APPLICATION_JSON, })
+	public Response deleteUserById(@PathParam("userId") final long userId) {
+        if(!us.findById(userId).isPresent())
+        	return Response.status(Response.Status.NOT_FOUND).build();
+        User loggedUser = us.getLoggedUser();
+        if(loggedUser == null || loggedUser.getId() != userId)
+        	return Response.status(Response.Status.UNAUTHORIZED).build();
+		us.deleteById(userId);
 		return Response.noContent().build(); // Da código 204 en vez de 404
 	}
+	
+	// TODO: Works but creates a new role with same name ADMIN
+	/*
+    @PUT
+    @Path("/{userId}/admin")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response makeAdmin(@PathParam("userId")int userId) {
+    	User u = us.findById(userId).orElse(null);
+    	if(u != null && !u.getAdminStatus())
+    	{
+            User loggedUser = us.getLoggedUser();
+            if(loggedUser == null || !loggedUser.getAdminStatus())
+            	return Response.status(Response.Status.UNAUTHORIZED).build();
+    		us.changeAdminStatus(u);
+    		return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    	}
+    	else
+    		return Response.status(Response.Status.FORBIDDEN).entity(new ValidationErrorDto()).build();
+    }
+    */
+
+    // TODO: Not tested
+    /*
+    @DELETE
+    @Path("/{userId}/admin")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response removeAdmin(@PathParam("userId")int userId) {
+    	User u = us.findById(userId).orElse(null);
+    	if(u != null && u.getAdminStatus())
+    	{
+            User loggedUser = us.getLoggedUser();
+            if(loggedUser == null || loggedUser.getId() != userId)
+            	return Response.status(Response.Status.UNAUTHORIZED).build();
+    		us.changeAdminStatus(u);
+    		return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    	}
+    	else
+    		return Response.status(Response.Status.FORBIDDEN).entity(new ValidationErrorDto()).build();
+    }
+    */
 	
 	@GET
 	@Path("{userId}/scores")
@@ -157,7 +263,7 @@ public class UserController
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ScoreDto> scores = scors.findAllUserScores(maybeUser.get(), page, SCORES_PAGE_SIZE).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = 1 + scors.countAllUserScores(maybeUser.get()) / SCORES_PAGE_SIZE;
+		int amount_of_pages = (scors.countAllUserScores(maybeUser.get()) + SCORES_PAGE_SIZE - 1) / SCORES_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -176,7 +282,7 @@ public class UserController
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<RunDto> runs = rs.findRunsByUser(maybeUser.get(), page, RUNS_PAGE_SIZE).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = 1 + rs.countRunsByUser(maybeUser.get()) / RUNS_PAGE_SIZE;
+		int amount_of_pages = (rs.countRunsByUser(maybeUser.get()) + RUNS_PAGE_SIZE - 1) / RUNS_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -195,8 +301,28 @@ public class UserController
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ReviewDto> reviews = revs.findUserReviews(maybeUser.get(), page, REVIEWS_PAGE_SIZE).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
-		int amount_of_pages = 1 + revs.countReviewsByUser(maybeUser.get()) / REVIEWS_PAGE_SIZE;
+		int amount_of_pages = (revs.countReviewsByUser(maybeUser.get()) + REVIEWS_PAGE_SIZE - 1) / REVIEWS_PAGE_SIZE;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+		return resp.build();
+	}
+	
+	@GET
+	@Path("{userId}/backlog")
+	public Response listBacklogForUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		List<GameDto> games = gs.getGamesInBacklog(maybeUser.get(), page, BACKLOG_PAGE_SIZE).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (gs.countGamesInBacklog(maybeUser.get()) + BACKLOG_PAGE_SIZE - 1) / BACKLOG_PAGE_SIZE;
+		
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -258,7 +384,7 @@ public class UserController
 		}
 		return new ModelAndView("redirect:" + redirectUrl);
 	}
-	*/
+
 	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request)
@@ -348,6 +474,7 @@ public class UserController
 		return new ModelAndView("redirect:/users/{id}");
 	}
 	
+	
 	@RequestMapping("/profile")
 	public ModelAndView visitOwnProfile()
 	{
@@ -370,7 +497,7 @@ public class UserController
 		mav.addObject("reviewsInPage", revs.findUserReviews(u, 1, REVIEWS_TEASER_PAGE_SIZE));
 		mav.addObject("reviewsCropped", revs.countReviewsByUser(u) > REVIEWS_TEASER_PAGE_SIZE);
 	}
-	
+
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public ModelAndView addToBacklogAndReturnToUserProfile(@RequestParam long gameId, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
 	{
@@ -435,17 +562,7 @@ public class UserController
         us.updateLocale(user, LocaleContextHolder.getLocale());
         return new ModelAndView("redirect:/");
 	}
-
-	private void authWithAuthManager(HttpServletRequest request, String username, String password)
-	{
-	    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-	    authToken.setDetails(new WebAuthenticationDetails(request));
-	    Authentication authentication = authenticationManager.authenticate(authToken);
-	    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        LOGGER.debug("User {} automatically logged in.", username);
-	}
-	
+		
     @RequestMapping("/users/{id}/scores")
     public ModelAndView viewScoresByUser(@PathVariable("id") long id, HttpServletResponse response, @RequestParam(required = false, defaultValue = "1", value = "page") int page)
     {
@@ -490,4 +607,15 @@ public class UserController
 		mav.addObject("user", visitedUser);
         return mav;
     }
+    */
+    
+	private void authWithAuthManager(HttpServletRequest request, String username, String password)
+	{
+	    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+	    authToken.setDetails(new WebAuthenticationDetails(request));
+	    Authentication authentication = authenticationManager.authenticate(authToken);
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        LOGGER.debug("User {} automatically logged in.", username);
+	}
 }
