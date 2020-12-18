@@ -215,8 +215,6 @@ public class UserController
 		return Response.noContent().build(); // Da código 204 en vez de 404
 	}
 	
-	// TODO: Works but creates a new role with same name ADMIN
-	/*
     @PUT
     @Path("/{userId}/admin")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -233,10 +231,8 @@ public class UserController
     	else
     		return Response.status(Response.Status.FORBIDDEN).entity(new ValidationErrorDto()).build();
     }
-    */
 
     // TODO: Not tested
-    /*
     @DELETE
     @Path("/{userId}/admin")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -245,7 +241,7 @@ public class UserController
     	if(u != null && u.getAdminStatus())
     	{
             User loggedUser = us.getLoggedUser();
-            if(loggedUser == null || loggedUser.getId() != userId)
+            if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();
     		us.changeAdminStatus(u);
     		return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
@@ -253,7 +249,6 @@ public class UserController
     	else
     		return Response.status(Response.Status.FORBIDDEN).entity(new ValidationErrorDto()).build();
     }
-    */
 	
 	@GET
 	@Path("{userId}/scores")

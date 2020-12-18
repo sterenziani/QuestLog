@@ -149,18 +149,6 @@ public class User
 		return roles.contains(new Role("Admin"));
 	}
 	
-	public void setAdminStatus(boolean value)
-	{
-		if(getAdminStatus())
-		{
-			if(!value)
-				roles.remove(new Role("Admin"));
-			return;
-		}
-		if(value)
-			roles.add(new Role("Admin"));		
-	}
-	
 	public void addRole(Role role)
 	{
 		roles.add(role);

@@ -128,13 +128,17 @@ public class UserJpaDao implements UserDao
 	@Override
 	public void addAdmin(User u)
 	{
-		u.addRole(new Role("Admin"));
+		Role r = getRoleByName("Admin").orElse(null);
+		if(r != null)
+			u.addRole(r);
 	}
 
 	@Override
 	public void removeAdmin(User u)
 	{
-		u.removeRole(new Role("Admin"));
+		Role r = getRoleByName("Admin").orElse(null);
+		if(r != null)
+			u.removeRole(r);
 	}
 
 	@Override
@@ -142,5 +146,12 @@ public class UserJpaDao implements UserDao
 		User user = em.find(User.class, id);
 		if (user != null)
 			em.remove(user);
-	}		
+	}
+	
+	@Override
+	public Optional<Role> getRoleByName(String name) {
+		final TypedQuery<Role> query = em.createQuery("from Role as r where r.roleName = :role_name", Role.class);
+		query.setParameter("role_name", name);
+		return query.getResultList().stream().findFirst();
+	}
 }

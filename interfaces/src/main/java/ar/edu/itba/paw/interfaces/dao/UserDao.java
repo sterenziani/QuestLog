@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.entity.PasswordResetToken;
+import ar.edu.itba.paw.model.entity.Role;
 import ar.edu.itba.paw.model.entity.User;
 
 public interface UserDao
@@ -69,5 +70,7 @@ public interface UserDao
 	
 	void removeAdmin(User u);
 
-	void deleteById(long id);	
+	void deleteById(long id);
+
+	Optional<Role> getRoleByName(String name);	
 }

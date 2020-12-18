@@ -180,12 +180,12 @@ public class UserServiceImpl implements UserService{
 		if(u.getAdminStatus())
 		{
 			LOGGER.debug("Removing {}'s admin privileges", u.getUsername());
-			u.setAdminStatus(false);
+			userDao.removeAdmin(u);
 		}
 		else
 		{
 			LOGGER.debug("Giving {} admin privileges", u.getUsername());
-			u.setAdminStatus(true);
+			userDao.addAdmin(u);
 		}
 		LOGGER.debug("{}'s admin privileges have been modified!", u.getUsername());
 	}

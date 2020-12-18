@@ -19,7 +19,7 @@ public class Role
 	@SequenceGenerator(allocationSize = 1, sequenceName = "roles_role_seq", name = "roles_role_seq")
 	private Long role;
 
-	@Column(name="role_name", length = 50, nullable = false, unique = true)
+	@Column(name="role_name", length = 50, unique = true, nullable = false)
 	private String roleName;
 	
 	@ManyToMany(mappedBy = "roles")
