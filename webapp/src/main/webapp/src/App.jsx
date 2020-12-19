@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Navigation from './components/Navigation';
 /*
  * There are two ways to declare components:
  *  - Functions
@@ -26,7 +26,7 @@ class App extends Component {
        */
 
       <React.Fragment>
-        <header></header>
+        <Navigation />
         <main></main>
       </React.Fragment>
      );
