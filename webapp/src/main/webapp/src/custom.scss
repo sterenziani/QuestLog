@@ -1,0 +1,25 @@
+$theme-colors: (
+  "blue": #2196f3,
+  "indigo": #607d8b,
+  "purple": #673ab7,
+  "pink": #e91e63,
+  "red": #f44336,
+  "orange": #ff9800,
+  "yellow": #ffc107,
+  "green": #4caf50,
+  "teal": #009688,
+  "cyan": #00bcd4,
+  "white": #fff,
+  "gray": #6c757d,
+  "gray-dark": #343a40,
+  "primary": #607d8b,
+  "secondary": #ffc107,
+  "success": #4caf50,
+  "info": #00bcd4,
+  "warning": #ff9800,
+  "danger": #f44336,
+  "light": #cfd8dc,
+  "dark": #455a64,
+);
+
+@import "~bootstrap/scss/bootstrap.scss";
