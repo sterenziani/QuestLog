@@ -32,32 +32,7 @@ public class BacklogController {
     private BacklogCookieHandlerService backlogCookieHandlerService;
     
     private static final int PAGE_SIZE = 15;
-
-    // Esto fue movido a UserController
-    @RequestMapping("")
-    public ModelAndView backlog(@RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        final ModelAndView mav = new ModelAndView("user/fullBacklog");
-        User u = us.getLoggedUser();
-        if(u == null)
-        {
-            mav.addObject("gamesInPage", backlogCookieHandlerService.getGamesInBacklog(backlog, page, PAGE_SIZE));
-            int countResults = backlogCookieHandlerService.countGamesInBacklog(backlog);
-            int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
-    		mav.addObject("pages", totalPages);
-    		mav.addObject("current", page);
-        }
-        else
-        {
-            mav.addObject("gamesInPage", gs.getGamesInBacklog(page, PAGE_SIZE));
-            int countResults = gs.countGamesInBacklog();
-            int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
-    		mav.addObject("pages", totalPages);
-    		mav.addObject("current", page);
-        }
-        return mav;
-    }
-    
+  
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ModelAndView backlog(@RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
     {

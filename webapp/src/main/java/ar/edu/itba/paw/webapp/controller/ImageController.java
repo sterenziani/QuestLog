@@ -1,29 +1,37 @@
 package ar.edu.itba.paw.webapp.controller;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.ImageService;
+import ar.edu.itba.paw.model.entity.Image;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 
-import javax.servlet.http.HttpServletRequest;
-
-@RequestMapping(value = "/images")
-@Controller
+@Path("images")
+@Component
 public class ImageController {
 
     @Autowired
     private ImageService is;
-
-    @RequestMapping(value = "/**")
-    public @ResponseBody byte[] retrieveImage(HttpServletRequest request)
+    
+	@Context
+	private UriInfo uriInfo;
+    
+    @GET
+    @Produces(value = {"image/base64"})
+    @Path("/{filename}")
+    public Response getPicture(@Context HttpServletRequest request, @PathParam("filename") String filename) throws ImageNotFoundException
     {
-        String[] image_name = request.getRequestURI().split(request.getContextPath() + "/images/");
-        if(image_name.length != 2){
-            throw new ImageNotFoundException();
-        }
-        return is.findByImageName(image_name[1]).orElseThrow(ImageNotFoundException::new).getImageData();
+        Optional<Image> maybeImage = is.findByImageName(filename);
+        if(!maybeImage.isPresent())
+        	return Response.status(Response.Status.NOT_FOUND).entity("").build();
+        return Response.ok(maybeImage.get().getImageData()).build();
     }
 }

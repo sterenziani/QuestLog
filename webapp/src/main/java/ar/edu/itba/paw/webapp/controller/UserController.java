@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
+
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -42,7 +44,6 @@ import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.User;
-import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 import ar.edu.itba.paw.webapp.dto.EditUserLocaleDto;
 import ar.edu.itba.paw.webapp.dto.EditUserPasswordDto;
 import ar.edu.itba.paw.webapp.dto.FormErrorDto;
@@ -52,7 +53,7 @@ import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 
 /*
 @Controller
@@ -87,25 +88,16 @@ public class UserController
     private Validator validator;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	private static final int USER_PAGE_SIZE = 20;
-	private static final int BACKLOG_TEASER_PAGE_SIZE = 5;
-	private static final int BACKLOG_PAGE_SIZE = 15;
-	private static final int SCORE_TEASER_PAGE_SIZE = 10;
-	private static final int RUNS_TEASER_PAGE_SIZE = 10;
-	private static final int REVIEWS_TEASER_PAGE_SIZE = 3;
-	private static final int SCORES_PAGE_SIZE = 25;
-	private static final int RUNS_PAGE_SIZE = 25;
-	private static final int REVIEWS_PAGE_SIZE = 10;
 	
 	@Context
 	private UriInfo uriInfo;
 	
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("searchTerm") @DefaultValue("") String searchTerm)
+	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("searchTerm") @DefaultValue("") String searchTerm, @QueryParam("page_size") @DefaultValue("20") int page_size)
 	{
-		final List<UserDto> allUsers = us.searchByUsernamePaged(searchTerm, page, USER_PAGE_SIZE).stream().map(u -> UserDto.fromUser(u, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = (us.countUserSearchResults(searchTerm) + USER_PAGE_SIZE - 1) / USER_PAGE_SIZE;
+		final List<UserDto> allUsers = us.searchByUsernamePaged(searchTerm, page, page_size).stream().map(u -> UserDto.fromUser(u, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (us.countUserSearchResults(searchTerm) + page_size - 1) / page_size;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<UserDto>>(allUsers) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -167,6 +159,17 @@ public class UserController
 		return Response.ok(maybeUser.map(u -> UserDto.fromUser(u, uriInfo)).get()).build();
 	}
 	
+	@GET
+	@Path("/profile")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getUserById()
+	{
+		User u = us.getLoggedUser();
+		if(u == null)
+			return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
+		return Response.ok(UserDto.fromUser(u, uriInfo)).build();
+	}
+	
     @PUT
     @Path("/{userId}/password")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
@@ -226,13 +229,12 @@ public class UserController
             if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();
     		us.changeAdminStatus(u);
-    		return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    		return Response.ok(UserDto.fromUser(u, uriInfo)).build();
     	}
     	else
     		return Response.status(Response.Status.FORBIDDEN).entity(new ValidationErrorDto()).build();
     }
 
-    // TODO: Not tested
     @DELETE
     @Path("/{userId}/admin")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -244,7 +246,7 @@ public class UserController
             if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();
     		us.changeAdminStatus(u);
-    		return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    		return Response.ok(UserDto.fromUser(u, uriInfo)).build();
     	}
     	else
     		return Response.status(Response.Status.FORBIDDEN).entity(new ValidationErrorDto()).build();
@@ -252,13 +254,13 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/scores")
-	public Response listScoresByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	public Response listScoresByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("25") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		final List<ScoreDto> scores = scors.findAllUserScores(maybeUser.get(), page, SCORES_PAGE_SIZE).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = (scors.countAllUserScores(maybeUser.get()) + SCORES_PAGE_SIZE - 1) / SCORES_PAGE_SIZE;
+		final List<ScoreDto> scores = scors.findAllUserScores(maybeUser.get(), page, page_size).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (scors.countAllUserScores(maybeUser.get()) + page_size - 1) / page_size;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -271,13 +273,13 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/runs")
-	public Response listRunsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	public Response listRunsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("25") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		final List<RunDto> runs = rs.findRunsByUser(maybeUser.get(), page, RUNS_PAGE_SIZE).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = (rs.countRunsByUser(maybeUser.get()) + RUNS_PAGE_SIZE - 1) / RUNS_PAGE_SIZE;
+		final List<RunDto> runs = rs.findRunsByUser(maybeUser.get(), page, page_size).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (rs.countRunsByUser(maybeUser.get()) + page_size - 1) / page_size;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -290,13 +292,13 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/reviews")
-	public Response listReviewsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	public Response listReviewsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("10") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		final List<ReviewDto> reviews = revs.findUserReviews(maybeUser.get(), page, REVIEWS_PAGE_SIZE).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
-		int amount_of_pages = (revs.countReviewsByUser(maybeUser.get()) + REVIEWS_PAGE_SIZE - 1) / REVIEWS_PAGE_SIZE;
+		final List<ReviewDto> reviews = revs.findUserReviews(maybeUser.get(), page, page_size).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
+		int amount_of_pages = (revs.countReviewsByUser(maybeUser.get()) + page_size - 1) / page_size;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
@@ -309,13 +311,13 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/backlog")
-	public Response listBacklogForUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page)
+	public Response listBacklogForUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		List<GameDto> games = gs.getGamesInBacklog(maybeUser.get(), page, BACKLOG_PAGE_SIZE).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = (gs.countGamesInBacklog(maybeUser.get()) + BACKLOG_PAGE_SIZE - 1) / BACKLOG_PAGE_SIZE;
+		List<GameDto> games = gs.getGamesInBacklog(maybeUser.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (gs.countGamesInBacklog(maybeUser.get()) + page_size - 1) / page_size;
 		
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
