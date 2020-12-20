@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Translation } from 'react-i18next';
-import i18n from './i18n';
-import Navigation from './components/Navigation';
+import i18n from '../services/i18n/i18n';
+import Navigation from './Navigation/Navigation';
 /*
  * There are two ways to declare components:
  *  - Functions

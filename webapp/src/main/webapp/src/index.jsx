@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './custom.scss'
-import './i18n';
+import App from './components/App';
+import reportWebVitals from './services/reportWebVitals';
+import './index.scss'
+import './services/i18n/i18n';
+import { Suspense } from 'react';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <App />
+    </Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -3,7 +3,7 @@ import {
     Navbar, 
     Nav
 } from 'react-bootstrap';
-import questlogLogo from '../images/questlog-logo.png';
+import questlogLogo from './images/questlog-logo.png';
 
 class Navigation extends Component {
     state = {  }
