@@ -4,7 +4,7 @@ class Search extends Component {
     state = {  }
     render() { 
         return (  
-            <p>Hello</p>
+            <p className={ this.props.className }>Hello</p>
         );
     }
 }

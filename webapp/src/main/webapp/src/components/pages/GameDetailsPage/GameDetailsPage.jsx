@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 
 class GameDetailsPage extends Component {
     state = {  }
     render() { 
         return ( 
-            <p>{this.props.match.params.id}</p>
+            <React.Fragment>
+                <Helmet>
+                    <title>Game Details</title>
+                </Helmet>
+                <p>{this.props.match.params.id}</p>
+            </React.Fragment>
         );
     }
 }
