@@ -4,6 +4,9 @@ import {
     Navbar, 
     Nav
 } from 'react-bootstrap';
+import {
+    Link
+} from 'react-router-dom';
 
 //Component resources
 import questlogLogo from './images/questlog-logo.png';
@@ -23,9 +26,9 @@ class Navigation extends Component {
                 variant="dark"
                 sticky="top"
             >
-                <Navbar.Brand href="#home">
+                <Navbar.Brand as={ Link } to="/">
                     <img
-                        src={questlogLogo}
+                        src={ questlogLogo }
                         className="d-inline-block align-top"
                         alt="QuestLog"
                     />
