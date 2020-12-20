@@ -1,5 +1,6 @@
 //Libraries
 import React, { Component } from 'react';
+import { Router } from 'react-router-dom';
 
 //Child components
 import MainContent from './MainContent/MainContent';
@@ -31,10 +32,10 @@ class App extends Component {
        * syntax sugar for JavaScript.
        */
 
-      <React.Fragment>
+      <Router>
         <Navigation />
         <MainContent />
-      </React.Fragment>
+      </Router>
      );
   }
 }
