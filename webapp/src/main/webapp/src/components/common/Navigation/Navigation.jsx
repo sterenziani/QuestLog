@@ -22,7 +22,7 @@ class Navigation extends Component {
     render() { 
         return (
             <Navbar 
-                bg="dark" 
+                bg="primary" 
                 variant="dark"
                 sticky="top"
             >
