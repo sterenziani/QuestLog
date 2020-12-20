@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { 
+    Component, 
+    Suspense 
+} from 'react';
 import { Translation } from 'react-i18next';
-import { Suspense } from 'react';
 
 class MainContent extends Component {
     state = {  }

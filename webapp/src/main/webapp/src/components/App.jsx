@@ -1,6 +1,10 @@
+//Libraries
 import React, { Component } from 'react';
+
+//Child components
 import MainContent from './MainContent/MainContent';
 import Navigation from './Navigation/Navigation';
+
 /*
  * There are two ways to declare components:
  *  - Functions
@@ -15,6 +19,7 @@ class App extends Component {
   state = {  }
   render() {
     return (
+      
       /* 
        * React components can have only one route element.
        * Thus, a <React.Fragment> is needed when you wish
