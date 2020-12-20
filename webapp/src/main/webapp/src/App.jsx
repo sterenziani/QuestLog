@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Translation } from 'react-i18next';
+import i18n from './i18n';
 import Navigation from './components/Navigation';
 /*
  * There are two ways to declare components:
@@ -13,6 +15,7 @@ import Navigation from './components/Navigation';
 class App extends Component {
   state = {  }
   render() { 
+    console.log(i18n.language)
     return (
       /* 
        * React components can have only one route element.
@@ -27,7 +30,13 @@ class App extends Component {
 
       <React.Fragment>
         <Navigation />
-        <main></main>
+        <main>
+          <Translation>
+            {
+              t => <h1>{t('welcome')}</h1>
+            }
+          </Translation>
+        </main>
       </React.Fragment>
      );
   }

@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { 
     Navbar, 
-    Nav, 
-    Form, 
-    FormControl, 
-    Button 
+    Nav
 } from 'react-bootstrap';
 import questlogLogo from '../images/questlog-logo.png';
 
