@@ -1,10 +1,12 @@
 //Libraries
 import React, { Component } from 'react';
-import { Router } from 'react-router-dom';
+import { 
+  BrowserRouter as Router 
+} from 'react-router-dom';
 
 //Child components
-import MainContent from './MainContent/MainContent';
-import Navigation from './Navigation/Navigation';
+import ContentSwitch from './common/ContentSwitch/ContentSwitch';
+import Navigation from './common/Navigation/Navigation';
 
 /*
  * There are two ways to declare components:
@@ -34,7 +36,7 @@ class App extends Component {
 
       <Router>
         <Navigation />
-        <MainContent />
+        <ContentSwitch />
       </Router>
      );
   }

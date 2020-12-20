@@ -2,7 +2,7 @@ import React, {
     Component
 } from 'react';
 
-class MainContent extends Component {
+class ContentSwitch extends Component {
     state = {  }
     render() { 
         return ( 
@@ -13,4 +13,4 @@ class MainContent extends Component {
     }
 }
  
-export default MainContent;
+export default ContentSwitch;

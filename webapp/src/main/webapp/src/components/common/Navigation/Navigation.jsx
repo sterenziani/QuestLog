@@ -9,9 +9,9 @@ import {
 import questlogLogo from './images/questlog-logo.png';
 
 //Child components
-import Search from './children/Search/Search';
-import Explore from './children/Explore/Explore';
-import Authentification from './children/Authentification/Authentification';
+import Search from '../Search/Search';
+import Explore from '../Explore/Explore';
+import Authentification from '../Authentification/Authentification';
 
 
 class Navigation extends Component {
