@@ -122,7 +122,7 @@ public class GameServiceImpl implements GameService
 		gameDao.addPublishers(g.getId(), publishers);
 		gameDao.addGenres(g.getId(), genres);
 		gameDao.addReleaseDates(g.getId(), releaseDates);
-		if(!cover.isEmpty()) {
+		if(cover != null && !cover.isEmpty()) {
 			g.setCover(getCoverName(g.getId(), cover));
 			try {
 				is.uploadImage(g.getCover(), cover.getBytes());
