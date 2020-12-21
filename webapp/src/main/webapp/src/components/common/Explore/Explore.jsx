@@ -13,6 +13,7 @@ class Explore extends Component {
             <LinkContainer to="/explore">
                 <Button 
                     variant="dark"
+                    className={ this.props.className }
                 >
                     Explore
                 </Button>

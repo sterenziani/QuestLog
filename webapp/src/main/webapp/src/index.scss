@@ -22,4 +22,8 @@ $theme-colors: (
   "dark": #455a64,
 );
 
+.no-lineheight {
+  line-height: 0;
+}
+
 @import "~bootstrap/scss/bootstrap.scss";

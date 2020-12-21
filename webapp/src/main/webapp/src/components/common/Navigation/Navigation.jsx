@@ -25,7 +25,7 @@ class Navigation extends Component {
                 bg="primary" 
                 variant="dark"
                 sticky="top"
-                className="d-flex"
+                className="d-flex no-lineheight"
             >
                 <Navbar.Brand as={ Link } to="/">
                     <img
@@ -35,8 +35,8 @@ class Navigation extends Component {
                     />
                 </Navbar.Brand>
                 <Nav className="mr-auto flex-grow-1 d-flex">
-                    <Search className="flex-grow-1"/>
-                    <Explore />
+                    <Search className="flex-grow-1 mr-4"/>
+                    <Explore className="mr-4" />
                     <Authentification />
                 </Nav>
             </Navbar>
