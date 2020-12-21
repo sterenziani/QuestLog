@@ -1,11 +1,25 @@
 package ar.edu.itba.paw.webapp.controller.game;
+import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validator;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -27,16 +43,22 @@ import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.Playstyle;
+import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.model.exception.BadFormatException;
 import ar.edu.itba.paw.webapp.dto.AvgTimeDto;
 import ar.edu.itba.paw.webapp.dto.DeveloperDto;
+import ar.edu.itba.paw.webapp.dto.FormErrorDto;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 import ar.edu.itba.paw.webapp.dto.GenreDto;
 import ar.edu.itba.paw.webapp.dto.PlatformDto;
 import ar.edu.itba.paw.webapp.dto.PublisherDto;
+import ar.edu.itba.paw.webapp.dto.RegisterDto;
+import ar.edu.itba.paw.webapp.dto.RegisterGameDto;
 import ar.edu.itba.paw.webapp.dto.ReleaseDto;
 import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 
 @Path("games")
 @Component
@@ -56,6 +78,9 @@ public class GameDetailController {
     
     @Autowired
     private ReviewService               revs;
+    
+    @Autowired
+    private Validator validator;
 
     @Autowired
     private BacklogCookieHandlerService backlogCookieHandlerService;
@@ -71,6 +96,45 @@ public class GameDetailController {
 		if(!maybeGame.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		return Response.ok(maybeGame.map(u -> GameDto.fromGame(u, uriInfo)).get()).build();
+	}
+	
+	@POST
+	@Path("/new_game")
+	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	public Response createGame(@Valid RegisterGameDto registerGameDto) throws BadFormatException
+	{
+        Set<ConstraintViolation<RegisterGameDto>> violations = validator.validate(registerGameDto);
+        if (!violations.isEmpty())
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
+		if(gs.findByTitle(registerGameDto.getTitle()).isPresent())
+			return Response.status(Response.Status.CONFLICT).entity(new FormErrorDto("title", "TitleUnique.gameForm")).build();
+		System.out.println("Es null? " +(registerGameDto.getReleaseDates() == null));
+		Map<Long, LocalDate> dates = convertDates(registerGameDto.getReleaseDates());
+		if(dates == null)
+			return Response.status(Response.Status.BAD_REQUEST).entity(new FormErrorDto("releaseDates", "Invalid date format")).build();
+		final Game createdGame = gs.register(registerGameDto.getTitle(), null, registerGameDto.getDescription(),
+				registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
+				registerGameDto.getPublishers(), registerGameDto.getGenres(), dates);
+		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(createdGame.getId())).build();
+		return Response.created(uri).build();
+	}
+	
+	private Map<Long, LocalDate> convertDates(Map<Long, String> dates)
+	{
+		Map<Long, LocalDate> map = new HashMap<>();
+		for(Entry<Long, String> e : dates.entrySet())
+		{
+			try
+			{
+				LocalDate ld = LocalDate.parse(e.getValue());
+				map.put(e.getKey(), ld);
+			}
+			catch(DateTimeParseException exception)
+			{
+				return null;
+			}
+		}
+		return map;
 	}
 	
 	@GET
