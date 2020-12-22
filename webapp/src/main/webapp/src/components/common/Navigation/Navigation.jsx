@@ -30,11 +30,11 @@ class Navigation extends Component {
                 <Navbar.Brand as={ Link } to="/">
                     <img
                         src={ questlogLogo }
-                        className="d-inline-block align-top"
+                        className="d-inline-block align-top mr-4 mb-2"
                         alt="QuestLog"
                     />
                 </Navbar.Brand>
-                <Nav className="mr-auto flex-grow-1 d-flex">
+                <Nav className="mr-auto flex-grow-1 d-flex my-3">
                     <Search className="flex-grow-1 mr-4"/>
                     <Explore className="mr-4" />
                     <Authentification />
