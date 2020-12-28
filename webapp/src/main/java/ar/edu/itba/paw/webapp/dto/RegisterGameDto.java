@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+
 
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,21 +15,21 @@ public class RegisterGameDto {
 	public RegisterGameDto() {}
 	
     @Size(min = 1)
-    private String              title;
+	private String              title;
 
     @Size(max = 15000)
     private String              description;
 
     //@ImageSize(max=256000)
-    //private MultipartFile       cover;
-    
-    private Map<Long, String> releaseDates;
+    //private MultiparlongtFile       cover;
 
     private String              trailer;
     private List<Long>          platforms;
     private List<Long>          developers;
     private List<Long>          publishers;
     private List<Long>          genres;
+
+    private List<RegisterReleaseDto>	releaseDates;
     
 	public String getTitle() {
 		return title;
@@ -58,14 +56,7 @@ public class RegisterGameDto {
 	}
 	
 	*/
-	public Map<Long, String> getReleaseDates() {
-		return releaseDates;
-	}
-	
-	public void setReleaseDates(Map<Long, String> releaseDates) {
-		this.releaseDates = releaseDates;
-	}
-	
+
 	public String getTrailer() {
 		return trailer;
 	}
@@ -104,5 +95,13 @@ public class RegisterGameDto {
 	
 	public void setGenres(List<Long> genres) {
 		this.genres = genres;
+	}
+
+	public List<RegisterReleaseDto> getReleaseDates() {
+		return releaseDates;
+	}
+
+	public void setReleaseDates(List<RegisterReleaseDto> releaseDates) {
+		this.releaseDates = releaseDates;
 	}
 }
