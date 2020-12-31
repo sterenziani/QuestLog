@@ -2,13 +2,8 @@ package ar.edu.itba.paw.webapp.dto;
 
 import java.util.List;
 
-
 import javax.validation.constraints.Size;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 
 public class RegisterGameDto {
 	

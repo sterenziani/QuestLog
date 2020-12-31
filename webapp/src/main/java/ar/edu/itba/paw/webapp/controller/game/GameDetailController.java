@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.webapp.dto.*;
 
 
@@ -40,11 +42,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
-import ar.edu.itba.paw.interfaces.service.GameService;
-import ar.edu.itba.paw.interfaces.service.ReviewService;
-import ar.edu.itba.paw.interfaces.service.RunService;
-import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.Playstyle;
 import ar.edu.itba.paw.model.entity.User;
@@ -60,6 +57,9 @@ public class GameDetailController {
 
     @Autowired
     private GameService                 gs;
+
+    @Autowired
+	private UserService					us;
 
     @Autowired
     private RunService                  runs;
@@ -126,6 +126,30 @@ public class GameDetailController {
 			}
 		}
 		return map;
+	}
+
+	@POST
+	@Path("/{gameId}/new_score")
+	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	public Response addScore(@Valid RegisterScoreDto registerScoreDto, @PathParam("gameId") long gameId) throws BadFormatException
+	{
+		Set<ConstraintViolation<RegisterScoreDto>> violations = validator.validate(registerScoreDto);
+		if (!violations.isEmpty())
+			return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
+		System.out.println(violations);
+		final Optional<Game> game = gs.findById(gameId);
+		if(!game.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final Optional<User> user = us.findByUsername(registerScoreDto.getUsername());
+		if(!user.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		Optional<Score> score = scors.findScore(user.get(), game.get());
+		if(score.isPresent())
+			scors.changeScore(registerScoreDto.getScore(), user.get(), game.get());
+		else
+			scors.register(user.get(), game.get(), registerScoreDto.getScore());
+		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(game.get().getId())).build();
+		return Response.created(uri).build();
 	}
 	
 	@GET
