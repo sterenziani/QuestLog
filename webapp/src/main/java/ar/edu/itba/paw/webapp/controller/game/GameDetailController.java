@@ -94,6 +94,10 @@ public class GameDetailController {
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
 	public Response createGame(@Valid RegisterGameDto registerGameDto) throws BadFormatException
 	{
+		User loggedUser = us.getLoggedUser();
+        if(loggedUser == null || !loggedUser.getAdminStatus())
+        	return Response.status(Response.Status.UNAUTHORIZED).build();
+        
 		Set<ConstraintViolation<RegisterGameDto>> violations = validator.validate(registerGameDto);
         if (!violations.isEmpty())
             return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
@@ -133,21 +137,21 @@ public class GameDetailController {
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
 	public Response addScore(@Valid RegisterScoreDto registerScoreDto, @PathParam("gameId") long gameId) throws BadFormatException
 	{
+		User loggedUser = us.getLoggedUser();
+		if(loggedUser == null)
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		Set<ConstraintViolation<RegisterScoreDto>> violations = validator.validate(registerScoreDto);
 		if (!violations.isEmpty())
 			return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
-		System.out.println(violations);
 		final Optional<Game> game = gs.findById(gameId);
 		if(!game.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		final Optional<User> user = us.findByUsername(registerScoreDto.getUsername());
-		if(!user.isPresent())
-			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		Optional<Score> score = scors.findScore(user.get(), game.get());
+
+		Optional<Score> score = scors.findScore(loggedUser, game.get());
 		if(score.isPresent())
-			scors.changeScore(registerScoreDto.getScore(), user.get(), game.get());
+			scors.changeScore(registerScoreDto.getScore(), loggedUser, game.get());
 		else
-			scors.register(user.get(), game.get(), registerScoreDto.getScore());
+			scors.register(loggedUser, game.get(), registerScoreDto.getScore());
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(game.get().getId())).build();
 		return Response.created(uri).build();
 	}
