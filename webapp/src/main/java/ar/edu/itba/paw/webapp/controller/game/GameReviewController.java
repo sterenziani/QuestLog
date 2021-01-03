@@ -3,9 +3,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
@@ -20,14 +17,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.PlatformService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -40,15 +31,8 @@ import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.model.exception.BadFormatException;
 import ar.edu.itba.paw.webapp.dto.RegisterReviewDto;
-import ar.edu.itba.paw.webapp.dto.RegisterScoreDto;
 import ar.edu.itba.paw.webapp.dto.ReviewDto;
-import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
-import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
-import ar.edu.itba.paw.webapp.exception.ReviewNotFoundException;
-import ar.edu.itba.paw.webapp.exception.ReviewsNotEnabledException;
-import ar.edu.itba.paw.webapp.form.ReviewForm;
 
 @Path("/")
 @Component
