@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.webapp.dto;
-import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 

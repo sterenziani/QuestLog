@@ -34,7 +34,7 @@ import ar.edu.itba.paw.webapp.dto.RegisterReviewDto;
 import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 
-@Path("/")
+@Path("games")
 @Component
 public class GameReviewController
 {
@@ -60,7 +60,7 @@ public class GameReviewController
     private ReviewService revs;
     
 	@POST
-	@Path("/games/{gameId}/new_review")
+	@Path("/{gameId}/new_review")
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
 	public Response addReview(@Valid RegisterReviewDto registerReviewDto, @PathParam("gameId") long gameId) throws BadFormatException
 	{
