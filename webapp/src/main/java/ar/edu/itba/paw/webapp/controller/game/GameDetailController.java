@@ -84,9 +84,6 @@ public class GameDetailController {
     @Autowired
     private Validator validator;
 
-    @Autowired
-    private BacklogCookieHandlerService backlogCookieHandlerService;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(GameDetailController.class);
 
 	@GET

@@ -36,9 +36,6 @@ public class DeveloperController {
     @Autowired
     private GameService gs;
 
-    @Autowired
-    private BacklogCookieHandlerService backlogCookieHandlerService;
-
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	public Response listDevelopers(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("30") int page_size)

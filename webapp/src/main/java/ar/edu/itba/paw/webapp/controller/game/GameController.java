@@ -33,9 +33,6 @@ public class GameController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
 
-    @Autowired
-    private BacklogCookieHandlerService backlogCookieHandlerService;
-
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page,
