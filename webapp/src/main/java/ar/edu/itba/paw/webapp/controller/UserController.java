@@ -162,7 +162,7 @@ public class UserController
 	@GET
 	@Path("/profile")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getUserById()
+	public Response getLoggedUserProfile()
 	{
 		User u = us.getLoggedUser();
 		if(u == null)

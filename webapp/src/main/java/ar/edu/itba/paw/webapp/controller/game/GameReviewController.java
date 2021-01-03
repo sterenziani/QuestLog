@@ -10,9 +10,12 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,6 +41,8 @@ import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.model.exception.BadFormatException;
 import ar.edu.itba.paw.webapp.dto.RegisterReviewDto;
 import ar.edu.itba.paw.webapp.dto.RegisterScoreDto;
+import ar.edu.itba.paw.webapp.dto.ReviewDto;
+import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 import ar.edu.itba.paw.webapp.exception.GameNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
@@ -45,7 +50,7 @@ import ar.edu.itba.paw.webapp.exception.ReviewNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ReviewsNotEnabledException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 
-@Path("/games")
+@Path("/")
 @Component
 public class GameReviewController
 {
@@ -71,7 +76,7 @@ public class GameReviewController
     private ReviewService revs;
     
 	@POST
-	@Path("/{gameId}/new_review")
+	@Path("/games/{gameId}/new_review")
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
 	public Response addReview(@Valid RegisterReviewDto registerReviewDto, @PathParam("gameId") long gameId) throws BadFormatException
 	{
@@ -101,62 +106,32 @@ public class GameReviewController
 		revs.register(loggedUser, game.get(), platform.get(), registerReviewDto.getScore(), registerReviewDto.getBody(), LocalDate.now());
 		return Response.created(uri).build();
 	}
-    
-    /////////////////////////////////////////////////////////////////////////////////
-    
-	@RequestMapping(value = "/{review_id}/delete", method = RequestMethod.POST)
-	public ModelAndView deleteReview(@PathVariable("review_id") final long reviewId, HttpServletRequest request)
-	{
-		Review r = revs.findReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
-		if(us.getLoggedUser().equals(r.getUser()) || us.getLoggedUser().getAdminStatus())
-		{
-			revs.deleteReview(r);
-			String referer = request.getHeader("Referer");
-			if(referer == null)
-				return new ModelAndView("redirect:/");
-			return new ModelAndView("redirect:" + referer);
-		}
-		return new ModelAndView("redirect:/error403");
-	}
-
-	@RequestMapping(value = "/create/{game_id}", method = RequestMethod.GET)
-	public ModelAndView writeReview(@PathVariable("game_id") long id, @ModelAttribute("reviewForm") final ReviewForm reviewForm, HttpServletRequest request)
-	{
-		ModelAndView mav = new ModelAndView("game/reviewForm");
-		Game game = gs.findById(id).orElseThrow(GameNotFoundException::new);
-        if(game.getPlatforms().size() == 0 || !game.hasReleased())
-        	throw new ReviewsNotEnabledException();
-		User user = us.getLoggedUser();
-		Optional<Score> optScore = ss.findScore(user, game);
-		Score score = null;
-		if(optScore.isPresent())
-			score = optScore.get();
-		mav.addObject("game", game);
-		mav.addObject("user_score", score);
-		return mav;
-	}
 	
-	@RequestMapping(value = "/create/{game_id}", method = RequestMethod.POST)
-	public ModelAndView saveReview(@PathVariable("game_id") long id, @Valid @ModelAttribute("reviewForm") final ReviewForm reviewForm, final BindingResult errors, HttpServletRequest request, HttpServletResponse response)
+	@DELETE
+	@Path("/reviews/{reviewId}")
+	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	public Response removeReview(@PathParam("reviewId") long reviewId)
 	{
-		if(errors.hasErrors())
-		{
-			return writeReview(id, reviewForm, request);
-		}
-		User u = us.getLoggedUser();
-		Game g = gs.findById(id).orElseThrow(GameNotFoundException::new);
-        if(g.getPlatforms().size() == 0 || !g.hasReleased())
-        	throw new ReviewsNotEnabledException();
-        if (reviewForm.isRemoveFromBacklog()){
-        	gs.removeFromBacklog(id);
-		}
-		Platform p = ps.findById(reviewForm.getPlatform()).orElseThrow(PlatformNotFoundException::new);
-		Optional<Score> optScore = ss.findScore(u, g);
-		if(optScore.isPresent())
-			ss.changeScore(reviewForm.getScore(), u, g);
-		else
-			ss.register(u, g, reviewForm.getScore());
-		revs.register(u, g, p, reviewForm.getScore(), reviewForm.getBody(), LocalDate.now());
-		return new ModelAndView("redirect:/games/{game_id}?reviews=true");
+		Optional<Review> review = revs.findReviewById(reviewId);
+		if(!review.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		User loggedUser = us.getLoggedUser();
+		if(loggedUser == null)
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		if(!loggedUser.getAdminStatus() || !review.get().getUser().equals(loggedUser))
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		revs.deleteReview(review.get());
+		return Response.noContent().build();
+	}
+    
+	@GET
+	@Path("/reviews/{reviewId}")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getReviewById(@PathParam("reviewId") long reviewId)
+	{
+		Optional<Review> review = revs.findReviewById(reviewId);
+		if(!review.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();	
+		return Response.ok(ReviewDto.fromReview(review.get(), uriInfo)).build();
 	}
 }
