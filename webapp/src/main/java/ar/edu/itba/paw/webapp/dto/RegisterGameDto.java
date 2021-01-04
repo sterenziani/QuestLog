@@ -5,12 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-import ar.edu.itba.paw.webapp.validators.anotation.ImageSize;
 
 public class RegisterGameDto {
 	
