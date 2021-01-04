@@ -36,9 +36,6 @@ public class PlatformController {
     @Autowired
     private GameService gs;
 
-    @Autowired
-    private BacklogCookieHandlerService backlogCookieHandlerService;
-
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	public Response listPlatforms(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("20") int page_size)

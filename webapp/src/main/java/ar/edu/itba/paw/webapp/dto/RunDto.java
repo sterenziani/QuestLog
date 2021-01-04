@@ -7,8 +7,8 @@ public class RunDto
 	private Long runId;
 	private UserDto user;
 	private GameDto game;
-	//private PlatformDto platform;
-	//private PlaystyleDto playstyle;
+	private PlatformDto platform;
+	private PlaystyleDto playstyle;
 	private long time;
 	
 	public Long getRunId() {
@@ -51,5 +51,21 @@ public class RunDto
 		dto.time = run.getTime();
 		dto.game = GameDto.fromGame(run.getGame(), uriInfo);
 		return dto;
+	}
+
+	public PlatformDto getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(PlatformDto platform) {
+		this.platform = platform;
+	}
+
+	public PlaystyleDto getPlaystyle() {
+		return playstyle;
+	}
+
+	public void setPlaystyle(PlaystyleDto playstyle) {
+		this.playstyle = playstyle;
 	}
 }

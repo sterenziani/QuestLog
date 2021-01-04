@@ -1,84 +1,191 @@
 package ar.edu.itba.paw.webapp.controller;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.UriInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
+import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.User;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.dto.GameDto;
+import ar.edu.itba.paw.webapp.dto.UserDto;
 
-@RequestMapping("/backlog")
-@Controller
-@ComponentScan("ar.edu.itba.paw.webapp.component")
+@Path("backlog")
+@Component
 public class BacklogController {
 
+	@Context
+	private UriInfo uriInfo;
+    
     @Autowired
     private UserService us;
     
     @Autowired
     private GameService gs;
-
-    @Autowired
-    private BacklogCookieHandlerService backlogCookieHandlerService;
-    
-    private static final int PAGE_SIZE = 15;
   
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public ModelAndView backlog(@RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+    @PUT
+    @Path("/add/{gameId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response addGameToBacklog(@PathParam("gameId")int gameId, @QueryParam("backlog") @DefaultValue("") String backlog)
     {
-        backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
-        return new ModelAndView("redirect:/backlog/?page="+page);
+    	Optional<Game> game = gs.findById(gameId);
+    	if(!game.isPresent())
+    		return Response.status(Response.Status.NOT_FOUND).build();
+    	User loggedUser = us.getLoggedUser();
+    	if(loggedUser == null)
+    	{
+    		String resp = backlog;
+    		resp = addToBacklog(gameId, backlog);
+    		return Response.ok().header("Result", resp).build();
+    	}
+    	gs.addToBacklog(gameId);
+    	return Response.ok(game.map(g -> GameDto.fromGame(g, uriInfo)).get()).build();
     }
     
-    @RequestMapping("/{userId}")
-    public ModelAndView backlog(@PathVariable("userId") long userId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, @CookieValue(value="backlog", defaultValue="") String backlog)
+    @PUT
+    @Path("/remove/{gameId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response removeGameFromBacklog(@PathParam("gameId")int gameId, @QueryParam("backlog") @DefaultValue("") String backlog)
     {
-        final ModelAndView mav = new ModelAndView("user/fullBacklog");
-        User visitedUser = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        User u = us.getLoggedUser();
-        List<Game> gamesInPage = gs.getGamesInBacklog(visitedUser, page, PAGE_SIZE);
-        if(u == null)
+    	Optional<Game> game = gs.findById(gameId);
+    	if(!game.isPresent())
+    		return Response.status(Response.Status.NOT_FOUND).build();
+    	User loggedUser = us.getLoggedUser();
+    	if(loggedUser == null)
+    	{
+    		String resp = backlog;
+    		resp = removeFromBacklog(gameId, backlog);
+    		return Response.ok().header("Result", resp).build();
+    	}
+    	gs.removeFromBacklog(gameId);
+    	return Response.ok(game.map(g -> GameDto.fromGame(g, uriInfo)).get()).build();
+    }
+    
+    @PUT
+    @Path("/transfer")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response transferBacklog(@QueryParam("backlog") @DefaultValue("") String backlog)
+    {
+    	User loggedUser = us.getLoggedUser();
+    	if(loggedUser == null)
+    		return Response.status(Response.Status.UNAUTHORIZED).build();
+        List<Game> anonGames = getGamesInBacklog(backlog);
+        for(Game g : anonGames)
+            gs.addToBacklog(g.getId());
+        return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
+    }
+    
+    @GET
+    public Response readBacklog(@QueryParam("backlog") @DefaultValue("") String backlog, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size)
+    {
+    	User loggedUser = us.getLoggedUser();
+    	List<GameDto> games;
+    	int amount_of_pages;
+    	if(loggedUser == null)
+    	{
+    		games = getGamesInBacklog(backlog, page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+    		amount_of_pages = (countGamesInBacklog(backlog) + page_size - 1) / page_size;
+    	}
+    	else
+    	{
+    		games = gs.getGamesInBacklog(loggedUser, page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+    		amount_of_pages = (gs.countGamesInBacklog(loggedUser) + page_size - 1) / page_size;
+    	}
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		if(page > 1 && page <= amount_of_pages)
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+		if(page >= 1 && page < amount_of_pages)
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+		return resp.build();
+    }
+    
+    //////////////// PRIVATE //////////////////////////
+    
+    public String addToBacklog(long gameId, String backlog)
+    {
+        if(gameInBacklog(gameId, backlog))
         {
-        	backlogCookieHandlerService.updateWithBacklogDetails(gamesInPage, backlog);
+            return backlog;
         }
-        mav.addObject("gamesInPage", gamesInPage);
-        int countResults = gs.countGamesInBacklog(visitedUser);
-        int totalPages = (countResults + PAGE_SIZE - 1)/PAGE_SIZE;
-		mav.addObject("pages", totalPages);
-		mav.addObject("current", page);
-		mav.addObject("visitedUser", visitedUser);
-        return mav;
-    }
-    
-    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-    public ModelAndView backlog(@PathVariable("userId") long userId, @RequestParam long gameId, @RequestParam(required = false, defaultValue = "1", value = "page") int page, HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        backlog = backlogCookieHandlerService.toggleBacklog(gameId, response, backlog);
-        return new ModelAndView("redirect:/backlog/{userId}?page="+page);
-    }
-    
-    @RequestMapping("/transfer")
-    public ModelAndView transferBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
-    {
-        backlogCookieHandlerService.transferBacklog(response, backlog, us.getLoggedUser());
-        backlogCookieHandlerService.clearAnonBacklog(response);
-        return new ModelAndView("redirect:/");
+        return backlog +"-" +gameId +"-";
     }
 
-    @RequestMapping("/clear")
-    public ModelAndView clearBacklog(HttpServletResponse response, @CookieValue(value="backlog", defaultValue="") String backlog)
+    public String removeFromBacklog(long gameId, String backlog)
     {
-        backlogCookieHandlerService.clearAnonBacklog(response);
-        return new ModelAndView("redirect:/");
+        return backlog.replaceAll("-"+gameId+"-", "");
+    }
+    
+    public boolean gameInBacklog(long gameId, String backlog)
+    {
+        return backlog.contains("-" +gameId +"-");
+    }
+    
+    private int countGamesInBacklog(String backlog)
+    {
+    	if(backlog.isEmpty())
+    		return 0;
+        String copy = backlog.replace("--", "-");
+        String[] ids = copy.split("-");
+        return ids.length - 1;
+    }
+    
+    private List<Game> getGamesInBacklog(String backlog)
+    {
+        List<Game> list = new ArrayList<Game>();
+        String[] ids = backlog.split("-");
+        for(String id : ids)
+        {
+            if(!id.isEmpty())
+            {
+                Optional<Game> g = gs.findById(Long.parseLong(id));
+                if(g.isPresent())
+                {
+                    list.add(g.get());
+                    g.get().setInBacklog(true);
+                }
+            }
+        }
+        return list;
+    }
+    
+    private List<Game> getGamesInBacklog(String backlog, int page, int pageSize)
+    {
+        List<Game> list = new ArrayList<Game>();
+        String copy = backlog.replace("--", "-");
+        String[] ids = copy.split("-");
+        int base = 1 + pageSize*(page-1);
+        if(base > ids.length-1)
+        	return Collections.emptyList();
+        int limit = pageSize*page;
+        if(limit >= ids.length)
+        	limit = ids.length-1;
+        for(int i=base; i <= limit; i++)
+        {
+            Optional<Game> g = gs.findById(Long.parseLong(ids[i]));
+            if(g.isPresent())
+            {
+                list.add(g.get());
+                g.get().setInBacklog(true);
+            }
+        }
+        return list;
     }
 }

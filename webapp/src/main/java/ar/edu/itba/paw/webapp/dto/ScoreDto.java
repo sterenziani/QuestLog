@@ -1,11 +1,20 @@
 package ar.edu.itba.paw.webapp.dto;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriInfo;
 import ar.edu.itba.paw.model.entity.Score;
 
 public class ScoreDto
 {
+	@NotNull
 	private GameDto game;
+
+	@NotNull
 	private UserDto user;
+
+	@Max(100)
+	@Min(0)
 	private int score;
 	
 	public static ScoreDto fromScore(final Score score, UriInfo uriInfo)
