@@ -5,6 +5,7 @@ import {
 import {
     LinkContainer
 } from 'react-router-bootstrap';
+import { Translation } from 'react-i18next';
 
 class Explore extends Component {
     state = {  }
@@ -15,7 +16,11 @@ class Explore extends Component {
                     variant="dark"
                     className={ this.props.className }
                 >
-                    Explore
+                    <Translation>
+                    {
+                        t => t('navigation.explore')
+                    }
+                    </Translation>
                 </Button>
             </LinkContainer>
         );

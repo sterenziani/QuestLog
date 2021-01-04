@@ -1,3 +1,16 @@
 {
-    "welcome" : "Welcome!"
+    "navigation" : {
+        "explore"   : "Explore",
+        "auth"      : {
+            "login"     : "Log In",
+            "signup"    : "Sign Up"
+        },
+        "search"    : {
+            "options"   : {
+                "game"  : "Game",
+                "user"  : "User"
+            },
+            "btn"       : "Search"
+        }
+    }
 }

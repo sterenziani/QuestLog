@@ -1,3 +1,16 @@
 {
-    "welcome" : "Bienvenido!"
+    "navigation" : {
+        "explore"   : "Explorar",
+        "auth"      : {
+            "login"     : "Ingresar",
+            "signup"    : "Registrarse"
+        },
+        "search"    : {
+            "options"   : {
+                "game"  : "Juego",
+                "user"  : "Usuario"
+            },
+            "btn"       : "Buscar"
+        }
+    }
 }

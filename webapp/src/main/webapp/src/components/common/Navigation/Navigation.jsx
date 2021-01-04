@@ -36,7 +36,7 @@ class Navigation extends Component {
                 </Navbar.Brand>
                 <Nav className="mr-auto flex-grow-1 d-flex my-3">
                     <Search className="flex-grow-1 mr-4"/>
-                    <Explore className="mr-4" />
+                    <Explore className="mr-5" />
                     <Authentification />
                 </Nav>
             </Navbar>
