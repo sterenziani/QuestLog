@@ -12,5 +12,10 @@
             },
             "btn"       : "Search"
         }
+    },
+    "games" : {
+        "profile" : {
+            "addToBacklog" : "Add to Backlog"
+        }
     }
 }

@@ -7,7 +7,7 @@ class GameDetailsPage extends Component {
         return ( 
             <React.Fragment>
                 <Helmet>
-                    <title>Game Details</title>
+                    <title>QuestLog - Game Details</title>
                 </Helmet>
                 <p>{this.props.match.params.id}</p>
             </React.Fragment>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
+import GameListItem from '../../common/GameListItem/GameListItem';
 
 class IndexPage extends Component {
     state = {  }
@@ -9,7 +10,9 @@ class IndexPage extends Component {
                 <Helmet>
                     <title>QuestLog</title>
                 </Helmet>
-                <h1>Welcome!</h1>
+                <GameListItem>
+                    
+                </GameListItem>
             </React.Fragment>
         );
     }
