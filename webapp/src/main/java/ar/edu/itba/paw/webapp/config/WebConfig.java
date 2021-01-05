@@ -32,6 +32,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.TemplateEngine;
@@ -47,7 +50,7 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 @EnableTransactionManagement
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller","ar.edu.itba.paw.service", "ar.edu.itba.paw.persistence" })
 @Configuration
-public class WebConfig
+public class WebConfig extends WebMvcConfigurerAdapter
 {
 	@Value("classpath:create_tables.sql")
 	private Resource createTablesSql;
@@ -79,7 +82,7 @@ public class WebConfig
         return dbp;
     }
 	
-	@Bean
+	/*@Bean
 	public ViewResolver viewResolver()
 	{
 		final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();        
@@ -87,7 +90,7 @@ public class WebConfig
 		viewResolver.setPrefix("/WEB-INF/jsp/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
-	}
+	}*/
 	
 	@Bean
 	public PlatformTransactionManager transactionManager(final EntityManagerFactory emf)
@@ -115,6 +118,25 @@ public class WebConfig
 		
 		factoryBean.setJpaProperties(properties);
 		return factoryBean;
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/locales/**").addResourceLocations("/locales/");
+		registry.addResourceHandler("/static/media/**").addResourceLocations("/static/media/");
+		registry.addResourceHandler("/static/css/**").addResourceLocations("/static/css/");
+		registry.addResourceHandler("/static/js/**").addResourceLocations("/static/js/");
+		registry.addResourceHandler("/index.html").addResourceLocations("/index.html");
+	}
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/{spring:\\w+}")
+				.setViewName("forward:/");
+		registry.addViewController("/**/{spring:\\w+}")
+				.setViewName("forward:/");
+		registry.addViewController("/{spring:\\w+}/**{spring:?!(\\.js|\\.css)$}")
+				.setViewName("forward:/");
 	}
 	
 	@Bean

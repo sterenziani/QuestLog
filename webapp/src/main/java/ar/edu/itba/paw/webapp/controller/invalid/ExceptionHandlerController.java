@@ -17,129 +17,13 @@ import ar.edu.itba.paw.webapp.exception.PlatformNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PublisherNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ReviewsNotEnabledException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
-public class ExceptionHandlerController
-{	
-	@Autowired
-	private UserService us;
-	
-	@ExceptionHandler(ImageNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchImage()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.imageNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
+public class ExceptionHandlerController {
 
-	@ExceptionHandler(UserNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchUser()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.userNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(GameNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchGame()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.gameNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(TokenNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchToken()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.invalidToken");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(RunsNotEnabledException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView runsDisabled()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.interactionDisabled");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(ScoresNotEnabledException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView scoresDisabled()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.interactionDisabled");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(ReviewsNotEnabledException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView reviewsDisabled()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.interactionDisabled");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(PlatformNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchPlatform()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.platformNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(DeveloperNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchDeveloper()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.developerNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(GenreNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchGenre()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.genreNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(PublisherNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ModelAndView NoSuchPublisher()
-	{
-		ModelAndView m = new ModelAndView("error/errorException");
-		m.addObject("msg", "error.publisherNotExists");
-		m.addObject("loggedUser", us.getLoggedUser());
-		return m;
-	}
-	
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ModelAndView notFoundHandler()
-	{
-		ModelAndView m = new ModelAndView("error/error");
-		m.addObject("msg", "error.500");
-		return m;
+	@ExceptionHandler(NoHandlerFoundException.class)
+	public String error404() {
+		return "forward:/index.html";
 	}
 }
