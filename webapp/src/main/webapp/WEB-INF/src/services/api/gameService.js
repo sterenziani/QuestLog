@@ -16,7 +16,7 @@ const getPopularGames       = async () => {
     }
 }
 
-const getUpcommingGames     = async() => {
+const getUpcomingGames     = async() => {
     try {
         const endpoint = `${gameServiceEndpoint}/upcoming`;
         const response = await api.get(endpoint);
@@ -30,9 +30,24 @@ const getUpcommingGames     = async() => {
     }
 }
 
+const getGameById    = async(gameId)  => {
+    try {
+        const endpoint = `${gameServiceEndpoint}/${gameId}`;
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch(err) {
+        if(err.response) {
+            return { status : err.response.status };
+        } else {
+            /* timeout */
+        }
+    }
+}
+
 const GameService = {
     getPopularGames     : getPopularGames,
-    getUpcommingGames   : getUpcommingGames
+    getUpcomingGames   : getUpcomingGames,
+    getGameById         : getGameById,
 }
 
 export default GameService;

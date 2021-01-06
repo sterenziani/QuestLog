@@ -11,7 +11,9 @@ import BacklogButton from '../../common/BacklogButton/BacklogButton';
 import defaultGameCover from './images/default_game_cover.png';
 
 class GameListItem extends Component {
-    state = {}
+    state = {
+        id: this.props.id
+    };
     render() {
         return (
             <Card style={{ width: '18rem' }}>

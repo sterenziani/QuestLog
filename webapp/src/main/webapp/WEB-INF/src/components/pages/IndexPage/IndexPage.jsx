@@ -28,9 +28,10 @@ class IndexPage extends Component {
                         <title>QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <GameListItem>
-                    
-                </GameListItem>
+                <ul>
+                    {this.state.popularGames.map(g =>
+                        <GameListItem key={g.id} id={g.id} />)}
+                </ul>
             </React.Fragment>
         );
     }
