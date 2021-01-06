@@ -12,7 +12,7 @@ class GameDetailsPage extends Component {
     componentDidMount = () => {
         let id = this.props.match.params.id;
 
-        axios.get('http://localhost:8080/webapp_war/api/games/' + id)
+        axios.get('http://localhost:8080/webapp/api/games/' + id)
             .then(response => {
                 const game = response.data;
                 console.log("HOLAAA")
