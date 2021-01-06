@@ -15,7 +15,8 @@
     },
     "games" : {
         "profile" : {
-            "addToBacklog" : "Add to Backlog"
+            "addToBacklog" : "Add to Backlog",
+            "removeFromBacklog" : "Remove from Backlog"
         }
     }
 }

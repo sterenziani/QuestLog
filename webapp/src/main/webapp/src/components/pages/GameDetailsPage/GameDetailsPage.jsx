@@ -1,14 +1,39 @@
 import React, { Component } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import axios from "axios";
 
 class GameDetailsPage extends Component {
-    state = {  }
-    render() { 
-        return ( 
+    state = {
+        id : null,
+        game: null,
+        loading : true,
+    };
+
+    componentDidMount = () => {
+        let id = this.props.match.params.id;
+
+        axios.get('http://localhost:8080/webapp_war/api/games/' + id)
+            .then(response => {
+                const game = response.data;
+                console.log("HOLAAA")
+                console.log(response.data)
+                console.log("CHAU")
+
+                this.setState({
+                    game,
+                    loading : false
+                });
+            })
+    }
+
+    render() {
+        return (
             <React.Fragment>
-                <Helmet>
-                    <title>QuestLog - Game Details</title>
-                </Helmet>
+                <HelmetProvider>
+                    <Helmet>
+                        <title>QuestLog - Game Details</title>
+                    </Helmet>
+                </HelmetProvider>
                 <p>{this.props.match.params.id}</p>
             </React.Fragment>
         );

@@ -3,9 +3,10 @@ import {
     Card,
     Button
 } from 'react-bootstrap';
-import {
-    Translation
-} from 'react-i18next';
+
+import axios from 'axios';
+
+import BacklogButton from '../../common/BacklogButton/BacklogButton';
 
 import defaultGameCover from './images/default_game_cover.png';
 
@@ -14,16 +15,10 @@ class GameListItem extends Component {
     render() {
         return (
             <Card style={{ width: '18rem' }}>
-                <Button variant="primary">
-                    <Translation>
-                    {
-                        t => t('games.profile.addToBacklog')
-                    }
-                    </Translation>
-                </Button>
+                <BacklogButton/>
                 <Card.Img variant="top" src={ defaultGameCover } />
                 <Card.Body>
-                    Algun jueguito
+                    hola
                 </Card.Body>
             </Card>
         )
