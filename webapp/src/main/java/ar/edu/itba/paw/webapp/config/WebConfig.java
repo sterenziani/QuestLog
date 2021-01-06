@@ -5,12 +5,16 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import javax.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -30,13 +34,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -50,6 +51,7 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 @EnableTransactionManagement
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller","ar.edu.itba.paw.service", "ar.edu.itba.paw.persistence" })
 @Configuration
+@PropertySources({@PropertySource(value = "classpath:url.properties"),})
 public class WebConfig extends WebMvcConfigurerAdapter
 {
 	@Value("classpath:create_tables.sql")
@@ -60,10 +62,13 @@ public class WebConfig extends WebMvcConfigurerAdapter
 	
 	public static final int MAX_IMAGE_SIZE = -1;
 	
-	@Bean
+    @Autowired
+    private Environment environment;
+    
+	@Bean(name = "QuestLog-baseUrl")
 	public String baseUrl()
 	{
-		return "http://pawserver.it.itba.edu.ar/paw-2020a-4/";
+		return environment.getRequiredProperty("baseUrl");
 	}
 	
 	@Bean
@@ -149,10 +154,9 @@ public class WebConfig extends WebMvcConfigurerAdapter
         ds.setUsername("paw-2020a-4");
         ds.setPassword("z5xN1hSaw");
         */
-        ds.setUrl("jdbc:postgresql://localhost/paw");
-        ds.setUsername("root");
-        ds.setPassword("root");
-        
+		ds.setUrl(environment.getRequiredProperty("dbUrl"));
+		ds.setUsername(environment.getProperty("dbUsername"));
+		ds.setPassword(environment.getProperty("dbPassword"));
         return ds;
     }
 	
@@ -176,10 +180,10 @@ public class WebConfig extends WebMvcConfigurerAdapter
 	public JavaMailSender javaMailSender()
 	{
 	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-	    mailSender.setHost("smtp.gmail.com");
-	    mailSender.setPort(587);
-	    mailSender.setUsername("no.reply.paw.questlog@gmail.com");
-	    mailSender.setPassword("PAWerpuffGirls");
+	    mailSender.setHost(environment.getProperty("mailHost"));
+	    mailSender.setPort(Integer.parseInt(environment.getProperty("mailPort")));
+	    mailSender.setUsername(environment.getProperty("mailUsername"));
+	    mailSender.setPassword(environment.getProperty("mailPassword"));
 	    Properties props = mailSender.getJavaMailProperties();
 	    props.put("mail.transport.protocol", "smtp");
 	    props.put("mail.smtp.auth", "true");
