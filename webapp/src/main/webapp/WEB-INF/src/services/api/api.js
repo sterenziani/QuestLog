@@ -1,7 +1,7 @@
 import { create } from 'axios';
 
 const api = create({
-    baseURL : 'http://localhost:8080/webapp_war/api/',
+    baseURL : `${process.env.PUBLIC_URL}/api/`,
 
 })
 
