@@ -4,10 +4,6 @@ import {
     Card, Container,
 } from 'react-bootstrap';
 
-import {
-    Card,
-} from 'react-bootstrap';
-
 import BacklogButton from '../../common/BacklogButton/BacklogButton';
 
 import defaultGameCover from './images/default_game_cover.png';

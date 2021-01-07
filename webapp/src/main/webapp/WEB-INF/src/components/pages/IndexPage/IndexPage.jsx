@@ -16,6 +16,7 @@ class IndexPage extends Component {
         const fetchPop = GameService.getPopularGames();
         const fetchUp = GameService.getUpcomingGames();
 
+        //TODO: Handle no response (404)
         Promise.all([ fetchPop, fetchUp ]).then((responses) => {
             this.setState({
                 loading: false,
