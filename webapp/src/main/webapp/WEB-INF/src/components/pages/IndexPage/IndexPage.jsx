@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
-import GameListItem from '../../common/GameListItem/GameListItem';
+//import GameListItem from '../../common/GameListItem/GameListItem';
 
 class IndexPage extends Component {
     state = {
@@ -29,8 +29,8 @@ class IndexPage extends Component {
                     </Helmet>
                 </HelmetProvider>
                 <ul>
-                    {this.state.popularGames.map(g =>
-                        <GameListItem key={g.id} id={g.id} />)}
+                    {/*this.state.popularGames.map(g =>
+                        <GameListItem key={g.id} id={g.id} />)*/}
                 </ul>
             </React.Fragment>
         );

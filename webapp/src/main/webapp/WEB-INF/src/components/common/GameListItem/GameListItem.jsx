@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import api from '../../../services/api/api';
+//import api from '../../../services/api/api';
 import ImageService from "../../../services/api/imageService";
 import {
     Card,
-    Button
+//    Button
 } from 'react-bootstrap';
 
-import axios from 'axios';
+//import axios from 'axios';
 
 import BacklogButton from '../../common/BacklogButton/BacklogButton';
 

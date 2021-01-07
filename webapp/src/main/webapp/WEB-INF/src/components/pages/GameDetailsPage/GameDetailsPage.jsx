@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import axios from "axios";
+//import axios from "axios";
 import GameService from "../../../services/api/gameService";
 import GameListItem from "../../common/GameListItem/GameListItem";
 
