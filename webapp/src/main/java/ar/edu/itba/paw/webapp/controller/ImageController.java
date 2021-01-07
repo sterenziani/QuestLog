@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,9 +24,9 @@ public class ImageController {
 	private UriInfo uriInfo;
     
     @GET
-    @Produces(value = {"image/base64"})
+    @Produces(value = {"image/png"})
     @Path("/{filename}")
-    public Response getPicture(@Context HttpServletRequest request, @PathParam("filename") String filename) throws ImageNotFoundException
+    public Response getPicture(@PathParam("filename") String filename) throws ImageNotFoundException
     {
         Optional<Image> maybeImage = is.findByImageName(filename);
         if(!maybeImage.isPresent())

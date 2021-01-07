@@ -18,7 +18,6 @@ class GameDetailsPage extends Component {
                     loading: 'false',
                 });
             });
-        console.log(this.state.game);
     }
 
     render() {
@@ -33,9 +32,7 @@ class GameDetailsPage extends Component {
                         <title></title>
                     </Helmet>
                 </HelmetProvider>
-                <GameListItem value={this.props.match.params.id} />
-                <p>{this.props.match.params.id}</p>
-                <p>{this.state.game.title}</p>
+                <GameListItem value={this.props.match.params.id} title={this.state.game.title} cover={this.state.game.cover} />
             </React.Fragment>
         );
     }
