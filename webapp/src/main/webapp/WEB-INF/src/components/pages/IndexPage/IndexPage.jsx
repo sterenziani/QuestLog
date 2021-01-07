@@ -1,26 +1,34 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
+import Spinner from 'react-bootstrap/Spinner';
 import GameListItem from '../../common/GameListItem/GameListItem';
 
 class IndexPage extends Component {
     state = {
         popularGames : [],
-        upcomingGames : []
+        upcomingGames : [],
+        loading : true,
     };
 
-    componentDidMount() {
-        const popularRes = GameService.getPopularGames();
-        const upcomingRes = GameService.getUpcomingGames();
-        this.setState({
-            popularGames : popularRes.data,
-            upcomingGames : upcomingRes.data
-        })
-        console.log(popularRes);
-        console.log(this.popularGames);
+    componentWillMount() {
+        const fetchPop = GameService.getPopularGames();
+        const fetchUp = GameService.getUpcomingGames();
+
+        Promise.all([ fetchPop, fetchUp ]).then((responses) => {
+            this.setState({
+                loading: false,
+                popularGames: responses[0],
+                upcomingGames : responses[1],
+            });
+        });
+        console.log(this.state.upcomingGames);
     }
 
-    render() { 
+    render() {
+        if (this.state.loading === true) {
+            return <Spinner animation="border" variant="primary" />;
+        }
         return (  
             <React.Fragment>
                 <HelmetProvider>
@@ -29,8 +37,8 @@ class IndexPage extends Component {
                     </Helmet>
                 </HelmetProvider>
                 <ul>
-                    {this.state.popularGames.map(g =>
-                        <GameListItem key={g.id} id={g.id} />)}
+                    {this.state.upcomingGames.map(g =>
+                        <GameListItem value={g.id} game={g}  />)}
                 </ul>
             </React.Fragment>
         );

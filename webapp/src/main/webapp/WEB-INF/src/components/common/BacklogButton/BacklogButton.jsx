@@ -10,9 +10,10 @@ class BacklogButton extends Component {
     state = {
         added: true
     };
+
     render() {
         return (
-            <Button variant={this.getButtonType()}>
+            <Button bg="light-grey" onClick={this.backlogHandler} variant={this.getButtonType()}>
                 <Translation>
                     {
                         t => t(this.getTranslation())
@@ -20,6 +21,12 @@ class BacklogButton extends Component {
                 </Translation>
             </Button>
         )
+    }
+
+    backlogHandler = () => {
+        this.setState({added : this.state.added ? false : true});
+        console.log(this.state.added);
+
     }
 
     getButtonType() {

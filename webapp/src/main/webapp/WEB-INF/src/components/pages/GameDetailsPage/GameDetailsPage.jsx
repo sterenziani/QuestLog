@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import axios from "axios";
+import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
 import GameListItem from "../../common/GameListItem/GameListItem";
 
 class GameDetailsPage extends Component {
     state = {
         game: null,
-        loading: 'true',
+        loading: true,
     };
 
     componentWillMount() {
@@ -15,14 +15,14 @@ class GameDetailsPage extends Component {
             .then((data) => {
                 this.setState({
                     game: data,
-                    loading: 'false',
+                    loading: false,
                 });
             });
     }
 
     render() {
-        if (this.state.loading === 'true') {
-            return <h2>Loading...</h2>;
+        if (this.state.loading === true) {
+            return <Spinner animation="border" variant="primary" />;
         }
 
         return (
@@ -32,7 +32,7 @@ class GameDetailsPage extends Component {
                         <title></title>
                     </Helmet>
                 </HelmetProvider>
-                <GameListItem value={this.props.match.params.id} title={this.state.game.title} cover={this.state.game.cover} />
+                <GameListItem value={this.props.match.params.id} game={this.state.game} />
             </React.Fragment>
         );
     }

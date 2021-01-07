@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import api from '../../../services/api/api';
-import ImageService from "../../../services/api/imageService";
+
+
 import {
-    Card,
-    Button
+    Card, Container,
 } from 'react-bootstrap';
 
-import axios from 'axios';
 
 import BacklogButton from '../../common/BacklogButton/BacklogButton';
 
@@ -15,30 +13,23 @@ import defaultGameCover from './images/default_game_cover.png';
 class GameListItem extends Component {
     state = {
         id: this.props.id,
-        title: this.props.title,
+        game: this.props.game,
         cover: defaultGameCover
     };
     
-    componentWillMount() {
-        if(this.props.cover == null)
-    		this.setState({ cover: defaultGameCover, });
-    	else
-	    	ImageService.getImageLink(this.props.cover)
-	            .then((data) => {
-	                this.setState({
-	                    cover: data
-	                });
-	            }).then((data) =>  {console.log(this.state.cover)});
-    }
-    
     render() {
         return (
-            <Card style={{ width: '18rem' }}>
+            <Card bg="light-grey" text="white" style={{
+                width: '18rem',
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingTop: 10,
+                paddingBottom: 10}}>
                 <BacklogButton/>
-                <Card.Img variant="top" src={this.state.cover} />
-                <Card.Body>
-                    {this.state.title}
-                </Card.Body>
+                <Card.Img variant="top" src={this.state.game.cover == null ? defaultGameCover : this.state.game.cover} />
+                    <Container bg="primary">
+                        {this.state.game.title}
+                    </Container>
             </Card>
         )
     }
