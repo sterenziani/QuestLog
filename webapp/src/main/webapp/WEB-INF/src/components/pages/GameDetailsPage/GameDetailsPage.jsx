@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+<<<<<<< HEAD
 import Spinner from 'react-bootstrap/Spinner';
+=======
+//import axios from "axios";
+>>>>>>> 42d4002c28226ba0242d6d5f055044ff1713e22e
 import GameService from "../../../services/api/gameService";
 import GameListItem from "../../common/GameListItem/GameListItem";
 

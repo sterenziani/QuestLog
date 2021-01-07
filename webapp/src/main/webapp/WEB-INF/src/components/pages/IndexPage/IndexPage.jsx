@@ -4,6 +4,7 @@ import GameService from "../../../services/api/gameService";
 import Spinner from 'react-bootstrap/Spinner';
 import GameListItem from '../../common/GameListItem/GameListItem';
 
+
 class IndexPage extends Component {
     state = {
         popularGames : [],

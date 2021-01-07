@@ -127,21 +127,7 @@ public class WebConfig extends WebMvcConfigurerAdapter
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/locales/**").addResourceLocations("/locales/");
-		registry.addResourceHandler("/static/media/**").addResourceLocations("/static/media/");
-		registry.addResourceHandler("/static/css/**").addResourceLocations("/static/css/");
-		registry.addResourceHandler("/static/js/**").addResourceLocations("/static/js/");
-		registry.addResourceHandler("/index.html").addResourceLocations("/index.html");
-	}
-
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/{spring:\\w+}")
-				.setViewName("forward:/");
-		registry.addViewController("/**/{spring:\\w+}")
-				.setViewName("forward:/");
-		registry.addViewController("/{spring:\\w+}/**{spring:?!(\\.js|\\.css)$}")
-				.setViewName("forward:/");
+		registry.addResourceHandler("/**").addResourceLocations("/");
 	}
 	
 	@Bean

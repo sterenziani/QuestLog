@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
-
 import {
     Card, Container,
 } from 'react-bootstrap';
 
+import {
+    Card,
+} from 'react-bootstrap';
 
 import BacklogButton from '../../common/BacklogButton/BacklogButton';
 
@@ -14,7 +16,6 @@ class GameListItem extends Component {
     state = {
         id: this.props.id,
         game: this.props.game,
-        cover: defaultGameCover
     };
     
     render() {
