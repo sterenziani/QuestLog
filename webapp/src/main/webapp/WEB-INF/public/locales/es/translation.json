@@ -17,6 +17,13 @@
         "profile" : {
             "addToBacklog" : "Agregar al Backlog",
             "removeFromBacklog" : "Eliminar del Backlog"
+        },
+        "lists" : {
+            "popularGames" : "Lo más popular",
+            "upcomingGames" : "Próximos lanzamientos",
+            "backlogGames" : "Mi Backlog",
+            "recommendedGames" : "Juegos recomendados",
+            "emptyList" : "No hay juegos en esta lista"
         }
     }
 }

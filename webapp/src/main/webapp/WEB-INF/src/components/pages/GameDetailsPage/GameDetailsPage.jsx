@@ -29,7 +29,7 @@ class GameDetailsPage extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title></title>
+                        <title>{this.state.game.title}</title>
                     </Helmet>
                 </HelmetProvider>
                 <GameListItem value={this.props.match.params.id} game={this.state.game} />

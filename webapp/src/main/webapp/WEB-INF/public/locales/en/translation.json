@@ -17,6 +17,13 @@
         "profile" : {
             "addToBacklog" : "Add to Backlog",
             "removeFromBacklog" : "Remove from Backlog"
+        },
+        "lists" : {
+            "popularGames" : "Popular right now",
+            "upcomingGames" : "Upcoming games",
+            "backlogGames" : "My Backlog",
+            "recommendedGames" : "Recommended games",
+            "emptyList" : "No games in this list"
         }
     }
 }

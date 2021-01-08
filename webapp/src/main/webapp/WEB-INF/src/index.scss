@@ -36,4 +36,8 @@ $theme-colors: (
     height: 400px;
 }
 
+.share-tech-mono {
+  font-family: 'Share Tech Mono', monospace;
+}
+
 @import "~bootstrap/scss/bootstrap.scss";
