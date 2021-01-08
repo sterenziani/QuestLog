@@ -235,4 +235,14 @@ public class WebConfig extends WebMvcConfigurerAdapter
     public Validator validator() {
         return new LocalValidatorFactoryBean();
     }
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/")
+				.setViewName("forward:/index.html");
+		registry.addViewController("/{x:[\\w\\-]+}")
+				.setViewName("forward:/index.html");
+		registry.addViewController("/{x:^(?!api$).*$}/**/{y:[\\w\\-]+}")
+				.setViewName("forward:/index.html");
+	}
 }
