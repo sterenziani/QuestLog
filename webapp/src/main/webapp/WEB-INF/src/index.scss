@@ -28,4 +28,12 @@ $theme-colors: (
   line-height: 0;
 }
 
+.cover {
+    height: 320px;
+}
+
+.cover-wide {
+    height: 400px;
+}
+
 @import "~bootstrap/scss/bootstrap.scss";
