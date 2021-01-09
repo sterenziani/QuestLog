@@ -18,5 +18,20 @@
             "addToBacklog" : "Agregar al Backlog",
             "removeFromBacklog" : "Eliminar del Backlog"
         }
+    },
+    "login" : {
+        "username" : {
+            "label"  : "Usuario",
+            "errors" : {
+                "is_required" : "Debe ingresar su usuario"
+            }
+        },
+        "password" : {
+            "label"  : "Contraseña",
+            "errors" : {
+                "is_required" : "Debe ingresar su contraseña"
+            }
+        }
+
     }
 }

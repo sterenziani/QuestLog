@@ -12,8 +12,8 @@ $theme-colors: (
   "white": #fff,
   "gray": #6c757d,
   "gray-dark": #343a40,
-  "very-dark" : #263137,
-  "light-grey" : #f7f7f7,
+  "very-dark": #263137,
+  "light-grey": #f7f7f7,
   "primary": #607d8b,
   "secondary": #ffc107,
   "success": #4caf50,
@@ -26,6 +26,14 @@ $theme-colors: (
 
 .no-lineheight {
   line-height: 0;
+}
+
+.form-error {
+  color: #cb0000;
+}
+
+.share-tech-mono {
+  font-family: "Share Tech Mono", monospace;
 }
 
 @import "~bootstrap/scss/bootstrap.scss";

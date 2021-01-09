@@ -18,5 +18,20 @@
             "addToBacklog" : "Add to Backlog",
             "removeFromBacklog" : "Remove from Backlog"
         }
+    },
+    "login" : {
+        "username" : {
+            "label"  : "Username",
+            "errors" : {
+                "is_required" : "Username should not be empty"
+            }
+        },
+        "password" : {
+            "label"  : "Password",
+            "errors" : {
+                "is_required" : "Password should not be empty"
+            }
+        }
+
     }
 }
