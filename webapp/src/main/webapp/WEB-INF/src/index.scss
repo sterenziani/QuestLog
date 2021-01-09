@@ -23,13 +23,18 @@ $theme-colors: (
   "light": #cfd8dc,
   "dark": #455a64,
 );
-
 .no-lineheight {
   line-height: 0;
 }
-
 .form-error {
   color: #cb0000;
+}
+.cover {
+  height: 320px;
+}
+
+.cover-wide {
+  height: 400px;
 }
 
 .share-tech-mono {

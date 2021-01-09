@@ -44,10 +44,25 @@ const getGameById    = async(gameId)  => {
     }
 }
 
+const getGameReleaseDates     = async(gameId) => {
+  try {
+    const endpoint = `games/${gameId}/release_dates`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const GameService = {
     getPopularGames     : getPopularGames,
     getUpcomingGames   : getUpcomingGames,
     getGameById         : getGameById,
+    getGameReleaseDates : getGameReleaseDates,
 }
 
 export default GameService;

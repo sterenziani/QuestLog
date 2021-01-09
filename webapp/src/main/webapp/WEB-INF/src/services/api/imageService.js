@@ -5,7 +5,6 @@ const imageServiceEndpoint   = 'images';
 const getImage = async(imageName)  => {
     try {
         const endpoint = `${imageServiceEndpoint}/${imageName}`;
-        console.log("Buscando " +endpoint);
         const response = await api.get(endpoint);
         return response.data;
     } catch(err) {
@@ -20,7 +19,6 @@ const getImage = async(imageName)  => {
 const getImageLink = async(imageName)  => {
     try {
         const endpoint = `${process.env.PUBLIC_URL}/api/${imageServiceEndpoint}/${imageName}`;
-        console.log(endpoint);
         return endpoint;
     } catch(err) {
         if(err.response) {
