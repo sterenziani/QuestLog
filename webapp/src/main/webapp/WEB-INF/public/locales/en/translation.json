@@ -54,5 +54,10 @@
         "Sports" : "Sports",
         "Stealth" : "Stealth",
         "Strategy" : "Strategy"
+    },
+    "score" : {
+        "average" : "Average user score",
+        "your" : "Your score",
+        "rate" : "Rate"
     }
 }

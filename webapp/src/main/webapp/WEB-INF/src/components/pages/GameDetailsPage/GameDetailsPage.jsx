@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
-import GameDetailsCard from "../../common/GameDetailsCard/GameDetailsCard";
+import DetailCard from "../../common/ItemsCard/DetailCard";
 
 class GameDetailsPage extends Component {
     state = {
@@ -32,7 +32,7 @@ class GameDetailsPage extends Component {
                         <title>{this.state.game.title}</title>
                     </Helmet>
                 </HelmetProvider>
-                <GameDetailsCard game={this.state.game} />
+                <DetailCard game={this.state.game} />
             </React.Fragment>
         );
     }

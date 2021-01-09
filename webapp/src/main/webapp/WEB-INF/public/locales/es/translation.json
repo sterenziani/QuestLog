@@ -54,5 +54,10 @@
         "Sports" : "Deportes",
         "Stealth" : "Sigilo",
         "Strategy" : "Estrategia"
+    },
+    "score" : {
+        "average" : "Calificación promedio",
+        "your" : "Tu calificación",
+        "rate" : "Calificar"
     }
 }
