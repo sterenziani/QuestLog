@@ -16,7 +16,13 @@
     "games" : {
         "profile" : {
             "addToBacklog" : "Agregar al Backlog",
-            "removeFromBacklog" : "Eliminar del Backlog"
+            "removeFromBacklog" : "Eliminar del Backlog",
+            "releaseDates" : "Fechas de lanzamiento",
+            "developers" : "Desarrollado por",
+            "publishers" : "Publicado por",
+            "genres" : "Géneros",
+            "platforms" : "Plataformas",
+            "trailer" : "Trailer"
         },
         "lists" : {
             "popularGames" : "Lo más popular",
@@ -25,5 +31,28 @@
             "recommendedGames" : "Juegos recomendados",
             "emptyList" : "No hay juegos en esta lista"
         }
+    },
+    "genres" : {
+        "Action" : "Acción",
+        "Adventure" : "Aventura",
+        "Arcade" : "Arcade",
+        "BoardGames" : "Juego de Mesa",
+        "Card" : "Cartas",
+        "Casual" : "Casual",
+        "Educational" : "Educativo",
+        "Family" : "Familiar",
+        "Fighting" : "Peleas",
+        "Horror" : "Horror",
+        "Indie" : "Indie",
+        "MMO" : "MMO",
+        "Platformer" : "Plataformas",
+        "Puzzle" : "Puzzle",
+        "Racing" : "Racing",
+        "RPG" : "RPG",
+        "Shooter" : "Shooter",
+        "Simulation" : "Simulación",
+        "Sports" : "Deportes",
+        "Stealth" : "Sigilo",
+        "Strategy" : "Estrategia"
     }
 }

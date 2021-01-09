@@ -1,9 +1,9 @@
 import api from './api';
 
 
-const getAllDevelopers       = async () => {
+const getAllPublishers       = async () => {
   try {
-    const endpoint = `developers`;
+    const endpoint = `publishers`;
     const response = await api.get(endpoint);
     return response.data;
   } catch(err) {
@@ -15,9 +15,9 @@ const getAllDevelopers       = async () => {
   }
 }
 
-const getGameDevelopers     = async(gameId) => {
+const getGamePublishers     = async(gameId) => {
   try {
-    const endpoint = `games/${gameId}/developers`;
+    const endpoint = `games/${gameId}/publishers`;
     const response = await api.get(endpoint);
     return response.data;
   } catch(err) {
@@ -29,9 +29,9 @@ const getGameDevelopers     = async(gameId) => {
   }
 }
 
-const DeveloperService = {
-  getAllDevelopers     : getAllDevelopers,
-  getGameDevelopers   : getGameDevelopers,
+const PublisherService = {
+  getAllPublishers     : getAllPublishers,
+  getGamePublishers   : getGamePublishers,
 }
 
-export default DeveloperService;
+export default PublisherService;
