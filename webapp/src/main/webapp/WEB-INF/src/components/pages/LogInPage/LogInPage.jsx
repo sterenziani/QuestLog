@@ -3,6 +3,9 @@ import {
     Form,
     Button
 } from 'react-bootstrap';
+import {
+    LinkContainer
+} from 'react-router-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Translation } from 'react-i18next';
@@ -46,65 +49,123 @@ class LogInPage extends Component {
                     <div
                         className="my-5 py-5 bg-light border-bottom border-primary rounded-lg"
                     >
-                        <h2>Log In</h2>
+                        <Form.Group>
+                            <h2 className="share-tech-mono">
+                                <Translation>
+                                {
+                                    t => t('login.title')
+                                }
+                                </Translation>
+                            </h2>
+                        </Form.Group>
+                        
                         <Form onSubmit={ handleSubmit }>
                             <Form.Group controlId="formUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    placeholder="Username" 
-                                    name="username"
-                                    onChange={ handleChange }
-                                    onBlur={ handleBlur }
-                                    value={ values.username }
-                                />
+                                <Form.Label>
+                                    <Translation>
+                                    {
+                                        t => t('login.username.label')
+                                    }
+                                    </Translation>
+                                    <Form.Control
+                                        placeholder="Username" 
+                                        name="username"
+                                        onChange={ handleChange }
+                                        onBlur={ handleBlur }
+                                        value={ values.username }
+                                    />
+                                    <p className="form-error">
+                                    { errors.username && touched.username && errors.username && (
+                                        <Translation>
+                                        {
+                                            t => t(`${errors.username}`)
+                                        }
+                                        </Translation>
+                                    )}
+                                    </p>
+                                </Form.Label>
                             </Form.Group>
-                            { errors.username && touched.username && errors.username && (
-                                <Translation>
-                                {
-                                    t => (
-                                        <p className="form-error">{t(`${errors.username}`)}</p>
-                                    )
-                                }
-                                </Translation>
-                                
-                            )}
-                            
                             <Form.Group controlId="formPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control 
-                                    type="password" 
-                                    placeholder="Password" 
-                                    name="password"
-                                    onChange={ handleChange }
-                                    onBlur={ handleBlur }
-                                    value={ values.password }
-                                />
+                                <Form.Label>
+                                    <Translation>
+                                    {
+                                        t => t('login.password.label')
+                                    }
+                                    </Translation>
+                                    <Form.Control 
+                                        type="password" 
+                                        placeholder="Password" 
+                                        name="password"
+                                        onChange={ handleChange }
+                                        onBlur={ handleBlur }
+                                        value={ values.password }
+                                    />
+                                    <p className="form-error">
+                                    { errors.password && touched.password && errors.password && (
+                                        <Translation>
+                                        {
+                                            t => t(`${errors.password}`)
+                                        }
+                                        </Translation>
+                                    )}
+                                    </p>
+                                </Form.Label>
                             </Form.Group>
-                            { errors.password && touched.password && errors.password && (
+                            <Form.Group controlId="formRememberMe">
                                 <Translation>
                                 {
-                                    t => (
-                                        <p className="form-error">{t(`${errors.password}`)}</p>
-                                    )
+                                    t => <Form.Check type="checkbox" label={t('login.remember-me')} />
                                 }
                                 </Translation>
                                 
-                            )}
-                            <Form.Group controlId="formRememberMe">
-                                <Form.Check type="checkbox" label="Remember Me" />
                             </Form.Group>
-                            <Button 
-                                variant="primary" 
-                                type="submit"
-                                disabled={ !touched.username || 
-                                    !touched.password || 
-                                    errors.username || 
-                                    errors.password || 
-                                    isSubmitting 
-                                }
-                            >
-                                Submit
-                            </Button>
+                            <Form.Group>
+                                <Button 
+                                    variant="dark" 
+                                    type="submit"
+                                    disabled={ 
+                                        isSubmitting 
+                                    }
+                                >
+                                    <Translation>
+                                    {
+                                        t => t('login.login')
+                                    }
+                                    </Translation>
+                                </Button>
+                            </Form.Group>
+                            <Form.Group>
+                                <LinkContainer to="/signup">
+                                    <Button 
+                                        variant="dark"
+                                        disabled={ 
+                                            isSubmitting 
+                                        }
+                                    >
+                                        <Translation>
+                                        {
+                                            t => t('login.signup')
+                                        }
+                                        </Translation>
+                                    </Button>
+                                </LinkContainer>
+                            </Form.Group>
+                            <Form.Group>
+                                <LinkContainer to="/forgotPassword">
+                                    <Button 
+                                        variant="link"
+                                        disabled={ 
+                                            isSubmitting 
+                                        }
+                                    >
+                                        <Translation>
+                                        {
+                                            t => t('login.forgot')
+                                        }
+                                        </Translation>
+                                    </Button>
+                                </LinkContainer>
+                            </Form.Group>
                         </Form>
                     </div>
                 </div>

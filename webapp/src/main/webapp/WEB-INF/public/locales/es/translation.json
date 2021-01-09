@@ -33,18 +33,23 @@
         }
     },
     "login" : {
+        "title"       : "Ingresar",
         "username" : {
-            "label"  : "Usuario",
+            "label"  : "Usuario:",
             "errors" : {
                 "is_required" : "Debe ingresar su usuario"
             }
         },
         "password" : {
-            "label"  : "Contraseña",
+            "label"  : "Contraseña:",
             "errors" : {
                 "is_required" : "Debe ingresar su contraseña"
             }
-        }
+        },
+        "remember-me" : "Recordarme",
+        "login"       : "Ingresar",
+        "signup"      : "¿Primera vez? ¡Registrate!",
+        "forgot"      : "Olvidé mi contraseña"
     },
     "genres" : {
         "Action" : "Acción",
