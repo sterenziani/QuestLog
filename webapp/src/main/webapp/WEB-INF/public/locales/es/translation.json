@@ -33,6 +33,25 @@
             "emptyList" : "No hay juegos en esta lista"
         }
     },
+    "login" : {
+        "title"       : "Ingresar",
+        "username" : {
+            "label"  : "Usuario:",
+            "errors" : {
+                "is_required" : "Debe ingresar su usuario"
+            }
+        },
+        "password" : {
+            "label"  : "Contraseña:",
+            "errors" : {
+                "is_required" : "Debe ingresar su contraseña"
+            }
+        },
+        "remember-me" : "Recordarme",
+        "login"       : "Ingresar",
+        "signup"      : "¿Primera vez? ¡Registrate!",
+        "forgot"      : "Olvidé mi contraseña"
+    },
     "genres" : {
         "Action" : "Acción",
         "Adventure" : "Aventura",
