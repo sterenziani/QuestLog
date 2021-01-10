@@ -80,5 +80,23 @@
         "your" : "Your score",
         "rate" : "Rate",
         "notAvailable" : "N/A"
+    },
+    "runs" : {
+        "fastestRuns" : "Fastest runs",
+        "addRun" : "Add run",
+        "avgTime" : "Average time",
+        "avgTimes" : "Average times",
+        "fastestRuns": "Fastest runs",
+        "playstyle" : "Playstyle",
+        "playstyles": {
+            "MainStory" : "Main Story",
+            "MainStoryExtras" : "Main Story + Extras",
+            "Speedrun" : "Speedrun",
+            "Completionist" : "Completionist"
+        },
+        "notAvailable" : "N/A",
+        "platform" : "Platform",
+        "time" : "Time",
+        "myRuns" : "My runs"
     }
 }

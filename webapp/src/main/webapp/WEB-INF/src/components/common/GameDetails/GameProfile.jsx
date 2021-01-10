@@ -5,6 +5,7 @@ import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import GameDetailsCard from "./GameDetailsCard";
 import ScoreSlider from "./ScoreSlider";
+import RunsTab from "./RunsTab";
 
 class GameProfile extends Component {
     state = {
@@ -25,7 +26,10 @@ class GameProfile extends Component {
                                 <Col className="col-3"><GameDetailsCard game={this.state.game}/></Col>
                                 <Col className="p-3 col-9">
                                     {this.state.game.released? [
-                                        <ScoreSlider game={this.state.game}/>
+                                        <div>
+                                            <ScoreSlider game={this.state.game}/>
+                                            <RunsTab game={this.state.game}/>
+                                        </div>
                                     ] : [ <Container className="text-center mt-5"> <p> <Translation>{t => t("games.profile.unreleased")}</Translation> </p> </Container> ]}
                                 </Col>
                             </Row>

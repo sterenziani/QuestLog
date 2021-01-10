@@ -80,5 +80,23 @@
         "your" : "Tu calificación",
         "rate" : "Calificar",
         "notAvailable" : "N/D"
+    },
+    "runs" : {
+        "fastestRuns" : "Los runs más rápidos",
+        "addRun" : "Agregar run",
+        "avgTime" : "Tiempo promedio",
+        "avgTimes" : "Tiempos promedio",
+        "fastestRuns": "Los runs más rápidos",
+        "playstyle" : "Estilo",
+        "playstyles": {
+            "MainStory" : "Modo Historia",
+            "MainStoryExtras" : "Modo Historia + Extras",
+            "Speedrun" : "Speedrun",
+            "Completionist" : "100%"
+        },
+        "notAvailable" : "N/D",
+        "platform" : "Plataforma",
+        "time" : "Tiempo",
+        "myRuns" : "Mis runs"
     }
 }

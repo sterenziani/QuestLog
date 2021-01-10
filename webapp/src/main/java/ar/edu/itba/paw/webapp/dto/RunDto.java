@@ -50,6 +50,8 @@ public class RunDto
 		dto.user = UserDto.fromUser(run.getUser(), uriInfo);
 		dto.time = run.getTime();
 		dto.game = GameDto.fromGame(run.getGame(), uriInfo);
+		dto.platform = PlatformDto.fromPlatform(run.getPlatform(), uriInfo);
+		dto.playstyle = PlaystyleDto.fromPlaystyle(run.getPlaystyle(), uriInfo);
 		return dto;
 	}
 

@@ -34,6 +34,7 @@ import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.webapp.dto.EditUserLocaleDto;
 import ar.edu.itba.paw.webapp.dto.EditUserPasswordDto;
@@ -272,6 +273,21 @@ public class UserController
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+		return resp.build();
+	}
+	
+	@GET
+	@Path("{userId}/runs/{gameId}")
+	public Response listRunsByUser(@PathParam("userId") long userId, @PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("25") int page_size)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final List<RunDto> runs = rs.findGameRuns(maybeGame.get(), maybeUser.get()).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
 		return resp.build();
 	}
 	
