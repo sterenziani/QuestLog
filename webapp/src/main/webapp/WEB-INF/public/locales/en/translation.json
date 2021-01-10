@@ -22,7 +22,8 @@
             "publishers" : "Publishers",
             "genres" : "Genres",
             "platforms" : "Platforms",
-            "trailer" : "Trailer"
+            "trailer" : "Trailer",
+            "unreleased" : "Scores, runs and reviews are disabled for this game until it comes out on at least one platform"
         },
         "lists" : {
             "popularGames" : "Popular right now",
@@ -58,6 +59,7 @@
     "score" : {
         "average" : "Average user score",
         "your" : "Your score",
-        "rate" : "Rate"
+        "rate" : "Rate",
+        "notAvailable" : "N/A"
     }
 }

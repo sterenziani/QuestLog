@@ -27,6 +27,9 @@ public class GameDto
 	private URI average_times_url;
 	private URI top_runs_url;
 	
+	private boolean released;
+	private int votes;
+	
 	public static GameDto fromGame(Game game, UriInfo uriInfo)
 	{   
 		final GameDto dto = new GameDto();
@@ -47,6 +50,9 @@ public class GameDto
 		dto.reviews_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("reviews").build();
 		dto.average_times_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("average_times").build();
 		dto.top_runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("top_runs").build();
+		
+		dto.released = game.hasReleased();
+		dto.setVotes(game.getScores().size());
 		return dto;
 	}
 
@@ -176,6 +182,22 @@ public class GameDto
 
 	public void setRuns_url(URI runs_url) {
 		this.runs_url = runs_url;
+	}
+
+	public boolean isReleased() {
+		return released;
+	}
+
+	public void setReleased(boolean released) {
+		this.released = released;
+	}
+
+	public int getVotes() {
+		return votes;
+	}
+
+	public void setVotes(int votes) {
+		this.votes = votes;
 	}
 	
 }

@@ -22,7 +22,8 @@
             "publishers" : "Publicado por",
             "genres" : "Géneros",
             "platforms" : "Plataformas",
-            "trailer" : "Trailer"
+            "trailer" : "Trailer",
+            "unreleased" : "Las calificaciones, runs y reseñas están deshabilitadas para este juego hasta que salga a la venta para alguna plataforma"
         },
         "lists" : {
             "popularGames" : "Lo más popular",
@@ -56,8 +57,9 @@
         "Strategy" : "Estrategia"
     },
     "score" : {
-        "average" : "Calificación promedio",
+        "average" : "Promedio según usuarios",
         "your" : "Tu calificación",
-        "rate" : "Calificar"
+        "rate" : "Calificar",
+        "notAvailable" : "N/D"
     }
 }
