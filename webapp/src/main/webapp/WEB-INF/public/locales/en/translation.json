@@ -23,7 +23,10 @@
             "genres" : "Genres",
             "platforms" : "Platforms",
             "trailer" : "Trailer",
-            "unreleased" : "Scores, runs and reviews are disabled for this game until it comes out on at least one platform"
+            "unreleased" : "Scores, runs and reviews are disabled for this game until it comes out on at least one platform",
+            "runs" : "RUNS",
+            "reviews" : "REVIEWS",
+            "myReviews" : "MY REVIEWS"
         },
         "lists" : {
             "popularGames" : "Popular right now",
@@ -98,5 +101,8 @@
         "platform" : "Platform",
         "time" : "Time",
         "myRuns" : "My runs"
+    },
+    "reviews" : {
+        "addRun" : "Write a review"
     }
 }

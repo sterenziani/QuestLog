@@ -52,7 +52,7 @@ class RunsTab extends Component {
                 </Col>
 
                 {
-                    this.state.loggedIn? [
+                    (this.state.loggedIn && this.state.myRuns.length > 0)? [
                         <Card className="m-5 bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                             <Card.Header className="bg-very-dark text-white d-flex">
                                 <h2 className="share-tech-mono"><Translation>{t => t("runs.myRuns")}</Translation></h2>

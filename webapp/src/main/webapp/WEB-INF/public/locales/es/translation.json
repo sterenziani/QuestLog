@@ -23,7 +23,10 @@
             "genres" : "Géneros",
             "platforms" : "Plataformas",
             "trailer" : "Trailer",
-            "unreleased" : "Las calificaciones, runs y reseñas están deshabilitadas para este juego hasta que salga a la venta para alguna plataforma"
+            "unreleased" : "Las calificaciones, runs y reseñas están deshabilitadas para este juego hasta que salga a la venta para alguna plataforma",
+            "runs" : "RUNS",
+            "reviews" : "RESEÑAS",
+            "myReviews" : "MIS RESEÑAS"
         },
         "lists" : {
             "popularGames" : "Lo más popular",
@@ -98,5 +101,8 @@
         "platform" : "Plataforma",
         "time" : "Tiempo",
         "myRuns" : "Mis runs"
+    },
+    "reviews" : {
+        "addRun" : "Escribir una reseña"
     }
 }

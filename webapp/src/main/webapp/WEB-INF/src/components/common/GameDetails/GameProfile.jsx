@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Container} from "react-bootstrap";
+import {Card, Row, Col, Container, Tabs, Tab} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import GameDetailsCard from "./GameDetailsCard";
 import ScoreSlider from "./ScoreSlider";
 import RunsTab from "./RunsTab";
+import ReviewsTab from "./ReviewsTab";
 
 class GameProfile extends Component {
     state = {
@@ -23,12 +24,19 @@ class GameProfile extends Component {
                     {
                         <Grid style={{width: "100%"}}>
                             <Row>
-                                <Col className="col-3"><GameDetailsCard game={this.state.game}/></Col>
+                                <Col className=""><GameDetailsCard game={this.state.game}/></Col>
                                 <Col className="p-3 col-9">
                                     {this.state.game.released? [
                                         <div>
                                             <ScoreSlider game={this.state.game}/>
-                                            <RunsTab game={this.state.game}/>
+                                            <Tabs className="mt-5 mx-3 bg-dark" defaultActiveKey="runs" id="uncontrolled-tab-example">
+                                                <Tab className="bg-very-light-grey" eventKey="runs" title={<Translation>{t => t("games.profile.runs")}</Translation>}>
+                                                    <RunsTab game={this.state.game}/>
+                                                </Tab>
+                                                <Tab className="bg-very-light-grey" eventKey="reviews" title=<Translation>{t => t("games.profile.reviews")}</Translation>>
+                                                    <ReviewsTab className="p-5" game={this.state.game} />
+                                                </Tab>
+                                            </Tabs>
                                         </div>
                                     ] : [ <Container className="text-center mt-5"> <p> <Translation>{t => t("games.profile.unreleased")}</Translation> </p> </Container> ]}
                                 </Col>
