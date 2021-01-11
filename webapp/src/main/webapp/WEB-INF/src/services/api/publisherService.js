@@ -15,6 +15,20 @@ const getAllPublishers       = async () => {
   }
 }
 
+const getBiggestPublishers       = async () => {
+  try {
+    const endpoint = `publishers/biggest`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const getGamePublishers     = async(gameId) => {
   try {
     const endpoint = `games/${gameId}/publishers`;
@@ -32,6 +46,7 @@ const getGamePublishers     = async(gameId) => {
 const PublisherService = {
   getAllPublishers     : getAllPublishers,
   getGamePublishers   : getGamePublishers,
+  getBiggestPublishers : getBiggestPublishers,
 }
 
 export default PublisherService;

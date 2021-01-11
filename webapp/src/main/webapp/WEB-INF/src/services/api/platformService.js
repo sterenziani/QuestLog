@@ -15,6 +15,20 @@ const getAllPlatforms       = async () => {
   }
 }
 
+const getBiggestPlatforms       = async () => {
+  try {
+    const endpoint = `platforms/biggest`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const getGamePlatforms     = async(gameId) => {
   try {
     const endpoint = `games/${gameId}/platforms`;
@@ -32,6 +46,7 @@ const getGamePlatforms     = async(gameId) => {
 const PlatformService = {
   getAllPlatforms     : getAllPlatforms,
   getGamePlatforms   : getGamePlatforms,
+  getBiggestPlatforms : getBiggestPlatforms,
 }
 
 export default PlatformService;

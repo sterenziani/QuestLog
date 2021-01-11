@@ -22,7 +22,11 @@ class GameDetailsPage extends Component {
 
     render() {
         if (this.state.loading === true) {
-            return <Spinner animation="border" variant="primary" />;
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />;
+            </div>
         }
 
         return (

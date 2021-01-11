@@ -24,19 +24,19 @@ class RunsTab extends Component {
     };
 
     componentWillMount() {
-        RunService.getGameTimes(this.props.game.gameId)
+        RunService.getGameTimes(this.props.game.id)
               .then((data) => {
                   this.setState({
                       avgTimes: data
                   });
               }).then((data) =>  {});
-        RunService.getGameTopRuns(this.props.game.gameId)
+        RunService.getGameTopRuns(this.props.game.id)
             .then((data) => {
                 this.setState({
                     fastestRuns: data
                 });
             }).then((data) =>  {});
-        RunService.getUserGameRuns(this.state.userId, this.props.game.gameId)
+        RunService.getUserGameRuns(this.state.userId, this.props.game.id)
             .then((data) => {
                 this.setState({
                     myRuns: data

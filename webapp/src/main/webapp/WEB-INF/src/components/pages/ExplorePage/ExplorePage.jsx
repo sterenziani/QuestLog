@@ -5,8 +5,6 @@ import GenreService from "../../../services/api/genreService";
 import DeveloperService from "../../../services/api/devService";
 import PlatformService from "../../../services/api/platformService";
 import PublisherService from "../../../services/api/publisherService";
-import {Col, Row} from "react-bootstrap";
-import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import ContainerCard from "../../common/ItemsCard/ContainerCard";
 
@@ -21,10 +19,10 @@ class ExplorePage extends Component {
     };
 
     componentWillMount() {
-        const fetchDev = DeveloperService.getAllDevelopers();
+        const fetchDev = DeveloperService.getBiggestDevelopers();
         const fetchGen = GenreService.getAllGenres();
-        const fetchPlat = PlatformService.getAllPlatforms();
-        const fetchPub = PublisherService.getAllPublishers();
+        const fetchPlat = PlatformService.getBiggestPlatforms();
+        const fetchPub = PublisherService.getBiggestPublishers();
 
         //TODO: Handle no response (404)
         Promise.all([ fetchDev, fetchGen, fetchPlat, fetchPub ]).then((responses) => {
@@ -57,22 +55,20 @@ class ExplorePage extends Component {
                         <title>Questlog</title>
                     </Helmet>
                 </HelmetProvider>
-                <Grid style={{width: "100%"}} justify="space-evenly" alignItems="center">
-                    <Col>
-                        <Row>
-                            <ContainerCard items={this.state.genres} label="Genres"/>
-                        </Row>
-                        <Row>
-                            <ContainerCard items={this.state.platforms} label="Platforms"/>
-                        </Row>
-                        <Row>
-                            <ContainerCard items={this.state.developers} label="Developers"/>
-                        </Row>
-                        <Row>
-                            <ContainerCard items={this.state.publishers} label="Publishers"/>
-                        </Row>
-                    </Col>
-                </Grid>
+                <div>
+                        <div>
+                            <ContainerCard items={this.state.genres} label="Genres" limit={25}/>
+                        </div>
+                        <div>
+                            <ContainerCard items={this.state.platforms} label="Platforms" limit={25}/>
+                        </div>
+                        <div>
+                            <ContainerCard items={this.state.developers} label="Developers" limit={15}/>
+                        </div>
+                        <div>
+                            <ContainerCard items={this.state.publishers} label="Publishers" limit={15}/>
+                        </div>
+                </div>
             </React.Fragment>
         );
     }

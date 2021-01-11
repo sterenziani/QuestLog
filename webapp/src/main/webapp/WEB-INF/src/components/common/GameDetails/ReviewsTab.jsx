@@ -17,19 +17,19 @@ class ReviewsTab extends Component {
     };
 
     componentWillMount() {
-        ReviewService.getUserGameReviews(this.state.userId, this.props.game.gameId)
+        ReviewService.getUserGameReviews(this.state.userId, this.props.game.id)
               .then((data) => {
                   this.setState({
                       myReviews: data
                   });
               }).then((data) =>  {});
-        ReviewService.getGameReviews(this.props.game.gameId)
+        ReviewService.getGameReviews(this.props.game.id)
             .then((data) => {
                 this.setState({
                     displayedReviews: data
                 });
             }).then((data) =>  {});
-        ReviewService.getGameReviewsPagination(this.props.game.gameId)
+        ReviewService.getGameReviewsPagination(this.props.game.id)
             .then((data) => {
                 console.log(data);
                 this.setState({
@@ -69,7 +69,7 @@ class ReviewsTab extends Component {
                         {
                             this.state.pagination.next? [
                                 <div className="ml-auto">
-                                    <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/games/` +this.state.game.gameId +'/reviews'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                    <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/games/` +this.state.game.id +'/reviews'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
                                 </div>
                             ] : []
                         }

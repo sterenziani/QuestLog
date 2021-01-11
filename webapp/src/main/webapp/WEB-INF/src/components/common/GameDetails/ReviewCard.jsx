@@ -27,7 +27,7 @@ class ReviewCard extends Component {
               <div className="panel-body p-3">
             	<Row className="mb-3">
             		<Col className="text-center font-weight-bold">
-            			<a href={`${process.env.PUBLIC_URL}/games/` + this.state.review.game.gameId}>{this.state.review.game.title}</a> {"("+this.state.review.platform.shortName+")"}
+            			<a href={`${process.env.PUBLIC_URL}/games/` + this.state.review.game.id}>{this.state.review.game.title}</a> {"("+this.state.review.platform.shortName+")"}
             		</Col>
             	</Row>
             	<Row>

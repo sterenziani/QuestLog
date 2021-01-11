@@ -13,13 +13,13 @@ class GenericListItem extends Component {
     render() {
         let cover = this.state.item.logo;
         if(this.state.label === "Publishers" || this.state.label === "Developers") {
-            cover = null;
+            cover = false;
         }
         let lower = this.state.label.toLowerCase();
         return (
             <Card className="m-3 d-flex bg-transparent" style={{width: '10rem'}}>
-                <a className="d-flex flex-column flex-grow-1 text-white align-content-center" href={`${process.env.PUBLIC_URL}/${lower}/` + this.state.value}>
-                    <Image src={cover} style={{height: '8rem'}} fluid />
+                <a className="d-flex flex-column flex-grow-1 text-white text-center align-center" href={`${process.env.PUBLIC_URL}/${lower}/` + this.state.value}>
+                    { cover? [<Image src={cover} style={{height: '8rem'}} fluid />] : []}
                     <div className="card-body bg-primary flex-grow-1">
                         <h5 align={"center"}>{this.state.item.name}</h5>
                     </div>

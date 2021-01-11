@@ -8,7 +8,7 @@ class ItemsCard extends Component {
     state = {
         label : this.props.label,
         items : this.props.items,
-        limit : 0,
+        limit : this.props.limit,
     };
 spacing
     render() {
@@ -35,9 +35,9 @@ spacing
                         </div>
                     </div>
                 </div>
-                <div className="card-body d-flex flex-wrap justify-content-center align-items-center">
-                    <Container> <Row>{this.state.items.slice(0,10).map(p =>
-                            <GenericListItem value={p.id} label={this.props.label} item={p}/>)}</Row></Container>
+                <div className="card-body d-flex flex-wrap justify-content-center align-items-center align-items-stretch">
+                     {this.state.items.slice(0,this.state.limit).map(p =>
+                            <GenericListItem value={p.id} label={this.props.label} item={p}/>)}
                 </div>
             </Card>
         );

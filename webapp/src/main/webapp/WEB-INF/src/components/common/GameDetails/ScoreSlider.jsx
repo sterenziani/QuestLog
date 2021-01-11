@@ -26,7 +26,7 @@ class ScoreSlider extends Component {
 
     publishScoreHandler(e) {
         console.log("Publishing score");
-        ScoreService.rateGame(this.state.game.gameId, this.state.userScore);
+        ScoreService.rateGame(this.state.game.id, this.state.userScore);
         console.log("I sent the request to rate game");
     }
 
