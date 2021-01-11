@@ -5,25 +5,25 @@ import javax.ws.rs.core.UriInfo;
 import ar.edu.itba.paw.model.entity.Region;
 
 public class RegionDto {
-	private Long regionId;
+	private Long id;
 	private String name;
 	private String shortName;
 	
 	public static RegionDto fromRegion(Region region, UriInfo uriInfo)
 	{   
 		final RegionDto dto = new RegionDto();
-		dto.regionId = region.getId();
+		dto.id = region.getId();
 		dto.name = region.getName();
 		dto.shortName = region.getShortName();
 		return dto;
 	}
 
-	public Long getRegionId() {
-		return regionId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setRegionId(Long regionId) {
-		this.regionId = regionId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

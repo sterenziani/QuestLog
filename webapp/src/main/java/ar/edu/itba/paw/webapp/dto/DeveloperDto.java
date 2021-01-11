@@ -7,7 +7,7 @@ import javax.ws.rs.core.UriInfo;
 import ar.edu.itba.paw.model.entity.Developer;
 
 public class DeveloperDto {
-	private long devId;
+	private long id;
 	private String name;
 	private String logo;
 	private URI games_url;
@@ -15,19 +15,19 @@ public class DeveloperDto {
 	public static DeveloperDto fromDeveloper(Developer dev, UriInfo uriInfo)
 	{
 		final DeveloperDto dto = new DeveloperDto();
-		dto.devId = dev.getId();
+		dto.id = dev.getId();
 		dto.name = dev.getName();
 		dto.logo = dev.getLogo();
-		dto.games_url = uriInfo.getBaseUriBuilder().path("developers").path(String.valueOf(dto.devId)).path("games").build();
+		dto.games_url = uriInfo.getBaseUriBuilder().path("developers").path(String.valueOf(dto.id)).path("games").build();
 		return dto;
 	}
 
-	public long getDevId() {
-		return devId;
+	public long getId() {
+		return id;
 	}
 
-	public void setDevId(long devId) {
-		this.devId = devId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {

@@ -7,7 +7,7 @@ import javax.ws.rs.core.UriInfo;
 import ar.edu.itba.paw.model.entity.Genre;
 
 public class GenreDto {
-	private long genreId;
+	private long id;
 	private String name;
 	private String logo;
 	private URI games_url;
@@ -15,19 +15,19 @@ public class GenreDto {
 	public static GenreDto fromGenre(Genre g, UriInfo uriInfo)
 	{
 		final GenreDto dto = new GenreDto();
-		dto.genreId = g.getId();
+		dto.id = g.getId();
 		dto.name = g.getName();
 		dto.logo = g.getLogo();
-		dto.games_url = uriInfo.getBaseUriBuilder().path("genres").path(String.valueOf(dto.genreId)).path("games").build();
+		dto.games_url = uriInfo.getBaseUriBuilder().path("genres").path(String.valueOf(dto.id)).path("games").build();
 		return dto;
 	}
 
-	public long getGenreId() {
-		return genreId;
+	public long getId() {
+		return id;
 	}
 
-	public void setGenreId(long genreId) {
-		this.genreId = genreId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {
