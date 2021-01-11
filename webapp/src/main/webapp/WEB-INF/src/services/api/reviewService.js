@@ -14,6 +14,20 @@ const getGameReviews = async(gameId) => {
   }
 }
 
+const getGameReviewsPage = async(gameId, page) => {
+  try {
+    const endpoint = `games/${gameId}/reviews?page=${page}`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const getUserGameReviews = async(userId, gameId) => {
   try {
     const endpoint = `users/${userId}/reviews/${gameId}`;
@@ -52,6 +66,7 @@ const getGameReviewsPagination = async(gameId) => {
 
 const ReviewService = {
   getGameReviews : getGameReviews,
+  getGameReviewsPage : getGameReviewsPage,
   getUserGameReviews : getUserGameReviews,
   getGameReviewsPagination : getGameReviewsPagination
 }

@@ -80,13 +80,15 @@ public class UserController
 	{
 		final List<UserDto> allUsers = us.searchByUsernamePaged(searchTerm, page, page_size).stream().map(u -> UserDto.fromUser(u, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (us.countUserSearchResults(searchTerm) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<UserDto>>(allUsers) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -243,13 +245,15 @@ public class UserController
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ScoreDto> scores = scors.findAllUserScores(maybeUser.get(), page, page_size).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (scors.countAllUserScores(maybeUser.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -262,13 +266,15 @@ public class UserController
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<RunDto> runs = rs.findRunsByUser(maybeUser.get(), page, page_size).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (rs.countRunsByUser(maybeUser.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -296,13 +302,15 @@ public class UserController
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ReviewDto> reviews = revs.findUserReviews(maybeUser.get(), page, page_size).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
 		int amount_of_pages = (revs.countReviewsByUser(maybeUser.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -331,14 +339,16 @@ public class UserController
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		List<GameDto> games = gs.getGamesInBacklog(maybeUser.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (gs.countGamesInBacklog(maybeUser.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 }
