@@ -12,6 +12,8 @@ import IndexPage from '../../pages/IndexPage/IndexPage';
 import GameDetailsPage from '../../pages/GameDetailsPage/GameDetailsPage';
 import LogInPage from '../../pages/LogInPage/LogInPage';
 import SignUpPage from '../../pages/SignUpPage/SignUpPage';
+import ExplorePage from '../../pages/ExplorePage/ExplorePage';
+
 
 class ContentSwitch extends Component {
     state = { }
@@ -37,7 +39,7 @@ class ContentSwitch extends Component {
                     />
                     <Route 
                         exact path="/explore"
-                        component={ IndexPage }
+                        component={ ExplorePage }
                     />
                     {
                         /*
