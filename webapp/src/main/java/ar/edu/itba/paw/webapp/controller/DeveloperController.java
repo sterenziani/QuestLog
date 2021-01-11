@@ -86,4 +86,13 @@ public class DeveloperController {
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
+	
+	@GET
+	@Path("/biggest")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getBiggestDevelopers(@QueryParam("top") @DefaultValue("20") int amount)
+	{
+		final List<DeveloperDto> devs = ds.getBiggestDevelopers(amount).stream().map(d -> DeveloperDto.fromDeveloper(d, uriInfo)).collect(Collectors.toList());
+		return Response.ok(new GenericEntity<List<DeveloperDto>>(devs) {}).build();
+	}
 }

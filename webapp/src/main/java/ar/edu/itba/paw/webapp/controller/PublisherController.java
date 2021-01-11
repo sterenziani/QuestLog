@@ -89,7 +89,7 @@ public class PublisherController {
 	@GET
 	@Path("/biggest")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getBiggestPublishers(@QueryParam("top") @DefaultValue("5") int amount)
+	public Response getBiggestPublishers(@QueryParam("top") @DefaultValue("20") int amount)
 	{
 		final List<PublisherDto> publishers = pubs.getBiggestPublishers(amount).stream().map(p -> PublisherDto.fromPublisher(p, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<PublisherDto>>(publishers) {}).build();
