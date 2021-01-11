@@ -330,7 +330,7 @@ public class GameDetailController {
 	
 	@GET
 	@Path("{gameId}/reviews")
-	public Response listReviewsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("10") int page_size)
+	public Response listReviewsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("5") int page_size)
 	{
 		final Optional<Game> maybeGame = gs.findById(gameId);
 		if(!maybeGame.isPresent())
@@ -338,12 +338,12 @@ public class GameDetailController {
 		final List<ReviewDto> reviews = revs.findGameReviews(maybeGame.get(), page, page_size).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
 		int amount_of_pages = (revs.countReviewsForGame(maybeGame.get()) + page_size - 1) / page_size;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 }

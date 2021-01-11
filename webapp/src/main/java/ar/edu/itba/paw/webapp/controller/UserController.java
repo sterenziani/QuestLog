@@ -47,10 +47,6 @@ import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 
-/*
-@Controller
-@ComponentScan("ar.edu.itba.paw.webapp.component")
-*/
 @Path("users")
 @Component
 public class UserController
@@ -278,7 +274,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/runs/{gameId}")
-	public Response listRunsByUser(@PathParam("userId") long userId, @PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("25") int page_size)
+	public Response listGameRunsByUser(@PathParam("userId") long userId, @PathParam("gameId") long gameId)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
@@ -307,6 +303,22 @@ public class UserController
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+		return resp.build();
+	}
+	
+	@GET
+	@Path("{userId}/reviews/{gameId}")
+	public Response listGameReviewsByUser(@PathParam("userId") long userId, @PathParam("gameId") long gameId)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		System.out.println("Hay pareja? " +revs.findUserAndGameReviews(maybeUser.get(), maybeGame.get()).size());
+		final List<ReviewDto> reviews = revs.findUserAndGameReviews(maybeUser.get(), maybeGame.get()).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());
+		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
 		return resp.build();
 	}
 	

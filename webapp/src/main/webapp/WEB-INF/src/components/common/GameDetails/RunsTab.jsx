@@ -93,7 +93,7 @@ class RunsTab extends Component {
                             {this.state.avgTimes.map(p => (
                                 <Row className="m-1">
                                     <Col className="text-right"> <Translation>{t => t("runs.playstyles." +p.playstyle.name)}</Translation> </Col>
-                                    <Col> {p.time != "0 : 00 : 00" ? [p.time] : [<Translation>{t => t("runs.notAvailable")}</Translation>]} </Col>
+                                    <Col> {p.time !== "0 : 00 : 00" ? [p.time] : [<Translation>{t => t("runs.notAvailable")}</Translation>]} </Col>
                                 </Row>
                             ))}
                         </Col>
@@ -106,13 +106,16 @@ class RunsTab extends Component {
                     </Card.Header>
                     <Card.Body class="mt-2 d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
                         <Col>
-                            {this.state.fastestRuns.map(r => (
-                                <Row className="m-1">
-                                    <Col className="text-right"> {r.user.username} </Col>
-                                    <Col className="text-center"> {r.platform.shortName} </Col>
-                                    <Col> {this.convertTime(r.time)} </Col>
-                                </Row>
-                            ))}
+                            {this.state.fastestRuns.length > 0 ? [
+                                this.state.fastestRuns.map(r => (
+                                    <Row className="m-1">
+                                        <Col className="text-right"> <a href={`${process.env.PUBLIC_URL}/users/` + r.user.id}>{r.user.username}</a></Col>
+                                        <Col className="text-center"> {r.platform.shortName} </Col>
+                                        <Col> {this.convertTime(r.time)} </Col>
+                                    </Row>
+                                ))
+                            ] : [ <Container className="text-center mt-5"> <p> <Translation>{t => t("runs.noRunsSubmitted")}</Translation> </p> </Container> ]}
+
                         </Col>
                     </Card.Body>
                 </Card>

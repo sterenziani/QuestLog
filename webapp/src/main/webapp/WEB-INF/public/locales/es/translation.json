@@ -11,7 +11,8 @@
                 "user"  : "Usuario"
             },
             "btn"       : "Buscar"
-        }
+        },
+        "seeAll" : "Ver todo >>"
     },
     "games" : {
         "profile" : {
@@ -98,11 +99,15 @@
             "Completionist" : "100%"
         },
         "notAvailable" : "N/D",
+        "noRunsSubmitted": "No se han registrado runs para este juego",
         "platform" : "Plataforma",
         "time" : "Tiempo",
         "myRuns" : "Mis runs"
     },
     "reviews" : {
-        "addRun" : "Escribir una reseña"
+        "addReview" : "Escribir una reseña",
+        "reviews" : "Reseñas",
+        "myReviews" : "Mis reseñas",
+        "noReviewsSubmitted" : "No se han escrito reseñas para este juego"
     }
 }

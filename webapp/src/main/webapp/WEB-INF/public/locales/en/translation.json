@@ -11,7 +11,8 @@
                 "user"  : "User"
             },
             "btn"       : "Search"
-        }
+        },
+        "seeAll" : "See all >>"
     },
     "games" : {
         "profile" : {
@@ -98,11 +99,15 @@
             "Completionist" : "Completionist"
         },
         "notAvailable" : "N/A",
+        "noRunsSubmitted": "No runs have been submitted for this game yet",
         "platform" : "Platform",
         "time" : "Time",
         "myRuns" : "My runs"
     },
     "reviews" : {
-        "addRun" : "Write a review"
+        "addReview" : "Write a review",
+        "reviews" : "Reviews",
+        "myReviews" : "My reviews",
+        "noReviewsSubmitted" : "No reviews have been written for this game yet"
     }
 }
