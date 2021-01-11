@@ -90,7 +90,7 @@ public class PlatformController {
 	@GET
 	@Path("/biggest")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getBiggestPlatforms(@QueryParam("top") @DefaultValue("5") int amount)
+	public Response getBiggestPlatforms(@QueryParam("top") @DefaultValue("20") int amount)
 	{
 		final List<PlatformDto> platforms = ps.getBiggestPlatforms(amount).stream().map(p -> PlatformDto.fromPlatform(p, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<PlatformDto>>(platforms) {}).build();
