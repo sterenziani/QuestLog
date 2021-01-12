@@ -1,8 +1,7 @@
 import { create } from 'axios';
 
-const api = create({
-    baseURL : `${process.env.PUBLIC_URL}/api/`,
-
+let api = create({
+    baseURL : `${process.env.PUBLIC_URL}/api/`
 })
 
 const errorHandler = (error) => {
