@@ -270,13 +270,15 @@ public class GameDetailController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ScoreDto> scores = scors.findAllGameScores(maybeGame.get(), page, page_size).stream().map(s -> ScoreDto.fromScore(s, uriInfo)).collect(Collectors.toList());;
 		int amount_of_pages = (scors.countAllGameScores(maybeGame.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -289,13 +291,15 @@ public class GameDetailController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<RunDto> runList = runs.findAllGameRuns(maybeGame.get(), page, page_size).stream().map(r -> RunDto.fromRun(r, uriInfo)).collect(Collectors.toList());;
 		int amount_of_pages = (scors.countAllGameScores(maybeGame.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runList) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -330,20 +334,22 @@ public class GameDetailController {
 	
 	@GET
 	@Path("{gameId}/reviews")
-	public Response listReviewsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("10") int page_size)
+	public Response listReviewsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("5") int page_size)
 	{
 		final Optional<Game> maybeGame = gs.findById(gameId);
 		if(!maybeGame.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<ReviewDto> reviews = revs.findGameReviews(maybeGame.get(), page, page_size).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());;
 		int amount_of_pages = (revs.countReviewsForGame(maybeGame.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 }

@@ -24,37 +24,37 @@ class GameDetailsCard extends Component {
     };
 
     componentWillMount() {
-        GameService.getGameReleaseDates(this.props.game.gameId)
+        GameService.getGameReleaseDates(this.props.game.id)
             .then((data) => {
                 this.setState({
                     releaseDates: data
                 });
             }).then((data) => {});
-        DeveloperService.getGameDevelopers(this.props.game.gameId)
+        DeveloperService.getGameDevelopers(this.props.game.id)
             .then((data) => {
                 this.setState({
                     developers: data
                 });
             }).then((data) => {});
-        DeveloperService.getGameDevelopers(this.props.game.gameId)
+        DeveloperService.getGameDevelopers(this.props.game.id)
           .then((data) => {
               this.setState({
                   developers: data
               });
           }).then((data) => {});
-        PublisherService.getGamePublishers(this.props.game.gameId)
+        PublisherService.getGamePublishers(this.props.game.id)
           .then((data) => {
               this.setState({
                   publishers: data
               });
           }).then((data) => {});
-        GenreService.getGameGenres(this.props.game.gameId)
+        GenreService.getGameGenres(this.props.game.id)
           .then((data) => {
               this.setState({
                   genres: data
               });
           }).then((data) => {});
-        PlatformService.getGamePlatforms(this.props.game.gameId)
+        PlatformService.getGamePlatforms(this.props.game.id)
           .then((data) => {
               this.setState({
                   platforms: data
@@ -67,7 +67,7 @@ class GameDetailsCard extends Component {
         return (
             <Card className="m-3 d-flex bg-transparent" style={{width: '18rem',}}>
               <BacklogButton/>
-              <div className="d-flex flex-column flex-grow-1 text-white" href={`${process.env.PUBLIC_URL}/games/` + this.state.game.gameId}>
+              <div className="d-flex flex-column flex-grow-1 text-white" href={`${process.env.PUBLIC_URL}/games/` + this.state.game.id}>
                 <GameCover cover={this.state.game.cover}/>
 
                 <div className="card-body bg-primary flex-grow-1">

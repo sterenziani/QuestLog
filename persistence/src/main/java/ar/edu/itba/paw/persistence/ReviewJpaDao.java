@@ -102,7 +102,7 @@ public class ReviewJpaDao implements ReviewDao {
 		final TypedQuery<Review> query = em.createQuery("from Review as rev where rev.enabled = true AND rev.user.id = :userId and rev.game.id = :gameId", Review.class);
 		query.setParameter("gameId", game.getId());
 		query.setParameter("userId", user.getId());
-		return null;
+		return query.getResultList();
 	}
 	
 	@Override

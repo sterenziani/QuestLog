@@ -8,7 +8,7 @@ import javax.ws.rs.core.UriInfo;
 import ar.edu.itba.paw.model.entity.Review;
 
 public class ReviewDto {
-	private long reviewId;
+	private long id;
 	private UserDto user;
 	private GameDto game;
 	private PlatformDto platform;
@@ -20,7 +20,7 @@ public class ReviewDto {
 	public static ReviewDto fromReview(Review r, UriInfo uriInfo)
 	{
 		final ReviewDto dto = new ReviewDto();
-		dto.reviewId = r.getId();
+		dto.id = r.getId();
 		dto.user = UserDto.fromUser(r.getUser(), uriInfo);
 		dto.game = GameDto.fromGame(r.getGame(), uriInfo);
 		dto.platform = PlatformDto.fromPlatform(r.getPlatform(), uriInfo);
@@ -31,12 +31,12 @@ public class ReviewDto {
 		return dto;
 	}
 
-	public long getReviewId() {
-		return reviewId;
+	public long getId() {
+		return id;
 	}
 
-	public void setReviewId(long reviewId) {
-		this.reviewId = reviewId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public UserDto getUser() {

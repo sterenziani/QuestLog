@@ -19,7 +19,7 @@ class GameCover extends Component {
                   this.setState({
                       cover: data
                   });
-              }).then((data) =>  {console.log(this.props.cover)});
+              }).then((data) =>  {});
     }
 
     render() {

@@ -4,19 +4,19 @@ import ar.edu.itba.paw.model.entity.Run;
 
 public class RunDto
 {
-	private Long runId;
+	private Long id;
 	private UserDto user;
 	private GameDto game;
 	private PlatformDto platform;
 	private PlaystyleDto playstyle;
 	private long time;
 	
-	public Long getRunId() {
-		return runId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setRunId(Long runId) {
-		this.runId = runId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public GameDto getGame() {
@@ -46,10 +46,12 @@ public class RunDto
 	public static RunDto fromRun(final Run run, UriInfo uriInfo)
 	{
 		final RunDto dto = new RunDto();
-		dto.runId = run.getId();
+		dto.id = run.getId();
 		dto.user = UserDto.fromUser(run.getUser(), uriInfo);
 		dto.time = run.getTime();
 		dto.game = GameDto.fromGame(run.getGame(), uriInfo);
+		dto.platform = PlatformDto.fromPlatform(run.getPlatform(), uriInfo);
+		dto.playstyle = PlaystyleDto.fromPlaystyle(run.getPlaystyle(), uriInfo);
 		return dto;
 	}
 

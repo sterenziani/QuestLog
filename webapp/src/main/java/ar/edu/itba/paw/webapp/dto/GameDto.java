@@ -9,7 +9,7 @@ import ar.edu.itba.paw.model.entity.Game;
 
 public class GameDto
 {    
-	private long gameId;
+	private long id;
 	private String title;
 	private String cover;
 	private String description;
@@ -27,35 +27,41 @@ public class GameDto
 	private URI average_times_url;
 	private URI top_runs_url;
 	
+	private boolean released;
+	private int votes;
+	
 	public static GameDto fromGame(Game game, UriInfo uriInfo)
 	{   
 		final GameDto dto = new GameDto();
-		dto.gameId = game.getId();
+		dto.id = game.getId();
 		dto.title = game.getTitle();
 		dto.cover = game.getCover();
 		dto.description = game.getDescription();
 		dto.trailer = game.getTrailer();
 		dto.score = game.getAverageScore();
 
-		dto.platforms_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("platforms").build();
-		dto.developers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("developers").build();
-		dto.publishers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("publishers").build();
-		dto.genres_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("genres").build();
-		dto.release_dates_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("release_dates").build();
-		dto.scores_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("scores").build();
-		dto.runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("runs").build();
-		dto.reviews_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("reviews").build();
-		dto.average_times_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("average_times").build();
-		dto.top_runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.gameId)).path("top_runs").build();
+		dto.platforms_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("platforms").build();
+		dto.developers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("developers").build();
+		dto.publishers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("publishers").build();
+		dto.genres_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("genres").build();
+		dto.release_dates_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("release_dates").build();
+		dto.scores_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("scores").build();
+		dto.runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("runs").build();
+		dto.reviews_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("reviews").build();
+		dto.average_times_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("average_times").build();
+		dto.top_runs_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("top_runs").build();
+		
+		dto.released = game.hasReleased();
+		dto.setVotes(game.getScores().size());
 		return dto;
 	}
 
-	public long getGameId() {
-		return gameId;
+	public long getId() {
+		return id;
 	}
 
-	public void setGameId(long gameId) {
-		this.gameId = gameId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -176,6 +182,22 @@ public class GameDto
 
 	public void setRuns_url(URI runs_url) {
 		this.runs_url = runs_url;
+	}
+
+	public boolean isReleased() {
+		return released;
+	}
+
+	public void setReleased(boolean released) {
+		this.released = released;
+	}
+
+	public int getVotes() {
+		return votes;
+	}
+
+	public void setVotes(int votes) {
+		this.votes = votes;
 	}
 	
 }

@@ -15,6 +15,20 @@ const getAllDevelopers       = async () => {
   }
 }
 
+const getBiggestDevelopers       = async () => {
+  try {
+    const endpoint = `developers/biggest`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const getGameDevelopers     = async(gameId) => {
   try {
     const endpoint = `games/${gameId}/developers`;
@@ -32,6 +46,7 @@ const getGameDevelopers     = async(gameId) => {
 const DeveloperService = {
   getAllDevelopers     : getAllDevelopers,
   getGameDevelopers   : getGameDevelopers,
+  getBiggestDevelopers : getBiggestDevelopers,
 }
 
 export default DeveloperService;

@@ -8,7 +8,7 @@ import ar.edu.itba.paw.model.entity.Platform;
 
 public class PlatformDto
 {
-	private long platformId;
+	private long id;
 	private String name;
 	private String shortName;
 	private String logo;
@@ -17,20 +17,20 @@ public class PlatformDto
 	public static PlatformDto fromPlatform(Platform p, UriInfo uriInfo)
 	{
 		final PlatformDto dto = new PlatformDto();
-		dto.platformId = p.getId();
+		dto.id = p.getId();
 		dto.name = p.getName();
 		dto.shortName = p.getShortName();
 		dto.logo = p.getLogo();
-		dto.games_url = uriInfo.getBaseUriBuilder().path("platforms").path(String.valueOf(dto.platformId)).path("games").build();
+		dto.games_url = uriInfo.getBaseUriBuilder().path("platforms").path(String.valueOf(dto.id)).path("games").build();
 		return dto;
 	}
 
-	public long getPlatformId() {
-		return platformId;
+	public long getId() {
+		return id;
 	}
 
-	public void setPlatformId(long platformId) {
-		this.platformId = platformId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {

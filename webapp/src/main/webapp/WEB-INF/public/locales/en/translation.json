@@ -11,7 +11,8 @@
                 "user"  : "User"
             },
             "btn"       : "Search"
-        }
+        },
+        "seeAll" : "See all >>"
     },
     "games" : {
         "profile" : {
@@ -22,7 +23,11 @@
             "publishers" : "Publishers",
             "genres" : "Genres",
             "platforms" : "Platforms",
-            "trailer" : "Trailer"
+            "trailer" : "Trailer",
+            "unreleased" : "Scores, runs and reviews are disabled for this game until it comes out on at least one platform",
+            "runs" : "RUNS",
+            "reviews" : "REVIEWS",
+            "myReviews" : "MY REVIEWS"
         },
         "lists" : {
             "popularGames" : "Popular right now",
@@ -79,6 +84,33 @@
     "score" : {
         "average" : "Average user score",
         "your" : "Your score",
-        "rate" : "Rate"
+        "rate" : "Rate",
+        "notAvailable" : "N/A"
+    },
+    "runs" : {
+        "fastestRuns" : "Fastest runs",
+        "addRun" : "Add run",
+        "avgTime" : "Average time",
+        "avgTimes" : "Average times",
+        "fastestRuns": "Fastest runs",
+        "playstyle" : "Playstyle",
+        "playstyles": {
+            "MainStory" : "Main Story",
+            "MainStoryExtras" : "Main Story + Extras",
+            "Speedrun" : "Speedrun",
+            "Completionist" : "Completionist"
+        },
+        "notAvailable" : "N/A",
+        "noRunsSubmitted": "No runs have been submitted for this game yet",
+        "platform" : "Platform",
+        "time" : "Time",
+        "myRuns" : "My runs"
+    },
+    "reviews" : {
+        "addReview" : "Write a review",
+        "reviews" : "Reviews",
+        "myReviews" : "My reviews",
+        "noReviewsSubmitted" : "No reviews have been written for this game yet",
+        "delete" : "Delete"
     }
 }

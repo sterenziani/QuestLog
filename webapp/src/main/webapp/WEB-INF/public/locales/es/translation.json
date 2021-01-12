@@ -11,7 +11,8 @@
                 "user"  : "Usuario"
             },
             "btn"       : "Buscar"
-        }
+        },
+        "seeAll" : "Ver todo >>"
     },
     "games" : {
         "profile" : {
@@ -22,7 +23,11 @@
             "publishers" : "Publicado por",
             "genres" : "Géneros",
             "platforms" : "Plataformas",
-            "trailer" : "Trailer"
+            "trailer" : "Trailer",
+            "unreleased" : "Las calificaciones, runs y reseñas están deshabilitadas para este juego hasta que salga a la venta para alguna plataforma",
+            "runs" : "RUNS",
+            "reviews" : "RESEÑAS",
+            "myReviews" : "MIS RESEÑAS"
         },
         "lists" : {
             "popularGames" : "Lo más popular",
@@ -77,8 +82,35 @@
         "Strategy" : "Estrategia"
     },
     "score" : {
-        "average" : "Calificación promedio",
+        "average" : "Promedio según usuarios",
         "your" : "Tu calificación",
-        "rate" : "Calificar"
+        "rate" : "Calificar",
+        "notAvailable" : "N/D"
+    },
+    "runs" : {
+        "fastestRuns" : "Los runs más rápidos",
+        "addRun" : "Agregar run",
+        "avgTime" : "Tiempo promedio",
+        "avgTimes" : "Tiempos promedio",
+        "fastestRuns": "Los runs más rápidos",
+        "playstyle" : "Estilo",
+        "playstyles": {
+            "MainStory" : "Modo Historia",
+            "MainStoryExtras" : "Modo Historia + Extras",
+            "Speedrun" : "Speedrun",
+            "Completionist" : "100%"
+        },
+        "notAvailable" : "N/D",
+        "noRunsSubmitted": "No se han registrado runs para este juego",
+        "platform" : "Plataforma",
+        "time" : "Tiempo",
+        "myRuns" : "Mis runs"
+    },
+    "reviews" : {
+        "addReview" : "Escribir una reseña",
+        "reviews" : "Reseñas",
+        "myReviews" : "Mis reseñas",
+        "noReviewsSubmitted" : "No se han escrito reseñas para este juego",
+        "delete" : "Eliminar"
     }
 }

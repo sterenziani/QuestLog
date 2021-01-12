@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
-import DetailCard from "../../common/ItemsCard/DetailCard";
+import GameProfile from "../../common/GameDetails/GameProfile";
 
 class GameDetailsPage extends Component {
     state = {
@@ -22,7 +22,11 @@ class GameDetailsPage extends Component {
 
     render() {
         if (this.state.loading === true) {
-            return <Spinner animation="border" variant="primary" />;
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
         }
 
         return (
@@ -32,7 +36,7 @@ class GameDetailsPage extends Component {
                         <title>{this.state.game.title}</title>
                     </Helmet>
                 </HelmetProvider>
-                <DetailCard game={this.state.game} />
+                <GameProfile game={this.state.game} />
             </React.Fragment>
         );
     }

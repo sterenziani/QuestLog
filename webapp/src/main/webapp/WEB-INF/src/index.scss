@@ -38,8 +38,30 @@ $theme-colors: (
   height: 400px;
 }
 
+.list-card-icon {
+    max-height: 7rem;
+    max-width: 7rem;
+}
+
+.score-display{
+	font-size: 32px;
+	font-style: bold;
+}
+
 .share-tech-mono {
   font-family: "Share Tech Mono", monospace;
+}
+
+.bg-very-dark {
+    background-color: #263137;
+}
+
+.bg-dark-white {
+    background-color: #f5f5f5;
+}
+
+.bg-light-grey {
+    background-color: #e2e2e2;
 }
 
 @import "~bootstrap/scss/bootstrap.scss";

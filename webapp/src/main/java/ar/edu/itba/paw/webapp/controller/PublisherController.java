@@ -41,13 +41,15 @@ public class PublisherController {
 	{
 		final List<PublisherDto> publishers = pubs.getPublishers(page, page_size).stream().map(p -> PublisherDto.fromPublisher(p, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (pubs.countPublishers() + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<PublisherDto>>(publishers) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -72,20 +74,22 @@ public class PublisherController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<GameDto> games = gs.getGamesForPublisher(maybePublisher.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (gs.countGamesForPublisher(maybePublisher.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
 	@GET
 	@Path("/biggest")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getBiggestPublishers(@QueryParam("top") @DefaultValue("5") int amount)
+	public Response getBiggestPublishers(@QueryParam("top") @DefaultValue("20") int amount)
 	{
 		final List<PublisherDto> publishers = pubs.getBiggestPublishers(amount).stream().map(p -> PublisherDto.fromPublisher(p, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<PublisherDto>>(publishers) {}).build();

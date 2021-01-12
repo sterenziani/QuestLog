@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
 import Spinner from 'react-bootstrap/Spinner';
-import ItemsCard from "../../common/ItemsCard/ItemsCard";
+import ItemsCard from "../../common/GamesCard/GamesCard";
 
 
 class IndexPage extends Component {
@@ -29,9 +29,13 @@ class IndexPage extends Component {
 
     render() {
         if (this.state.loading === true) {
-            return <Spinner animation="border" variant="primary" />;
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                    <Spinner animation="border" variant="primary" />
+                </div>
         }
-        return (  
+        return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
@@ -48,5 +52,5 @@ class IndexPage extends Component {
         );
     }
 }
- 
+
 export default IndexPage;

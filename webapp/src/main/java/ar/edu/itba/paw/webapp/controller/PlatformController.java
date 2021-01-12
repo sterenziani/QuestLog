@@ -42,13 +42,15 @@ public class PlatformController {
 	{
 		final List<PlatformDto> platforms = ps.getPlatforms(page, page_size).stream().map(p -> PlatformDto.fromPlatform(p, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (ps.countPlatforms() + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<PlatformDto>>(platforms) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
@@ -73,20 +75,22 @@ public class PlatformController {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<GameDto> games = gs.getGamesForPlatform(maybePlatform.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
 		int amount_of_pages = (gs.countGamesForPlatform(maybePlatform.get()) + page_size - 1) / page_size;
+		if(amount_of_pages == 0)
+			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first");
-		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).build(), "last");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
+		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).queryParam("page_size", page_size).build(), "prev");
 		if(page >= 1 && page < amount_of_pages)
-			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
+			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
 	}
 	
 	@GET
 	@Path("/biggest")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getBiggestPlatforms(@QueryParam("top") @DefaultValue("5") int amount)
+	public Response getBiggestPlatforms(@QueryParam("top") @DefaultValue("20") int amount)
 	{
 		final List<PlatformDto> platforms = ps.getBiggestPlatforms(amount).stream().map(p -> PlatformDto.fromPlatform(p, uriInfo)).collect(Collectors.toList());
 		return Response.ok(new GenericEntity<List<PlatformDto>>(platforms) {}).build();

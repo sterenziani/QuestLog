@@ -8,7 +8,7 @@ import ar.edu.itba.paw.model.entity.Publisher;
 
 public class PublisherDto
 {
-	private long publisherId;
+	private long id;
 	private String name;
 	private String logo;
 	private URI games_url;
@@ -16,19 +16,19 @@ public class PublisherDto
 	public static PublisherDto fromPublisher(Publisher p, UriInfo uriInfo)
 	{
 		final PublisherDto dto = new PublisherDto();
-		dto.publisherId = p.getId();
+		dto.id = p.getId();
 		dto.name = p.getName();
 		dto.logo = p.getLogo();
-		dto.games_url = uriInfo.getBaseUriBuilder().path("publishers").path(String.valueOf(dto.publisherId)).path("games").build();
+		dto.games_url = uriInfo.getBaseUriBuilder().path("publishers").path(String.valueOf(dto.id)).path("games").build();
 		return dto;
 	}
 
-	public long getPublisherId() {
-		return publisherId;
+	public long getId() {
+		return id;
 	}
 
-	public void setPublisherId(long publisherId) {
-		this.publisherId = publisherId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {
