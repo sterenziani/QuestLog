@@ -47,9 +47,9 @@ class RunsTab extends Component {
     render() {
         return (
             <Grid>
-                <Col className="text-center m-4">
+                <div className="text-center m-4">
                     <Button variant={"success"}> <Translation>{t => t("runs.addRun")}</Translation> </Button>
-                </Col>
+                </div>
 
                 {
                     (this.state.loggedIn && this.state.myRuns.length > 0)? [

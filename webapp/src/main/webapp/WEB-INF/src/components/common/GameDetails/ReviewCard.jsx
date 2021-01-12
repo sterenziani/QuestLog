@@ -43,7 +43,7 @@ class ReviewCard extends Component {
             	</Row>
                 {(this.state.loggedIn && this.state.review.user.id === this.state.userId)? [
                     <Row className="mt-3 justify-content-center">
-                        <Button variant="danger"><Translation>{t => t("reviews.delete")}</Translation></Button>
+                        <Button variant="danger"><Translation>{t => t("reviews.delete")}</Translation>{this.state.label}</Button>
                     </Row>] : []}
               </div>
             </div>

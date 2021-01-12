@@ -32,7 +32,7 @@ class IndexPage extends Component {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
                 transform: 'translate(-50%, -50%)'}}>
-                    <Spinner animation="border" variant="primary" />;
+                    <Spinner animation="border" variant="primary" />
                 </div>
         }
         return (
