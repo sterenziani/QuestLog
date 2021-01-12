@@ -10,7 +10,7 @@ import ar.edu.itba.paw.model.entity.Role;
 
 public class JwtUserDto {
 	private String username;
-    private Set<Role> roles;
+    private Set<String> roles;
 
     public String getUsername() {
         return username;
@@ -20,11 +20,11 @@ public class JwtUserDto {
         this.username = username;
     }
 
-    public Set<Role> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = new HashSet<>(roles);
     }
 
@@ -36,7 +36,7 @@ public class JwtUserDto {
         for(GrantedAuthority a : authorities)
         {
         	if(a.toString().equals("ROLE_ADMIN"))
-        		dto.roles.add(new Role("Admin"));
+        		dto.roles.add("Admin");
         }
         dto.username = (((User) authentication.getPrincipal()).getUsername());
         return dto;

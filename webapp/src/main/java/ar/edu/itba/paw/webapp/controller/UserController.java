@@ -25,6 +25,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
+
+import ar.edu.itba.paw.webapp.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +37,6 @@ import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.User;
-import ar.edu.itba.paw.webapp.dto.EditUserLocaleDto;
-import ar.edu.itba.paw.webapp.dto.EditUserPasswordDto;
-import ar.edu.itba.paw.webapp.dto.FormErrorDto;
-import ar.edu.itba.paw.webapp.dto.GameDto;
-import ar.edu.itba.paw.webapp.dto.RegisterDto;
-import ar.edu.itba.paw.webapp.dto.ReviewDto;
-import ar.edu.itba.paw.webapp.dto.RunDto;
-import ar.edu.itba.paw.webapp.dto.ScoreDto;
-import ar.edu.itba.paw.webapp.dto.UserDto;
-import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 
 /*
 @Controller
@@ -312,5 +304,16 @@ public class UserController
 		if(page >= 1 && page < amount_of_pages)
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next");
 		return resp.build();
+	}
+
+	@GET
+	@Path("/login")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getLoggedUserPrivileges()
+	{
+		User u = us.getLoggedUser();
+		if(u == null)
+			return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
+		return Response.ok(UserPrivilegesDto.fromUser(u)).build();
 	}
 }
