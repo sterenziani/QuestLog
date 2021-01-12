@@ -3,7 +3,6 @@ import React, { Component, Suspense } from 'react';
 import { 
   BrowserRouter as Router 
 } from 'react-router-dom';
-import { AuthProvider } from 'react-auth-kit';
 
 //Child components
 import ContentSwitch from './common/ContentSwitch/ContentSwitch';
@@ -34,16 +33,12 @@ class App extends Component {
        * This is JSX, it may look like HTML but is actually
        * syntax sugar for JavaScript.
        */
-      <AuthProvider
-        authStorageType={'localstorage'}
-      >
-        <Router basename={process.env.PUBLIC_URL}>
-          <Suspense fallback="Loading...">
-            <Navigation />
-            <ContentSwitch />
-          </Suspense>
-        </Router>
-      </AuthProvider>
+      <Router basename={process.env.PUBLIC_URL}>
+        <Suspense fallback="Loading...">
+          <Navigation />
+          <ContentSwitch />
+        </Suspense>
+      </Router>
      );
   }
 }
