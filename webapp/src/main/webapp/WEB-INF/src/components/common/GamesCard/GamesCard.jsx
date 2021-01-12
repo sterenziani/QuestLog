@@ -4,7 +4,7 @@ import {Card, Container, Row} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 
-class ItemsCard extends Component {
+class GamesCard extends Component {
     state = {
         label : this.props.label,
         items : this.props.items,
@@ -31,9 +31,8 @@ class ItemsCard extends Component {
                                     }
                                 </Translation>]
                                 :
-                    [<Container> <Row>{this.state.items.map(g =>
-                        <GameListItem value={g.id} game={g}/>)}</Row></Container>]
-
+                    [<Row className="justify-content-center">{this.state.items.map(g =>
+                        <GameListItem value={g.id} game={g}/>)}</Row>]
                     }
                 </div>
             </Card>
@@ -41,4 +40,4 @@ class ItemsCard extends Component {
     }
 }
 
-export default ItemsCard;
+export default GamesCard;

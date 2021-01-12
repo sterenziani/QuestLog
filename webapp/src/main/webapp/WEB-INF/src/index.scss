@@ -38,6 +38,11 @@ $theme-colors: (
   height: 400px;
 }
 
+.list-card-icon {
+    max-height: 7rem;
+    max-width: 7rem;
+}
+
 .score-display{
 	font-size: 32px;
 	font-style: bold;

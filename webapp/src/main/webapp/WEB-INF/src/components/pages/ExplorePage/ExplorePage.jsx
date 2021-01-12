@@ -6,7 +6,7 @@ import DeveloperService from "../../../services/api/devService";
 import PlatformService from "../../../services/api/platformService";
 import PublisherService from "../../../services/api/publisherService";
 import {Translation} from "react-i18next";
-import ContainerCard from "../../common/ItemsCard/ContainerCard";
+import ContainerCard from "../../common/GamesCard/ContainerCard";
 
 class ExplorePage extends Component {
     state = {
@@ -34,10 +34,6 @@ class ExplorePage extends Component {
                 publishers : responses[3],
             });
         });
-        console.log(this.state.developers);
-        console.log(this.state.genres);
-        console.log(this.state.platforms);
-        console.log(this.state.publishers);
     }
 
     render() {
@@ -60,7 +56,7 @@ class ExplorePage extends Component {
                             <ContainerCard items={this.state.genres} label="Genres" limit={25}/>
                         </div>
                         <div>
-                            <ContainerCard items={this.state.platforms} label="Platforms" limit={25}/>
+                            <ContainerCard items={this.state.platforms} label="Platforms" limit={18}/>
                         </div>
                         <div>
                             <ContainerCard items={this.state.developers} label="Developers" limit={15}/>

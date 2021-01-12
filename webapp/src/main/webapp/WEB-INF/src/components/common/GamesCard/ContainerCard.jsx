@@ -10,7 +10,7 @@ class ItemsCard extends Component {
         items : this.props.items,
         limit : this.props.limit,
     };
-spacing
+
     render() {
         let lower = this.state.label.toLowerCase();
         return (
