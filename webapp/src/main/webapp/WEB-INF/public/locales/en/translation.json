@@ -35,14 +35,16 @@
     "login" : {
         "title"       : "Log In",
         "username"    : {
-            "label"  : "Username:",
-            "errors" : {
+            "label"       : "Username:",
+            "placeholder" : "Username",
+            "errors"      : {
                 "is_required" : "Username should not be empty"
             }
         },
         "password"    : {
-            "label"  : "Password:",
-            "errors" : {
+            "label"       : "Password:",
+            "placeholder" : "Password",
+            "errors"      : {
                 "is_required" : "Password should not be empty"
             }
         },

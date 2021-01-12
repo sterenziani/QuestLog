@@ -35,14 +35,16 @@
     "login" : {
         "title"       : "Ingresar",
         "username" : {
-            "label"  : "Usuario:",
+            "label"       : "Usuario:",
+            "placeholder" : "Usuario",
             "errors" : {
                 "is_required" : "Debe ingresar su usuario"
             }
         },
         "password" : {
-            "label"  : "Contraseña:",
-            "errors" : {
+            "label"       : "Contraseña:",
+            "placeholder" : "Contraseña",
+            "errors"      : {
                 "is_required" : "Debe ingresar su contraseña"
             }
         },
