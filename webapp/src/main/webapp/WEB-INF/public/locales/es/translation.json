@@ -108,6 +108,7 @@
         "addReview" : "Escribir una reseña",
         "reviews" : "Reseñas",
         "myReviews" : "Mis reseñas",
-        "noReviewsSubmitted" : "No se han escrito reseñas para este juego"
+        "noReviewsSubmitted" : "No se han escrito reseñas para este juego",
+        "delete" : "Eliminar"
     }
 }

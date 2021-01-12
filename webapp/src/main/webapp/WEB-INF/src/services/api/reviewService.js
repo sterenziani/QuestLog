@@ -2,9 +2,20 @@ import api from './api';
 
 const getGameReviews = async(gameId) => {
   try {
-    const endpoint = `games/${gameId}/reviews`;
-    const response = await api.get(endpoint);
-    return response.data;
+        const endpoint = `games/${gameId}/reviews`;
+        const response = await api.get(endpoint);
+        // Parse links
+        const data = response.headers.link;
+        let parsed_data = {};
+        let arrData = data.split(",");
+        arrData.forEach(element => {
+            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
+            parsed_data[linkInfo[2]]=linkInfo[1];
+        });
+        const ret = {};
+        ret['pagination'] = parsed_data;
+        ret['content'] = response.data;
+        return ret;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -42,33 +53,10 @@ const getUserGameReviews = async(userId, gameId) => {
   }
 }
 
-const getGameReviewsPagination = async(gameId) => {
-    try {
-        const endpoint = `games/${gameId}/reviews`;
-        const response = await api.get(endpoint);
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        return parsed_data;
-    } catch(err) {
-      if(err.response) {
-        return { status : err.response.status };
-      } else {
-        /* timeout */
-      }
-    }
-  }
-
 const ReviewService = {
   getGameReviews : getGameReviews,
   getGameReviewsPage : getGameReviewsPage,
-  getUserGameReviews : getUserGameReviews,
-  getGameReviewsPagination : getGameReviewsPagination
+  getUserGameReviews : getUserGameReviews
 }
 
 export default ReviewService;

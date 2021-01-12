@@ -108,6 +108,7 @@
         "addReview" : "Write a review",
         "reviews" : "Reviews",
         "myReviews" : "My reviews",
-        "noReviewsSubmitted" : "No reviews have been written for this game yet"
+        "noReviewsSubmitted" : "No reviews have been written for this game yet",
+        "delete" : "Delete"
     }
 }

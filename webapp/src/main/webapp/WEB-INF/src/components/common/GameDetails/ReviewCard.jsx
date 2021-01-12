@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Badge, Button, Container} from "react-bootstrap";
-import {Grid} from '@material-ui/core';
+import {Row, Col, Button} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 
@@ -44,7 +43,7 @@ class ReviewCard extends Component {
             	</Row>
                 {(this.state.loggedIn && this.state.review.user.id === this.state.userId)? [
                     <Row className="mt-3 justify-content-center">
-                        <Button variant="danger">Delete</Button>
+                        <Button variant="danger"><Translation>{t => t("reviews.delete")}</Translation></Button>
                     </Row>] : []}
               </div>
             </div>

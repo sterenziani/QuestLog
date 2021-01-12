@@ -26,14 +26,8 @@ class ReviewsTab extends Component {
         ReviewService.getGameReviews(this.props.game.id)
             .then((data) => {
                 this.setState({
-                    displayedReviews: data
-                });
-            }).then((data) =>  {});
-        ReviewService.getGameReviewsPagination(this.props.game.id)
-            .then((data) => {
-                console.log(data);
-                this.setState({
-                    pagination: data
+                    displayedReviews: data.content,
+                    pagination: data.pagination
                 });
             }).then((data) =>  {});
     };
