@@ -13,6 +13,7 @@ import GameDetailsPage from '../../pages/GameDetailsPage/GameDetailsPage';
 import LogInPage from '../../pages/LogInPage/LogInPage';
 import SignUpPage from '../../pages/SignUpPage/SignUpPage';
 import ExplorePage from '../../pages/ExplorePage/ExplorePage';
+import ExploreResultsPage from '../../pages/ExploreResultsPage/ExploreResultsPage';
 
 
 class ContentSwitch extends Component {
@@ -53,6 +54,22 @@ class ContentSwitch extends Component {
                     <Route 
                         exact path="/games/:id"
                         component={ GameDetailsPage }
+                    />
+                    <Route
+                        exact path="/genres/:id"
+                        component={ ExploreResultsPage }
+                    />
+                    <Route
+                        exact path="/platforms/:id"
+                        component={ ExploreResultsPage }
+                    />
+                    <Route
+                        exact path="/developers/:id"
+                        component={ ExploreResultsPage }
+                    />
+                    <Route
+                        exact path="/publishers/:id"
+                        component={ ExploreResultsPage }
                     />
                 </Switch>
             </main>

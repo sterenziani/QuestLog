@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
 import Spinner from 'react-bootstrap/Spinner';
-import ItemsCard from "../../common/GamesCard/GamesCard";
+import GamesCard from "../../common/GamesCard/GamesCard";
 
 
 class IndexPage extends Component {
@@ -43,10 +43,10 @@ class IndexPage extends Component {
                     </Helmet>
                 </HelmetProvider>
                 <div>
-                    <ItemsCard items={this.state.popularGames} label={"games.lists.popularGames"}/>
+                    <GamesCard items={this.state.popularGames} label={"games.lists.popularGames"}/>
                 </div>
                 <div>
-                    <ItemsCard items={this.state.upcomingGames} label={"games.lists.upcomingGames"}/>
+                    <GamesCard items={this.state.upcomingGames} label={"games.lists.upcomingGames"}/>
                 </div>
             </React.Fragment>
         );
