@@ -3,12 +3,13 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import PaginationService from "../../../services/api/paginationService";
-import Pagination from "../../common/Pagination";
+import Pagination from "../../common/Pagination/Pagination";
 import GameService from "../../../services/api/gameService";
 
 class ExploreResultsPage extends Component {
     state = {
-        path : window.location.pathname.substring(8),
+        path : window.location.pathname.substring(1 + (`${process.env.PUBLIC_URL}`).length),
+        pagination: [],
         content : [],
         data : null,
         loading : true,
@@ -22,14 +23,15 @@ class ExploreResultsPage extends Component {
         Promise.all([ fetchContent, fetchData ]).then((responses) => {
             this.setState({
                 loading: false,
-                content: responses[0],
-                data : responses[1],
+                content: responses[0].content,
+                pagination: responses[0].pagination,
+                data : responses[1].content,
             });
         });
     }
 
     render() {
-        console.log(this.state.path)
+        console.log("En ExploreResultsPage el path es: " +this.state.path)
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -42,11 +44,11 @@ class ExploreResultsPage extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>Questlog</title>
+                        <title>QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <GamesCard label={this.state.data.name} items={this.state.content} />
-                <Pagination total={this.state.content.length} page={1}/>
+                <Pagination url={this.state.path} page={1} totalPages={5}/>
             </React.Fragment>
         );
     }
