@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GenericListItem from "../ListItem/GenericListItem";
-import {Card, Container, Row} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 

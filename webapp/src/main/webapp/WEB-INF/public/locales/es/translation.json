@@ -12,6 +12,12 @@
             },
             "btn"       : "Buscar"
         },
+        "pagination" : {
+            "prev"      : "<< Anterior",
+            "next"      : "Siguiente >>",
+            "first"     : "Primero",
+            "last"      : "Último"
+        },
         "seeAll" : "Ver todo >>"
     },
     "games" : {
