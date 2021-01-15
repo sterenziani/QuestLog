@@ -7,32 +7,61 @@ import {
 } from 'react-router-bootstrap';
 import { Translation } from 'react-i18next';
 
+/*
+    Props: href, text, textKey
+
+    <AnyButton
+        textKey="tranlate.json.key"         // Tranlate Key for Button Text. Ignored if 'text' prop is present.
+        href="/goto"                        // If present tells the Button where it should redirect on click.
+        { ...reactBootstrapButtonProps }    // Any other props are passed down to Button from react-bootstrap.
+    />
+
+    Alternatively,
+
+    <AnyButton
+        text="ButtonText"                   // Button Text
+        href="/goto"                        // If present tells the Button where it should redirect on click.
+        { ...reactBootstrapButtonProps }    // Any other props are passed down to Button from react-bootstrap.
+    />
+*/
+
 const AnyButton = props => {
-    const { href, textKey, ...other } = props
-    if(href){
-        return (
-            <LinkContainer to={ href }>
-                <Button 
-                    { ...other }
-                >
+    const { href, text, textKey, ...other } = props
+
+    return href ? (
+        <LinkContainer to={ href }>
+            <Button 
+                { ...other }
+            >
+            {
+                text ? (
+                    text
+                ) : (
                     <Translation>
                     {
                         t => t(`${textKey}`)
                     }
                     </Translation>
-                </Button>
-            </LinkContainer>
-        )
-    }
-    return (
+                )
+            }
+                
+            </Button>
+        </LinkContainer>
+    ) : (
         <Button 
             { ...other }
         >
-            <Translation>
-            {
-                t => t(`${textKey}`)
-            }
-            </Translation>
+        {
+            text ? (
+                text
+            ) : (
+                <Translation>
+                {
+                    t => t(`${textKey}`)
+                }
+                </Translation>
+            )
+        }
         </Button>
     );
 }
