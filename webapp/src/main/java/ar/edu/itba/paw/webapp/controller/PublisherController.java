@@ -34,6 +34,9 @@ public class PublisherController {
 
     @Autowired
     private GameService gs;
+    
+	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
+	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
 
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -44,6 +47,8 @@ public class PublisherController {
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<PublisherDto>>(publishers) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -77,6 +82,8 @@ public class PublisherController {
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)

@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
 import ar.edu.itba.paw.interfaces.service.RunService;
@@ -85,6 +84,9 @@ public class GameDetailController {
     private Validator validator;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameDetailController.class);
+    
+	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
+	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
 
 	@GET
 	@Path("/{gameId}")
@@ -273,6 +275,8 @@ public class GameDetailController {
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -294,6 +298,8 @@ public class GameDetailController {
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runList) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -344,6 +350,8 @@ public class GameDetailController {
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)

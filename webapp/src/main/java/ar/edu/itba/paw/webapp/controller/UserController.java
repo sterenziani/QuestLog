@@ -25,7 +25,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
-
 import ar.edu.itba.paw.webapp.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +65,9 @@ public class UserController
 	@Context
 	private UriInfo uriInfo;
 	
+	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
+	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
+	
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("searchTerm") @DefaultValue("") String searchTerm, @QueryParam("page_size") @DefaultValue("20") int page_size)
@@ -75,6 +77,8 @@ public class UserController
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<UserDto>>(allUsers) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -240,6 +244,8 @@ public class UserController
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ScoreDto>>(scores) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -261,6 +267,8 @@ public class UserController
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<RunDto>>(runs) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -297,6 +305,8 @@ public class UserController
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
@@ -335,6 +345,8 @@ public class UserController
 			amount_of_pages = 1;
 		
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(games) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)

@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ar.edu.itba.paw.interfaces.service.BacklogCookieHandlerService;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 
@@ -32,6 +31,9 @@ public class GameController {
     private GameService                 gs;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
+    
+	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
+	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
 
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -59,6 +61,8 @@ public class GameController {
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(searchResults) {});
+		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
+		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)
