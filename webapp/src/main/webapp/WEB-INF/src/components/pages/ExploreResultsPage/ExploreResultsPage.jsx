@@ -5,6 +5,7 @@ import GamesCard from "../../common/GamesCard/GamesCard";
 import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import GameService from "../../../services/api/gameService";
+import withQuery from '../../hoc/withQuery';
 
 class ExploreResultsPage extends Component {
     state = {
@@ -16,7 +17,8 @@ class ExploreResultsPage extends Component {
     };
 
     componentWillMount() {
-        const fetchContent = PaginationService.getGenericContent(this.state.path + "/games");
+        const page = this.props.query.get("page");
+        const fetchContent = PaginationService.getGenericContent(this.state.path + "/games?page=" + page);
         const fetchData = PaginationService.getGenericContent(this.state.path);
 
         //TODO: Handle no response (404)
@@ -53,4 +55,4 @@ class ExploreResultsPage extends Component {
         );
     }
 }
-export default ExploreResultsPage;
+export default withQuery(ExploreResultsPage);
