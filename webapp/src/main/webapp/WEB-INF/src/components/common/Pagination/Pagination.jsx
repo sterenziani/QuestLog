@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Container, Tabs, Tab, Button} from "react-bootstrap";
-import {Translation} from "react-i18next";
+import AnyButton from "../AnyButton/AnyButton";
 
 class Pagination extends Component {
     state = {
@@ -11,7 +10,6 @@ class Pagination extends Component {
     }
 
     componentWillMount() {
-        console.log("En Pagination el url es: " +this.state.url);
         if (!this.state.totalPages || this.state.currentPage < 1) {
             return null;
         }
@@ -25,35 +23,25 @@ class Pagination extends Component {
     }
 
     render() {
-        const prev = this.state.currentPage - 1
-        const next = this.state.currentPage + 1
+        const prev = parseInt(this.state.currentPage) - 1;
+        const next = parseInt(this.state.currentPage) + 1;
         return (
             <div className="col mb-5">
                  <div className="row text-center">
-                     {prev > 0 ? [<div className="col"> <Button key={'prev'} className="page-item">
-                    {<Translation>
-                    {
-                        t => t("navigation.pagination.prev")
-                    }
-                        </Translation>}
-                     </Button></div>] : null}
+                     {prev > 0 ? [<div className="col">
+                         <AnyButton key={'prev'} href={`/` + this.state.url + `?page=` + prev} onClick={this.props.setPage} textKey="navigation.pagination.prev"/>
+                         </div>] : null}
                          {
                              this.state.pages.map(index => (
                                  <div className="col mx-auto">
-                                 <Button key={index} className={this.isActive(index)}
-                                         disabled={index === this.state.currentPage}>
-                                    {index}
-                                 </Button>
+                                         <AnyButton key={index}  className={this.isActive(index)} text={index} onClick={this.props.setPage} disabled={index === parseInt(this.state.currentPage)}
+                                                    href={`/` + this.state.url + `?page=` + index} />
                                  </div>
                             ))
                         }
-                     {next < this.state.totalPages ? [<div className="col"><Button key={'next'} className="page-item">
-                         {<Translation>
-                             {
-                                 t => t("navigation.pagination.next")
-                             }
-                         </Translation>}
-                     </Button></div>] : null}
+                     {next <= parseInt(this.state.totalPages) ? [<div className="col">
+                         <AnyButton key={'prev'}  href={`/` + this.state.url + `?page=` + next} onClick={this.props.setPage} textKey="navigation.pagination.next"/>
+                     </div>] : null}
                 </div>
             </div>
         );

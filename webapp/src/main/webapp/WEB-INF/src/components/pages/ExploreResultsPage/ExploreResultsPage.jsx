@@ -13,11 +13,20 @@ class ExploreResultsPage extends Component {
         pagination: [],
         content : [],
         data : null,
+        page : null,
+        pageCount : null,
         loading : true,
     };
 
     componentWillMount() {
-        const page = this.props.query.get("page");
+        this.setPage()
+    }
+
+    setPage() {
+        let page = this.props.query.get("page");
+        if(!page) {
+            page = 1;
+        }
         const fetchContent = PaginationService.getGenericContent(this.state.path + "/games?page=" + page);
         const fetchData = PaginationService.getGenericContent(this.state.path);
 
@@ -28,12 +37,13 @@ class ExploreResultsPage extends Component {
                 content: responses[0].content,
                 pagination: responses[0].pagination,
                 data : responses[1].content,
+                page : page,
+                pageCount : responses[0].pageCount,
             });
         });
     }
 
     render() {
-        console.log("En ExploreResultsPage el path es: " +this.state.path)
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -50,7 +60,7 @@ class ExploreResultsPage extends Component {
                     </Helmet>
                 </HelmetProvider>
                 <GamesCard label={this.state.data.name} items={this.state.content} />
-                <Pagination url={this.state.path} page={1} totalPages={5}/>
+                <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage}/>
             </React.Fragment>
         );
     }
