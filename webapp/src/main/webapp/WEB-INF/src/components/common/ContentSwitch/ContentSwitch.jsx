@@ -14,6 +14,7 @@ import LogInPage from '../../pages/LogInPage/LogInPage';
 import SignUpPage from '../../pages/SignUpPage/SignUpPage';
 import ExplorePage from '../../pages/ExplorePage/ExplorePage';
 import ExploreResultsPage from '../../pages/ExploreResultsPage/ExploreResultsPage';
+import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
 
 
 class ContentSwitch extends Component {
@@ -70,6 +71,22 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/publishers/:id"
                         component={ ExploreResultsPage }
+                    />
+                    <Route
+                        exact path="/genres"
+                        component={ SeeAllPage }
+                    />
+                    <Route
+                        exact path="/platforms"
+                        component={ SeeAllPage }
+                    />
+                    <Route
+                        exact path="/developers"
+                        component={ SeeAllPage }
+                    />
+                    <Route
+                        exact path="/publishers"
+                        component={ SeeAllPage }
                     />
                 </Switch>
             </main>
