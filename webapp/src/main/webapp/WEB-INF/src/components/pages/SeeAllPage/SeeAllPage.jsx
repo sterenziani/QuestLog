@@ -36,9 +36,6 @@ class SeeAllPage extends Component {
     }
 
     render() {
-        console.log(this.state.path)
-        console.log(this.state.content)
-        console.log(this.state.pageCount)
         let label = this.state.path.charAt(0).toUpperCase() + this.state.path.substring(1);
         if (this.state.loading === true) {
             return <div style={{

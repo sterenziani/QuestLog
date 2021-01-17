@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AnyButton from "../AnyButton/AnyButton";
+import { Row, Col } from 'react-bootstrap';
 
 class Pagination extends Component {
     state = {
@@ -28,9 +29,11 @@ class Pagination extends Component {
         return (
             <div className="col mb-5">
                  <div className="row text-center">
-                     {prev > 0 ? [<div className="col">
-                         <AnyButton key={'prev'} href={`/` + this.state.url + `?page=` + prev} onClick={this.props.setPage} textKey="navigation.pagination.prev"/>
-                         </div>] : null}
+                     <Col>
+                        <AnyButton className={prev <= 0? 'disabled' : ''} key={'prev'} href={`/` + this.state.url + `?page=` + prev} onClick={this.props.setPage} textKey="navigation.pagination.prev"/>
+                     </Col>
+                     <Col>
+                         <Row>
                          {
                              this.state.pages.map(index => (
                                  <div className="col mx-auto">
@@ -39,9 +42,11 @@ class Pagination extends Component {
                                  </div>
                             ))
                         }
-                     {next <= parseInt(this.state.totalPages) ? [<div className="col">
-                         <AnyButton key={'prev'}  href={`/` + this.state.url + `?page=` + next} onClick={this.props.setPage} textKey="navigation.pagination.next"/>
-                     </div>] : null}
+                        </Row>
+                    </Col>
+                    <Col>
+                        <AnyButton className={next <= parseInt(this.state.totalPages)? '':'disabled'} key={'prev'}  href={`/` + this.state.url + `?page=` + next} onClick={this.props.setPage} textKey="navigation.pagination.next"/>
+                    </Col>
                 </div>
             </div>
         );
