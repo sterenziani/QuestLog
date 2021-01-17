@@ -84,7 +84,7 @@ class GameProfile extends Component {
                             <div>
                             <Card className="m-5 bg-light-grey" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                                 <Card.Header className="bg-very-dark text-white d-flex">
-                                <div><h2 className="share-tech-mono"> <Translation>{t => t("users.backlog", {value: this.state.user.username})}</Translation></h2></div>
+                                <div><h2 className="share-tech-mono"> <Translation>{t => t("users.userBacklog", {value: this.state.user.username})}</Translation></h2></div>
                                 {
                                     this.state.backlogPagination.next? [
                                         <div className="ml-auto">

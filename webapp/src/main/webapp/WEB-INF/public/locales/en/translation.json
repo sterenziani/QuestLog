@@ -130,7 +130,7 @@
         "scores" : "SCORES",
         "runs" : "RUNS",
         "reviews" : "REVIEWS",
-        "backlog" : "{{value}}'s backlog",
+        "userBacklog" : "{{value}}'s backlog",
         "userScores" : "{{value}}'s scores",
         "noScoresSubmitted" : "This user has not rated any games yet",
         "userRuns" : "{{value}}'s runs",

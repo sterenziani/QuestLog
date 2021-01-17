@@ -130,7 +130,7 @@
         "scores" : "CALIFICACIONES",
         "runs" : "RUNS",
         "reviews" : "RESEÑAS",
-        "backlog" : "Backlog de {{value}}",
+        "userBacklog" : "Backlog de {{value}}",
         "userScores" : "Calificaciones por {{value}}",
         "noScoresSubmitted" : "Este usuario aún no ha calificado ningún juego",
         "userRuns" : "Runs por {{value}}",
