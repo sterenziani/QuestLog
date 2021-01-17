@@ -15,31 +15,32 @@ import SignUpPage from '../../pages/SignUpPage/SignUpPage';
 import ExplorePage from '../../pages/ExplorePage/ExplorePage';
 import ExploreResultsPage from '../../pages/ExploreResultsPage/ExploreResultsPage';
 import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
+import UserProfilePage from '../../pages/UserProfilePage/UserProfilePage';
 
 
 class ContentSwitch extends Component {
     state = { }
     render() {
-        return ( 
+        return (
             <main>
                 <Switch>
-                    <Route 
+                    <Route
                         exact path="/"
                         component={ IndexPage }
                     />
-                    <Route 
+                    <Route
                         exact path="/login"
                         component={ LogInPage }
                     />
-                    <Route 
+                    <Route
                         exact path="/signup"
                         component={ SignUpPage }
                     />
-                    <Route 
+                    <Route
                         exact path="/search"
                         component={ IndexPage }
                     />
-                    <Route 
+                    <Route
                         exact path="/explore"
                         component={ ExplorePage }
                     />
@@ -88,10 +89,14 @@ class ContentSwitch extends Component {
                         exact path="/publishers"
                         component={ SeeAllPage }
                     />
+                    <Route
+                        exact path="/users/:id"
+                        component={ UserProfilePage }
+                    />
                 </Switch>
             </main>
         );
     }
 }
- 
+
 export default ContentSwitch;

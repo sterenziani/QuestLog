@@ -37,6 +37,7 @@ public class UserDto
 	private int reviews_total;
 	private URI backlog_url;
 	private int backlog_size;
+	private GameDto favorite_game;
 	
 	public static UserDto fromUser(User user, UriInfo uriInfo)
 	{
@@ -59,6 +60,7 @@ public class UserDto
 		
 		dto.backlog_url = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(dto.id)).path("backlog").build();
 		dto.backlog_size = user.getBacklog().size();
+		dto.setFavorite_game(GameDto.fromGame(user.getFavoriteGame(), uriInfo));
 		return dto;
 	}
 
@@ -172,5 +174,13 @@ public class UserDto
 
 	public void setBacklog_size(int backlog_size) {
 		this.backlog_size = backlog_size;
+	}
+
+	public GameDto getFavorite_game() {
+		return favorite_game;
+	}
+
+	public void setFavorite_game(GameDto favorite_game) {
+		this.favorite_game = favorite_game;
 	}
 }
