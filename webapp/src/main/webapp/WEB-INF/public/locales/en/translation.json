@@ -3,7 +3,8 @@
         "explore"   : "Explore",
         "auth"      : {
             "login"     : "Log In",
-            "signup"    : "Sign Up"
+            "signup"    : "Sign Up",
+            "logout"    : "Log Out"
         },
         "search"    : {
             "options"   : {
@@ -44,25 +45,27 @@
         }
     },
     "login" : {
-        "title"       : "Log In",
-        "username"    : {
+        "title"          : "Log In",
+        "username"       : {
             "label"       : "Username:",
             "placeholder" : "Username",
             "errors"      : {
                 "is_required" : "Username should not be empty"
             }
         },
-        "password"    : {
+        "password"       : {
             "label"       : "Password:",
             "placeholder" : "Password",
             "errors"      : {
                 "is_required" : "Password should not be empty"
             }
         },
-        "remember-me" : "Remember me",
-        "login"       : "Log in",
-        "signup"      : "First time? Sign Up!",
-        "forgot"      : "I forgot my password"
+        "remember-me"    : "Remember me",
+        "login"          : "Log in",
+        "signup"         : "First time? Sign Up!",
+        "forgot"         : "I forgot my password",
+        "error"          : "Incorrect username and/or password",
+        "bad_connection" : "Unable to connect. Check your internet connection and try again"
     },
     "genres" : {
         "Action" : "Action",
