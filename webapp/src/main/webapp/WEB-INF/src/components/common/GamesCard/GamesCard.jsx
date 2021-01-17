@@ -18,7 +18,7 @@ class GamesCard extends Component {
                     <h2 className="share-tech-mono">
                         <Translation>
                             {
-                                t => t(this.state.label)
+                                t => t(this.state.label, {value: this.props.labelArgs})
                             }
                         </Translation>
                     </h2>
