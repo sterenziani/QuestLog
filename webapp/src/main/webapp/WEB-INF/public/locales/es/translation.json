@@ -111,6 +111,7 @@
         },
         "notAvailable" : "N/D",
         "noRunsSubmitted": "No se han registrado runs para este juego",
+        "game" : "Juego",
         "platform" : "Plataforma",
         "time" : "Tiempo",
         "myRuns" : "Mis runs"
@@ -121,5 +122,23 @@
         "myReviews" : "Mis reseñas",
         "noReviewsSubmitted" : "No se han escrito reseñas para este juego",
         "delete" : "Eliminar"
+    },
+    "users" : {
+        "gamesRated" : "Juegos calificados: {{value}}",
+        "scoreAverage" : "Calificación promedio: {{value}}",
+        "runsCreated" : "Runs registrados: {{value}}",
+        "hoursPlayed" : "Horas jugadas en total: {{value}}",
+        "favoriteGame" : "Juego favorito:",
+        "backlog" : "BACKLOG",
+        "scores" : "CALIFICACIONES",
+        "runs" : "RUNS",
+        "reviews" : "RESEÑAS",
+        "userBacklog" : "Backlog de {{value}}",
+        "userScores" : "Calificaciones por {{value}}",
+        "noScoresSubmitted" : "Este usuario aún no ha calificado ningún juego",
+        "userRuns" : "Runs por {{value}}",
+        "noRunsSubmitted" : "Este usuario aún no ha registrado ningún run",
+        "userReviews" : "Reseñas por {{value}}",
+        "noReviewsSubmitted" : "Este usuario aún no ha escrito ninguna reseña"
     }
 }

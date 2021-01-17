@@ -5,7 +5,6 @@ import GenreService from "../../../services/api/genreService";
 import DeveloperService from "../../../services/api/devService";
 import PlatformService from "../../../services/api/platformService";
 import PublisherService from "../../../services/api/publisherService";
-import {Translation} from "react-i18next";
 import ContainerCard from "../../common/GamesCard/ContainerCard";
 
 class ExplorePage extends Component {

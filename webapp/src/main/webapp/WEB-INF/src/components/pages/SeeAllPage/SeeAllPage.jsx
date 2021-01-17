@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
-import GamesCard from "../../common/GamesCard/GamesCard";
+import ContainerCard from "../../common/GamesCard/ContainerCard";
 import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
-import GameService from "../../../services/api/gameService";
 import withQuery from '../../hoc/withQuery';
 
-class ExploreResultsPage extends Component {
+class SeeAllPage extends Component {
     state = {
         path : window.location.pathname.substring(1 + (`${process.env.PUBLIC_URL}`).length),
-        pagination: [],
-        content : [],
-        data : null,
+        content: [],
         page : null,
         pageCount : null,
-        loading : true,
+        loading: true,
     };
 
     componentWillMount() {
@@ -27,23 +24,19 @@ class ExploreResultsPage extends Component {
         if(!page) {
             page = 1;
         }
-        const fetchContent = PaginationService.getGenericContent(this.state.path + "/games?page=" + page);
-        const fetchData = PaginationService.getGenericContent(this.state.path);
-
-        //TODO: Handle no response (404)
-        Promise.all([ fetchContent, fetchData ]).then((responses) => {
-            this.setState({
-                loading: false,
-                content: responses[0].content,
-                pagination: responses[0].pagination,
-                data : responses[1].content,
-                page : page,
-                pageCount : responses[0].pageCount,
+        PaginationService.getGenericContent(this.state.path + "?page=" + page)
+            .then((data) => {
+                this.setState({
+                    loading: false,
+                    content: data.content,
+                    page : page,
+                    pageCount : data.pageCount,
             });
         });
     }
 
     render() {
+        let label = this.state.path.charAt(0).toUpperCase() + this.state.path.substring(1);
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -51,18 +44,19 @@ class ExploreResultsPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>QuestLog</title>
+                        <title>Questlog</title>
                     </Helmet>
                 </HelmetProvider>
-                <GamesCard label={this.state.data.name} items={this.state.content} />
+                <ContainerCard items={this.state.content} label={label} limit={this.state.content.length}/>
                 <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage}/>
             </React.Fragment>
         );
     }
+
 }
-export default withQuery(ExploreResultsPage);
+
+export default withQuery(SeeAllPage);

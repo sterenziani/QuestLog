@@ -17,6 +17,7 @@ const getGenericContent = async (endpoint) => {
         }
         ret['pagination'] = parsed_data;
         ret['content'] = response.data;
+        ret['pageCount'] = response.headers["page-count"];
         return ret;
     } catch(err) {
         if(err.response) {

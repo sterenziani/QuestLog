@@ -32,6 +32,8 @@ public class GameDto
 	
 	public static GameDto fromGame(Game game, UriInfo uriInfo)
 	{   
+		if(game == null)
+			return null;
 		final GameDto dto = new GameDto();
 		dto.id = game.getId();
 		dto.title = game.getTitle();

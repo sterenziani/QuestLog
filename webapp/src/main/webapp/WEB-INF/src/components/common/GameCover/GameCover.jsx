@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ImageService from "../../../services/api/imageService";
-import {
-    Card,
-} from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 import defaultGameCover from './images/default_game_cover.png';
+import "../../../../src/index.scss";
 
 class GameCover extends Component {
     state = {
@@ -24,8 +23,11 @@ class GameCover extends Component {
 
     render() {
         let resize = this.props.resize;
+        let mini = this.props.mini;
         return (
-            <Card.Img className={resize? 'cover' : ''} variant="top" src={this.state.cover} />
+            <div>
+            {mini? [<Image className={'cover-mini'} src={this.state.cover}/>] : [<Card.Img className={resize? 'cover' : ''} variant="top" src={this.state.cover} />]}
+            </div>
         )
     }
 }

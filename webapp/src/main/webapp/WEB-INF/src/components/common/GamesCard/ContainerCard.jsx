@@ -23,7 +23,8 @@ class ItemsCard extends Component {
                             }
                         </Translation>
                     </h2>
-                    <div className="ml-auto">
+                    {this.state.items.length > this.state.limit ?
+                        [<div className="ml-auto">
                         <div className="ml-auto">
                             <a className="btn btn-link text-white" href={`${process.env.PUBLIC_URL}/${lower}`}>
                                 <Translation>
@@ -33,7 +34,7 @@ class ItemsCard extends Component {
                                 </Translation>
                             </a>
                         </div>
-                    </div>
+                    </div>] : null}
                 </div>
                 <div className="card-body d-flex flex-wrap justify-content-center align-items-center align-items-stretch">
                      {this.state.items.slice(0,this.state.limit).map(p =>
