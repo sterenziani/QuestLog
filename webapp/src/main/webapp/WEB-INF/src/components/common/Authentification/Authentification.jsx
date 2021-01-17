@@ -1,40 +1,57 @@
 import React, { Component } from 'react';
-import {
-    Button
-} from 'react-bootstrap';
-import {
-    LinkContainer
-} from 'react-router-bootstrap';
-import { Translation } from 'react-i18next';
+import {reaction} from 'mobx';
+
+import AnyButton from '../AnyButton/AnyButton';
+import AuthService from '../../../services/api/authService';
 
 class Authentification extends Component {
-    state = {  }
+    constructor(props){
+        super(props)
+
+        const userStore = AuthService.getUserStore()
+
+        this.state = {}
+        
+        this.state.userIsLoggedIn = userStore.isLoggedIn
+        this.state.user           = userStore.user
+        reaction(
+            () => userStore.user,
+            () => this.setState({
+                userIsLoggedIn : userStore.isLoggedIn,
+                user           : userStore.user
+            })
+        )
+    }
+    
     render() { 
-        return ( 
+        console.log("here")
+        return this.state.userIsLoggedIn ? (
             <React.Fragment>
-                <LinkContainer to="/login">
-                    <Button
-                        variant="outline-secondary"
-                        className="mr-3"
-                    >
-                        <Translation>
-                        {
-                            t => t('navigation.auth.login')
-                        }
-                        </Translation>
-                    </Button>
-                </LinkContainer>
-                <LinkContainer to="signup">
-                    <Button
-                        variant="outline-secondary"
-                    >
-                        <Translation>
-                        {
-                            t => t('navigation.auth.signup')
-                        }
-                        </Translation>
-                    </Button>
-                </LinkContainer>
+                <AnyButton 
+                    variant="link"
+                    text={ this.state.user.username }
+                    href="/profile"
+                    className="mr-3 color-white"
+                />
+                <AnyButton 
+                    textKey="navigation.auth.logout"
+                    href="/logout"
+                    variant="outline-secondary"
+                />
+            </React.Fragment>
+        ) : ( 
+            <React.Fragment>
+                <AnyButton 
+                    textKey="navigation.auth.login"
+                    href="/login"
+                    variant="outline-secondary"
+                    className="mr-3"
+                />
+                <AnyButton 
+                    textKey="navigation.auth.signup"
+                    href="/signup"
+                    variant="outline-secondary"
+                />
             </React.Fragment>
         );
     }
