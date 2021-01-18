@@ -16,7 +16,7 @@ class Pagination extends Component {
             return null;
         }
         let arr = [];
-        for (var i = 1; i <= this.state.totalPages; i++) {
+        for (let i = 1; i <= this.state.totalPages; i++) {
            arr.push(i);
         }
         this.setState({

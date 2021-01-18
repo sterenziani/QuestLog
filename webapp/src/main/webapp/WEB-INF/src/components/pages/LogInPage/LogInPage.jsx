@@ -9,13 +9,15 @@ import {
     Formik 
 } from 'formik';
 import * as Yup from 'yup';
+import { withLastLocation } from 'react-router-last-location';
 
 import FormikTextField from '../../common/Forms/FormikTextField';
 import AuthForm from '../../common/Forms/AuthForm';
 import AnyButton from '../../common/AnyButton/AnyButton';
 import AuthService from '../../../services/api/authService';
-import withRedirect from '../../hoc/withRedirect';
 import { OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
+import withHistory from '../../hoc/withHistory';
+import withRedirect from '../../hoc/withRedirect';
 
 const LogInSchema = Yup.object().shape({
     username : Yup
@@ -38,7 +40,7 @@ class LogInPage extends Component {
         switch(status){
 
             case OK:
-                this.props.activateRedirect("back")
+                this.props.activateGoBack()
                 break;
 
             case UNAUTHORIZED:
@@ -69,6 +71,7 @@ class LogInPage extends Component {
         this.authenticate(values, setSubmitting);
     }
     render() {
+        console.log(this.props.lastLocation)
         return ( 
             <Formik
                 initialValues = {{
@@ -171,4 +174,4 @@ class LogInPage extends Component {
     }
 }
 
-export default withRedirect(LogInPage, { back : "/" });
+export default withRedirect(LogInPage, { home : "/" });

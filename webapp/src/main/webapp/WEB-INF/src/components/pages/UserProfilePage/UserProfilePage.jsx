@@ -3,10 +3,14 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import UserService from "../../../services/api/userService";
 import UserProfile from "../../common/UserDetails/UserProfile";
+import withUser from '../../hoc/withUser';
+
 
 class GameDetailsPage extends Component {
     state = {
         user: null,
+        userId: this.props.user.id,
+        loggedIn: this.props.userIsLoggedIn,
         loading: true,
     };
 
@@ -36,10 +40,10 @@ class GameDetailsPage extends Component {
                         <title>{this.state.user.username}</title>
                     </Helmet>
                 </HelmetProvider>
-                <UserProfile user={this.state.user} />
+                <UserProfile user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.userId}/>
             </React.Fragment>
         );
     }
 }
 
-export default GameDetailsPage;
+export default withUser(GameDetailsPage);

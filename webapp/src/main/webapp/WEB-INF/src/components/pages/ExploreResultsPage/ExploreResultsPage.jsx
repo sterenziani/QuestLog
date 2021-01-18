@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import {Translation} from "react-i18next";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
-import GameService from "../../../services/api/gameService";
 import withQuery from '../../hoc/withQuery';
 
 class ExploreResultsPage extends Component {
