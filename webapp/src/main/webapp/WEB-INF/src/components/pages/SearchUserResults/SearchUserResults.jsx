@@ -75,14 +75,14 @@ class SearchUserResults extends Component {
                              {this.state.content.length > 0? [this.state.content.map(u =>
                                 <Row>
                                     <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.state.adminLoggedIn? 'text-right':'text-center'}>
-                                        <a href={u.id} style={{fontSize: "25px"}}>{u.username}</a>
+                                        <a href={"users/"+u.id} style={{fontSize: "25px"}}>{u.username}</a>
                          			</Col>
                                     {
                                         this.state.adminLoggedIn? [
                                             <Col style={{verticalAlign: "middle", padding:"10px"}}>
                                                 {u.admin? [
-                                                    <Button variant="success" href=""><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
-                                                    <Button variant="danger" href=""><Translation>{t => t("search.makeAdmin")}</Translation></Button>]}
+                                                    <Button variant="danger" href=""><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
+                                                    <Button variant="success" href=""><Translation>{t => t("search.makeAdmin")}</Translation></Button>]}
                                             </Col>] : []
                                     }
                      			</Row>
