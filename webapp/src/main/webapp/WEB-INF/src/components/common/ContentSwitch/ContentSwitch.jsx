@@ -18,6 +18,7 @@ import LogOutPage from '../../pages/LogOutPage/LogOutPage';
 import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
 import UserProfilePage from '../../pages/UserProfilePage/UserProfilePage';
 import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
+import SearchGameResults from '../../pages/SearchGameResults/SearchGameResults';
 
 
 class ContentSwitch extends Component {
@@ -46,7 +47,7 @@ class ContentSwitch extends Component {
                         exact path="/login"
                         render={ (props) => <LogInPage {...props} loginFailed={ this.state.loginFailed } loginFailedProcessed={ this.userCouldNotLoginWasProcessed }/> }
                     />
-                    <Route 
+                    <Route
                         exact path="/logout"
                         component={ LogOutPage }
                     />
@@ -112,7 +113,11 @@ class ContentSwitch extends Component {
                         component={ UserProfilePage }
                     />
                     <Route
-                        exact path="/users"
+                        exact path="/gameSearch"
+                        component={ SearchGameResults }
+                    />
+                    <Route
+                        exact path="/userSearch"
                         component={ SearchUserResults }
                     />
                 </Switch>

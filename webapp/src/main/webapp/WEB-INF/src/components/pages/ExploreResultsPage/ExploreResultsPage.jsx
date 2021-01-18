@@ -51,7 +51,6 @@ class ExploreResultsPage extends Component {
             label = this.state.data.name;
         if(category.toLowerCase() === "genres" && this.state.data){
             label = "genres." +this.state.data.name;
-            console.log("El label es " +label);
         }
         if (this.state.loading === true) {
             return <div style={{
