@@ -8,14 +8,16 @@ import ScoreSlider from "./ScoreSlider";
 import RunsTab from "./RunsTab";
 import ReviewsTab from "./ReviewsTab";
 import ReviewService from "../../../services/api/reviewService";
+import AuthService from "../../../services/api/authService";
+import ScoreService from "../../../services/api/scoreService";
 
 class GameProfile extends Component {
     state = {
         game : this.props.game,
         userScore : 87,
         myReviews: [],
-        userId: 22,
-        loggedIn: true,
+        userId: null,
+        loggedIn: null,
         displayedReviews: [],
         pagination: []
     };
@@ -27,7 +29,7 @@ class GameProfile extends Component {
                       myReviews: data
                   });
               }).then((data) =>  {});
-      ReviewService.getGameReviews(this.props.game.id)
+      ReviewService.getGameReviews(this.state.game.id)
           .then((data) => {
               this.setState({
                   displayedReviews: data.content,
@@ -37,6 +39,8 @@ class GameProfile extends Component {
     };
 
     render() {
+        console.log(this.state.userId)
+        console.log(this.state.loggedIn)
         return (
             <Card className="m-5 bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <div className="card-header bg-very-dark text-white">
@@ -56,16 +60,16 @@ class GameProfile extends Component {
                                                     <RunsTab game={this.state.game}/>
                                                 </Tab>
                                                 {
-                                                    this.state.displayedReviews.length > 0? [
-                                                    <Tab className="bg-very-light" eventKey="reviews" title=<Translation>{t => t("games.profile.reviews")}</Translation>>
+                                                    this.state.displayedReviews.length > 0 ? [
+                                                    <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("games.profile.reviews")}</Translation>}>
                                                         <ReviewsTab className="p-5" key="1" game={this.state.game} reviews={this.state.displayedReviews} pagination={this.state.pagination} />
                                                     </Tab>] : [
-                                                    <Tab className="bg-very-light" eventKey="reviews2" title=<Translation>{t => t("games.profile.reviews")}</Translation>>
+                                                    <Tab className="bg-very-light" eventKey="reviews2" title={<Translation>{t => t("games.profile.reviews")}</Translation>}>
                                                         <ReviewsTab className="p-5" key="1b" game={this.state.game} reviews={[]} pagination={[]} />
                                                     </Tab>]
                                                 }
                                                 {this.state.myReviews.length > 0? [
-                                                    <Tab className="bg-very-light" eventKey="my-reviews" title=<Translation>{t => t("games.profile.myReviews")}</Translation>>
+                                                    <Tab className="bg-very-light" eventKey="my-reviews" title={<Translation>{t => t("games.profile.myReviews")}</Translation>}>
                                                         <ReviewsTab className="p-5" key="2" game={this.state.game} reviews={this.state.myReviews} label="reviews.myReviews"/>
                                                     </Tab>] : []
                                                 }
