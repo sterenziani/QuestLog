@@ -23,8 +23,7 @@ class Authentification extends Component {
         )
     }
     
-    render() { 
-        console.log("here")
+    render() {
         return this.state.userIsLoggedIn ? (
             <React.Fragment>
                 <AnyButton 
