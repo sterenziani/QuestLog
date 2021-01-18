@@ -94,7 +94,7 @@ const logInWithStore = async () => {
     try {
         const response      = await api.get(logInEndpoint, {
             headers : {
-                authorization : 'Bearer ' + savedToken
+                authorization : savedToken
             }
         })
         
