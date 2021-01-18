@@ -45,27 +45,66 @@
         }
     },
     "login" : {
-        "title"          : "Log In",
-        "username"       : {
+        "title"                 : "Log In",
+        "username"              : {
             "label"       : "Username:",
             "placeholder" : "Username",
             "errors"      : {
                 "is_required" : "Username should not be empty"
             }
         },
-        "password"       : {
+        "password"              : {
             "label"       : "Password:",
             "placeholder" : "Password",
             "errors"      : {
                 "is_required" : "Password should not be empty"
             }
         },
-        "remember-me"    : "Remember me",
-        "login"          : "Log in",
-        "signup"         : "First time? Sign Up!",
-        "forgot"         : "I forgot my password",
-        "error"          : "Incorrect username and/or password",
-        "bad_connection" : "Unable to connect. Check your internet connection and try again"
+        "remember-me"           : "Remember me",
+        "login"                 : "Log in",
+        "signup"                : "First time? Sign Up!",
+        "forgot"                : "I forgot my password",
+        "error"                 : "Incorrect username and/or password",
+        "bad_connection"        : "Unable to connect. Check your internet connection and try again",
+        "external_login_failed" : "Failed to log you in automatically, please log in manually"
+    },
+    "signup" : {
+        "title"           : "Sign Up",
+        "username"        : {
+            "errors"      : {
+                "required_length"      : "Username should be at least 6 characters long",
+                "max_length"           : "Username should not exceed 100 characters long",
+                "illegal_characters"   : "Username can only contain letters and numbers",
+                "duplicated"           : "This username was already taken. Try another one"
+            }
+        },
+        "password"        : {
+            "errors"      : {
+                "required_length"      : "Passwords should be at least 6 characters long",
+                "max_length"           : "Passwords should not exceed 100 characters long"
+            }
+        },
+        "repeat_password" : {
+            "label"       : "Repeat password:",
+            "placeholder" : "Repeat password",
+            "errors"      : {
+                "passwords_dont_match" : "Passwords should match",
+                "is_required"          : "Repeat password should not be empty"
+            }
+        },
+        "email"           : {
+            "label"       : "Email:",
+            "placeholder" : "example@quelog.com",
+            "errors"      : {
+                "invalid_email"        : "Please type in a valid email address",
+                "max_length"           : "Email adresses should not exceed 100 characters long",
+                "is_required"          : "Email address should not be empty",
+                "duplicated"           : "An account with the same email address is already registered"
+            }
+        },
+        "signup"          : "Register!",
+        "login"           : "I already have an account. I wish to Log in",
+        "bad_connection"  : "Unable to connect. Check your internet connection and try again"
     },
     "genres" : {
         "Action" : "Action",

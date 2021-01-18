@@ -8,19 +8,21 @@ const FormikTextField = props =>  {
     const { t } = useTranslation();
     const { label, placeholder, name, error, touched, ...other } = props
     return (  
-        <Form.Label>
-            {t(`${label}`)}
-            <Form.Control
-                placeholder={ t(`${placeholder}`) } 
-                name={ name }
-                { ...other }
-            />
+        <React.Fragment>
+            <Form.Label>
+                {t(`${label}`)}
+                <Form.Control
+                    placeholder={ t(`${placeholder}`) } 
+                    name={ name }
+                    { ...other }
+                />
+            </Form.Label>
             <p className="form-error">
             { error && touched && error && (
                 t(`${error}`)
             )}
             </p>
-        </Form.Label>
+        </React.Fragment>
     );
 }
  

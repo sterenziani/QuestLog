@@ -21,7 +21,19 @@ import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
 
 
 class ContentSwitch extends Component {
-    state = { }
+    state = {
+        loginFailed : false
+    }
+    userCouldNotLoginNeedsProcessing = () => {
+        this.setState({
+            loginFailed : true
+        })
+    }
+    userCouldNotLoginWasProcessed = () => {
+        this.setState({
+            loginFailed : false
+        })
+    }
     render() {
         return (
             <main>
@@ -32,7 +44,7 @@ class ContentSwitch extends Component {
                     />
                     <Route
                         exact path="/login"
-                        component={ LogInPage }
+                        render={ (props) => <LogInPage {...props} loginFailed={ this.state.loginFailed } loginFailedProcessed={ this.userCouldNotLoginWasProcessed }/> }
                     />
                     <Route 
                         exact path="/logout"
@@ -40,7 +52,7 @@ class ContentSwitch extends Component {
                     />
                     <Route
                         exact path="/signup"
-                        component={ SignUpPage }
+                        render={ (props) => <SignUpPage {...props} loginFailed={ this.userCouldNotLoginNeedsProcessing }/> }
                     />
                     <Route
                         exact path="/search"

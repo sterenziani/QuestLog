@@ -45,27 +45,66 @@
         }
     },
     "login" : {
-        "title"          : "Ingresar",
-        "username"       : {
+        "title"                 : "Ingresar",
+        "username"              : {
             "label"       : "Usuario:",
             "placeholder" : "Usuario",
             "errors" : {
                 "is_required" : "Debe ingresar su usuario"
             }
         },
-        "password"       : {
+        "password"              : {
             "label"       : "Contraseña:",
             "placeholder" : "Contraseña",
             "errors"      : {
                 "is_required" : "Debe ingresar su contraseña"
             }
         },
-        "remember-me"    : "Recordarme",
-        "login"          : "Ingresar",
-        "signup"         : "¿Primera vez? ¡Registrate!",
-        "forgot"         : "Olvidé mi contraseña",
-        "error"          : "Usuario y/o contraseña incorrecto/s",
-        "bad_connection" : "No es posible conectarse. Chequee su conexión a internet e intente nuevamente"
+        "remember-me"           : "Recordarme",
+        "login"                 : "Ingresar",
+        "signup"                : "¿Primera vez? ¡Registrate!",
+        "forgot"                : "Olvidé mi contraseña",
+        "error"                 : "Usuario y/o contraseña incorrecto/s",
+        "bad_connection"        : "No es posible conectarse. Chequee su conexión a internet e intente nuevamente",
+        "external_login_failed" : "El inicio de sesión automático falló. Intente ingresar manualmente"
+    },
+    "signup" : {
+        "title"           : "Registrate",
+        "username"        : {
+            "errors"      : {
+                "required_length"      : "Su usuario debe contener al menos 6 caracteres",
+                "max_length"           : "Su usuario no debe exceder los 100 caracteres",
+                "illegal_characters"   : "Su usuario puede contener unicamente letras y numeros",
+                "duplicated"           : "Este usuario ya ha sido tomado. Intente con otro"
+            }
+        },
+        "password"        : {
+            "errors"      : {
+                "required_length"      : "Las contraseñas deben contener al menos 6 caracteres",
+                "max_length"           : "Las contraseñas no deben exceder los 100 caracteres"
+            }
+        },
+        "repeat_password" : {
+            "label"       : "Repetir contraseña:",
+            "placeholder" : "Repetir contraseña",
+            "errors"      : {
+                "passwords_dont_match" : "Las contraseñas deben coincidir",
+                "is_required"          : "Debe reingresar su contraseña"
+            }
+        },
+        "email"           : {
+            "label"       : "Email:",
+            "placeholder" : "ejemplo@quelog.com",
+            "errors"      : {
+                "invalid_email"        : "Ingrese una dirección de mail válida",
+                "max_length"           : "Las direcciones de mail no deben exceder los 100 caracteres",
+                "is_required"          : "Debe ingresar su dirección de mail",
+                "duplicated"           : "Ya existe una cuenta con este mail asociado"
+            }
+        },
+        "signup"          : "¡Registrarse!",
+        "login"           : "Ya tengo cuenta. Quiero iniciar sesión",
+        "bad_connection"  : "No se pudo establecer una conexión. Chequee su conexión a internet y vuelva a intentar"
     },
     "genres" : {
         "Action" : "Acción",
