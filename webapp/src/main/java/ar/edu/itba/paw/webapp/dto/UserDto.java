@@ -38,6 +38,7 @@ public class UserDto
 	private URI backlog_url;
 	private int backlog_size;
 	private GameDto favorite_game;
+	private boolean admin;
 	
 	public static UserDto fromUser(User user, UriInfo uriInfo)
 	{
@@ -46,6 +47,7 @@ public class UserDto
 		dto.username = user.getUsername();
 		dto.email = user.getEmail();
 		dto.locale = user.getLocale().toLanguageTag();
+		dto.setAdmin(user.getAdminStatus());
 		
 		dto.score_total = user.getScoreCount();
 		dto.score_average = user.getScoreAverage();
@@ -182,5 +184,13 @@ public class UserDto
 
 	public void setFavorite_game(GameDto favorite_game) {
 		this.favorite_game = favorite_game;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 }

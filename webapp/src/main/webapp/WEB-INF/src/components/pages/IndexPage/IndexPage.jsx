@@ -24,7 +24,6 @@ class IndexPage extends Component {
                 upcomingGames : responses[1],
             });
         });
-        console.log(this.state.upcomingGames);
     }
 
     render() {

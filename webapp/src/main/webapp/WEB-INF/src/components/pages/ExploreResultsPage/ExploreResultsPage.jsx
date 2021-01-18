@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Translation} from "react-i18next";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GamesCard from "../../common/GamesCard/GamesCard";
@@ -44,6 +45,14 @@ class ExploreResultsPage extends Component {
     }
 
     render() {
+        let category = this.state.path.split("/")[0];
+        let label = "";
+        if(this.state.data)
+            label = this.state.data.name;
+        if(category.toLowerCase() === "genres" && this.state.data){
+            label = "genres." +this.state.data.name;
+            console.log("El label es " +label);
+        }
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -59,7 +68,7 @@ class ExploreResultsPage extends Component {
                         <title>QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <GamesCard label={this.state.data.name} items={this.state.content} />
+                <GamesCard label={label} items={this.state.content} />
                 <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage}/>
             </React.Fragment>
         );
