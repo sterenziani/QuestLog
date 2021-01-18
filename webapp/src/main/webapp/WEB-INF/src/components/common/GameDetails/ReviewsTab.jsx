@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Badge, Button, Container} from "react-bootstrap";
+import {Card, Col, Button, Container} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
-import ReviewService from "../../../services/api/reviewService";
 import ReviewCard from "./ReviewCard";
 
 class ReviewsTab extends Component {
     state = {
         game: this.props.game,
         reviews: this.props.reviews? this.props.reviews : [],
-        userId: 22,
-        loggedIn: true,
+        userId: this.props.userId,
+        loggedIn: this.props.loggedIn,
         myReviews: [],
         displayedReviews: [],
         pagination: this.props.pagination? this.props.pagination : [],
@@ -41,7 +40,7 @@ class ReviewsTab extends Component {
                     {(this.state.reviews.length > 0)? [
                         <Col>
                             {this.state.reviews.map(r => (
-                                    <ReviewCard review={r}/>
+                                    <ReviewCard review={r} userId={this.state.userId} loggedIn={this.state.loggedIn}/>
                                 ))}
                         </Col>
                     ] : [<Container className="text-center mt-5"> <p> <Translation>{t => t("reviews.noReviewsSubmitted")}</Translation> </p> </Container>]

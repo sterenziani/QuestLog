@@ -8,7 +8,7 @@ import ScoreService from "../../../services/api/scoreService";
 class ScoreSlider extends Component {
     state = {
         game: this.props.game,
-        userScore: null,
+        userScore : this.props.userScore,
     };
 
     getScore() {
@@ -25,17 +25,24 @@ class ScoreSlider extends Component {
     }
 
     publishScoreHandler(e) {
-        console.log("Publishing score");
         ScoreService.rateGame(this.state.game.id, this.state.userScore);
-        console.log("I sent the request to rate game");
     }
 
     getUserScore() {
-        if(this.state.userScore != null) {
-            return this.state.userScore;
+        if(this.state.userScore || this.state.userScore == 0) {
+            return parseInt(this.state.userScore);
         }
         else {
             return '-';
+        }
+    }
+
+    getUserScoreNumerical() {
+        if(this.state.userScore || this.state.userScore == 0) {
+            return parseInt(this.state.userScore);
+        }
+        else {
+            return 50;
         }
     }
 
@@ -54,7 +61,7 @@ class ScoreSlider extends Component {
                             <Row className="m-auto"> <h6 style={{fontWeight: "bold"}}> <Translation>{t => t("score.your")}</Translation> </h6></Row>
                             <Slider className="my-3" onChange={(e, newValue) => {this.handleSliderChange(e, newValue)}}
                                 style={{root:{color: 'light', height: 10}, thumb:{height: 24, width:24, backgroundColor: "primary"}}}
-                                defaultValue={50} min={0} max={100} step={1} value={this.getUserScore()}/>
+                                    min={0} max={100} step={1} value={this.getUserScoreNumerical()}/>
                         </Col>
                         <Col>
                             <div className="score-display text-center px-5"> <p class="badge badge-success">{this.getUserScore()}</p></div>

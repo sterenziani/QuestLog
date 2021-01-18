@@ -16,6 +16,20 @@ const rateGame = async(gameId, score) => {
   }
 }
 
+const getUserGameScore       = async (userId, gameId) => {
+  try {
+    const endpoint = `users/${userId}/scores/${gameId}`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const getGameScores = async(gameId) => {
     return getGameScoresPage(gameId, 1);
 }
@@ -78,6 +92,7 @@ const getUserScoresPage = async(userId, page) => {
 
 const ScoreService = {
   rateGame     : rateGame,
+  getUserGameScore : getUserGameScore,
   getGameScores : getGameScores,
   getUserScores : getUserScores,
   getGameScoresPage : getGameScoresPage,

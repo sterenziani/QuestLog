@@ -25,6 +25,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
+
+import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.webapp.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,6 +255,24 @@ public class UserController
 		if(page >= 1 && page < amount_of_pages)
 			resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).queryParam("page_size", page_size).build(), "next");
 		return resp.build();
+	}
+
+	@GET
+	@Path("{userId}/scores/{gameId}")
+	public Response getUserGameScore(@PathParam("userId") long userId, @PathParam("gameId") long gameId)
+	{
+		final Optional<User> maybeUser = us.findById(userId);
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		final Optional<Game> maybeGame = gs.findById(gameId);
+		if(!maybeGame.isPresent())
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+		Optional<Score> maybeScore = scors.findScore(maybeUser.get(), maybeGame.get());
+		if(!maybeScore.isPresent()) {
+			Score score = new Score(maybeUser.get(), maybeGame.get(), -1);
+			return Response.ok(false).build();
+		}
+		return Response.ok(maybeScore.map(u -> ScoreDto.fromScore(u, uriInfo)).get()).build();
 	}
 	
 	@GET

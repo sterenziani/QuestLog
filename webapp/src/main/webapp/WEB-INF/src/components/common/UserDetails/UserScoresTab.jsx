@@ -4,14 +4,16 @@ import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ScoreService from "../../../services/api/scoreService";
+import Spinner from "react-bootstrap/Spinner";
 
 class UserScoresTab extends Component {
     state = {
         user: this.props.user,
-        userId: 22,
-        loggedIn: true,
+        loggedInId: this.props.loggedInId,
+        loggedIn: this.props.loggedIn,
         scoresDisplayed: [],
-        scoresPagination: []
+        scoresPagination: [],
+        loading: true,
     };
 
     componentWillMount() {
@@ -19,12 +21,20 @@ class UserScoresTab extends Component {
               .then((data) => {
                   this.setState({
                       scoresDisplayed: data.content,
-                      scoresPagination: data.pagination
+                      scoresPagination: data.pagination,
+                      loading: false,
                   });
               }).then((data) =>  {});
     };
 
     render() {
+        if (this.state.loading === true) {
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+        }
         return (
             <Grid>
             {
