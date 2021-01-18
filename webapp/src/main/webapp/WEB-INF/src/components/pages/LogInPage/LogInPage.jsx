@@ -14,8 +14,8 @@ import FormikTextField from '../../common/Forms/FormikTextField';
 import AuthForm from '../../common/Forms/AuthForm';
 import AnyButton from '../../common/AnyButton/AnyButton';
 import AuthService from '../../../services/api/authService';
-import withRedirect from '../../hoc/withRedirect';
 import { OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
+import withHistory from '../../hoc/withHistory';
 
 const LogInSchema = Yup.object().shape({
     username : Yup
@@ -38,7 +38,7 @@ class LogInPage extends Component {
         switch(status){
 
             case OK:
-                this.props.activateRedirect("back")
+                this.props.history.goBack()
                 break;
 
             case UNAUTHORIZED:
@@ -171,4 +171,4 @@ class LogInPage extends Component {
     }
 }
 
-export default withRedirect(LogInPage, { back : "/" });
+export default withHistory(LogInPage);

@@ -15,6 +15,7 @@ import withRedirect from '../../hoc/withRedirect';
 import { CREATED, OK, CONFLICT } from '../../../services/api/apiConstants';
 import UserService from '../../../services/api/userService';
 import i18n from '../../../services/i18n';
+import withHistory from '../../hoc/withHistory';
 
 //TODO: Check validations in RegisterDto
 const SignUpSchema = Yup.object().shape({
@@ -53,14 +54,14 @@ class SignUpPage extends Component {
         const { status, conflicts } = await UserService.register(values.username, values.password, values.email, i18n.language)
         
         switch(status){
-            
+
             case CREATED:
                 this.authenticate(values)
                 break;
 
             case CONFLICT:
                 setSubmitting(false)
-                conflicts.map(conflict =>{
+                conflicts.forEach(conflict => {
                     setFieldError(conflict.field, conflict.i18Key)
                 })
                 break;
@@ -79,7 +80,7 @@ class SignUpPage extends Component {
         switch(status){
 
             case OK:
-                this.props.activateRedirect("back")
+                this.props.history.goBack()
                 break;
 
             default:
@@ -189,4 +190,4 @@ class SignUpPage extends Component {
     }
 }
  
-export default withRedirect(SignUpPage, { back : "/", login : "/login" });
+export default withHistory(withRedirect(SignUpPage, { login : "/login" }));
