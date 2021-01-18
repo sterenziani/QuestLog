@@ -79,7 +79,7 @@
         "MMO" : "MMO",
         "Platformer" : "Plataformas",
         "Puzzle" : "Puzzle",
-        "Racing" : "Racing",
+        "Racing" : "Carreras",
         "RPG" : "RPG",
         "Shooter" : "Shooter",
         "Simulation" : "Simulación",
@@ -137,5 +137,10 @@
         "noRunsSubmitted" : "Este usuario aún no ha registrado ningún run",
         "userReviews" : "Reseñas por {{value}}",
         "noReviewsSubmitted" : "Este usuario aún no ha escrito ninguna reseña"
+    },
+    "search" : {
+        "gameResults" : "Resultados de búsqueda para juego {{value}}",
+        "userResults" : "Resultados de búsqueda para usuario {{value}}",
+        "noResults" : "No se encontraron resultados"
     }
 }

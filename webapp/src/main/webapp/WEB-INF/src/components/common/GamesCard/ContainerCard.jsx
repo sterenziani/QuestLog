@@ -17,11 +17,7 @@ class ItemsCard extends Component {
             <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <div className="card-header bg-very-dark text-white px-3 d-flex">
                     <h2 className="share-tech-mono">
-                        <Translation>
-                            {
-                                t => t(this.state.label)
-                            }
-                        </Translation>
+                        <Translation>{t => t("games.profile." +lower)}</Translation>
                     </h2>
                     {this.state.items.length > this.state.limit ?
                         [<div className="ml-auto">
@@ -38,7 +34,7 @@ class ItemsCard extends Component {
                 </div>
                 <div className="card-body d-flex flex-wrap justify-content-center align-items-center align-items-stretch">
                      {this.state.items.slice(0,this.state.limit).map(p =>
-                            <GenericListItem value={p.id} label={this.props.label} item={p}/>)}
+                            <GenericListItem value={p.id} category={this.props.label} item={p}/>)}
                 </div>
             </Card>
         );

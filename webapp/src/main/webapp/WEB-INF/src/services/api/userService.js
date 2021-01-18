@@ -1,8 +1,18 @@
 import api from './api';
 
-const getAllUsers = async(userId) => {
+const searchUsers = async(term) => {
+    if(term == null){
+        term = '';
+    }
+    return searchUsersPage(term, 1);
+}
+
+const searchUsersPage = async(term, page) => {
   try {
-        const endpoint = `users`;
+        if(term == null){
+            term = '';
+        }
+        const endpoint = `users?page=${page}&searchTerm=${term}`;
         const response = await api.get(endpoint);
         // Parse links
         const data = response.headers.link;
@@ -42,7 +52,8 @@ const getUserById = async(userId) => {
 
 const UserService = {
   getUserById   : getUserById,
-  getAllUsers   : getAllUsers,
+  searchUsers   : searchUsers,
+  searchUsersPage : searchUsersPage
 }
 
 export default UserService;

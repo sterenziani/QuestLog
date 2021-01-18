@@ -1,9 +1,9 @@
 //Libraries
-import React, { 
+import React, {
     Component
 } from 'react';
-import { 
-    Route, 
+import {
+    Route,
     Switch
 } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import ExplorePage from '../../pages/ExplorePage/ExplorePage';
 import ExploreResultsPage from '../../pages/ExploreResultsPage/ExploreResultsPage';
 import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
 import UserProfilePage from '../../pages/UserProfilePage/UserProfilePage';
+import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
 
 
 class ContentSwitch extends Component {
@@ -53,7 +54,7 @@ class ContentSwitch extends Component {
                          * { this.props.match.params.my_parameter }
                          */
                     }
-                    <Route 
+                    <Route
                         exact path="/games/:id"
                         component={ GameDetailsPage }
                     />
@@ -92,6 +93,10 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/users/:id"
                         component={ UserProfilePage }
+                    />
+                    <Route
+                        exact path="/users"
+                        component={ SearchUserResults }
                     />
                 </Switch>
             </main>

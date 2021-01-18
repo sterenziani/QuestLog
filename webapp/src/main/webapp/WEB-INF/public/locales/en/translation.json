@@ -137,5 +137,9 @@
         "noRunsSubmitted" : "This user has not registered any runs yet",
         "userReviews" : "{{value}}'s reviews",
         "noReviewsSubmitted" : "This user has not written any reviews yet"
-    }
+    },
+    "search" : {
+        "gameResults" : "Search results for game {{value}}",
+        "userResults" : "Search results for user {{value}}",
+        "noResults" : "No results found"
 }
