@@ -1,4 +1,39 @@
 import api from './api';
+import { CONFLICT, TIMEOUT } from './apiConstants';
+
+const endpoint    = '/users'
+
+const register    = async(username, password, email, locale) => {
+  try {
+    const registerEndpoint = endpoint + '/register';
+    const newUser          = {
+      "username" : username,
+      "password" : password,
+      "email"    : email,
+      "locale"   : locale
+    }
+    const response         = await api.post(registerEndpoint, newUser, {
+      headers : {
+        contentType : "application/json"
+      }
+    });
+    return { status : response.status }
+  } catch(e) {
+    if (e.response){
+      if(e.response.status === CONFLICT){
+        return { 
+          status    : CONFLICT,
+          conflicts : e.response.data
+        }
+      }
+      return { status : e.response.status }
+    } else {
+      return { status : TIMEOUT }
+    }
+  }
+  
+  
+}
 
 const searchUsers = async(term) => {
     if(term == null){
@@ -51,6 +86,7 @@ const getUserById = async(userId) => {
 }
 
 const UserService = {
+  register      : register,
   getUserById   : getUserById,
   searchUsers   : searchUsers,
   searchUsersPage : searchUsersPage
