@@ -29,20 +29,20 @@ const LogInSchema = Yup.object().shape({
 class LogInPage extends Component {
     state = {
         correct        : true,
-        bad_connection : false
+        bad_connection : false,
+        failed_external_login : this.props.loginFailed
     }
     authenticate = async (values, setSubmitting) => {
         const { status } = await AuthService.logIn(values.username, values.password)
 
-        console.log(status);
-
         switch(status){
 
             case OK:
-                this.props.activateRedirect()
+                this.props.activateRedirect("back")
                 break;
 
             case UNAUTHORIZED:
+                setSubmitting(false)
                 this.setState({
                     correct : false
                 })
@@ -58,6 +58,13 @@ class LogInPage extends Component {
 
     }
     onSubmit = (values, { setSubmitting }) => {
+        if(this.state.failed_external_login){
+            this.props.loginFailedProcessed()
+            this.setState({
+                failed_external_login : false
+            })
+        }
+
         setSubmitting(true);
         this.authenticate(values, setSubmitting);
     }
@@ -101,6 +108,16 @@ class LogInPage extends Component {
                                 <Translation>
                                 {
                                     t => t("login.bad_connection")
+                                }
+                                </Translation>
+                            </p>
+                    }
+                    { 
+                        this.state.failed_external_login &&
+                            <p className="form-error">
+                                <Translation>
+                                {
+                                    t => t("login.external_login_failed")
                                 }
                                 </Translation>
                             </p>
@@ -154,4 +171,4 @@ class LogInPage extends Component {
     }
 }
 
-export default withRedirect(LogInPage, "/");
+export default withRedirect(LogInPage, { back : "/" });

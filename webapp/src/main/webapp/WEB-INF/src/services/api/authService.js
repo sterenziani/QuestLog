@@ -28,7 +28,6 @@ reaction(
             userStore.isLoggedIn = false
         else
             userStore.isLoggedIn = true
-        console.log("change")
     }
 )
 
@@ -88,10 +87,14 @@ const logIn = async (username, password) => {
     }
 }
 const logInWithStore = async () => {
+    const savedToken = TokenStore.getToken()
+    const savedUser  = UserStore.getUser()
+    if(!savedToken && !savedUser)
+        return { status : OK }
     try {
         const response      = await api.get(logInEndpoint, {
             headers : {
-                authorization : 'Bearer ' + TokenStore.getToken()
+                authorization : 'Bearer ' + savedToken
             }
         })
         

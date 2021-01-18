@@ -1,23 +1,25 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-const withRedirect = (WrappedComponent, redirect_to) => {
+const withRedirect = (WrappedComponent, redirections) => {
     return class extends React.Component {
         constructor(props){
             super(props);
             this.state = {
-                redirect : redirect_to,
-                active   : false
+                redirect : redirections,
+                active   : false,
+                key      : undefined
             }
         }
-        activateRedirect = () => {
+        activateRedirect = (key) => {
             this.setState({
-                active   : true
+                active : true,
+                key    : key
             })
         }
         render(){
             return this.state.active ? (
-                <Redirect to={ this.state.redirect }/>
+                <Redirect to={ this.state.redirect[this.state.key] }/>
             ) : (
                 <WrappedComponent activateRedirect={ this.activateRedirect } {...this.props} />
             )
