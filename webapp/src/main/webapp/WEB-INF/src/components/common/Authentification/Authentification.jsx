@@ -1,34 +1,15 @@
 import React, { Component } from 'react';
-import {reaction} from 'mobx';
 
 import AnyButton from '../AnyButton/AnyButton';
-import AuthService from '../../../services/api/authService';
+import withUser from '../../hoc/withUser';
 
-class Authentification extends Component {
-    constructor(props){
-        super(props)
-
-        const userStore = AuthService.getUserStore()
-
-        this.state = {}
-        
-        this.state.userIsLoggedIn = userStore.isLoggedIn
-        this.state.user           = userStore.user
-        reaction(
-            () => userStore.user,
-            () => this.setState({
-                userIsLoggedIn : userStore.isLoggedIn,
-                user           : userStore.user
-            })
-        )
-    }
-    
+class Authentification extends Component {    
     render() {
-        return this.state.userIsLoggedIn ? (
+        return this.props.userIsLoggedIn ? (
             <React.Fragment>
                 <AnyButton 
                     variant="link"
-                    text={ this.state.user.username }
+                    text={ this.props.user.username }
                     href="/profile"
                     className="mr-3 color-white"
                 />
@@ -56,4 +37,4 @@ class Authentification extends Component {
     }
 }
  
-export default Authentification;
+export default withUser(Authentification);
