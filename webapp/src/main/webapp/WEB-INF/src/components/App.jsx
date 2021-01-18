@@ -7,6 +7,7 @@ import {
 //Child components
 import ContentSwitch from './common/ContentSwitch/ContentSwitch';
 import Navigation from './common/Navigation/Navigation';
+import AuthService from '../services/api/authService';
 
 /*
  * There are two ways to declare components:
@@ -20,6 +21,9 @@ import Navigation from './common/Navigation/Navigation';
 
 class App extends Component {
   state = {  }
+  componentDidMount() {
+    AuthService.logInWithStore()
+  }
   render() {
     return (
       

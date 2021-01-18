@@ -3,7 +3,8 @@
         "explore"   : "Explorar",
         "auth"      : {
             "login"     : "Ingresar",
-            "signup"    : "Registrarse"
+            "signup"    : "Registrarse",
+            "logout"    : "Cerrar Sesión"
         },
         "search"    : {
             "options"   : {
@@ -44,25 +45,27 @@
         }
     },
     "login" : {
-        "title"       : "Ingresar",
-        "username" : {
+        "title"          : "Ingresar",
+        "username"       : {
             "label"       : "Usuario:",
             "placeholder" : "Usuario",
             "errors" : {
                 "is_required" : "Debe ingresar su usuario"
             }
         },
-        "password" : {
+        "password"       : {
             "label"       : "Contraseña:",
             "placeholder" : "Contraseña",
             "errors"      : {
                 "is_required" : "Debe ingresar su contraseña"
             }
         },
-        "remember-me" : "Recordarme",
-        "login"       : "Ingresar",
-        "signup"      : "¿Primera vez? ¡Registrate!",
-        "forgot"      : "Olvidé mi contraseña"
+        "remember-me"    : "Recordarme",
+        "login"          : "Ingresar",
+        "signup"         : "¿Primera vez? ¡Registrate!",
+        "forgot"         : "Olvidé mi contraseña",
+        "error"          : "Usuario y/o contraseña incorrecto/s",
+        "bad_connection" : "No es posible conectarse. Chequee su conexión a internet e intente nuevamente"
     },
     "genres" : {
         "Action" : "Acción",

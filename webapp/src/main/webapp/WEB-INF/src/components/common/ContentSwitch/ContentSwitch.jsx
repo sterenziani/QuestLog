@@ -14,6 +14,7 @@ import LogInPage from '../../pages/LogInPage/LogInPage';
 import SignUpPage from '../../pages/SignUpPage/SignUpPage';
 import ExplorePage from '../../pages/ExplorePage/ExplorePage';
 import ExploreResultsPage from '../../pages/ExploreResultsPage/ExploreResultsPage';
+import LogOutPage from '../../pages/LogOutPage/LogOutPage';
 import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
 import UserProfilePage from '../../pages/UserProfilePage/UserProfilePage';
 import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
@@ -32,6 +33,10 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/login"
                         component={ LogInPage }
+                    />
+                    <Route 
+                        exact path="/logout"
+                        component={ LogOutPage }
                     />
                     <Route
                         exact path="/signup"

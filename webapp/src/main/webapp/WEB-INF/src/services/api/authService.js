@@ -1,4 +1,6 @@
 import api from './api';
+import { observable, reaction } from 'mobx';
+import { OK, UNAUTHORIZED, TIMEOUT } from './apiConstants';
 
 const endpoint      = '/users';
 
@@ -9,21 +11,36 @@ const TokenStore    = {
 }
 
 const UserStore     = {
-    setUser     : user  => localStorage.setItem('user', user),
-    getUser     : ()    => localStorage.getItem('user'),
+    setUser     : user  => localStorage.setItem('user', JSON.stringify(user)),
+    getUser     : ()    => JSON.parse(localStorage.getItem('user')),
     removeUser  : ()    => localStorage.removeItem('user')
 }
 
-let user;
-const getUser   = () => {
-    if(!user){
-        user = UserStore.getUser();
+let userStore = observable({
+    user       : undefined,
+    isLoggedIn : false
+});
+
+reaction(
+    () => userStore.user,
+    () => {
+        if(!userStore.user)
+            userStore.isLoggedIn = false
+        else
+            userStore.isLoggedIn = true
+        console.log("change")
     }
-    return user;
+)
+
+const getUserStore      = () => {
+    if(!userStore.user){
+        userStore.user = UserStore.getUser();
+    }
+    return userStore;
 }
-const deleteUser = () => {
-    if(user){
-        user = undefined;
+const deleteUserInStore = () => {
+    if(userStore.user){
+        userStore.user = undefined;
     }
     UserStore.removeUser()
 }
@@ -31,7 +48,7 @@ const deleteUser = () => {
 let token;
 const getToken  = () => {
     if(!token){
-        token = TokenStore.getToken();
+            token = TokenStore.getToken();
     }
     return token;
 }
@@ -42,43 +59,70 @@ const deleteToken = () => {
     TokenStore.removeToken();
 }
 
+const logInEndpoint = endpoint + '/login';
+
 const logIn = async (username, password) => {
     try {
-        const logInEndpoint = endpoint + '/login';
-
         const response      = await api.get(logInEndpoint, {
             headers : {
                 authorization : 'Basic ' + btoa(username + ":" + password)
             }
         })
+
+        if(response.status === UNAUTHORIZED)
+            return { status: UNAUTHORIZED }
         
-        token         = response.headers.authorization;
-        user          = response.data;
+        token          = response.headers.authorization;
+        userStore.user = response.data;
 
         TokenStore.setToken(token);
-        UserStore.setUser(user);
+        UserStore.setUser(userStore.user);
 
-        return { status: response.status }
+        return { status: OK }
     } catch(e) {
         if (e.response) {
             return { status: e.response.status }
         } else {
-            return { status: 408 }
+            return { status: TIMEOUT }
+        }
+    }
+}
+const logInWithStore = async () => {
+    try {
+        const response      = await api.get(logInEndpoint, {
+            headers : {
+                authorization : 'Bearer ' + TokenStore.getToken()
+            }
+        })
+        
+        token          = response.headers.authorization;
+        userStore.user = response.data;
+
+        TokenStore.setToken(token);
+        UserStore.setUser(userStore.user);
+
+        return { status: OK }
+    } catch(e) {
+        if (e.response) {
+            return { status: e.response.status }
+        } else {
+            return { status: TIMEOUT }
         }
     }
 }
 
 const logOut = async () => {
-    deleteUser();
+    deleteUserInStore();
     deleteToken();
-    return { status: 200 }
+    return { status: OK }
 }
 
 const AuthService   = {
-    logIn    : logIn,
-    logOut   : logOut,
-    getUser  : getUser,
-    getToken : getToken
+    logIn          : logIn,
+    logInWithStore : logInWithStore, 
+    logOut         : logOut,
+    getUserStore   : getUserStore,
+    getToken       : getToken
 }
 
 export default AuthService;

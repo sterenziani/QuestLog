@@ -18,6 +18,7 @@
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
     "jquery": "^3.5.1",
+    "mobx": "^6.0.4",
     "node-sass": "^4.14.1",
     "popper.js": "^1.16.1",
     "react": "^17.0.1",
@@ -31,6 +32,7 @@
     "react-scripts": "4.0.1",
     "react-slick": "^0.27.13",
     "react-slider": "^1.1.2",
+    "rxjs": "^6.6.3",
     "web-vitals": "^0.2.4",
     "yup": "^0.32.8"
   },
