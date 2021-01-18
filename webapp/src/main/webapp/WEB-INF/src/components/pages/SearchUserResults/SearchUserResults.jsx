@@ -19,7 +19,7 @@ class SearchUserResults extends Component {
         page : null,
         term: null,
         pageCount : null,
-        adminLoggedIn: false,
+        adminLoggedIn: true,
     };
 
     componentWillMount() {
@@ -48,7 +48,6 @@ class SearchUserResults extends Component {
     }
 
     render() {
-        let label = "Buscando usuarios :)";
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -57,11 +56,12 @@ class SearchUserResults extends Component {
             </div>
         }
 
+
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>sEaRCh ReSuLtS</title>
+                        <title>User search results</title>
                     </Helmet>
                 </HelmetProvider>
                 <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
@@ -80,11 +80,13 @@ class SearchUserResults extends Component {
                                     {
                                         this.state.adminLoggedIn? [
                                             <Col style={{verticalAlign: "middle", padding:"10px"}}>
-                                                <Button href="">ADD/REMOVE ADMIN</Button>
+                                                {u.admin? [
+                                                    <Button variant="success" href=""><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
+                                                    <Button variant="danger" href=""><Translation>{t => t("search.makeAdmin")}</Translation></Button>]}
                                             </Col>] : []
                                     }
                      			</Row>
-                            )] : [<Translation>{t => t("search.noResults")}</Translation>] }
+                            )] : [<div class="text-center"><Translation>{t => t("search.noResults")}</Translation></div>] }
                         </Col>
                     </Card.Body>
                 </Card>

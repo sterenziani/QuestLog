@@ -144,6 +144,8 @@
     "search" : {
         "gameResults" : "Resultados de búsqueda para juego {{value}}",
         "userResults" : "Resultados de búsqueda para usuario {{value}}",
-        "noResults" : "No se encontraron resultados"
+        "noResults" : "No se encontraron resultados",
+        "makeAdmin" : "Hacer administrador",
+        "removeAdmin" : "Quitar administrador"
     }
 }
