@@ -119,10 +119,10 @@ public class UserController
 			}
 			FormErrorDto[] errors = new FormErrorDto[size];
 			if(emailInUse)
-				errors[index++] = new FormErrorDto("email", "EmailUnique.registerForm.email");
+				errors[index++] = new FormErrorDto("email", "signup.email.errors.duplicated");
 			if(usernameInUse)
-				errors[index++] = new FormErrorDto("username", "UserUnique.registerForm.username");
-			return Response.status(Response.Status.CONFLICT).entity(errors.length > 1 ? errors : errors[0]).build();
+				errors[index++] = new FormErrorDto("username", "signup.username.errors.duplicated");
+			return Response.status(Response.Status.CONFLICT).entity(errors).build();
 		}
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(registeredUser.getId())).build();
 		return Response.created(uri).build();
