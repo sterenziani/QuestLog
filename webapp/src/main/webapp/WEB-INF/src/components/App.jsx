@@ -1,8 +1,9 @@
 //Libraries
 import React, { Component, Suspense } from 'react';
-import { 
-  BrowserRouter as Router 
+import {
+  BrowserRouter as Router
 } from 'react-router-dom';
+import { LastLocationProvider } from 'react-router-last-location';
 
 //Child components
 import ContentSwitch from './common/ContentSwitch/ContentSwitch';
@@ -38,10 +39,12 @@ class App extends Component {
        * syntax sugar for JavaScript.
        */
       <Router basename={process.env.PUBLIC_URL}>
-        <Suspense fallback="Loading...">
-          <Navigation />
-          <ContentSwitch />
-        </Suspense>
+        <LastLocationProvider>
+          <Suspense fallback="Loading...">
+            <Navigation />
+            <ContentSwitch />
+          </Suspense>
+        </LastLocationProvider>
       </Router>
      );
   }

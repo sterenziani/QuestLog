@@ -80,7 +80,7 @@ class SignUpPage extends Component {
         switch(status){
 
             case OK:
-                this.props.history.goBack()
+                this.props.activateGoBack()
                 break;
 
             default:
@@ -190,4 +190,4 @@ class SignUpPage extends Component {
     }
 }
  
-export default withHistory(withRedirect(SignUpPage, { login : "/login" }));
+export default withRedirect(SignUpPage, { login : "/login" });

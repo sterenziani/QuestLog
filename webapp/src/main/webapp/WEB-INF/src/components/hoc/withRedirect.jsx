@@ -1,14 +1,18 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { withLastLocation } from 'react-router-last-location';
+
+import withHistory from './withHistory';
 
 const withRedirect = (WrappedComponent, redirections) => {
-    return class extends React.Component {
+    return withHistory(withLastLocation(class extends React.Component {
         constructor(props){
             super(props);
             this.state = {
                 redirect : redirections,
                 active   : false,
-                key      : undefined
+                key      : undefined,
+                goBack   : false
             }
         }
         activateRedirect = (key) => {
@@ -17,14 +21,27 @@ const withRedirect = (WrappedComponent, redirections) => {
                 key    : key
             })
         }
+        activateGoBack = () => {
+            if(this.props.lastLocation)
+                this.props.history.goBack()
+            else
+                this.setState({
+                    active : true,
+                    goBack : true
+                })
+        }
         render(){
             return this.state.active ? (
-                <Redirect to={ this.state.redirect[this.state.key] }/>
+                this.state.goBack ? (
+                    <Redirect to="/"/>
+                ) : (
+                    <Redirect to={ this.state.redirect[this.state.key] }/>
+                )
             ) : (
-                <WrappedComponent activateRedirect={ this.activateRedirect } {...this.props} />
+                <WrappedComponent activateRedirect={ this.activateRedirect } activateGoBack={ this.activateGoBack } {...this.props} />
             )
         }
-    };
+    }));
 }
 
 export default withRedirect;
