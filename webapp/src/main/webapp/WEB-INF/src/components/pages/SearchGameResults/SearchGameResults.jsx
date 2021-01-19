@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
-import {Card, Row, Col, Button} from "react-bootstrap";
+import {Card, Row, Col, Button, Modal, Form} from "react-bootstrap";
 import GameService from "../../../services/api/gameService";
 import ContainerCard from "../../common/GamesCard/ContainerCard";
 import PaginationService from "../../../services/api/paginationService";
@@ -10,7 +10,7 @@ import withQuery from '../../hoc/withQuery';
 import {Translation} from "react-i18next";
 import GenericListItem from "../../common/ListItem/GenericListItem";
 import GamesCard from "../../common/GamesCard/GamesCard";
-
+import SearchModal from "../../common/SearchModal/SearchModal"
 
 class SearchGameResults extends Component {
     state = {
@@ -25,7 +25,7 @@ class SearchGameResults extends Component {
     };
 
     componentWillMount() {
-        this.setPage()
+        this.setPage();
     }
 
     setPage() {
@@ -60,6 +60,8 @@ class SearchGameResults extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
+        let params = GameService.buildQueryParams(this.state.searchParams).replace(0,"?");
+
         return (
             <React.Fragment>
                 <HelmetProvider>
@@ -67,6 +69,7 @@ class SearchGameResults extends Component {
                         <title>QuestLog - Game Search Results</title>
                     </Helmet>
                 </HelmetProvider>
+                <SearchModal searchParams={this.state.searchParams} path={this.state.path}/>
                 <GamesCard label={"search.gameResults"} labelArgs={this.state.searchParams.searchTerm} items={this.state.content} />
                 <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage} queryParams={this.state.searchParams}/>
             </React.Fragment>

@@ -185,6 +185,10 @@
         "userResults" : "Resultados de búsqueda para usuario {{value}}",
         "noResults" : "No se encontraron resultados",
         "makeAdmin" : "Hacer administrador",
-        "removeAdmin" : "Quitar administrador"
+        "removeAdmin" : "Quitar administrador",
+        "filterResults" : "Filtrar resultados",
+        "closeModal" : "Cerrar",
+        "search" : "Buscar",
+        "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items"
     }
 }

@@ -20,23 +20,28 @@ const searchGames = async(searchParams) => {
     return searchGamesPage(searchParams, 1);
 }
 
+const buildQueryParams = (searchParams) => {
+    let params = "";
+    // Parse searchParams
+    for (var key of Object.keys(searchParams)) {
+        if((key == "platforms" || key == "genres") && searchParams[key]){
+            for(var item of searchParams[key]){
+                params += "&"+key+"="+item;
+            }
+        }
+        else if(searchParams[key]){
+            params += "&"+key+"="+searchParams[key];
+        }
+    }
+    return params;
+}
+
 const searchGamesPage = async(searchParams, page) => {
   try {
         if(searchParams.searchTerm == null){
             searchParams.searchTerm = '';
         }
-        let params = "";
-        // Parse searchParams
-        for (var key of Object.keys(searchParams)) {
-            if((key == "platforms" || key == "genres") && searchParams[key]){
-                for(var item of searchParams[key]){
-                    params += "&"+key+"="+item;
-                }
-            }
-            else if(searchParams[key]){
-                params += "&"+key+"="+searchParams[key];
-            }
-        }
+        let params = buildQueryParams(searchParams);
         const endpoint = `${gameServiceEndpoint}?page=${page}`+params;
         const response = await api.get(endpoint);
         // Parse links
@@ -109,7 +114,8 @@ const GameService = {
     getGameById         : getGameById,
     getGameReleaseDates : getGameReleaseDates,
     searchGames : searchGames,
-    searchGamesPage : searchGamesPage
+    searchGamesPage : searchGamesPage,
+    buildQueryParams : buildQueryParams
 }
 
 export default GameService;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AnyButton from "../AnyButton/AnyButton";
 import { Row, Col } from 'react-bootstrap';
+import GameService from "../../../services/api/gameService";
 
 class Pagination extends Component {
     state = {
@@ -27,20 +28,7 @@ class Pagination extends Component {
     render() {
         const prev = parseInt(this.state.currentPage) - 1;
         const next = parseInt(this.state.currentPage) + 1;
-        let params = "";
-        const searchParams = this.state.queryParams? this.state.queryParams : {};
-        // Parse searchParams
-        for (var key of Object.keys(searchParams)) {
-            console.log(key + " -> " + searchParams[key]);
-            if((key == "platforms" || key == "genres") && searchParams[key]){
-                for(var item of searchParams[key]){
-                    params += "&"+key+"="+item;
-                }
-            }
-            else if(searchParams[key]){
-                params += "&"+key+"="+searchParams[key];
-            }
-        }
+        let params = GameService.buildQueryParams(this.state.queryParams);
         return (
             <div className="col mb-5">
                  <div className="row text-center">
