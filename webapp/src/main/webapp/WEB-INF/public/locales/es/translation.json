@@ -189,6 +189,11 @@
         "filterResults" : "Filtrar resultados",
         "closeModal" : "Cerrar",
         "search" : "Buscar",
-        "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items"
+        "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items",
+        "scoreRange" : "Calificación",
+        "hours" : "hs",
+        "mins" : "mins",
+        "minTime" : "Duración mínima del modo historia",
+        "maxTime" : "Duración máxima del modo historia"
     }
 }

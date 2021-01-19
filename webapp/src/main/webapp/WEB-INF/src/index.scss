@@ -23,6 +23,7 @@ $theme-colors: (
   "light": #cfd8dc,
   "dark": #455a64,
 );
+
 .no-lineheight {
   line-height: 0;
 }
@@ -66,6 +67,10 @@ $theme-colors: (
 
 .bg-light-grey {
   background-color: #e2e2e2;
+}
+
+.color-primary {
+    color: #607d8b;
 }
 
 .color-white {
