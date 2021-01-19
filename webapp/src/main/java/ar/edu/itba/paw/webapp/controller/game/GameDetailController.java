@@ -185,6 +185,7 @@ public class GameDetailController {
 	public Response addScore(@Valid RegisterScoreDto registerScoreDto, @PathParam("gameId") long gameId) throws BadFormatException
 	{
 		User loggedUser = us.getLoggedUser();
+		System.out.println(loggedUser);
 		if(loggedUser == null)
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		Set<ConstraintViolation<RegisterScoreDto>> violations = validator.validate(registerScoreDto);

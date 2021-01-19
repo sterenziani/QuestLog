@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import {Row, Col, Badge, Button, Container} from "react-bootstrap";
 import {Slider} from '@material-ui/core';
 import {Translation} from "react-i18next";
@@ -25,7 +26,11 @@ class ScoreSlider extends Component {
     }
 
     publishScoreHandler(e) {
-        ScoreService.rateGame(this.state.game.id, this.state.userScore);
+        if(this.props.userId) {
+            ScoreService.rateGame(this.state.game.id, this.state.userScore);
+        }
+        else
+            this.props.history.push("/login");
     }
 
     getUserScore() {
@@ -75,4 +80,4 @@ class ScoreSlider extends Component {
     }
 }
 
-export default ScoreSlider;
+export default withRouter(ScoreSlider);

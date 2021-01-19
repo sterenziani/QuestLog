@@ -17,7 +17,7 @@ class GameProfile extends Component {
         game : this.props.game,
         userScore : null,
         myReviews: [],
-        userId: this.props.user.id,
+        userId: this.props.user ? this.props.user.id : null,
         loggedIn: this.props.userIsLoggedIn,
         displayedReviews: [],
         pagination: [],
@@ -62,7 +62,7 @@ class GameProfile extends Component {
                                 <Col className="p-3 col-9">
                                     {this.state.game.released? [
                                         <div>
-                                            <ScoreSlider game={this.state.game} userScore={this.state.userScore}/>
+                                            <ScoreSlider game={this.state.game} userScore={this.state.userScore} userId={this.state.userId}/>
                                             <Tabs className="mt-5 mx-3 bg-dark" defaultActiveKey="runs" id="uncontrolled-tab-example">
                                                 <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("games.profile.runs")}</Translation>}>
                                                     <RunsTab game={this.state.game} userId={this.state.userId} loggedIn={this.state.loggedIn}/>
