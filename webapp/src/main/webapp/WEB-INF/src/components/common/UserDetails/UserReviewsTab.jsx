@@ -5,14 +5,16 @@ import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ReviewService from "../../../services/api/reviewService";
 import ReviewCard from "../GameDetails/ReviewCard";
+import Spinner from "react-bootstrap/Spinner";
 
 class UserReviewsTab extends Component {
     state = {
         user: this.props.user,
-        userId: 22,
-        loggedIn: true,
+        loggedInId: this.props.loggedInId,
+        loggedIn: this.props.loggedIn,
         reviewsDisplayed: [],
-        reviewsPagination: []
+        reviewsPagination: [],
+        loading: true,
     };
 
     componentWillMount() {
@@ -20,12 +22,20 @@ class UserReviewsTab extends Component {
               .then((data) => {
                   this.setState({
                       reviewsDisplayed: data.content,
-                      reviewsPagination: data.pagination
+                      reviewsPagination: data.pagination,
+                      loading: false,
                   });
               }).then((data) =>  {});
     };
 
     render() {
+        if (this.state.loading === true) {
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+        }
         return (
             <Grid>
                 <Card className="m-5 text-center bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>

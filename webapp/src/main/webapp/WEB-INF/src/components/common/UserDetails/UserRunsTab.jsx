@@ -4,14 +4,16 @@ import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import RunService from "../../../services/api/runService";
+import Spinner from "react-bootstrap/Spinner";
 
 class UserRunsTab extends Component {
     state = {
         user: this.props.user,
-        userId: 22,
-        loggedIn: true,
+        loggedInId: this.props.loggedInId,
+        loggedIn: this.props.loggedIn,
         runsDisplayed: [],
-        runsPagination: []
+        runsPagination: [],
+        loading: true,
     };
 
     convertTime(seconds) {
@@ -27,12 +29,20 @@ class UserRunsTab extends Component {
               .then((data) => {
                   this.setState({
                       runsDisplayed: data.content,
-                      runsPagination: data.pagination
+                      runsPagination: data.pagination,
+                      loading: false,
                   });
               }).then((data) =>  {});
     };
 
     render() {
+        if (this.state.loading === true) {
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+        }
         return (
             <Grid>
                 {

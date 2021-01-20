@@ -6,8 +6,8 @@ import "../../../../src/index.scss";
 class ReviewCard extends Component {
     state = {
         review: this.props.review,
-        userId: 22,
-        loggedIn: true,
+        userId: this.props.userId,
+        loggedIn: this.props.loggedIn,
     };
 
     render() {

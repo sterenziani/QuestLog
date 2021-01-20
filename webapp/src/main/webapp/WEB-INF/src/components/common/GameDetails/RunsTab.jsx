@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Badge, Button, Container} from "react-bootstrap";
+import {Card, Row, Col, Button, Container} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import RunService from "../../../services/api/runService";
+import Spinner from "react-bootstrap/Spinner";
 
 class RunsTab extends Component {
     state = {
         game: this.props.game,
-        userId: 22,
+        userId: this.props.userId,
         loggedIn: true,
         avgTimes: [],
         fastestRuns: [],
-        myRuns: []
+        myRuns: [],
+        loading: true,
     };
 
     convertTime(seconds) {
@@ -24,27 +26,29 @@ class RunsTab extends Component {
     };
 
     componentWillMount() {
-        RunService.getGameTimes(this.props.game.id)
-              .then((data) => {
-                  this.setState({
-                      avgTimes: data
-                  });
-              }).then((data) =>  {});
-        RunService.getGameTopRuns(this.props.game.id)
-            .then((data) => {
-                this.setState({
-                    fastestRuns: data
-                });
-            }).then((data) =>  {});
-        RunService.getUserGameRuns(this.state.userId, this.props.game.id)
-            .then((data) => {
-                this.setState({
-                    myRuns: data
-                });
-            }).then((data) =>  {});
-    };
+        const fetchAvg = RunService.getGameTimes(this.props.game.id);
+        const fetchFastest = RunService.getGameTopRuns(this.props.game.id);
+        const fetchUsers = RunService.getUserGameRuns(this.state.userId, this.props.game.id);
+
+        //TODO: Handle no response (404)
+        Promise.all([ fetchAvg, fetchFastest, fetchUsers ]).then((responses) => {
+            this.setState({
+                loading: false,
+                avgTimes: responses[0],
+                fastestRuns : responses[1],
+                myRuns : responses[2],
+            });
+        });
+    }
 
     render() {
+        if (this.state.loading === true) {
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+        }
         return (
             <Grid>
                 <div className="text-center m-4">

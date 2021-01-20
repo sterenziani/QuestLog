@@ -61,7 +61,7 @@ class SearchUserResults extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>User search results</title>
+                        <title>QuestLog - User Search Results</title>
                     </Helmet>
                 </HelmetProvider>
                 <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>

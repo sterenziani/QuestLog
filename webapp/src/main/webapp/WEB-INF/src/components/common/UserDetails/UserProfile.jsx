@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Container, Tabs, Tab, Button} from "react-bootstrap";
+import {Card, Row, Tabs, Tab, Button} from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
-import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import BacklogService from "../../../services/api/backlogService";
@@ -11,12 +10,12 @@ import UserRunsTab from "./UserRunsTab";
 import UserReviewsTab from "./UserReviewsTab";
 import GameListItem from "../ListItem/GameListItem";
 
-class GameProfile extends Component {
+class UserProfile extends Component {
     state = {
         loading: true,
         user : this.props.user,
-        loggedIn: true,
-        loggedInId: 22,
+        loggedIn: this.props.loggedIn,
+        loggedInId: this.props.loggedInId,
         backlog: [],
         backlogPagination: []
     };
@@ -27,7 +26,7 @@ class GameProfile extends Component {
                   this.setState({
                       backlog: data.content,
                       backlogPagination: data.pagination,
-                      loading: false
+                      loading: false,
                   });
               }).then((data) =>  {});
     };
@@ -100,13 +99,13 @@ class GameProfile extends Component {
                             </div>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="scores" title={<Translation>{t => t("users.scores")}</Translation>}>
-                            <UserScoresTab user={this.state.user}/>
+                            <UserScoresTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInId}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("users.runs")}</Translation>}>
-                            <UserRunsTab user={this.state.user}/>
+                            <UserRunsTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInId}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("users.reviews")}</Translation>}>
-                            <UserReviewsTab user={this.state.user}/>
+                            <UserReviewsTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInId}/>
                         </Tab>
                     </Tabs>
                 </div>
@@ -115,4 +114,4 @@ class GameProfile extends Component {
     }
 }
 
-export default GameProfile;
+export default UserProfile;

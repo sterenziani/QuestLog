@@ -185,6 +185,15 @@
         "userResults" : "Search results for user {{value}}",
         "noResults" : "No results found",
         "makeAdmin" : "Make admin",
-        "removeAdmin" : "Remove admin"
+        "removeAdmin" : "Remove admin",
+        "filterResults" : "Filter results",
+        "closeModal" : "Close",
+        "search" : "Search",
+        "multipleSelectHint" : "Hold CTRL while clicking to select multiple items",
+        "scoreRange" : "Score",
+        "hours" : "hrs",
+        "mins" : "mins",
+        "minTime" : "Story mode min length",
+        "maxTime" : "Story mode max length"
     }
 }

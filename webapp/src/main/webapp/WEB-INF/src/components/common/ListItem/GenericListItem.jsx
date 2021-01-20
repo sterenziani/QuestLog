@@ -2,25 +2,35 @@ import React, { Component } from 'react';
 import { Card, Image } from 'react-bootstrap';
 import ImageService from "../../../services/api/imageService";
 import {Translation} from "react-i18next";
+import Spinner from "react-bootstrap/Spinner";
 
 class GenericListItem extends Component {
     state = {
         value: this.props.value,
         item: this.props.item,
         category: this.props.category,
-        icon: null
+        icon: null,
+        loading: true,
     };
 
     componentWillMount() {
       ImageService.getImageLink(this.state.item.logo)
               .then((data) => {
                   this.setState({
-                      icon: data
+                      icon: data,
+                      loading: false,
                   });
               }).then((data) =>  {});
     }
 
     render() {
+        if (this.state.loading === true) {
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+        }
         let cover = this.state.item.logo;
         let label = this.state.item.name;
         if(this.state.category === "Publishers" || this.state.category === "Developers") {

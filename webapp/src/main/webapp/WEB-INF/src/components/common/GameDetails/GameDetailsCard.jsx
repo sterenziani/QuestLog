@@ -12,6 +12,7 @@ import GameDetailsInfoItem from './GameDetailsInfoItem'
 import GameCover from '../../common/GameCover/GameCover';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
+import Spinner from "react-bootstrap/Spinner";
 
 class GameDetailsCard extends Component {
     state = {
@@ -21,49 +22,38 @@ class GameDetailsCard extends Component {
         publishers: [],
         genres: [],
         platforms: [],
+        loading: true,
     };
 
     componentWillMount() {
-        GameService.getGameReleaseDates(this.props.game.id)
-            .then((data) => {
-                this.setState({
-                    releaseDates: data
-                });
-            }).then((data) => {});
-        DeveloperService.getGameDevelopers(this.props.game.id)
-            .then((data) => {
-                this.setState({
-                    developers: data
-                });
-            }).then((data) => {});
-        DeveloperService.getGameDevelopers(this.props.game.id)
-          .then((data) => {
-              this.setState({
-                  developers: data
-              });
-          }).then((data) => {});
-        PublisherService.getGamePublishers(this.props.game.id)
-          .then((data) => {
-              this.setState({
-                  publishers: data
-              });
-          }).then((data) => {});
-        GenreService.getGameGenres(this.props.game.id)
-          .then((data) => {
-              this.setState({
-                  genres: data
-              });
-          }).then((data) => {});
-        PlatformService.getGamePlatforms(this.props.game.id)
-          .then((data) => {
-              this.setState({
-                  platforms: data
-              });
-          }).then((data) => {});
+        const fetchDates = GameService.getGameReleaseDates(this.props.game.id);
+        const fetchDev = DeveloperService.getGameDevelopers(this.props.game.id);
+        const fetchGen = GenreService.getGameGenres(this.props.game.id);
+        const fetchPlat = PlatformService.getGamePlatforms(this.props.game.id);
+        const fetchPub = PublisherService.getGamePublishers(this.props.game.id);
+
+        //TODO: Handle no response (404)
+        Promise.all([ fetchDates, fetchDev, fetchGen, fetchPlat, fetchPub ]).then((responses) => {
+            this.setState({
+                loading: false,
+                releaseDates : responses[0],
+                developers: responses[1],
+                genres : responses[2],
+                platforms : responses[3],
+                publishers : responses[4],
+            });
+        });
     }
 
     render() {
         let trailerAvailable = this.state.game.trailer;
+        if (this.state.loading === true) {
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                <Spinner animation="border" variant="primary" />
+            </div>
+        }
         return (
             <Card className="m-3 d-flex bg-transparent" style={{width: '18rem',}}>
               <BacklogButton/>
