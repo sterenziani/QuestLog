@@ -9,15 +9,14 @@ import {
     Formik 
 } from 'formik';
 import * as Yup from 'yup';
-import { withLastLocation } from 'react-router-last-location';
 
 import FormikTextField from '../../common/Forms/FormikTextField';
 import AuthForm from '../../common/Forms/AuthForm';
 import AnyButton from '../../common/AnyButton/AnyButton';
 import AuthService from '../../../services/api/authService';
 import { OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
-import withHistory from '../../hoc/withHistory';
 import withRedirect from '../../hoc/withRedirect';
+import withUser from '../../hoc/withUser';
 
 const LogInSchema = Yup.object().shape({
     username : Yup
@@ -174,4 +173,4 @@ class LogInPage extends Component {
     }
 }
 
-export default withRedirect(LogInPage, { home : "/" });
+export default withUser(withRedirect(LogInPage, { home : "/" }), { visibility : "anonymousOnly"});

@@ -15,9 +15,8 @@ import withRedirect from '../../hoc/withRedirect';
 import { CREATED, OK, CONFLICT } from '../../../services/api/apiConstants';
 import UserService from '../../../services/api/userService';
 import i18n from '../../../services/i18n';
-import withHistory from '../../hoc/withHistory';
+import withUser from '../../hoc/withUser';
 
-//TODO: Check validations in RegisterDto
 const SignUpSchema = Yup.object().shape({
     username        : Yup
         .string()
@@ -190,4 +189,4 @@ class SignUpPage extends Component {
     }
 }
  
-export default withRedirect(SignUpPage, { login : "/login" });
+export default withUser(withRedirect(SignUpPage, { login : "/login" }), { visibility : "anonymousOnly" });
