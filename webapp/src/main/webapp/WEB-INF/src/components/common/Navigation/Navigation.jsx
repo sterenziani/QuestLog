@@ -15,11 +15,18 @@ import questlogLogo from './images/questlog-logo.png';
 import Search from '../Search/Search';
 import Explore from '../Explore/Explore';
 import Authentification from '../Authentification/Authentification';
+import CreateGame from '../CreateGame/CreateGame';
+
+import withUser from '../../hoc/withUser';
 
 
 class Navigation extends Component {
     state = {  }
     render() { 
+        let createGame;
+        if(this.props.userIsAdmin){
+            createGame = <CreateGame className="ml-4"/>
+        }
         return (
             <Navbar 
                 bg="primary" 
@@ -36,12 +43,13 @@ class Navigation extends Component {
                 </Navbar.Brand>
                 <Nav className="mr-auto flex-grow-1 d-flex my-3">
                     <Search className="flex-grow-1 mr-4"/>
-                    <Explore className="mr-5" />
-                    <Authentification />
+                    <Explore />
+                    { createGame }
+                    <Authentification className="ml-5" />
                 </Nav>
             </Navbar>
          );
     }
 }
  
-export default Navigation;
+export default withUser(Navigation);

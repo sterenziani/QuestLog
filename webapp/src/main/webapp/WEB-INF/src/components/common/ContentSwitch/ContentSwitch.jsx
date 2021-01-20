@@ -10,6 +10,7 @@ import {
 //Child components
 import IndexPage from '../../pages/IndexPage/IndexPage';
 import GameDetailsPage from '../../pages/GameDetailsPage/GameDetailsPage';
+import NewGamePage from '../../pages/NewGamePage/NewGamePage';
 import LogInPage from '../../pages/LogInPage/LogInPage';
 import SignUpPage from '../../pages/SignUpPage/SignUpPage';
 import ExplorePage from '../../pages/ExplorePage/ExplorePage';
@@ -42,6 +43,10 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/"
                         component={ IndexPage }
+                    />
+                    <Route 
+                        exact path="/admin/game/new"
+                        component={ NewGamePage }
                     />
                     <Route
                         exact path="/login"

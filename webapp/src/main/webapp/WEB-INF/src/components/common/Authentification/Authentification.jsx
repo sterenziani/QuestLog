@@ -5,11 +5,12 @@ import withUser from '../../hoc/withUser';
 
 class Authentification extends Component {    
     render() {
-        return this.props.userIsLoggedIn ? (
-            <React.Fragment>
+        const { userIsLoggedIn, user } = this.props;
+        return userIsLoggedIn ? (
+            <div className={ this.props.className }>
                 <AnyButton 
                     variant="link"
-                    text={ this.props.user.username }
+                    text={ user.username }
                     href="/profile"
                     className="mr-3 color-white"
                 />
@@ -18,9 +19,9 @@ class Authentification extends Component {
                     href="/logout"
                     variant="outline-secondary"
                 />
-            </React.Fragment>
+            </div>
         ) : ( 
-            <React.Fragment>
+            <div className={ this.props.className }>
                 <AnyButton 
                     textKey="navigation.auth.login"
                     href="/login"
@@ -32,7 +33,7 @@ class Authentification extends Component {
                     href="/signup"
                     variant="outline-secondary"
                 />
-            </React.Fragment>
+            </div>
         );
     }
 }

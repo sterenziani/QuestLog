@@ -19,7 +19,8 @@
             "first"     : "First",
             "last"      : "Last"
         },
-        "seeAll" : "See all >>"
+        "seeAll"    : "See all >>",
+        "addGame"   : "Add Game"
     },
     "games" : {
         "profile" : {
