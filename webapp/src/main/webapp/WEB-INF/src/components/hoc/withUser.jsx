@@ -15,11 +15,14 @@ const withUser = (WrappedComponent, config) => {
             this.state = {}
         
             this.state.userIsLoggedIn = userStore.isLoggedIn
+            this.state.userIsAdmin    = userStore.isAdmin
             this.state.user           = userStore.user
+            
             reaction(
                 () => userStore.user,
                 () => this.setState({
                     userIsLoggedIn : userStore.isLoggedIn,
+                    userIsAdmin    : userStore.isAdmin,
                     user           : userStore.user
                 })
             )
@@ -41,13 +44,24 @@ const withUser = (WrappedComponent, config) => {
                         break;
 
                     case "adminOnly":
+                        if(!userStore.isAdmin){
+                            if(!userStore.isLoggedIn){
+                                this.props.activateRedirect("login")
+                            }
+                            this.props.activateGoBack()
+                        }
                         break;
                 }
             }
             
         }
         render(){
-            return <WrappedComponent user={this.state.user} userIsLoggedIn={this.state.userIsLoggedIn} {...this.props}/>
+            return  <WrappedComponent 
+                        user={ this.state.user } 
+                        userIsAdmin={ this.state.userIsAdmin }
+                        userIsLoggedIn={ this.state.userIsLoggedIn } 
+                        {...this.props}
+                    />
         }
     }, { login : "/login" })
 }

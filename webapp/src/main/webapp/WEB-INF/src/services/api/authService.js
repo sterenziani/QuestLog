@@ -18,16 +18,23 @@ const UserStore     = {
 
 let userStore = observable({
     user       : undefined,
-    isLoggedIn : false
+    isLoggedIn : false,
+    isAdmin    : false
 });
 
 reaction(
     () => userStore.user,
     () => {
-        if(!userStore.user)
+        if(!userStore.user){
             userStore.isLoggedIn = false
-        else
+            userStore.isAdmin    = false
+        } else {
             userStore.isLoggedIn = true
+            if(userStore.user.admin && userStore.user.admin === true)
+                userStore.isAdmin = true
+            else
+                userStore.isAdmin = false
+        }  
     }
 )
 
