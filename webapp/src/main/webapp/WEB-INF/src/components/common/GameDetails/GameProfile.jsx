@@ -58,8 +58,8 @@ class GameProfile extends Component {
                     {
                         <Grid style={{width: "100%"}}>
                             <Row>
-                                <Col className=""><GameDetailsCard game={this.state.game}/></Col>
-                                <Col className="p-3 col-9">
+                                <div><GameDetailsCard game={this.state.game}/></div>
+                                <Col className="p-3">
                                     {this.state.game.released? [
                                         <div>
                                             <ScoreSlider game={this.state.game} userScore={this.state.userScore} userId={this.state.userId}/>

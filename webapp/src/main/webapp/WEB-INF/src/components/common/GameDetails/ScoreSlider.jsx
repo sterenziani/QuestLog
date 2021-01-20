@@ -10,6 +10,7 @@ class ScoreSlider extends Component {
     state = {
         game: this.props.game,
         userScore : this.props.userScore,
+        published : false,
     };
 
     getScore() {
@@ -28,6 +29,7 @@ class ScoreSlider extends Component {
     publishScoreHandler(e) {
         if(this.props.userId) {
             ScoreService.rateGame(this.state.game.id, this.state.userScore);
+            this.setState({published:true});
         }
         else
             this.props.history.push("/login");
@@ -70,7 +72,13 @@ class ScoreSlider extends Component {
                         </Col>
                         <Col>
                             <div className="score-display text-center px-5"> <p class="badge badge-success">{this.getUserScore()}</p></div>
-                            <div className="px-5"> <Button className="btn-block" variant={"primary"} onClick={(e) => {this.publishScoreHandler(e)}}> <Translation>{t => t("score.rate")}</Translation> </Button> </div>
+                            <div className="px-5">
+                                {
+                                    this.state.published?
+                                        [<Button disabled className="btn-block" variant={"primary"}> <Translation>{t => t("score.rate")}</Translation> </Button>
+                                        ] : [<Button className="btn-block" variant={"primary"} onClick={(e) => {this.publishScoreHandler(e)}}> <Translation>{t => t("score.rate")}</Translation> </Button>]
+                                }
+                            </div>
                         </Col>
                     </Row>
                 </Col>
