@@ -138,6 +138,7 @@
     "runs" : {
         "fastestRuns" : "Los runs más rápidos",
         "addRun" : "Agregar run",
+        "addingRun" : "Creando run para ",
         "avgTime" : "Tiempo promedio",
         "avgTimes" : "Tiempos promedio",
         "fastestRuns": "Los runs más rápidos",
@@ -195,5 +196,6 @@
         "mins" : "mins",
         "minTime" : "Duración mínima del modo historia",
         "maxTime" : "Duración máxima del modo historia"
-    }
+    },
+    "submit" : "Enviar"
 }

@@ -104,13 +104,28 @@ const getUserGameRuns = async(userId, gameId) => {
   }
 }
 
+const getAllPlaystyles       = async () => {
+  try {
+    const endpoint = `games/runs/playstyles`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const RunService = {
   getGameRuns  : getGameRuns,
   getGameTimes : getGameTimes,
   getGameTopRuns  : getGameTopRuns,
   getUserGameRuns : getUserGameRuns,
   getUserRuns     : getUserRuns,
-  getUserRunsPage : getUserRunsPage
+  getUserRunsPage : getUserRunsPage,
+  getAllPlaystyles : getAllPlaystyles,
 }
 
 export default RunService;

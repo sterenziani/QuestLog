@@ -138,6 +138,7 @@
     "runs" : {
         "fastestRuns" : "Fastest runs",
         "addRun" : "Add run",
+        "addingRun" : "Adding run for ",
         "avgTime" : "Average time",
         "avgTimes" : "Average times",
         "fastestRuns": "Fastest runs",
@@ -183,7 +184,7 @@
     "search" : {
         "gameResults" : "Search results for game {{value}}",
         "userResults" : "Search results for user {{value}}",
-        "noResults" : "No results found",
+        "noResults" : "No results Submitfound",
         "makeAdmin" : "Make admin",
         "removeAdmin" : "Remove admin",
         "filterResults" : "Filter results",
@@ -195,5 +196,6 @@
         "mins" : "mins",
         "minTime" : "Story mode min length",
         "maxTime" : "Story mode max length"
-    }
+    },
+    "submit" : "Submit"
 }

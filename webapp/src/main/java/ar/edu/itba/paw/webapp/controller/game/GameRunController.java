@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.game;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
@@ -11,10 +13,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
+
+import ar.edu.itba.paw.webapp.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,6 @@ import ar.edu.itba.paw.model.entity.Playstyle;
 import ar.edu.itba.paw.model.entity.Run;
 import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.model.exception.BadFormatException;
-import ar.edu.itba.paw.webapp.dto.RegisterRunDto;
-import ar.edu.itba.paw.webapp.dto.RunDto;
-import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
 
 @Path("games")
 @Component
@@ -97,5 +95,14 @@ public class GameRunController
 		if(!run.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();	
 		return Response.ok(RunDto.fromRun(run.get(), uriInfo)).build();
+	}
+
+	@GET
+	@Path("/runs/playstyles")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public Response getAllPlaystyles()
+	{
+		final List<PlaystyleDto> plays = runs.getAllPlaystyles().stream().map(p -> PlaystyleDto.fromPlaystyle(p, uriInfo)).collect(Collectors.toList());
+		return Response.ok(new GenericEntity<List<PlaystyleDto>>(plays) {}).build();
 	}
 }

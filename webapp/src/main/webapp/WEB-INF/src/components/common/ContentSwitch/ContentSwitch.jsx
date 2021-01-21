@@ -19,6 +19,7 @@ import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
 import UserProfilePage from '../../pages/UserProfilePage/UserProfilePage';
 import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
 import SearchGameResults from '../../pages/SearchGameResults/SearchGameResults';
+import AddRunPage from "../../pages/AddRunPage/AddRunPage";
 
 
 class ContentSwitch extends Component {
@@ -119,6 +120,10 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/userSearch"
                         component={ SearchUserResults }
+                    />
+                    <Route
+                        exact path="/createRun/:id"
+                        component={ AddRunPage }
                     />
                 </Switch>
             </main>

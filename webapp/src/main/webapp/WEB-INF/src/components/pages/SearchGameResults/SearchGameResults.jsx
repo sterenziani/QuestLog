@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
-import {Card, Row, Col, Button, Modal, Form} from "react-bootstrap";
 import GameService from "../../../services/api/gameService";
 import ContainerCard from "../../common/GamesCard/ContainerCard";
 import PaginationService from "../../../services/api/paginationService";
