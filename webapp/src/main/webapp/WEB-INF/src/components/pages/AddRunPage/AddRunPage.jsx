@@ -5,12 +5,13 @@ import {Helmet, HelmetProvider} from "react-helmet-async";
 import PlatformService from "../../../services/api/platformService";
 import RunService from "../../../services/api/runService";
 import RunCard from "../../common/GamesCard/RunCard";
-
+import withUser from '../../hoc/withUser';
 
 class AddRunPage extends Component {
     state = {
         game: null,
         loading: true,
+        userId: this.props.user ? this.props.user.id : null,
     };
 
     componentWillMount() {
@@ -43,10 +44,10 @@ class AddRunPage extends Component {
                         <title>{this.state.game.title}</title>
                     </Helmet>
                 </HelmetProvider>
-                <RunCard game={this.state.game} platforms={this.state.platforms} playstyles={this.state.playstyles}/>
+                <RunCard game={this.state.game} platforms={this.state.platforms} playstyles={this.state.playstyles} userId={this.state.userId}/>
             </React.Fragment>
         );
     }
 }
 
-export default AddRunPage;
+export default withUser(AddRunPage);

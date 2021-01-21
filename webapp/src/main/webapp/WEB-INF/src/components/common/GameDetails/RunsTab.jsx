@@ -5,6 +5,7 @@ import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import RunService from "../../../services/api/runService";
 import Spinner from "react-bootstrap/Spinner";
+import ScoreService from "../../../services/api/scoreService";
 
 class RunsTab extends Component {
     state = {
@@ -24,6 +25,15 @@ class RunsTab extends Component {
         seconds = ("0" + seconds%60).slice(-2);
         return "" +hours + " : " +minutes +" : " +seconds;
     };
+
+    addRun(e) {
+        if(this.state.userId) {
+            window.location.href = `${process.env.PUBLIC_URL}/createRun/${this.state.game.id}`;
+
+        }
+        else
+            window.location.href = `${process.env.PUBLIC_URL}/login`;
+    }
 
     componentWillMount() {
         const fetchAvg = RunService.getGameTimes(this.props.game.id);
@@ -52,7 +62,7 @@ class RunsTab extends Component {
         return (
             <Grid>
                 <div className="text-center m-4">
-                    <Button variant={"success"}> <Translation>{t => t("runs.addRun")}</Translation> </Button>
+                    <Button variant={"success"}  onClick={(e) => {this.addRun(e)}}> <Translation>{t => t("runs.addRun")}</Translation> </Button>
                 </div>
 
                 {

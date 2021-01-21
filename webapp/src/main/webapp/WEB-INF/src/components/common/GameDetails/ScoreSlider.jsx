@@ -32,7 +32,7 @@ class ScoreSlider extends Component {
             this.setState({published:true});
         }
         else
-            this.props.history.push("/login");
+            window.location.href = `${process.env.PUBLIC_URL}/login`;
     }
 
     getUserScore() {

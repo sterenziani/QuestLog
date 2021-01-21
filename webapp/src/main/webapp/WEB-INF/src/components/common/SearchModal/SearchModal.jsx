@@ -7,6 +7,8 @@ import GenreService from "../../../services/api/genreService";
 import PlatformService from "../../../services/api/platformService";
 import GameService from "../../../services/api/gameService";
 import NumericInput from 'react-numeric-input';
+import { withTranslation } from 'react-i18next';
+
 
 class SearchModal extends Component {
     state = {
@@ -108,6 +110,7 @@ class SearchModal extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
+        const { t } = this.props
         return (
             <div class="text-center mt-5">
                 <Button variant="secondary" onClick={() => {this.switchModal()}}><Translation>{t => t("search.filterResults")}</Translation></Button>
@@ -131,7 +134,7 @@ class SearchModal extends Component {
                                         <Form.Label><Translation>{t => t("games.profile.genres")}</Translation></Form.Label>
                                         <Form.Control as="select" multiple value={this.state.searchParams.genres} onChange={this.onChangeGenres.bind(this)} style={{height: '15rem'}}>
                                         {
-                                            this.state.genres.map(g => (<option key={g.id} value={g.id}>{g.name}</option>))
+                                            this.state.genres.map(g => (<option key={g.id} value={g.id}>{t(`genres.${g.name}`)}</option>))
                                         }
                                         </Form.Control>
                                     </Form.Group>
@@ -181,4 +184,4 @@ class SearchModal extends Component {
     }
 }
 
-export default SearchModal;
+export default withTranslation() (SearchModal);

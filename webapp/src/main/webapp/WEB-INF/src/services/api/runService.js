@@ -1,4 +1,5 @@
 import api from './api';
+import AuthService from "./authService";
 
 const getGameRuns = async(gameId) => {
   try {
@@ -118,6 +119,27 @@ const getAllPlaystyles       = async () => {
   }
 }
 
+const addRun = async(gameId, hours, mins, secs, ps, plat) => {
+  try {
+    const endpoint = `games/${gameId}/new_run`;
+    const time = secs + mins*60 + hours*60*60;
+    const newRun          = {
+      "time" : time,
+      "playstyle" : ps,
+      "platform"    : plat,
+    }
+    console.log("HELLO THERE")
+    const response = await api.post(endpoint, newRun, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const RunService = {
   getGameRuns  : getGameRuns,
   getGameTimes : getGameTimes,
@@ -126,6 +148,7 @@ const RunService = {
   getUserRuns     : getUserRuns,
   getUserRunsPage : getUserRunsPage,
   getAllPlaystyles : getAllPlaystyles,
+  addRun        : addRun,
 }
 
 export default RunService;

@@ -5,6 +5,9 @@ import "../../../../src/index.scss";
 import GameCover from "../GameCover/GameCover";
 import NumericInput from "react-numeric-input";
 import withQuery from "../../hoc/withQuery";
+import RunService from "../../../services/api/runService";
+import { withTranslation } from 'react-i18next';
+
 
 class RunCard extends Component {
     state = {
@@ -30,46 +33,59 @@ class RunCard extends Component {
 
     handleHourChange(e) {
         this.state.params.hours = e;
+        this.setState({});
     }
 
     handleMinsChange(e) {
         this.state.params.mins = e;
+        this.setState({});
+
     }
 
     handleSecsChange(e) {
         this.state.params.secs = e;
+        this.setState({});
+
     }
 
     onChangePlatforms(e){
-        console.log(e)
         this.state.params.platforms = e.target.value;
+        this.setState({});
+
     }
 
     onChangePlaystyles(e){
-        console.log(e)
-        console.log(e.target)
         this.state.params.playstyles = e.target.value;
+        this.setState({});
+
     }
 
     handleSubmit = () =>{
-        console.log(this.state.params)
+        if(this.props.userId) {
+            RunService.addRun(this.state.game.id, this.state.params.hours, this.state.params.mins, this.state.params.secs, this.state.params.playstyles, this.state.params.platforms);
+            window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.game.id}`;
+        }
+        else
+            window.location.href = `${process.env.PUBLIC_URL}/login`;
     }
 
     render() {
+        const { t } = this.props
         return (
-            <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
+            <Card style={{width: "100%", borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }} className="m-5 bg-light-grey right-wave left-wave" bordered>
                 <div className="card-header bg-very-dark text-white px-3 d-flex">
                     <h2 className="share-tech-mono">
                         <Translation>{t => t("runs.addingRun")}</Translation> {this.state.game.title}
                     </h2>
                 </div>
-                <div className="card-body d-flex flex-wrap justify-content-center align-items-center align-items-stretch">
+                <div className="card-body d-flex flex-wrap justify-content-center align-items-center">
                     <div>
                         <GameCover cover={this.state.game.cover}/>
                     </div>
                     <div>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group controlId="formPlatforms">
+                                <div className="text-center">
                                 <Form.Label className="text-center">
                                     <h5 className="text-center">
                                         <strong>
@@ -77,15 +93,19 @@ class RunCard extends Component {
                                         </strong>
                                     </h5>
                                 </Form.Label>
-                                <Form.Control size="sm" className="text-center" as="select" value={this.state.params.platforms} onChange={this.onChangePlatforms.bind(this)}
+                                </div>
+                                <div className="text-center">
+                                <Form.Control className="text-center" as="select" value={this.state.params.platforms} onChange={this.onChangePlatforms.bind(this)}
                                               style={{padding: "5px"}}>
                                     {
                                         this.state.platforms.map(p => (
                                             <option key={p.id} value={p.id}>{p.name}</option>))
                                     }
                                 </Form.Control>
+                                </div>
                             </Form.Group>
                             <Form.Group controlId="formPlaystyles">
+                                <div className="text-center">
                                 <Form.Label className="text-center">
                                     <h5>
                                         <strong>
@@ -93,13 +113,16 @@ class RunCard extends Component {
                                         </strong>
                                     </h5>
                                 </Form.Label>
-                                <Form.Control size="lg" className="text-center" as="select" value={this.state.params.playstyles} onChange={this.onChangePlaystyles.bind(this)}
+                                </div>
+                                <div className="text-center">
+                                <Form.Control className="text-center" as="select" value={this.state.params.playstyles} onChange={this.onChangePlaystyles.bind(this)}
                                               style={{padding: "5px"}}>
                                     {
                                         this.state.playstyles.map(p => (
-                                            <option key={p.id} value={p.id}>{p.name}</option>))
+                                                <option key={p.id} value={p.id}>{t(`runs.playstyles.${p.name}`)}</option>))
                                     }
                                 </Form.Control>
+                                </div>
                             </Form.Group>
                                 <div className="text-center">
                                 <Form.Label>
@@ -110,7 +133,7 @@ class RunCard extends Component {
                                     </h5>
                                 </Form.Label>
                                 </div>
-                                <Form.Group controlId="formTimeRight">
+                                <Form.Group controlId="formTime">
                                     <Row>
                                         <NumericInput value={this.state.params.hours} min={0} max={9999} step={1} onChange={(e) => {this.handleHourChange(e)}}/>
                                         <strong> : </strong>
@@ -120,7 +143,7 @@ class RunCard extends Component {
                                     </Row>
                                 </Form.Group>
                             <div className="text-center">
-                            <Button className="btn btn-dark mt-3" type="submit" onClick={this.handleSubmit}>
+                            <Button className="btn btn-dark mt-3" onClick={this.handleSubmit}>
                                 <Translation>
                                     {
                                         t => t("submit")
@@ -139,4 +162,4 @@ class RunCard extends Component {
 
 
 
-export default withQuery(RunCard);
+export default withTranslation() (withQuery(RunCard));
