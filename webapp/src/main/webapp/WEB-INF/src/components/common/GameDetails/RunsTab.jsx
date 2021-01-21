@@ -29,7 +29,6 @@ class RunsTab extends Component {
     addRun(e) {
         if(this.state.userId) {
             window.location.href = `${process.env.PUBLIC_URL}/createRun/${this.state.game.id}`;
-
         }
         else
             window.location.href = `${process.env.PUBLIC_URL}/login`;

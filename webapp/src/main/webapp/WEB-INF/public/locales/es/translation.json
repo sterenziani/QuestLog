@@ -139,7 +139,7 @@
     "runs" : {
         "fastestRuns" : "Los runs más rápidos",
         "addRun" : "Agregar run",
-        "addingRun" : "Creando run para ",
+        "addingRun" : "Creando run para {{value}}",
         "avgTime" : "Tiempo promedio",
         "avgTimes" : "Tiempos promedio",
         "fastestRuns": "Los runs más rápidos",
@@ -162,7 +162,10 @@
         "reviews" : "Reseñas",
         "myReviews" : "Mis reseñas",
         "noReviewsSubmitted" : "No se han escrito reseñas para este juego",
-        "delete" : "Eliminar"
+        "delete" : "Eliminar",
+        "addingReview" : "Escribiendo reseña para {{value}}",
+        "platform": "Plataforma",
+        "body": "Tu reseña:"
     },
     "users" : {
         "gamesRated" : "Juegos calificados: {{value}}",

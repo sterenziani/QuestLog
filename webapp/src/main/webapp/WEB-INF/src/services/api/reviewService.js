@@ -1,4 +1,5 @@
 import api from './api';
+import AuthService from "./authService";
 
 const getGameReviews = async(gameId) => {
   return getGameReviewsPage(gameId, 1);
@@ -80,12 +81,32 @@ const getUserGameReviews = async(userId, gameId) => {
   }
 }
 
+const addReview = async(gameId, score, platform, body) => {
+  try {
+    const endpoint = `games/${gameId}/new_review`;
+    const newReview = {
+      "platform" : platform,
+      "score" : score,
+      "body" : body,
+    }
+    const response = await api.post(endpoint, newReview, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const ReviewService = {
   getGameReviews     : getGameReviews,
   getGameReviewsPage : getGameReviewsPage,
   getUserGameReviews : getUserGameReviews,
   getUserReviews     : getUserReviews,
-  getUserReviewsPage : getUserReviewsPage
+  getUserReviewsPage : getUserReviewsPage,
+  addReview : addReview
 }
 
 export default ReviewService;

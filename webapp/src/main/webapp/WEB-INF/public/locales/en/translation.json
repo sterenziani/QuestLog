@@ -139,7 +139,7 @@
     "runs" : {
         "fastestRuns" : "Fastest runs",
         "addRun" : "Add run",
-        "addingRun" : "Adding run for ",
+        "addingRun" : "Registering run for {{value}}",
         "avgTime" : "Average time",
         "avgTimes" : "Average times",
         "fastestRuns": "Fastest runs",
@@ -162,7 +162,10 @@
         "reviews" : "Reviews",
         "myReviews" : "My reviews",
         "noReviewsSubmitted" : "No reviews have been written for this game yet",
-        "delete" : "Delete"
+        "delete" : "Delete",
+        "addingReview" : "Writing review for {{value}}",
+        "platform": "Platform",
+        "body": "Your review:"
     },
     "users" : {
         "gamesRated" : "Games rated: {{value}}",
