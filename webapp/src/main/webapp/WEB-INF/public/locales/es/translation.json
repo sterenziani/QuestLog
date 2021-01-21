@@ -19,7 +19,8 @@
             "first"     : "Primero",
             "last"      : "Último"
         },
-        "seeAll" : "Ver todo >>"
+        "seeAll"    : "Ver todo >>",
+        "addGame"   : "Agregar Juego"
     },
     "games" : {
         "profile" : {

@@ -23,14 +23,16 @@ const searchGames = async(searchParams) => {
 const buildQueryParams = (searchParams) => {
     let params = "";
     // Parse searchParams
-    for (var key of Object.keys(searchParams)) {
-        if((key == "platforms" || key == "genres") && searchParams[key]){
-            for(var item of searchParams[key]){
-                params += "&"+key+"="+item;
+    if(searchParams){
+        for (var key of Object.keys(searchParams)) {
+            if((key == "platforms" || key == "genres") && searchParams[key]){
+                for(var item of searchParams[key]){
+                    params += "&"+key+"="+item;
+                }
             }
-        }
-        else if(searchParams[key]){
-            params += "&"+key+"="+searchParams[key];
+            else if(searchParams[key]){
+                params += "&"+key+"="+searchParams[key];
+            }
         }
     }
     return params;
