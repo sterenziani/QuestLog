@@ -3,12 +3,9 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import {Card, Row, Col, Button} from "react-bootstrap";
 import UserService from "../../../services/api/userService";
-import ContainerCard from "../../common/GamesCard/ContainerCard";
-import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
 import {Translation} from "react-i18next";
-import GenericListItem from "../../common/ListItem/GenericListItem";
 import withUser from '../../hoc/withUser';
 
 class SearchUserResults extends Component {

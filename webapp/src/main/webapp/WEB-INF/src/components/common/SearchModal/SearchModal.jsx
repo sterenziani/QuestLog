@@ -1,4 +1,4 @@
-import React, { Component , useState} from 'react';
+import React, { Component } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import {Button, Modal, Form, Col, Row} from "react-bootstrap";
 import {Translation} from "react-i18next";
@@ -83,7 +83,7 @@ class SearchModal extends Component {
     }
 
     handleHourChange(e, side){
-        if(side == "left"){
+        if(side === "left"){
             this.state.searchParams.hoursLeft = e;
         }
         else{
@@ -93,7 +93,7 @@ class SearchModal extends Component {
     }
 
     handleMinsChange(e, side){
-        if(side == "left"){
+        if(side === "left"){
             this.state.searchParams.minsLeft = e;
         }
         else{

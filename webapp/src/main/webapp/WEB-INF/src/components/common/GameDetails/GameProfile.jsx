@@ -25,17 +25,26 @@ class GameProfile extends Component {
     };
 
     componentWillMount() {
-        const userReviews = ReviewService.getUserGameReviews(this.state.user.id, this.state.game.id);
-        const score = ScoreService.getUserGameScore(this.state.user.id, this.state.game.id);
-        const gameReviews = ReviewService.getGameReviews(this.state.game.id);
+        if(this.state.user)
+        {
+            const userReviews = ReviewService.getUserGameReviews(this.state.user.id, this.state.game.id);
+            const score = ScoreService.getUserGameScore(this.state.user.id, this.state.game.id);
 
+            //TODO: Handle no response (404)
+            Promise.all([ userReviews, score ]).then((responses) => {
+                this.setState({
+                    myReviews: responses[0],
+                    userScore : responses[1].score,
+                    loading: false,
+                });
+            });
+        }
+        const gameReviews = ReviewService.getGameReviews(this.state.game.id);
         //TODO: Handle no response (404)
-        Promise.all([ userReviews, score, gameReviews ]).then((responses) => {
+        Promise.all([gameReviews]).then((responses) => {
             this.setState({
-                myReviews: responses[0],
-                userScore : responses[1].score,
-                displayedReviews: responses[2].content,
-                pagination: responses[2].pagination,
+                displayedReviews: responses[0].content,
+                pagination: responses[0].pagination,
                 loading: false,
             });
         });
@@ -78,7 +87,7 @@ class GameProfile extends Component {
                                                 }
                                                 {this.state.myReviews.length > 0? [
                                                     <Tab className="bg-very-light" eventKey="my-reviews" title={<Translation>{t => t("games.profile.myReviews")}</Translation>}>
-                                                        <ReviewsTab className="p-5" key="2" game={this.state.game} user={this.state.user} reviews={this.state.myReviews} loggedIn={this.state.loggedIn} label="reviews.myReviews"/>
+                                                        <ReviewsTab className="p-5" key="2" game={this.state.game} reviews={this.state.myReviews} label="reviews.myReviews"/>
                                                     </Tab>] : []
                                                 }
                                             </Tabs>

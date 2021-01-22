@@ -21,10 +21,10 @@ class Search extends Component {
     }
 
     onSubmit = () => {
-        if(this.state.category == "1"){
+        if(this.state.category === "1"){
             window.location.href = `${process.env.PUBLIC_URL}/gameSearch?searchTerm=` +this.state.searchTerm;
         }
-        else if(this.state.category == "2"){
+        else if(this.state.category === "2"){
             window.location.href = `${process.env.PUBLIC_URL}/userSearch?searchTerm=` +this.state.searchTerm;
         }
     };

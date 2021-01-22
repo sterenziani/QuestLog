@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
-import ContainerCard from "../../common/GamesCard/ContainerCard";
-import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
-import {Translation} from "react-i18next";
-import GenericListItem from "../../common/ListItem/GenericListItem";
 import GamesCard from "../../common/GamesCard/GamesCard";
 import SearchModal from "../../common/SearchModal/SearchModal"
 

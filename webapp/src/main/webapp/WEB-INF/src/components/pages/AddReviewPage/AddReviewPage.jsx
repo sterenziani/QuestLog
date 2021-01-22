@@ -3,7 +3,6 @@ import Spinner from "react-bootstrap/Spinner";
 import React, { Component } from 'react';
 import {Helmet, HelmetProvider} from "react-helmet-async";
 import PlatformService from "../../../services/api/platformService";
-import RunService from "../../../services/api/runService";
 import ReviewCard from "../../common/GamesCard/ReviewCard";
 import withUser from '../../hoc/withUser';
 
