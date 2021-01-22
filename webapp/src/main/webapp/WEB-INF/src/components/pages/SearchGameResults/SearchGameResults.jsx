@@ -49,6 +49,9 @@ class SearchGameResults extends Component {
                 searchParams : searchParams,
             });
         });
+        if (this.state.content.length == 1) {
+            window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
+        }
     }
 
     render() {
@@ -65,11 +68,11 @@ class SearchGameResults extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>QuestLog - Game Search Results</title>
+                        <title>{this.state.searchParams.searchTerm} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <SearchModal searchParams={this.state.searchParams} path={this.state.path}/>
-                <GamesCard label={"search.gameResults"} labelArgs={this.state.searchParams.searchTerm} items={this.state.content} />
+                <GamesCard label={"search.gameResults"} labelArgs={this.state.searchParams.searchTerm} items={this.state.content} search={true}/>
                 <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage} queryParams={this.state.searchParams}/>
             </React.Fragment>
         );

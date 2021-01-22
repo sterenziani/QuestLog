@@ -33,7 +33,7 @@ class GameDetailsPage extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.game.title}</title>
+                        <title>{this.state.game.title} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <GameProfile game={this.state.game} />

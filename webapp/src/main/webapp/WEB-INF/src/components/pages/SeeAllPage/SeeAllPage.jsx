@@ -5,6 +5,8 @@ import ContainerCard from "../../common/GamesCard/ContainerCard";
 import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
+import { withTranslation } from 'react-i18next';
+
 
 class SeeAllPage extends Component {
     state = {
@@ -44,11 +46,12 @@ class SeeAllPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
+        const { t } = this.props
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>Questlog</title>
+                        <title>{t(`games.profile.${this.state.path}`)} - Questlog</title>
                     </Helmet>
                 </HelmetProvider>
                 <ContainerCard items={this.state.content} label={label} limit={this.state.content.length}/>
@@ -59,4 +62,4 @@ class SeeAllPage extends Component {
 
 }
 
-export default withQuery(SeeAllPage);
+export default withTranslation() (withQuery(SeeAllPage));

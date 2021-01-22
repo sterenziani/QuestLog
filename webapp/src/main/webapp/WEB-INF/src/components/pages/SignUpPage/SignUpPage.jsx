@@ -16,6 +16,8 @@ import { CREATED, OK, CONFLICT } from '../../../services/api/apiConstants';
 import UserService from '../../../services/api/userService';
 import i18n from '../../../services/i18n';
 import withUser from '../../hoc/withUser';
+import { withTranslation } from 'react-i18next';
+import {Helmet, HelmetProvider} from "react-helmet-async";
 
 const SignUpSchema = Yup.object().shape({
     username        : Yup
@@ -93,8 +95,15 @@ class SignUpPage extends Component {
         setSubmitting(true);
         this.register(values, setSubmitting, setFieldError);
     }
-    render() { 
-        return ( 
+    render() {
+        const { t } = this.props
+        return (
+            <React.Fragment>
+                <HelmetProvider>
+                    <Helmet>
+                        <title>{t(`signup.title`)} - QuestLog</title>
+                    </Helmet>
+                </HelmetProvider>
             <Formik
                 initialValues = {{
                         username        : '',
@@ -185,8 +194,9 @@ class SignUpPage extends Component {
                 </AuthForm>
             )} 
             </Formik>
+            </React.Fragment>
         );
     }
 }
  
-export default withUser(withRedirect(SignUpPage, { login : "/login" }), { visibility : "anonymousOnly" });
+export default withTranslation() (withUser(withRedirect(SignUpPage, { login : "/login" }), { visibility : "anonymousOnly" }));

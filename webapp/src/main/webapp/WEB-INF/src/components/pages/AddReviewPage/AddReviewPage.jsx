@@ -3,7 +3,7 @@ import Spinner from "react-bootstrap/Spinner";
 import React, { Component } from 'react';
 import {Helmet, HelmetProvider} from "react-helmet-async";
 import PlatformService from "../../../services/api/platformService";
-import RunService from "../../../services/api/runService";
+import { withTranslation } from 'react-i18next';
 import ReviewCard from "../../common/GamesCard/ReviewCard";
 import withUser from '../../hoc/withUser';
 
@@ -34,12 +34,12 @@ class AddReviewPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-
+        const { t } = this.props
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.game.title}</title>
+                        <title>{t(`reviews.addingReview`)} {this.state.game.title} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <ReviewCard game={this.state.game} platforms={this.state.platforms} userId={this.state.userId}/>
@@ -48,4 +48,4 @@ class AddReviewPage extends Component {
     }
 }
 
-export default withUser(AddReviewPage);
+export default withTranslation() (withUser(AddReviewPage));

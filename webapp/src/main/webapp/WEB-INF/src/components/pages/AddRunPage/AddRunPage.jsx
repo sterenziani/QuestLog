@@ -6,6 +6,8 @@ import PlatformService from "../../../services/api/platformService";
 import RunService from "../../../services/api/runService";
 import RunCard from "../../common/GamesCard/RunCard";
 import withUser from '../../hoc/withUser';
+import { withTranslation } from 'react-i18next';
+
 
 class AddRunPage extends Component {
     state = {
@@ -36,12 +38,12 @@ class AddRunPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-
+        const { t } = this.props
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.game.title}</title>
+                        <title>{t(`runs.addingRun`)} {this.state.game.title} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <RunCard game={this.state.game} platforms={this.state.platforms} playstyles={this.state.playstyles} userId={this.state.userId}/>
@@ -50,4 +52,4 @@ class AddRunPage extends Component {
     }
 }
 
-export default withUser(AddRunPage);
+export default withTranslation() (withUser(AddRunPage));

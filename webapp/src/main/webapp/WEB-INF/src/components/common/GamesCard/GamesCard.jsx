@@ -8,6 +8,7 @@ class GamesCard extends Component {
     state = {
         label : this.props.label,
         items : this.props.items,
+        search : this.props.search,
     };
 
     render() {
@@ -15,6 +16,7 @@ class GamesCard extends Component {
         return (
             <Card className="m-5 bg-light-grey" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <div className="card-header bg-very-dark text-white px-3">
+                    <row>
                     <h2 className="share-tech-mono">
                         <Translation>
                             {
@@ -22,6 +24,17 @@ class GamesCard extends Component {
                             }
                         </Translation>
                     </h2>
+                    </row>
+                    {this.state.search ?[
+                    <row>
+                        <div className="row ml-1 mr-auto my-auto">
+                            <strong>{this.props.items.length}</strong> &nbsp; <Translation>
+                            {
+                                t => t("search.resultsLabel")
+                            }
+                        </Translation>
+                        </div>
+                    </row>] : null}
                 </div>
                 <div className="card-body d-flex flex-wrap justify-content-center">
                     {empty
