@@ -44,12 +44,11 @@ class SearchGameResults extends Component {
                 page : page,
                 searchParams : searchParams,
             });
+            if (this.state.content.length === 1) {
+                window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
+            }
         });
-        console.log(this.state.content.length)
-        if (this.state.content.length === 1) {
-            console.log("VAMOS PALANTE")
-            window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
-        }
+
     }
 
     render() {
