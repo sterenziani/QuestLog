@@ -15,7 +15,7 @@ class UserProfile extends Component {
         loading: true,
         user : this.props.user,
         loggedIn: this.props.loggedIn,
-        loggedInId: this.props.loggedInId,
+        loggedInUser: this.props.loggedInUser,
         backlog: [],
         backlogPagination: []
     };
@@ -44,7 +44,7 @@ class UserProfile extends Component {
                 <div class="mx-5 align-middle">
                     <div class="mb-4 mt-5 text-center">
                         <h1 class="align-middle share-tech-mono">{this.state.user.username}</h1>
-                        {(this.state.loggedIn && this.state.loggedInId === this.state.user.id)? [<h5 class="align-middle">{this.state.user.email}</h5>] : []}
+                        {(this.state.loggedIn && this.state.loggedInUser.id === this.state.user.id)? [<h5 class="align-middle">{this.state.user.email}</h5>] : []}
                     </div>
                     <div class="d-flex text-left flex-wrap">
                         <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center">
@@ -99,13 +99,13 @@ class UserProfile extends Component {
                             </div>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="scores" title={<Translation>{t => t("users.scores")}</Translation>}>
-                            <UserScoresTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInId}/>
+                            <UserScoresTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInUser.id}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("users.runs")}</Translation>}>
-                            <UserRunsTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInId}/>
+                            <UserRunsTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInUser.id}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("users.reviews")}</Translation>}>
-                            <UserReviewsTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.loggedInId}/>
+                            <UserReviewsTab user={this.state.user} loggedIn={this.state.loggedIn} loggedInUser={this.state.loggedInUser}/>
                         </Tab>
                     </Tabs>
                 </div>

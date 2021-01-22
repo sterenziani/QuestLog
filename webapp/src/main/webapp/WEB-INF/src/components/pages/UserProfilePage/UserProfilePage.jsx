@@ -9,7 +9,7 @@ import withUser from '../../hoc/withUser';
 class GameDetailsPage extends Component {
     state = {
         user: null,
-        userId: this.props.user.id,
+        loggedInUser: this.props.user,
         loggedIn: this.props.userIsLoggedIn,
         loading: true,
     };
@@ -40,7 +40,8 @@ class GameDetailsPage extends Component {
                         <title>{this.state.user.username}</title>
                     </Helmet>
                 </HelmetProvider>
-                <UserProfile user={this.state.user} loggedIn={this.state.loggedIn} loggedInId={this.state.userId}/>
+                {console.log(this.state)}
+                <UserProfile user={this.state.user} loggedIn={this.state.loggedIn} loggedInUser={this.state.loggedInUser}/>
             </React.Fragment>
         );
     }
