@@ -102,7 +102,7 @@ public class GameReviewController
 		User loggedUser = us.getLoggedUser();
 		if(loggedUser == null)
 			return Response.status(Response.Status.UNAUTHORIZED).build();
-		if(!loggedUser.getAdminStatus() || !review.get().getUser().equals(loggedUser))
+		if(!loggedUser.getAdminStatus() && !review.get().getUser().equals(loggedUser))
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		revs.deleteReview(review.get());
 		return Response.noContent().build();

@@ -100,13 +100,30 @@ const addReview = async(gameId, score, platform, body) => {
   }
 }
 
+const deleteReview = async(reviewId) => {
+  try {
+    const endpoint = `games/reviews/${reviewId}`;
+    console.log("Deleting...");
+    const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    console.log(response);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const ReviewService = {
   getGameReviews     : getGameReviews,
   getGameReviewsPage : getGameReviewsPage,
   getUserGameReviews : getUserGameReviews,
   getUserReviews     : getUserReviews,
   getUserReviewsPage : getUserReviewsPage,
-  addReview : addReview
+  addReview : addReview,
+  deleteReview : deleteReview
 }
 
 export default ReviewService;

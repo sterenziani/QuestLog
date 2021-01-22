@@ -10,7 +10,7 @@ import ScoreService from "../../../services/api/scoreService";
 class RunsTab extends Component {
     state = {
         game: this.props.game,
-        userId: this.props.userId,
+        user: this.props.user,
         loggedIn: true,
         avgTimes: [],
         fastestRuns: [],
@@ -26,18 +26,10 @@ class RunsTab extends Component {
         return "" +hours + " : " +minutes +" : " +seconds;
     };
 
-    addRun(e) {
-        if(this.state.userId) {
-            window.location.href = `${process.env.PUBLIC_URL}/createRun/${this.state.game.id}`;
-        }
-        else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
-    }
-
     componentWillMount() {
         const fetchAvg = RunService.getGameTimes(this.props.game.id);
         const fetchFastest = RunService.getGameTopRuns(this.props.game.id);
-        const fetchUsers = RunService.getUserGameRuns(this.state.userId, this.props.game.id);
+        const fetchUsers = RunService.getUserGameRuns(this.state.user.id, this.props.game.id);
 
         //TODO: Handle no response (404)
         Promise.all([ fetchAvg, fetchFastest, fetchUsers ]).then((responses) => {
@@ -61,7 +53,7 @@ class RunsTab extends Component {
         return (
             <Grid>
                 <div className="text-center m-4">
-                    <Button variant={"success"}  onClick={(e) => {this.addRun(e)}}> <Translation>{t => t("runs.addRun")}</Translation> </Button>
+                    <Button variant={"success"}  href={`${process.env.PUBLIC_URL}/createRun/${this.state.game.id}`}> <Translation>{t => t("runs.addRun")}</Translation> </Button>
                 </div>
 
                 {

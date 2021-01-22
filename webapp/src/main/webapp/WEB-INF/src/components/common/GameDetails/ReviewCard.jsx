@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import {Row, Col, Button} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
+import ReviewService from "../../../services/api/reviewService";
 
 class ReviewCard extends Component {
     state = {
         review: this.props.review,
-        userId: this.props.userId,
+        user: this.props.user,
         loggedIn: this.props.loggedIn,
     };
+
+    publishScoreHandler(e) {
+        ReviewService.deleteReview(this.state.review.id);
+        window.location.reload();
+    }
 
     render() {
         return (
@@ -41,9 +47,9 @@ class ReviewCard extends Component {
             			<div className="score-display text-center px-5"> <p class="badge badge-primary">{this.state.review.score}</p></div>
             		</Col>
             	</Row>
-                {(this.state.loggedIn && this.state.review.user.id === this.state.userId)? [
+                {(this.state.loggedIn && (this.state.review.user.id === this.state.user.id || this.state.user.admin))? [
                     <Row className="mt-3 justify-content-center">
-                        <Button variant="danger"><Translation>{t => t("reviews.delete")}</Translation>{this.state.label}</Button>
+                        <Button variant="danger" onClick={(e) => {this.publishScoreHandler(e)}}><Translation>{t => t("reviews.delete")}</Translation>{this.state.label}</Button>
                     </Row>] : []}
               </div>
             </div>

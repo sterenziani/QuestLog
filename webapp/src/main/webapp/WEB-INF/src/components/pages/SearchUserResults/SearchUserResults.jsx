@@ -9,6 +9,7 @@ import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
 import {Translation} from "react-i18next";
 import GenericListItem from "../../common/ListItem/GenericListItem";
+import withUser from '../../hoc/withUser';
 
 class SearchUserResults extends Component {
     state = {
@@ -18,8 +19,7 @@ class SearchUserResults extends Component {
         content : [],
         page : null,
         term: null,
-        pageCount : null,
-        adminLoggedIn: true,
+        pageCount : null
     };
 
     componentWillMount() {
@@ -74,11 +74,11 @@ class SearchUserResults extends Component {
                         <Col>
                              {this.state.content.length > 0? [this.state.content.map(u =>
                                 <Row>
-                                    <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.state.adminLoggedIn? 'text-right':'text-center'}>
+                                    <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.props.userIsAdmin? 'text-right':'text-center'}>
                                         <a href={"users/"+u.id} style={{fontSize: "25px"}}>{u.username}</a>
                          			</Col>
                                     {
-                                        this.state.adminLoggedIn? [
+                                        (this.props.userIsAdmin)? [
                                             <Col style={{verticalAlign: "middle", padding:"10px"}}>
                                                 {u.admin? [
                                                     <Button variant="danger" href=""><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
@@ -96,4 +96,4 @@ class SearchUserResults extends Component {
     }
 }
 
-export default withQuery(SearchUserResults);
+export default withUser(withQuery(SearchUserResults));

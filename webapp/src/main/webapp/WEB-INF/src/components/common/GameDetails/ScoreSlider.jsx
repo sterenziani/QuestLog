@@ -28,8 +28,16 @@ class ScoreSlider extends Component {
 
     publishScoreHandler(e) {
         if(this.props.userId) {
-            ScoreService.rateGame(this.state.game.id, this.state.userScore);
-            this.setState({published:true});
+            let resp = "";
+            ScoreService.rateGame(this.state.game.id, this.state.userScore).then(data => {
+                                                                                            if(data.status == '201'){
+                                                                                                this.setState({published:true})
+                                                                                            }
+                                                                                            else{
+                                                                                                // TODO: Force login or try again
+                                                                                                console.log("Try again!");
+                                                                                            }
+                                                                                        });
         }
         else
             window.location.href = `${process.env.PUBLIC_URL}/login`;

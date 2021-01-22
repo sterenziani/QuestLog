@@ -9,7 +9,7 @@ class ReviewsTab extends Component {
     state = {
         game: this.props.game,
         reviews: this.props.reviews? this.props.reviews : [],
-        userId: this.props.userId,
+        user: this.props.user,
         loggedIn: this.props.loggedIn,
         myReviews: [],
         displayedReviews: [],
@@ -17,19 +17,11 @@ class ReviewsTab extends Component {
         label: this.props.label? this.props.label : "reviews.reviews"
     };
 
-    addReview(e) {
-        if(this.state.userId) {
-            window.location.href = `${process.env.PUBLIC_URL}/reviews/create/${this.state.game.id}`;
-        }
-        else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
-    }
-
     render() {
         return (
             <Grid>
                 <div className="text-center m-4">
-                    <Button variant={"success"} onClick={(e) => {this.addReview(e)}}> <Translation>{t => t("reviews.addReview")}</Translation> </Button>
+                    <Button variant={"success"} href={`${process.env.PUBLIC_URL}/reviews/create/${this.state.game.id}`}> <Translation>{t => t("reviews.addReview")}</Translation> </Button>
                 </div>
                 <Card className="m-5 text-center bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                     <Card.Header className="bg-very-dark text-white d-flex">
@@ -48,7 +40,7 @@ class ReviewsTab extends Component {
                     {(this.state.reviews.length > 0)? [
                         <Col>
                             {this.state.reviews.map(r => (
-                                    <ReviewCard review={r} userId={this.state.userId} loggedIn={this.state.loggedIn}/>
+                                    <ReviewCard review={r} user={this.state.user} loggedIn={this.state.loggedIn}/>
                                 ))}
                         </Col>
                     ] : [<Container className="text-center mt-5"> <p> <Translation>{t => t("reviews.noReviewsSubmitted")}</Translation> </p> </Container>]

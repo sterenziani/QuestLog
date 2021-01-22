@@ -17,7 +17,7 @@ class GameProfile extends Component {
         game : this.props.game,
         userScore : null,
         myReviews: [],
-        userId: this.props.user ? this.props.user.id : null,
+        user: this.props.user ? this.props.user : null,
         loggedIn: this.props.userIsLoggedIn,
         displayedReviews: [],
         pagination: [],
@@ -25,8 +25,8 @@ class GameProfile extends Component {
     };
 
     componentWillMount() {
-        const userReviews = ReviewService.getUserGameReviews(this.state.userId, this.state.game.id);
-        const score = ScoreService.getUserGameScore(this.state.userId, this.state.game.id);
+        const userReviews = ReviewService.getUserGameReviews(this.state.user.id, this.state.game.id);
+        const score = ScoreService.getUserGameScore(this.state.user.id, this.state.game.id);
         const gameReviews = ReviewService.getGameReviews(this.state.game.id);
 
         //TODO: Handle no response (404)
@@ -62,23 +62,23 @@ class GameProfile extends Component {
                                 <Col className="p-3">
                                     {this.state.game.released? [
                                         <div>
-                                            <ScoreSlider game={this.state.game} userScore={this.state.userScore} userId={this.state.userId}/>
+                                            <ScoreSlider game={this.state.game} userScore={this.state.userScore} user={this.state.user}/>
                                             <Tabs className="mt-5 mx-3 bg-dark" defaultActiveKey="runs" id="uncontrolled-tab-example">
                                                 <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("games.profile.runs")}</Translation>}>
-                                                    <RunsTab game={this.state.game} userId={this.state.userId} loggedIn={this.state.loggedIn}/>
+                                                    <RunsTab game={this.state.game} user={this.state.user} loggedIn={this.state.loggedIn}/>
                                                 </Tab>
                                                 {
                                                     this.state.displayedReviews.length > 0 ? [
                                                     <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("games.profile.reviews")}</Translation>}>
-                                                        <ReviewsTab className="p-5" key="1" game={this.state.game} userId={this.state.userId} loggedIn={this.state.loggedIn} reviews={this.state.displayedReviews} pagination={this.state.pagination} />
+                                                        <ReviewsTab className="p-5" key="1" game={this.state.game} user={this.state.user} loggedIn={this.state.loggedIn} reviews={this.state.displayedReviews} pagination={this.state.pagination} />
                                                     </Tab>] : [
                                                     <Tab className="bg-very-light" eventKey="reviews2" title={<Translation>{t => t("games.profile.reviews")}</Translation>}>
-                                                        <ReviewsTab className="p-5" key="1b" game={this.state.game} userId={this.state.userId} loggedIn={this.state.loggedIn} reviews={[]} pagination={[]} />
+                                                        <ReviewsTab className="p-5" key="1b" game={this.state.game} user={this.state.user} loggedIn={this.state.loggedIn} reviews={[]} pagination={[]} />
                                                     </Tab>]
                                                 }
                                                 {this.state.myReviews.length > 0? [
                                                     <Tab className="bg-very-light" eventKey="my-reviews" title={<Translation>{t => t("games.profile.myReviews")}</Translation>}>
-                                                        <ReviewsTab className="p-5" key="2" game={this.state.game} userId={this.state.userId} reviews={this.state.myReviews} loggedIn={this.state.loggedIn} label="reviews.myReviews"/>
+                                                        <ReviewsTab className="p-5" key="2" game={this.state.game} user={this.state.user} reviews={this.state.myReviews} loggedIn={this.state.loggedIn} label="reviews.myReviews"/>
                                                     </Tab>] : []
                                                 }
                                             </Tabs>

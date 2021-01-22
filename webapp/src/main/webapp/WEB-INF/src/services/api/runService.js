@@ -122,15 +122,12 @@ const getAllPlaystyles       = async () => {
 const addRun = async(gameId, hours, mins, secs, ps, plat) => {
   try {
     const endpoint = `games/${gameId}/new_run`;
-    console.log(hours +":" +mins +":" +secs);
     const time = secs + mins*60 + hours*3600;
-    console.log(time +" segundos en total");
     const newRun          = {
       "time" : time,
       "playstyle" : ps,
       "platform" : plat,
     }
-    console.log(newRun);
     const response = await api.post(endpoint, newRun, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
     return response.data;
   } catch(err) {

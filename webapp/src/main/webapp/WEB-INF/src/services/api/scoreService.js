@@ -7,7 +7,7 @@ const rateGame = async(gameId, score) => {
     const endpoint = `games/${gameId}/new_score`;
     const json = JSON.stringify({"score": score});
     const response = await api.post(endpoint, json, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
