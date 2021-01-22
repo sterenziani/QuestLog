@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import {Button, Card, Form, Row, Col, Container} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
-import GameCover from "../GameCover/GameCover";
-import NumericInput from "react-numeric-input";
 import withQuery from "../../hoc/withQuery";
 import ReviewService from "../../../services/api/reviewService";
 import { withTranslation } from 'react-i18next';
@@ -45,7 +43,7 @@ class ReviewCard extends Component {
     }
 
     getUserScore() {
-        if(this.state.params.score || this.state.params.score == 0) {
+        if(this.state.params.score || this.state.params.score === 0) {
             return parseInt(this.state.params.score);
         }
         else {
@@ -54,7 +52,7 @@ class ReviewCard extends Component {
     }
 
     getUserScoreNumerical() {
-        if(this.state.params.score || this.state.params.score == 0) {
+        if(this.state.params.score || this.state.params.score === 0) {
             return parseInt(this.state.params.score);
         }
         else {
@@ -72,7 +70,6 @@ class ReviewCard extends Component {
     }
 
     render() {
-        const { t } = this.props
         return (
             <Card style={{borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }} className="m-5 bg-light-grey right-wave left-wave" bordered>
                 <Card.Header className="bg-very-dark text-white px-3 d-flex">

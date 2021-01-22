@@ -3,12 +3,13 @@ import {Row, Col, Button} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ReviewService from "../../../services/api/reviewService";
+import withUser from '../../hoc/withUser';
 
 class ReviewCard extends Component {
     state = {
         review: this.props.review,
         user: this.props.user,
-        loggedIn: this.props.loggedIn,
+        loggedIn: this.props.userIsLoggedIn,
     };
 
     publishScoreHandler(e) {
@@ -57,4 +58,4 @@ class ReviewCard extends Component {
     }
 }
 
-export default ReviewCard;
+export default withUser(ReviewCard);

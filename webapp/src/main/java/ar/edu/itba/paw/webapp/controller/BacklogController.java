@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -43,7 +45,7 @@ public class BacklogController {
 	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
   
     @PUT
-    @Path("/add/{gameId}")
+    @Path("/{gameId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response addGameToBacklog(@PathParam("gameId")int gameId, @QueryParam("backlog") @DefaultValue("") String backlog)
     {
@@ -61,8 +63,8 @@ public class BacklogController {
     	return Response.ok(game.map(g -> GameDto.fromGame(g, uriInfo)).get()).build();
     }
     
-    @PUT
-    @Path("/remove/{gameId}")
+    @DELETE
+    @Path("/{gameId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response removeGameFromBacklog(@PathParam("gameId")int gameId, @QueryParam("backlog") @DefaultValue("") String backlog)
     {
@@ -81,7 +83,6 @@ public class BacklogController {
     }
     
     @PUT
-    @Path("/transfer")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response transferBacklog(@QueryParam("backlog") @DefaultValue("") String backlog)
     {

@@ -8,17 +8,13 @@ import {
 
 class BacklogButton extends Component {
     state = {
-        added: true
+        //added: this.props.inBacklog;
     };
 
     render() {
         return (
             <Button bg="light-grey" onClick={this.backlogHandler} variant={this.getButtonType()}>
-                <Translation>
-                    {
-                        t => t(this.getTranslation())
-                    }
-                </Translation>
+                <Translation>{t => t(this.getTranslation())}</Translation>
             </Button>
         )
     }
@@ -26,7 +22,10 @@ class BacklogButton extends Component {
     backlogHandler = () => {
         this.setState({added : this.state.added ? false : true});
         console.log(this.state.added);
-
+        //const endpoint = `games/${gameId}/new_run`;
+        //const response = await api.post(endpoint, newRun, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        return "";
+        // return response.data;
     }
 
     getButtonType() {

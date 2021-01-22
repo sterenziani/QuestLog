@@ -12,19 +12,19 @@ class Search extends Component {
 
     state = {
         searchTerm : "",
-        category : 1,
+        category : "1",
         className   : this.props.className + " d-flex no-lineheight",
         searchTypes : [
-            { id : 1, trans : "game", urlParam : "game" },
-            { id : 2, trans : "user", urlParam : "user" }
+            { id : "1", trans : "game", urlParam : "game" },
+            { id : "2", trans : "user", urlParam : "user" }
         ]
     }
 
     onSubmit = () => {
-        if(this.state.category == "1"){
+        if(this.state.category === "1"){
             window.location.href = `${process.env.PUBLIC_URL}/gameSearch?searchTerm=` +this.state.searchTerm;
         }
-        else if(this.state.category == "2"){
+        else if(this.state.category === "2"){
             window.location.href = `${process.env.PUBLIC_URL}/userSearch?searchTerm=` +this.state.searchTerm;
         }
     };

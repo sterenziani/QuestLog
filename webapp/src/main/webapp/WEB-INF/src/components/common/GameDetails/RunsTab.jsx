@@ -5,17 +5,17 @@ import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import RunService from "../../../services/api/runService";
 import Spinner from "react-bootstrap/Spinner";
-import ScoreService from "../../../services/api/scoreService";
+import withUser from '../../hoc/withUser';
 
 class RunsTab extends Component {
     state = {
         game: this.props.game,
-        user: this.props.user,
-        loggedIn: true,
         avgTimes: [],
         fastestRuns: [],
         myRuns: [],
         loading: true,
+        user: this.props.user ? this.props.user : null,
+        loggedIn: this.props.userIsLoggedIn,
     };
 
     convertTime(seconds) {
@@ -27,17 +27,23 @@ class RunsTab extends Component {
     };
 
     componentWillMount() {
+        if(this.state.user){
+            const fetchUsers = RunService.getUserGameRuns(this.state.user.id, this.props.game.id);
+            //TODO: Handle no response (404)
+            Promise.all([ fetchUsers ]).then((responses) => {
+                this.setState({
+                    myRuns : responses[0],
+                });
+            });
+        }
         const fetchAvg = RunService.getGameTimes(this.props.game.id);
         const fetchFastest = RunService.getGameTopRuns(this.props.game.id);
-        const fetchUsers = RunService.getUserGameRuns(this.state.user.id, this.props.game.id);
-
         //TODO: Handle no response (404)
-        Promise.all([ fetchAvg, fetchFastest, fetchUsers ]).then((responses) => {
+        Promise.all([ fetchAvg, fetchFastest ]).then((responses) => {
             this.setState({
                 loading: false,
                 avgTimes: responses[0],
-                fastestRuns : responses[1],
-                myRuns : responses[2],
+                fastestRuns : responses[1]
             });
         });
     }
@@ -131,4 +137,4 @@ class RunsTab extends Component {
     }
 }
 
-export default RunsTab;
+export default withUser(RunsTab);

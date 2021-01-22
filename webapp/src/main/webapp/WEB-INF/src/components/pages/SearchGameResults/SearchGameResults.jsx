@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
-import ContainerCard from "../../common/GamesCard/ContainerCard";
-import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
-import {Translation} from "react-i18next";
-import GenericListItem from "../../common/ListItem/GenericListItem";
 import GamesCard from "../../common/GamesCard/GamesCard";
 import SearchModal from "../../common/SearchModal/SearchModal"
 
@@ -49,7 +45,9 @@ class SearchGameResults extends Component {
                 searchParams : searchParams,
             });
         });
-        if (this.state.content.length == 1) {
+        console.log(this.state.content.length)
+        if (this.state.content.length === 1) {
+            console.log("VAMOS PALANTE")
             window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
         }
     }

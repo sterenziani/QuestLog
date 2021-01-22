@@ -4,17 +4,18 @@ import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ReviewCard from "./ReviewCard";
+import withUser from '../../hoc/withUser';
 
 class ReviewsTab extends Component {
     state = {
         game: this.props.game,
         reviews: this.props.reviews? this.props.reviews : [],
-        user: this.props.user,
-        loggedIn: this.props.loggedIn,
         myReviews: [],
         displayedReviews: [],
         pagination: this.props.pagination? this.props.pagination : [],
-        label: this.props.label? this.props.label : "reviews.reviews"
+        label: this.props.label? this.props.label : "reviews.reviews",
+        user: this.props.user ? this.props.user : null,
+        loggedIn: this.props.userIsLoggedIn,
     };
 
     render() {
@@ -40,7 +41,7 @@ class ReviewsTab extends Component {
                     {(this.state.reviews.length > 0)? [
                         <Col>
                             {this.state.reviews.map(r => (
-                                    <ReviewCard review={r} user={this.state.user} loggedIn={this.state.loggedIn}/>
+                                    <ReviewCard review={r}/>
                                 ))}
                         </Col>
                     ] : [<Container className="text-center mt-5"> <p> <Translation>{t => t("reviews.noReviewsSubmitted")}</Translation> </p> </Container>]
@@ -52,4 +53,4 @@ class ReviewsTab extends Component {
     }
 }
 
-export default ReviewsTab;
+export default withUser(ReviewsTab);

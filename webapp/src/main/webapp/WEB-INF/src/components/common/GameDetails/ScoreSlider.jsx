@@ -28,9 +28,8 @@ class ScoreSlider extends Component {
 
     publishScoreHandler(e) {
         if(this.props.userId) {
-            let resp = "";
             ScoreService.rateGame(this.state.game.id, this.state.userScore).then(data => {
-                                                                                            if(data.status == '201'){
+                                                                                            if(data.status === '201'){
                                                                                                 this.setState({published:true})
                                                                                             }
                                                                                             else{
@@ -44,7 +43,7 @@ class ScoreSlider extends Component {
     }
 
     getUserScore() {
-        if(this.state.userScore || this.state.userScore == 0) {
+        if(this.state.userScore || this.state.userScore === 0) {
             return parseInt(this.state.userScore);
         }
         else {
@@ -53,7 +52,7 @@ class ScoreSlider extends Component {
     }
 
     getUserScoreNumerical() {
-        if(this.state.userScore || this.state.userScore == 0) {
+        if(this.state.userScore || this.state.userScore === 0) {
             return parseInt(this.state.userScore);
         }
         else {

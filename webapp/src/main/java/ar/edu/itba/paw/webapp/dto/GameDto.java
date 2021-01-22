@@ -15,6 +15,7 @@ public class GameDto
 	private String description;
 	private String trailer;
 	private int score;
+	private boolean in_backlog;
 	
 	private URI platforms_url;
 	private URI developers_url;
@@ -41,6 +42,7 @@ public class GameDto
 		dto.description = game.getDescription();
 		dto.trailer = game.getTrailer();
 		dto.score = game.getAverageScore();
+		dto.setIn_backlog(game.getInBacklog());
 
 		dto.platforms_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("platforms").build();
 		dto.developers_url = uriInfo.getBaseUriBuilder().path("games").path(String.valueOf(dto.id)).path("developers").build();
@@ -200,6 +202,14 @@ public class GameDto
 
 	public void setVotes(int votes) {
 		this.votes = votes;
+	}
+
+	public boolean isIn_backlog() {
+		return in_backlog;
+	}
+
+	public void setIn_backlog(boolean in_backlog) {
+		this.in_backlog = in_backlog;
 	}
 	
 }
