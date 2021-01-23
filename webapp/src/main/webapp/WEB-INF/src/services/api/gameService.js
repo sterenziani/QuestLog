@@ -1,11 +1,12 @@
 import api from './api';
+import AuthService from "./authService";
 
 const gameServiceEndpoint   = 'games';
 
 const getPopularGames = async () => {
     try {
         const endpoint = `${gameServiceEndpoint}/popular`;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
     } catch(err) {
         if(err.response) {
@@ -45,7 +46,7 @@ const searchGamesPage = async(searchParams, page) => {
         }
         let params = buildQueryParams(searchParams);
         const endpoint = `${gameServiceEndpoint}?page=${page}`+params;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};
@@ -68,10 +69,10 @@ const searchGamesPage = async(searchParams, page) => {
   }
 }
 
-const getUpcomingGames     = async() => {
+const getUpcomingGames = async() => {
     try {
         const endpoint = `${gameServiceEndpoint}/upcoming`;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
     } catch(err) {
         if(err.response) {
@@ -82,10 +83,10 @@ const getUpcomingGames     = async() => {
     }
 }
 
-const getGameById    = async(gameId)  => {
+const getGameById = async(gameId)  => {
     try {
         const endpoint = `${gameServiceEndpoint}/${gameId}`;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
     } catch(err) {
         if(err.response) {
@@ -96,7 +97,7 @@ const getGameById    = async(gameId)  => {
     }
 }
 
-const getGameReleaseDates     = async(gameId) => {
+const getGameReleaseDates = async(gameId) => {
   try {
     const endpoint = `${gameServiceEndpoint}/${gameId}/release_dates`;
     const response = await api.get(endpoint);
@@ -112,12 +113,12 @@ const getGameReleaseDates     = async(gameId) => {
 
 const GameService = {
     getPopularGames     : getPopularGames,
-    getUpcomingGames   : getUpcomingGames,
+    getUpcomingGames    : getUpcomingGames,
     getGameById         : getGameById,
     getGameReleaseDates : getGameReleaseDates,
-    searchGames : searchGames,
-    searchGamesPage : searchGamesPage,
-    buildQueryParams : buildQueryParams
+    searchGames         : searchGames,
+    searchGamesPage     : searchGamesPage,
+    buildQueryParams    : buildQueryParams
 }
 
 export default GameService;

@@ -1,4 +1,5 @@
 import api from './api';
+import AuthService from "./authService";
 
 const getUserBacklog = async(userId) => {
     return getUserBacklogPage(userId, 1);
@@ -7,7 +8,7 @@ const getUserBacklog = async(userId) => {
 const getUserBacklogPage = async(userId, page) => {
   try {
         const endpoint = `users/${userId}/backlog?page=${page}`;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};
@@ -30,9 +31,41 @@ const getUserBacklogPage = async(userId, page) => {
   }
 }
 
+const addGameToBacklog = async(gameId) => {
+  try {
+        console.log("Adding...");
+        const endpoint = `backlog/${gameId}`;
+        const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        return response;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
+const removeGameFromBacklog = async(gameId) => {
+  try {
+        console.log("Removing...");
+        const endpoint = `backlog/${gameId}`;
+        const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        return response;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const BacklogService = {
     getUserBacklog : getUserBacklog,
-    getUserBacklogPage : getUserBacklogPage
+    getUserBacklogPage : getUserBacklogPage,
+    addGameToBacklog : addGameToBacklog,
+    removeGameFromBacklog : removeGameFromBacklog
 }
 
 export default BacklogService;

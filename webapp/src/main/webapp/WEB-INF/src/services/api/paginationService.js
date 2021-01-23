@@ -1,8 +1,9 @@
 import api from './api';
+import AuthService from "./authService";
 
 const getGenericContent = async (endpoint) => {
     try {
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};
@@ -30,7 +31,7 @@ const getGenericContent = async (endpoint) => {
 
 const getGenericContentPage = async (endpoint, page) => {
     try {
-        const response = await api.get(endpoint +"?page=" +page);
+        const response = await api.get(endpoint +"?page=" +page, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};
