@@ -182,7 +182,6 @@ public class UserController
         User loggedUser = us.getLoggedUser();
         if(loggedUser == null || loggedUser.getId() != userId)
         	return Response.status(Response.Status.UNAUTHORIZED).build();
-        System.out.println("Updating Locale!");
         us.updateLocale(loggedUser, Locale.forLanguageTag(editLocaleDto.getLocale()));
         return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
     }
@@ -346,7 +345,6 @@ public class UserController
 		final Optional<Game> maybeGame = gs.findById(gameId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		System.out.println("Hay pareja? " +revs.findUserAndGameReviews(maybeUser.get(), maybeGame.get()).size());
 		final List<ReviewDto> reviews = revs.findUserAndGameReviews(maybeUser.get(), maybeGame.get()).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
 		return resp.build();

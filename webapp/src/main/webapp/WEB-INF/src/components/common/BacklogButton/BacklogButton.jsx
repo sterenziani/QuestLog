@@ -19,13 +19,12 @@ class BacklogButton extends Component {
 
     backlogHandler = () => {
         if(this.state.added){
-            BacklogService.removeGameFromBacklog(this.state.game.id).then((data) => console.log(data));
+            BacklogService.removeGameFromBacklog(this.state.game.id);
         }
         else{
-            BacklogService.addGameToBacklog(this.state.game.id).then((data) => console.log(data));
+            BacklogService.addGameToBacklog(this.state.game.id);
         }
         this.setState({added : !this.state.added});
-        console.log(this.state);
     }
 
     getButtonType() {

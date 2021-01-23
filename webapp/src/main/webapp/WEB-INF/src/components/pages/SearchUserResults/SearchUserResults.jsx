@@ -44,6 +44,16 @@ class SearchUserResults extends Component {
         });
     }
 
+    makeAdminHandler = (userId) => {
+        UserService.makeAdmin(userId);
+        this.setState({});
+    }
+
+    removeAdminHandler = (userId) => {
+        UserService.removeAdmin(userId);
+        this.setState({});
+    }
+
     render() {
         if (this.state.loading === true) {
             return <div style={{
@@ -52,7 +62,6 @@ class SearchUserResults extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-
 
         return (
             <React.Fragment>
@@ -75,12 +84,12 @@ class SearchUserResults extends Component {
                                         <a href={"users/"+u.id} style={{fontSize: "25px"}}>{u.username}</a>
                          			</Col>
                                     {
-                                        (this.props.userIsAdmin)? [
+                                        (this.props.userIsAdmin && u.id != this.props.user.id)? [
                                             <Col style={{verticalAlign: "middle", padding:"10px"}}>
                                                 {u.admin? [
-                                                    <Button variant="danger" href=""><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
-                                                    <Button variant="success" href=""><Translation>{t => t("search.makeAdmin")}</Translation></Button>]}
-                                            </Col>] : []
+                                                    <Button variant="danger" onClick={() => {this.removeAdminHandler(u.id)}}><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
+                                                    <Button variant="success" onClick={() => {this.makeAdminHandler(u.id)}}><Translation>{t => t("search.makeAdmin")}</Translation></Button>]}
+                                            </Col>] : [<Col></Col>]
                                     }
                      			</Row>
                             )] : [<div class="text-center"><Translation>{t => t("search.noResults")}</Translation></div>] }
