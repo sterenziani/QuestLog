@@ -28,7 +28,7 @@ class ExploreResultsPage extends Component {
         if(!page) {
             page = 1;
         }
-        const fetchContent = PaginationService.getGenericContent(this.state.path + "/games?page=" + page);
+        const fetchContent = PaginationService.getGenericContentPage(this.state.path + "/games", page);
         const fetchData = PaginationService.getGenericContent(this.state.path);
 
         //TODO: Handle no response (404)

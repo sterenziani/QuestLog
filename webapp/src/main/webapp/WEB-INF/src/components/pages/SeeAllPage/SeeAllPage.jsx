@@ -26,7 +26,7 @@ class SeeAllPage extends Component {
         if(!page) {
             page = 1;
         }
-        PaginationService.getGenericContent(this.state.path + "?page=" + page)
+        PaginationService.getGenericContentPage(this.state.path, page)
             .then((data) => {
                 this.setState({
                     loading: false,

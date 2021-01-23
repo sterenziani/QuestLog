@@ -42,6 +42,7 @@ import ar.edu.itba.paw.model.entity.Playstyle;
 import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.model.exception.BadFormatException;
+import ar.edu.itba.paw.webapp.controller.AnonBacklogHelper;
 import ar.edu.itba.paw.webapp.dto.AvgTimeDto;
 import ar.edu.itba.paw.webapp.dto.DeveloperDto;
 import ar.edu.itba.paw.webapp.dto.FormErrorDto;
@@ -91,12 +92,15 @@ public class GameDetailController {
 	@GET
 	@Path("/{gameId}")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getGameById(@PathParam("gameId") long gameId)
+	public Response getGameById(@PathParam("gameId") long gameId, @QueryParam("backlog") @DefaultValue("") String backlog)
 	{
 		final Optional<Game> maybeGame = gs.findById(gameId);
 		if(!maybeGame.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		return Response.ok(maybeGame.map(u -> GameDto.fromGame(u, uriInfo)).get()).build();
+		GameDto g = GameDto.fromGame(maybeGame.get(), uriInfo);
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateDto(g, backlog);
+		return Response.ok(g).build();
 	}
 	
 	@POST

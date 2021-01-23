@@ -1,9 +1,12 @@
 import api from './api';
 import AuthService from "./authService";
+import Cookies from 'universal-cookie';
 
 const getGenericContent = async (endpoint) => {
     try {
-        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+        const response = await api.get(endpoint + `?backlog=${currentBacklog}`, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};
@@ -31,7 +34,9 @@ const getGenericContent = async (endpoint) => {
 
 const getGenericContentPage = async (endpoint, page) => {
     try {
-        const response = await api.get(endpoint +"?page=" +page, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+        const response = await api.get(endpoint +"?page=" +page + `&backlog=${currentBacklog}`, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};

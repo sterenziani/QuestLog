@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.webapp.controller.AnonBacklogHelper;
+import ar.edu.itba.paw.webapp.controller.BacklogController;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 
 @Path("games")
@@ -28,7 +31,10 @@ public class GameController {
 	private UriInfo uriInfo;
 	
     @Autowired
-    private GameService                 gs;
+    private GameService gs;
+    
+    @Autowired
+    private UserService us;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
     
@@ -51,14 +57,16 @@ public class GameController {
 							@QueryParam("scoreLeft") @DefaultValue("0") int scoreLeft,
 							@QueryParam("platforms") List<String> platforms, 
 							@QueryParam("genres") List<String> genres,
-							@QueryParam("page_size") @DefaultValue("15") int page_size)
+							@QueryParam("page_size") @DefaultValue("15") int page_size,
+							@QueryParam("backlog") @DefaultValue("") String backlog)
 	{
 		int timeLeft = hoursLeft*3600 + minsLeft*60 + secsLeft;
 		int timeRight = hoursRight*3600 + minsRight*60 + secsRight;
 		int countResults = gs.countSearchResultsFiltered(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight);
 		final List<GameDto> searchResults = gs.getFilteredGames(searchTerm, genres, platforms, scoreLeft, scoreRight, timeLeft, timeRight, page, page_size)
 				.stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
-		
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateList(searchResults, backlog);
 		int amount_of_pages = (countResults + page_size - 1)/page_size;
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
@@ -78,18 +86,22 @@ public class GameController {
 	@GET
 	@Path("/upcoming")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getUpcomingGames()
+	public Response getUpcomingGames(@QueryParam("backlog") @DefaultValue("") String backlog)
 	{
         List<GameDto> list = gs.getUpcomingGames().stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateList(list, backlog);
         return Response.ok(new GenericEntity<List<GameDto>>(list) {}).build();
 	}
 	
 	@GET
 	@Path("/popular")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getPopularGames()
+	public Response getPopularGames(@QueryParam("backlog") @DefaultValue("") String backlog)
 	{
         List<GameDto> list = gs.getPopularGames().stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateList(list, backlog);
         return Response.ok(new GenericEntity<List<GameDto>>(list) {}).build();
 	}
 }
