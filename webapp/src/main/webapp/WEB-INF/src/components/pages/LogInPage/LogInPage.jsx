@@ -17,6 +17,8 @@ import AuthService from '../../../services/api/authService';
 import { OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
 import withRedirect from '../../hoc/withRedirect';
 import withUser from '../../hoc/withUser';
+import { withTranslation } from 'react-i18next';
+import {Helmet, HelmetProvider} from "react-helmet-async";
 
 const LogInSchema = Yup.object().shape({
     username : Yup
@@ -70,8 +72,14 @@ class LogInPage extends Component {
         this.authenticate(values, setSubmitting);
     }
     render() {
-        console.log(this.props.lastLocation)
-        return ( 
+        const { t } = this.props
+        return (
+            <React.Fragment>
+                <HelmetProvider>
+                    <Helmet>
+                        <title>{t(`login.title`)} - QuestLog</title>
+                    </Helmet>
+                </HelmetProvider>
             <Formik
                 initialValues = {{
                         username : '',
@@ -169,8 +177,9 @@ class LogInPage extends Component {
                 </AuthForm>
             )} 
             </Formik>
+            </React.Fragment>
         );
     }
 }
 
-export default withUser(withRedirect(LogInPage, { home : "/" }), { visibility : "anonymousOnly"});
+export default withTranslation() (withUser(withRedirect(LogInPage, { home : "/" }), { visibility : "anonymousOnly"}));

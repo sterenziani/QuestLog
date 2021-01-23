@@ -6,6 +6,7 @@ import DeveloperService from "../../../services/api/devService";
 import PlatformService from "../../../services/api/platformService";
 import PublisherService from "../../../services/api/publisherService";
 import ContainerCard from "../../common/GamesCard/ContainerCard";
+import { withTranslation } from 'react-i18next';
 
 class ExplorePage extends Component {
     state = {
@@ -43,11 +44,12 @@ class ExplorePage extends Component {
                         <Spinner animation="border" variant="primary" />
                     </div>
         }
+        const { t } = this.props
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>Questlog</title>
+                        <title>{t(`navigation.explore`)} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <div>
@@ -70,4 +72,4 @@ class ExplorePage extends Component {
 
 }
 
-export default ExplorePage;
+export default withTranslation() (ExplorePage);

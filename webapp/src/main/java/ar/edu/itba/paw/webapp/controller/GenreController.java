@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.GenreService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Genre;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 import ar.edu.itba.paw.webapp.dto.GenreDto;
@@ -34,6 +35,9 @@ public class GenreController {
     
     @Autowired
     private GameService                 gs;
+    
+    @Autowired
+	private UserService us;
     
 	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
 	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
@@ -72,12 +76,14 @@ public class GenreController {
 	@GET
 	@Path("/{genreId}/games")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getGamesByGenre(@PathParam("genreId") long genreId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size)
+	public Response getGamesByGenre(@PathParam("genreId") long genreId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size, @QueryParam("backlog") @DefaultValue("") String backlog)
 	{
 		final Optional<Genre> maybeGenre = gens.findById(genreId);
 		if(!maybeGenre.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<GameDto> games = gs.getGamesForGenre(maybeGenre.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateList(games, backlog);
 		int amount_of_pages = (gs.countGamesForGenre(maybeGenre.get()) + page_size - 1) / page_size;
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;

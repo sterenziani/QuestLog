@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.DeveloperService;
 import ar.edu.itba.paw.interfaces.service.GameService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Developer;
 import ar.edu.itba.paw.webapp.dto.DeveloperDto;
 import ar.edu.itba.paw.webapp.dto.GameDto;
@@ -31,6 +32,9 @@ public class DeveloperController {
 	
     @Autowired
     private DeveloperService ds;
+    
+    @Autowired
+	private UserService us;
 
     @Autowired
     private GameService gs;
@@ -72,12 +76,14 @@ public class DeveloperController {
 	@GET
 	@Path("/{devId}/games")
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response getGamesByDev(@PathParam("devId") long devId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size)
+	public Response getGamesByDev(@PathParam("devId") long devId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size, @QueryParam("backlog") @DefaultValue("") String backlog)
 	{
 		final Optional<Developer> maybeDev = ds.findById(devId);
 		if(!maybeDev.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		final List<GameDto> games = gs.getGamesForDeveloper(maybeDev.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateList(games, backlog);
 		int amount_of_pages = (gs.countGamesForDeveloper(maybeDev.get()) + page_size - 1) / page_size;
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;

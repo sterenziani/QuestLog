@@ -11,6 +11,7 @@ class UserRunsTab extends Component {
         visitedUser: this.props.visitedUser,
         runsDisplayed: [],
         runsPagination: [],
+        loggedUser: this.props.loggedUser,
         loading: true,
     };
 

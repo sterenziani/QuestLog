@@ -35,7 +35,7 @@ class GameDetailsPage extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.user.username}</title>
+                        <title>{this.state.user.username} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <UserProfile visitedUser={this.state.user}/>

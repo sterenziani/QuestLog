@@ -1,4 +1,5 @@
 import api from './api';
+import AuthService from "./authService";
 import { CONFLICT, TIMEOUT } from './apiConstants';
 
 const endpoint    = '/users'
@@ -31,8 +32,6 @@ const register    = async(username, password, email, locale) => {
       return { status : TIMEOUT }
     }
   }
-  
-  
 }
 
 const searchUsers = async(term) => {
@@ -85,11 +84,43 @@ const getUserById = async(userId) => {
   }
 }
 
+const makeAdmin = async(userId) => {
+  try {
+        console.log("Haciendo admin a " +userId);
+        const endpoint = `users/${userId}/admin`;
+        const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
+const removeAdmin = async(userId) => {
+  try {
+        console.log("Matando admin " +userId);
+        const endpoint = `users/${userId}/admin`;
+        const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const UserService = {
   register      : register,
   getUserById   : getUserById,
   searchUsers   : searchUsers,
-  searchUsersPage : searchUsersPage
+  searchUsersPage : searchUsersPage,
+  makeAdmin     : makeAdmin,
+  removeAdmin   : removeAdmin
 }
 
 export default UserService;

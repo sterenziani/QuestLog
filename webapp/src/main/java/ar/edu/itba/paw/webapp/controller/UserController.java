@@ -182,7 +182,6 @@ public class UserController
         User loggedUser = us.getLoggedUser();
         if(loggedUser == null || loggedUser.getId() != userId)
         	return Response.status(Response.Status.UNAUTHORIZED).build();
-        System.out.println("Updating Locale!");
         us.updateLocale(loggedUser, Locale.forLanguageTag(editLocaleDto.getLocale()));
         return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
     }
@@ -346,7 +345,6 @@ public class UserController
 		final Optional<Game> maybeGame = gs.findById(gameId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		System.out.println("Hay pareja? " +revs.findUserAndGameReviews(maybeUser.get(), maybeGame.get()).size());
 		final List<ReviewDto> reviews = revs.findUserAndGameReviews(maybeUser.get(), maybeGame.get()).stream().map(r -> ReviewDto.fromReview(r, uriInfo)).collect(Collectors.toList());
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<ReviewDto>>(reviews) {});
 		return resp.build();
@@ -354,12 +352,14 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/backlog")
-	public Response listBacklogForUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size)
+	public Response listBacklogForUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size, @QueryParam("backlog") @DefaultValue("") String backlog)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
 		if(!maybeUser.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		List<GameDto> games = gs.getGamesInBacklog(maybeUser.get(), page, page_size).stream().map(g -> GameDto.fromGame(g, uriInfo)).collect(Collectors.toList());
+        if(us.getLoggedUser() == null)
+        	AnonBacklogHelper.updateList(games, backlog);
 		int amount_of_pages = (gs.countGamesInBacklog(maybeUser.get()) + page_size - 1) / page_size;
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;

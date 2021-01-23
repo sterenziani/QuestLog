@@ -1,11 +1,15 @@
 import api from './api';
+import AuthService from "./authService";
+import Cookies from 'universal-cookie';
 
 const gameServiceEndpoint   = 'games';
 
 const getPopularGames = async () => {
     try {
-        const endpoint = `${gameServiceEndpoint}/popular`;
-        const response = await api.get(endpoint);
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+        const endpoint = `${gameServiceEndpoint}/popular?backlog=${currentBacklog}`;
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
     } catch(err) {
         if(err.response) {
@@ -40,12 +44,14 @@ const buildQueryParams = (searchParams) => {
 
 const searchGamesPage = async(searchParams, page) => {
   try {
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
         if(searchParams.searchTerm == null){
             searchParams.searchTerm = '';
         }
-        let params = buildQueryParams(searchParams);
+        let params = buildQueryParams(searchParams) + `&backlog=${currentBacklog}`;
         const endpoint = `${gameServiceEndpoint}?page=${page}`+params;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         // Parse links
         const data = response.headers.link;
         let parsed_data = {};
@@ -58,6 +64,7 @@ const searchGamesPage = async(searchParams, page) => {
         ret['pagination'] = parsed_data;
         ret['content'] = response.data;
         ret['pageCount'] = response.headers["page-count"];
+        ret['totalCount'] = response.headers["total-count"];
         return ret;
   } catch(err) {
     if(err.response) {
@@ -68,10 +75,12 @@ const searchGamesPage = async(searchParams, page) => {
   }
 }
 
-const getUpcomingGames     = async() => {
+const getUpcomingGames = async() => {
     try {
-        const endpoint = `${gameServiceEndpoint}/upcoming`;
-        const response = await api.get(endpoint);
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+        const endpoint = `${gameServiceEndpoint}/upcoming?backlog=${currentBacklog}`;
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
     } catch(err) {
         if(err.response) {
@@ -82,10 +91,12 @@ const getUpcomingGames     = async() => {
     }
 }
 
-const getGameById    = async(gameId)  => {
+const getGameById = async(gameId)  => {
     try {
-        const endpoint = `${gameServiceEndpoint}/${gameId}`;
-        const response = await api.get(endpoint);
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+        const endpoint = `${gameServiceEndpoint}/${gameId}?backlog=${currentBacklog}`;
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
     } catch(err) {
         if(err.response) {
@@ -96,11 +107,13 @@ const getGameById    = async(gameId)  => {
     }
 }
 
-const getGameReleaseDates     = async(gameId) => {
+const getGameReleaseDates = async(gameId) => {
   try {
-    const endpoint = `${gameServiceEndpoint}/${gameId}/release_dates`;
-    const response = await api.get(endpoint);
-    return response.data;
+      const cookies = new Cookies();
+      let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+      const endpoint = `${gameServiceEndpoint}/${gameId}/release_dates?backlog=${currentBacklog}`;
+      const response = await api.get(endpoint);
+      return response.data;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -112,12 +125,12 @@ const getGameReleaseDates     = async(gameId) => {
 
 const GameService = {
     getPopularGames     : getPopularGames,
-    getUpcomingGames   : getUpcomingGames,
+    getUpcomingGames    : getUpcomingGames,
     getGameById         : getGameById,
     getGameReleaseDates : getGameReleaseDates,
-    searchGames : searchGames,
-    searchGamesPage : searchGamesPage,
-    buildQueryParams : buildQueryParams
+    searchGames         : searchGames,
+    searchGamesPage     : searchGamesPage,
+    buildQueryParams    : buildQueryParams
 }
 
 export default GameService;

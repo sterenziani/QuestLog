@@ -100,13 +100,13 @@ class UserProfile extends Component {
                             </div>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="scores" title={<Translation>{t => t("users.scores")}</Translation>}>
-                            <UserScoresTab visitedUser={this.state.visitedUser}/>
+                            <UserScoresTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("users.runs")}</Translation>}>
-                            <UserRunsTab visitedUser={this.state.visitedUser}/>
+                            <UserRunsTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("users.reviews")}</Translation>}>
-                            <UserReviewsTab visitedUser={this.state.visitedUser}/>
+                            <UserReviewsTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
                         </Tab>
                     </Tabs>
                 </div>

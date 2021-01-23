@@ -188,6 +188,7 @@
     "search" : {
         "gameResults" : "Search results for game {{value}}",
         "userResults" : "Search results for user {{value}}",
+        "resultsLabel" : "  results found that match your search",
         "noResults" : "No results Submitfound",
         "makeAdmin" : "Make admin",
         "removeAdmin" : "Remove admin",

@@ -25,6 +25,7 @@ import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Game;
 import ar.edu.itba.paw.model.entity.User;
+import ar.edu.itba.paw.webapp.dto.AnonBacklogDto;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 
@@ -57,7 +58,7 @@ public class BacklogController {
     	{
     		String resp = backlog;
     		resp = addToBacklog(gameId, backlog);
-    		return Response.ok().header("Result", resp).build();
+    		return Response.ok(AnonBacklogDto.fromCookie(resp, uriInfo)).build();
     	}
     	gs.addToBacklog(gameId);
     	return Response.ok(game.map(g -> GameDto.fromGame(g, uriInfo)).get()).build();
@@ -76,7 +77,7 @@ public class BacklogController {
     	{
     		String resp = backlog;
     		resp = removeFromBacklog(gameId, backlog);
-    		return Response.ok().header("Result", resp).build();
+    		return Response.ok(AnonBacklogDto.fromCookie(resp, uriInfo)).build();
     	}
     	gs.removeFromBacklog(gameId);
     	return Response.ok(game.map(g -> GameDto.fromGame(g, uriInfo)).get()).build();
@@ -126,8 +127,8 @@ public class BacklogController {
     }
     
     //////////////// PRIVATE //////////////////////////
-    
-    public String addToBacklog(long gameId, String backlog)
+	
+    private String addToBacklog(long gameId, String backlog)
     {
         if(gameInBacklog(gameId, backlog))
         {
@@ -136,12 +137,12 @@ public class BacklogController {
         return backlog +"-" +gameId +"-";
     }
 
-    public String removeFromBacklog(long gameId, String backlog)
+    private String removeFromBacklog(long gameId, String backlog)
     {
         return backlog.replaceAll("-"+gameId+"-", "");
     }
     
-    public boolean gameInBacklog(long gameId, String backlog)
+    private boolean gameInBacklog(long gameId, String backlog)
     {
         return backlog.contains("-" +gameId +"-");
     }

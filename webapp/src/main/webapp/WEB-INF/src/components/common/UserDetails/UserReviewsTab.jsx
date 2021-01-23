@@ -12,6 +12,7 @@ class UserReviewsTab extends Component {
         visitedUser: this.props.visitedUser,
         reviewsDisplayed: [],
         reviewsPagination: [],
+        loggedUser: this.props.loggedUser,
         loading: true,
     };
 
@@ -51,7 +52,7 @@ class UserReviewsTab extends Component {
                     {(this.state.reviewsDisplayed.length > 0)? [
                         <Col>
                             {this.state.reviewsDisplayed.map(r => (
-                                    <ReviewCard review={r} user={this.state.loggedInUser} loggedIn={this.state.loggedIn}/>
+                                    <ReviewCard review={r} user={this.state.loggedUser} loggedIn={this.state.loggedIn}/>
                                 ))}
                         </Col>
                     ] : [<Container className="text-center mt-5"> <p> <Translation>{t => t("users.noReviewsSubmitted")}</Translation> </p> </Container>]

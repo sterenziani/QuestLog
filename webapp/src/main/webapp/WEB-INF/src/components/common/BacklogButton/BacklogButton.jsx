@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import {
-    Button
-} from 'react-bootstrap';
-import {
-    Translation
-} from 'react-i18next';
+import {Button} from 'react-bootstrap';
+import {Translation} from 'react-i18next';
+import BacklogService from "../../../services/api/backlogService";
 
 class BacklogButton extends Component {
     state = {
-        //added: this.props.inBacklog;
+        game: this.props.game? this.props.game : null,
+        added: this.props.game? this.props.game.in_backlog : false
     };
 
     render() {
@@ -20,12 +18,13 @@ class BacklogButton extends Component {
     }
 
     backlogHandler = () => {
-        this.setState({added : this.state.added ? false : true});
-        console.log(this.state.added);
-        //const endpoint = `games/${gameId}/new_run`;
-        //const response = await api.post(endpoint, newRun, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        return "";
-        // return response.data;
+        if(this.state.added){
+            BacklogService.removeGameFromBacklog(this.state.game.id);
+        }
+        else{
+            BacklogService.addGameToBacklog(this.state.game.id);
+        }
+        this.setState({added : !this.state.added});
     }
 
     getButtonType() {
@@ -40,4 +39,5 @@ class BacklogButton extends Component {
         return translate;
     }
 }
+
 export default BacklogButton;

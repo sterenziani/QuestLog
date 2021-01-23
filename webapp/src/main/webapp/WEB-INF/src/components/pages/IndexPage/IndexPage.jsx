@@ -42,10 +42,10 @@ class IndexPage extends Component {
                     </Helmet>
                 </HelmetProvider>
                 <div>
-                    <GamesCard items={this.state.popularGames} label={"games.lists.popularGames"}/>
+                    <GamesCard items={this.state.popularGames} label={"games.lists.popularGames"} search={false}/>
                 </div>
                 <div>
-                    <GamesCard items={this.state.upcomingGames} label={"games.lists.upcomingGames"}/>
+                    <GamesCard items={this.state.upcomingGames} label={"games.lists.upcomingGames"} search={false}/>
                 </div>
             </React.Fragment>
         );

@@ -95,6 +95,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 				.antMatchers(HttpMethod.POST,"/api/users/register").permitAll()
 				.antMatchers(HttpMethod.POST,"/api/users/login").permitAll()
 	            .antMatchers(HttpMethod.POST,"/api/users/forgot_password").permitAll()
+	            .antMatchers(HttpMethod.DELETE, "/api/backlog/**").permitAll()
 	            .antMatchers(HttpMethod.POST, "/api/**").authenticated()
 	            .antMatchers(HttpMethod.PUT, "/api/backlog/**").permitAll()
 	            .antMatchers(HttpMethod.PUT, "/api/**").authenticated()

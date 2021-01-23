@@ -188,6 +188,7 @@
     "search" : {
         "gameResults" : "Resultados de búsqueda para juego {{value}}",
         "userResults" : "Resultados de búsqueda para usuario {{value}}",
+        "resultsLabel" : "  resultados encontrados para tu búsqueda",
         "noResults" : "No se encontraron resultados",
         "makeAdmin" : "Hacer administrador",
         "removeAdmin" : "Quitar administrador",
