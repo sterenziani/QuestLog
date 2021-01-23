@@ -34,6 +34,8 @@ public class GameController {
     
 	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
 	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
+	private static final String PAGINATION_TOTAL_COUNT_HEADER = "Total-Count";
+
 
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -63,6 +65,7 @@ public class GameController {
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<GameDto>>(searchResults) {});
 		resp.header(PAGINATION_CURR_PAGE_HEADER, page);
 		resp.header(PAGINATION_PAGE_COUNT_HEADER, amount_of_pages);
+		resp.header(PAGINATION_TOTAL_COUNT_HEADER, countResults);
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).queryParam("page_size", page_size).build(), "first");
 		resp.link(uriInfo.getAbsolutePathBuilder().queryParam("page", amount_of_pages).queryParam("page_size", page_size).build(), "last");
 		if(page > 1 && page <= amount_of_pages)

@@ -11,7 +11,7 @@ class Authentification extends Component {
                 <AnyButton 
                     variant="link"
                     text={ user.username }
-                    href="/profile"
+                    href={"/users/" + user.id}
                     className="mr-3 color-white"
                 />
                 <AnyButton 

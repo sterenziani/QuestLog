@@ -28,7 +28,7 @@ class GamesCard extends Component {
                     {this.state.search ?[
                     <row>
                         <div className="row ml-1 mr-auto my-auto">
-                            <strong>{this.props.items.length}</strong> &nbsp; <Translation>
+                            <strong>{this.props.totalCount}</strong> &nbsp; <Translation>
                             {
                                 t => t("search.resultsLabel")
                             }

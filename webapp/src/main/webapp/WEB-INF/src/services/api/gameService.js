@@ -59,6 +59,7 @@ const searchGamesPage = async(searchParams, page) => {
         ret['pagination'] = parsed_data;
         ret['content'] = response.data;
         ret['pageCount'] = response.headers["page-count"];
+        ret['totalCount'] = response.headers["total-count"];
         return ret;
   } catch(err) {
     if(err.response) {

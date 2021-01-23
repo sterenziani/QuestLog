@@ -41,10 +41,11 @@ class SearchGameResults extends Component {
                 content: response.content,
                 pagination: response.pagination,
                 pageCount : response.pageCount,
+                totalCount : response.totalCount,
                 page : page,
                 searchParams : searchParams,
             });
-            if (this.state.content.length === 1) {
+            if (this.state.totalCount === "1") {
                 window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
             }
         });
@@ -69,7 +70,7 @@ class SearchGameResults extends Component {
                     </Helmet>
                 </HelmetProvider>
                 <SearchModal searchParams={this.state.searchParams} path={this.state.path}/>
-                <GamesCard label={"search.gameResults"} labelArgs={this.state.searchParams.searchTerm} items={this.state.content} search={true}/>
+                <GamesCard label={"search.gameResults"} labelArgs={this.state.searchParams.searchTerm} items={this.state.content} search={true} totalCount={this.state.totalCount}/>
                 <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage} queryParams={this.state.searchParams}/>
             </React.Fragment>
         );

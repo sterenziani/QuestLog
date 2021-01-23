@@ -20,7 +20,8 @@ class Search extends Component {
         ]
     }
 
-    onSubmit = () => {
+    onSubmit = (e) => {
+        e.preventDefault();
         if(this.state.category === "1"){
             window.location.href = `${process.env.PUBLIC_URL}/gameSearch?searchTerm=` +this.state.searchTerm;
         }
@@ -29,18 +30,25 @@ class Search extends Component {
         }
     };
 
+    onKeyUp = (e) => {
+        if (e.charCode === 13) {
+            this.onSubmit(e);
+            return false;
+        }
+    }
+
     render() {
         const { t } = this.props
         return (
             <Form className={ this.state.className } inline>
-                <FormControl type="text" placeholder="Search" className="mr-sm-2 flex-grow-1" onChange={e => this.setState({ searchTerm: e.target.value })}/>
+                <FormControl type="text" placeholder="Search" className="mr-sm-2 flex-grow-1" onKeyPress={this.onKeyUp.bind(this)} onChange={e => this.setState({ searchTerm: e.target.value })}/>
                 <Form.Control className="btn btn-dark mr-sm-2" as="select" onChange={e => this.setState({ category: e.target.value })}>
                 {
                     this.state.searchTypes.map((s) =>
                         <option value={s.id} key={ s.id }>{t(`navigation.search.options.${s.trans}`)}</option>)
                 }
                 </Form.Control>
-                <Button variant="dark" onClick={this.onSubmit}>
+                <Button variant="dark" onClick={this.onSubmit.bind(this)}>
                     <FontAwesomeIcon className="mr-sm-2" icon={ faSearch }/>{t('navigation.search.btn')}
                 </Button>
             </Form>
