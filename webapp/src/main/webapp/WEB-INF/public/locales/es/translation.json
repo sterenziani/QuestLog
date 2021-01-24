@@ -22,6 +22,12 @@
         "seeAll"    : "Ver todo >>",
         "addGame"   : "Agregar Juego"
     },
+    "index" : {
+        "anonBacklogWarning" : "Había juegos añadidos a tu backlog antes de iniciar sesión. ¿Deseas importarlos a tu cuenta?",
+        "importNo" : "Borrarlos",
+        "importYes" : "Importarlos",
+        "ignoreThis" : "Ignora este mensaje si quieres conservar tu lista anónima."
+    },
     "games" : {
         "profile" : {
             "addToBacklog" : "Agregar al Backlog",

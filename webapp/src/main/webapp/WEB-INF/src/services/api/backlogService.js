@@ -112,13 +112,35 @@ const removeGameFromBacklog = async(gameId) => {
   }
 }
 
+const wipeAnonBacklog = () => {
+    const cookies = new Cookies();
+    cookies.set('backlog', '', {path: '/'});
+}
+
+const transferBacklog = async () => {
+    const cookies = new Cookies();
+    const currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+    const endpoint = `backlog?backlog=${currentBacklog}`;
+    const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    cookies.set('backlog', '', {path: '/'});
+}
+
+const isAnonBacklogEmpty = () => {
+    const cookies = new Cookies();
+    const currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+    return (currentBacklog.length > 0)? false:true;
+}
+
 const BacklogService = {
     getUserBacklog : getUserBacklog,
     getUserBacklogPage : getUserBacklogPage,
     addGameToBacklog : addGameToBacklog,
     removeGameFromBacklog : removeGameFromBacklog,
     getCurrentUserBacklog : getCurrentUserBacklog,
-    getCurrentUserBacklogPage : getCurrentUserBacklogPage
+    getCurrentUserBacklogPage : getCurrentUserBacklogPage,
+    wipeAnonBacklog : wipeAnonBacklog,
+    transferBacklog : transferBacklog,
+    isAnonBacklogEmpty : isAnonBacklogEmpty
 }
 
 export default BacklogService;

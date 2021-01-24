@@ -22,6 +22,12 @@
         "seeAll"    : "See all >>",
         "addGame"   : "Add Game"
     },
+    "index" : {
+        "anonBacklogWarning" : "You had games added to your backlog before logging in. Would you like to import them into your account?",
+        "importNo" : "Erase them",
+        "importYes" : "Import them",
+        "ignoreThis" : "Ignore this message if you want to keep your anonymous backlog."
+    },
     "games" : {
         "profile" : {
             "addToBacklog" : "Add to Backlog",
@@ -188,7 +194,7 @@
     "search" : {
         "gameResults" : "Search results for game {{value}}",
         "userResults" : "Search results for user {{value}}",
-        "resultsLabel" : "  results found that match your search",
+        "resultsLabel" : "{{value}} results found that match your search",
         "noResults" : "No results Submitfound",
         "makeAdmin" : "Make admin",
         "removeAdmin" : "Remove admin",
