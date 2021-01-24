@@ -20,7 +20,11 @@
             "last"      : "Last"
         },
         "seeAll"    : "See all >>",
-        "addGame"   : "Add Game"
+        "addGame"   : "Add Game",
+        "platforms" : "Platforms",
+        "genres" : "Genres",
+        "developers" : "Developers",
+        "publishers" : "Publishers"
     },
     "index" : {
         "anonBacklogWarning" : "You had games added to your backlog before logging in. Would you like to import them into your account?",

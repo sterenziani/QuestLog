@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
 import { CONFLICT, TIMEOUT } from './apiConstants';
+import PaginationService from './paginationService';
 
 const endpoint    = '/users'
 
@@ -22,7 +23,7 @@ const register    = async(username, password, email, locale) => {
   } catch(e) {
     if (e.response){
       if(e.response.status === CONFLICT){
-        return { 
+        return {
           status    : CONFLICT,
           conflicts : e.response.data
         }
@@ -48,19 +49,7 @@ const searchUsersPage = async(term, page) => {
         }
         const endpoint = `users?page=${page}&searchTerm=${term}`;
         const response = await api.get(endpoint);
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        const ret = {};
-        ret['pagination'] = parsed_data;
-        ret['content'] = response.data;
-        ret['pageCount'] = response.headers["page-count"];
-        return ret;
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

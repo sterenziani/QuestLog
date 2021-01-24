@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
+import PaginationService from './paginationService';
 
 const getUserBacklog = async(userId) => {
     return getUserBacklogPage(userId, 1);
@@ -12,19 +13,7 @@ const getUserBacklogPage = async(userId, page) => {
         let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
         const endpoint = `users/${userId}/backlog?page=${page}&backlog=${currentBacklog}`;
         const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        const ret = {};
-        ret['pagination'] = parsed_data;
-        ret['content'] = response.data;
-        ret['pageCount'] = response.headers["page-count"];
-        return ret;
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -40,19 +29,7 @@ const getCurrentUserBacklogPreview = async(page_size) => {
         let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
         const endpoint = `backlog?page_size=${page_size}&backlog=${currentBacklog}`;
         const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        const ret = {};
-        ret['pagination'] = parsed_data;
-        ret['content'] = response.data;
-        ret['pageCount'] = response.headers["page-count"];
-        return ret;
+        return PaginationService.parseResponsePaginationHeaders(response);
     } catch(err) {
       if(err.response) {
         return { status : err.response.status };
@@ -72,19 +49,7 @@ const getCurrentUserBacklogPage = async(page) => {
       let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
       const endpoint = `backlog?page=${page}&backlog=${currentBacklog}`;
       const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-      // Parse links
-      const data = response.headers.link;
-      let parsed_data = {};
-      let arrData = data.split(",");
-      arrData.forEach(element => {
-          let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-          parsed_data[linkInfo[2]]=linkInfo[1];
-      });
-      const ret = {};
-      ret['pagination'] = parsed_data;
-      ret['content'] = response.data;
-      ret['pageCount'] = response.headers["page-count"];
-      return ret;
+      return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

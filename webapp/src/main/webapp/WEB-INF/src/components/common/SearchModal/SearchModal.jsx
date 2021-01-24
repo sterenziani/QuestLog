@@ -21,8 +21,8 @@ class SearchModal extends Component {
     };
 
     componentWillMount() {
-        const fetchGen = GenreService.getEveryGenre();
-        const fetchPlat = PlatformService.getEveryPlatform();
+        const fetchGen = GenreService.getAllGenres();
+        const fetchPlat = PlatformService.getAllPlatforms();
 
         //TODO: Handle no response (404)
         Promise.all([ fetchGen, fetchPlat ]).then((responses) => {

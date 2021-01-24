@@ -20,7 +20,11 @@
             "last"      : "Último"
         },
         "seeAll"    : "Ver todo >>",
-        "addGame"   : "Agregar Juego"
+        "addGame"   : "Agregar Juego",
+        "platforms" : "Plataformas",
+        "genres" : "Géneros",
+        "developers" : "Desarrolladores",
+        "publishers" : "Distribuidoras"
     },
     "index" : {
         "anonBacklogWarning" : "Había juegos añadidos a tu backlog antes de iniciar sesión. ¿Deseas importarlos a tu cuenta?",

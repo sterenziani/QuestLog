@@ -1,11 +1,15 @@
 import api from './api';
+import PaginationService from './paginationService';
 
+const getDevelopers = async() => {
+  return getDevelopersPage(1);
+}
 
-const getAllDevelopers       = async () => {
+const getDevelopersPage = async(page) => {
   try {
-    const endpoint = `developers`;
-    const response = await api.get(endpoint);
-    return response.data;
+        const endpoint = `developers?page=${page}`;
+        const response = await api.get(endpoint);
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -44,9 +48,10 @@ const getGameDevelopers     = async(gameId) => {
 }
 
 const DeveloperService = {
-  getAllDevelopers     : getAllDevelopers,
-  getGameDevelopers   : getGameDevelopers,
-  getBiggestDevelopers : getBiggestDevelopers,
+    getDevelopers       : getDevelopers,
+    getDevelopersPage   : getDevelopersPage,
+    getGameDevelopers   : getGameDevelopers,
+    getBiggestDevelopers : getBiggestDevelopers,
 }
 
 export default DeveloperService;

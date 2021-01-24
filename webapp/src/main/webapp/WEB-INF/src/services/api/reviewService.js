@@ -1,5 +1,6 @@
 import api from './api';
 import AuthService from "./authService";
+import PaginationService from './paginationService';
 
 const getGameReviews = async(gameId) => {
   return getGameReviewsPage(gameId, 1);
@@ -13,19 +14,7 @@ const getGameReviewsPage = async(gameId, page) => {
   try {
     const endpoint = `games/${gameId}/reviews?page=${page}`;
     const response = await api.get(endpoint);
-    // Parse links
-    const data = response.headers.link;
-    let parsed_data = {};
-    let arrData = data.split(",");
-    arrData.forEach(element => {
-        let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-        parsed_data[linkInfo[2]]=linkInfo[1];
-    });
-    const ret = {};
-    ret['pagination'] = parsed_data;
-    ret['content'] = response.data;
-    ret['pageCount'] = response.headers["page-count"];
-    return ret;
+    return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -42,19 +31,7 @@ const getUserReviewsPage = async(userId, page) => {
   try {
     const endpoint = `users/${userId}/reviews?page=${page}`;
     const response = await api.get(endpoint);
-    // Parse links
-    const data = response.headers.link;
-    let parsed_data = {};
-    let arrData = data.split(",");
-    arrData.forEach(element => {
-        let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-        parsed_data[linkInfo[2]]=linkInfo[1];
-    });
-    const ret = {};
-    ret['pagination'] = parsed_data;
-    ret['content'] = response.data;
-    ret['pageCount'] = response.headers["page-count"];
-    return ret;
+    return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

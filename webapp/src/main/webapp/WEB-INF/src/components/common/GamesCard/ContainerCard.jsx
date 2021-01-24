@@ -17,7 +17,7 @@ class ItemsCard extends Component {
             <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <div className="card-header bg-very-dark text-white px-3 d-flex">
                     <h2 className="share-tech-mono">
-                        <Translation>{t => t("games.profile." +lower)}</Translation>
+                        <Translation>{t => t("navigation." +lower)}</Translation>
                     </h2>
                     {this.state.items.length > this.state.limit ?
                         [<div className="ml-auto">

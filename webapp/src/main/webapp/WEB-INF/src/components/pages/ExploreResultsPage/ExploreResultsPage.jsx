@@ -39,7 +39,7 @@ class ExploreResultsPage extends Component {
                 pagination: responses[0].pagination,
                 data : responses[1].content,
                 page : page,
-                pageCount : responses[0].pageCount,
+                pageCount : responses[1].pageCount,
             });
         });
     }
@@ -52,6 +52,7 @@ class ExploreResultsPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
+        console.log(this.state);
 
         let category = this.state.path.split("/")[0];
         let label = "";
