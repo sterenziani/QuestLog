@@ -22,6 +22,7 @@ import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
 import SearchGameResults from '../../pages/SearchGameResults/SearchGameResults';
 import AddRunPage from "../../pages/AddRunPage/AddRunPage";
 import AddReviewPage from "../../pages/AddReviewPage/AddReviewPage";
+import UserBacklogPage from "../../pages/UserBacklogPage/UserBacklogPage";
 
 
 class ContentSwitch extends Component {
@@ -134,6 +135,14 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/reviews/create/:id"
                         component={ AddReviewPage }
+                    />
+                    <Route
+                        exact path="/users/:id/backlog"
+                        component={ UserBacklogPage }
+                    />
+                    <Route
+                        exact path="/backlog"
+                        component={ UserBacklogPage }
                     />
                 </Switch>
             </main>

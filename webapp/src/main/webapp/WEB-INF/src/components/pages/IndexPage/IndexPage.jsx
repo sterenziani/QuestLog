@@ -30,7 +30,7 @@ class IndexPage extends Component {
     }
 
     render() {
-        const fetchBacklog = BacklogService.getCurrentUserBacklog();
+        const fetchBacklog = BacklogService.getCurrentUserBacklogPreview(10);
         const fetchPop = GameService.getPopularGames();
         const fetchUp = GameService.getUpcomingGames();
 
