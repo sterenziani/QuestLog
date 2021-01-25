@@ -35,6 +35,8 @@
     "games" : {
         "profile" : {
             "addToBacklog" : "Add to Backlog",
+            "edit" : "Edit",
+            "delete" : "Delete",
             "removeFromBacklog" : "Remove from Backlog",
             "releaseDates" : "Release dates",
             "developers" : "Developers",

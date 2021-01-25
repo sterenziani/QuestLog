@@ -111,6 +111,20 @@ const getGameReleaseDates = async(gameId) => {
   }
 }
 
+const deleteGame = async(gameId) => {
+  try {
+    const endpoint = `games/${gameId}`;
+    const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const GameService = {
     getPopularGames     : getPopularGames,
     getUpcomingGames    : getUpcomingGames,
@@ -118,7 +132,8 @@ const GameService = {
     getGameReleaseDates : getGameReleaseDates,
     searchGames         : searchGames,
     searchGamesPage     : searchGamesPage,
-    buildQueryParams    : buildQueryParams
+    buildQueryParams    : buildQueryParams,
+    deleteGame          : deleteGame
 }
 
 export default GameService;

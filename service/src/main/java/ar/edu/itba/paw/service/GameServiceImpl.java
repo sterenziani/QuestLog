@@ -486,7 +486,8 @@ public class GameServiceImpl implements GameService
 	@Override
 	public void removeById(long id){
 		Optional<Game> g = gameDao.findById(id);
-		remove(g.get());
+		if(g.isPresent())
+			remove(g.get());
 	}
 
 	@Transactional
