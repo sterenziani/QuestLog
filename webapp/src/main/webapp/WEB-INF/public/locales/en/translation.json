@@ -205,7 +205,7 @@
         "filterResults" : "Filter results",
         "closeModal" : "Close",
         "search" : "Search",
-        "multipleSelectHint" : "Hold CTRL while clicking to select multiple items",
+        "multipleSelectHint" : "Hold CTRL while clicking to select multiple items.",
         "scoreRange" : "Score",
         "hours" : "hrs",
         "mins" : "mins",

@@ -18,6 +18,7 @@ const getGenericContent = async (endpoint) => {
         ret['pagination'] = parsed_data;
         ret['content'] = response.data;
         ret['pageCount'] = response.headers["page-count"];
+        ret['totalCount'] = response.headers["total-count"];
         return ret;
     } catch(err) {
         if(err.response) {
@@ -44,6 +45,7 @@ const getGenericContentPage = async (endpoint, page) => {
         ret['pagination'] = parsed_data;
         ret['content'] = response.data;
         ret['pageCount'] = response.headers["page-count"];
+        ret['totalCount'] = response.headers["total-count"];
         return ret;
     } catch(err) {
         if(err.response) {
@@ -66,6 +68,7 @@ const parseResponsePaginationHeaders = (response) => {
     ret['pagination'] = parsed_data;
     ret['content'] = response.data;
     ret['pageCount'] = response.headers["page-count"];
+    ret['totalCount'] = response.headers["total-count"];
     return ret;
 }
 
