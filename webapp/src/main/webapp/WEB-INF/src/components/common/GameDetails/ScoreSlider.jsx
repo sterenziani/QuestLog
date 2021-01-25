@@ -4,6 +4,7 @@ import {Row, Col, Badge, Button, Container} from "react-bootstrap";
 import {Slider} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
+import withUser from '../../hoc/withUser';
 import ScoreService from "../../../services/api/scoreService";
 
 class ScoreSlider extends Component {
@@ -27,10 +28,10 @@ class ScoreSlider extends Component {
     }
 
     publishScoreHandler(e) {
-        if(this.props.userId) {
+        if(this.props.userIsLoggedIn) {
             ScoreService.rateGame(this.state.game.id, this.state.userScore).then(data => {
-                                                                                            if(data.status === '201'){
-                                                                                                this.setState({published:true})
+                                                                                            if(data.status == '201'){
+                                                                                                this.setState({published:true});
                                                                                             }
                                                                                             else{
                                                                                                 // TODO: Force login or try again
@@ -43,7 +44,7 @@ class ScoreSlider extends Component {
     }
 
     getUserScore() {
-        if(this.state.userScore || this.state.userScore === 0) {
+        if(this.state.userScore || this.state.userScore == 0) {
             return parseInt(this.state.userScore);
         }
         else {
@@ -52,7 +53,7 @@ class ScoreSlider extends Component {
     }
 
     getUserScoreNumerical() {
-        if(this.state.userScore || this.state.userScore === 0) {
+        if(this.state.userScore || this.state.userScore == 0) {
             return parseInt(this.state.userScore);
         }
         else {
@@ -95,4 +96,4 @@ class ScoreSlider extends Component {
     }
 }
 
-export default withRouter(ScoreSlider);
+export default withRouter(withUser(ScoreSlider));
