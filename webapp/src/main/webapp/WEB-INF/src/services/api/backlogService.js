@@ -3,15 +3,15 @@ import AuthService from "./authService";
 import Cookies from 'universal-cookie';
 import PaginationService from './paginationService';
 
-const getUserBacklog = async(userId) => {
-    return getUserBacklogPage(userId, 1);
+const getUserBacklog = async(userId, limit) => {
+    return getUserBacklogPage(userId, 1, limit);
 }
 
-const getUserBacklogPage = async(userId, page) => {
+const getUserBacklogPage = async(userId, page, limit) => {
   try {
         const cookies = new Cookies();
         let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
-        const endpoint = `users/${userId}/backlog?page=${page}&backlog=${currentBacklog}`;
+        const endpoint = `users/${userId}/backlog?page=${page}&backlog=${currentBacklog}&page_size=${limit}`;
         const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {

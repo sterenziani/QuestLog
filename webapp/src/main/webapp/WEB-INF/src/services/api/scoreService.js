@@ -39,8 +39,8 @@ const getGameScores = async(gameId) => {
     return getGameScoresPage(gameId, 1);
 }
 
-const getUserScores = async(userId) => {
-    return getUserScoresPage(userId, 1);
+const getUserScores = async(userId, limit) => {
+    return getUserScoresPage(userId, 1, limit);
 }
 
 const getGameScoresPage = async(gameId, page) => {
@@ -57,9 +57,9 @@ const getGameScoresPage = async(gameId, page) => {
   }
 }
 
-const getUserScoresPage = async(userId, page) => {
+const getUserScoresPage = async(userId, page, limit) => {
   try {
-    const endpoint = `users/${userId}/scores?page=${page}`;
+    const endpoint = `users/${userId}/scores?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
     return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {

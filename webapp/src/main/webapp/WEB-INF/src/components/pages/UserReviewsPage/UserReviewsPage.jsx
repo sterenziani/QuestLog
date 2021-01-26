@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
-import BacklogService from "../../../services/api/backlogService";
 import UserService from "../../../services/api/userService";
 import withUser from '../../hoc/withUser';
 import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';
-import GamesCard from "../../common/GamesCard/GamesCard";
 import Pagination from "../../common/Pagination/Pagination";
+import ReviewService from "../../../services/api/reviewService";
+import UserReviewsTab from "../../common/UserDetails/UserReviewsTab";
 
 
-class UserBacklogPage extends Component {
+class UserReviewsPage extends Component {
     state = {
-        backlogOwner: this.props.user,
         path : window.location.pathname.substring(1 + (`${process.env.PUBLIC_URL}`).length),
         loading: true,
+        userId: this.props.user ? this.props.user.id : null,
+        visitedUser: this.props.user,
         pagination: [],
         content : [],
+        pageCount : null,
         page : null,
-        pageCount : null
     };
 
     componentWillMount() {
@@ -30,37 +31,23 @@ class UserBacklogPage extends Component {
         if(!page) {
             page = 1;
         }
-        if(this.props.match.params.id)
+        if(this.props.match.params.id != this.state.userId)
         {
-            // Visiting specified user
             UserService.getUserById(this.props.match.params.id).then((response) => {
                 this.setState({
-                    backlogOwner : response,
+                    visitedUser : response,
                 })
             });
-            BacklogService.getUserBacklogPage(this.props.match.params.id, page, 15).then((response) => {
-                this.setState({
-                    loading: false,
-                    content: response.content,
-                    pagination: response.pagination,
-                    pageCount : response.pageCount,
-                    page : page,
-                });
-            });
         }
-        else
-        {
-            // Own backlog
-            BacklogService.getCurrentUserBacklogPage(page).then((response) => {
-                this.setState({
-                    loading: false,
-                    content: response.content,
-                    pagination: response.pagination,
-                    pageCount : response.pageCount,
-                    page : page,
-                });
+        ReviewService.getUserReviewsPage(this.props.match.params.id, page, 10).then((response) => {
+            this.setState({
+                loading: false,
+                content: response.content,
+                pagination: response.pagination,
+                pageCount : response.pageCount,
+                page : page,
             });
-        }
+        });
     }
 
     render() {
@@ -71,26 +58,20 @@ class UserBacklogPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-        let label = "games.lists.backlogGames";
-        let param = "";
-        if(this.state.backlogOwner){
-            label = "users.userBacklog";
-            param = {value: this.state.backlogOwner.username};
-        }
-
-        const { t } = this.props
+        console.log(this.state.pagination)
+        const { t } = this.props;
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{t(label, param)} - QuestLog</title>
+                        <title>{t("users.userReviews", {value: this.state.visitedUser.username})} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <GamesCard label={t(label, param)} items={this.state.content} totalCount={this.state.totalCount}/>
+                <UserReviewsTab visitedUser={this.state.visitedUser} loggedUser={this.props.user} reviewsDisplayed={this.state.content} reviewsPagination={this.state.pagination} seeAll={false}/>
                 <Pagination url={this.state.path} page={this.state.page} totalPages={this.state.pageCount} setPage={this.setPage} queryParams={this.state.searchParams}/>
             </React.Fragment>
         );
     }
 }
 
-export default withTranslation() (withUser(withQuery(UserBacklogPage)));
+export default withTranslation() (withUser(withQuery(UserReviewsPage)));

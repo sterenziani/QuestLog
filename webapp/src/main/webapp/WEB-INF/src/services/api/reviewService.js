@@ -6,8 +6,8 @@ const getGameReviews = async(gameId) => {
   return getGameReviewsPage(gameId, 1);
 }
 
-const getUserReviews = async(userId) => {
-  return getUserReviewsPage(userId, 1);
+const getUserReviews = async(userId, limit) => {
+  return getUserReviewsPage(userId, 1, limit);
 }
 
 const getGameReviewsPage = async(gameId, page) => {
@@ -24,12 +24,12 @@ const getGameReviewsPage = async(gameId, page) => {
   }
 }
 
-const getUserReviewsPage = async(userId, page) => {
+const getUserReviewsPage = async(userId, page, limit) => {
   if(userId == null) {
     return [];
   }
   try {
-    const endpoint = `users/${userId}/reviews?page=${page}`;
+    const endpoint = `users/${userId}/reviews?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
     return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {

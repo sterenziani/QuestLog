@@ -10,27 +10,40 @@ import UserRunsTab from "./UserRunsTab";
 import UserReviewsTab from "./UserReviewsTab";
 import GameListItem from "../ListItem/GameListItem";
 import withUser from '../../hoc/withUser';
+import ScoreService from "../../../services/api/scoreService";
+import ReviewService from "../../../services/api/reviewService";
+import RunService from "../../../services/api/runService";
 
 class UserProfile extends Component {
     state = {
         loading: true,
         visitedUser : this.props.visitedUser,
-        backlog: [],
-        backlogPagination: [],
         user: this.props.user ? this.props.user : null,
         loggedIn: this.props.userIsLoggedIn,
     };
 
     componentWillMount() {
-        BacklogService.getUserBacklog(this.props.visitedUser.id)
-              .then((data) => {
-                  this.setState({
-                      backlog: data.content,
-                      backlogPagination: data.pagination,
-                      loading: false,
-                  });
-              }).then((data) =>  {});
-    };
+        const fetchBacklog = BacklogService.getUserBacklog(this.props.visitedUser.id, 5);
+        const fetchScore = ScoreService.getUserScores(this.props.visitedUser.id, 10);
+        const fetchRev = ReviewService.getUserReviews(this.props.visitedUser.id, 5);
+        const fetchRun = RunService.getUserRuns(this.props.visitedUser.id, 10);
+
+        //TODO: Handle no response (404)
+        Promise.all([ fetchBacklog, fetchScore, fetchRev, fetchRun ]).then((responses) => {
+            this.setState({
+                loading: false,
+                backlog: responses[0].content,
+                backlogPagination: responses[0].pagination,
+                scoresDisplayed: responses[1].content,
+                scoresPagination: responses[1].pagination,
+                reviewsDisplayed: responses[2].content,
+                reviewsPagination: responses[2].pagination,
+                runsDisplayed: responses[3].content,
+                runsPagination: responses[3].pagination,
+
+            });
+        });
+    }
 
     render() {
         if (this.state.loading === true) {
@@ -100,13 +113,13 @@ class UserProfile extends Component {
                             </div>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="scores" title={<Translation>{t => t("users.scores")}</Translation>}>
-                            <UserScoresTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
+                            <UserScoresTab seeAll={true} visitedUser={this.state.visitedUser} loggedUser={this.state.user} scoresDisplayed={this.state.scoresDisplayed} scoresPagination={this.state.scoresPagination}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("users.runs")}</Translation>}>
-                            <UserRunsTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
+                            <UserRunsTab seeAll={true} visitedUser={this.state.visitedUser} loggedUser={this.state.user} runsDisplayed={this.state.runsDisplayed} runsPagination={this.state.runsPagination}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("users.reviews")}</Translation>}>
-                            <UserReviewsTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
+                            <UserReviewsTab seeAll={true} visitedUser={this.state.visitedUser} loggedUser={this.state.user} reviewsDisplayed={this.state.reviewsDisplayed} reviewsPagination={this.state.reviewsPagination}/>
                         </Tab>
                     </Tabs>
                 </div>
