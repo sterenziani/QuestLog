@@ -16,16 +16,16 @@ const getGameRuns = async(gameId) => {
   }
 }
 
-const getUserRuns = async(userId) => {
-  return getUserRunsPage(userId, 1);
+const getUserRuns = async(userId, limit) => {
+  return getUserRunsPage(userId, 1, limit);
 }
 
-const getUserRunsPage = async(userId, page) => {
+const getUserRunsPage = async(userId, page, limit) => {
   if(userId == null) {
     return [];
   }
   try {
-    const endpoint = `users/${userId}/runs?page=${page}`;
+    const endpoint = `users/${userId}/runs?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
     return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
