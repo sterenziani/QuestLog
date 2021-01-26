@@ -50,6 +50,11 @@ class GameProfile extends Component {
         });
     };
 
+    updateGameBacklogStatus = status => {
+        this.state.game.in_backlog = status;
+        this.setState({game: this.state.game});
+    };
+
     render() {
         if (this.state.loading === true) {
             return <div style={{
@@ -67,11 +72,11 @@ class GameProfile extends Component {
                     {
                         <Grid style={{width: "100%"}}>
                             <Row>
-                                <div><GameDetailsCard game={this.state.game}/></div>
+                                <div><GameDetailsCard game={this.state.game} onUpdate={this.updateGameBacklogStatus}/></div>
                                 <Col className="p-3">
                                     {this.state.game.released? [
                                         <div>
-                                            <ScoreSlider game={this.state.game} userScore={this.state.userScore} user={this.state.user}/>
+                                            <ScoreSlider game={this.state.game} userScore={this.state.userScore} user={this.state.user} onBacklogUpdate={this.updateGameBacklogStatus}/>
                                             <Tabs className="mt-5 mx-3 bg-dark" defaultActiveKey="runs" id="uncontrolled-tab-example">
                                                 <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("games.profile.runs")}</Translation>}>
                                                     <RunsTab game={this.state.game} user={this.state.user} loggedIn={this.state.loggedIn}/>

@@ -51,7 +51,11 @@
             "unreleased" : "Las calificaciones, runs y reseñas están deshabilitadas para este juego hasta que salga a la venta para alguna plataforma",
             "runs" : "RUNS",
             "reviews" : "RESEÑAS",
-            "myReviews" : "MIS RESEÑAS"
+            "myReviews" : "MIS RESEÑAS",
+            "removeFromBacklogPrompt": "¿Quitar {{value}} del backlog?",
+            "removeFromBacklogPromptExplain": "Este juego está actualmente en tu backlog. Ya que parece que lo has terminado, ¿Quieres además removerlo del backlog?",
+            "keepInBacklogAndSend": "No, quiero conservarlo y enviar mi información",
+            "removeFromBacklogAndSend": "¡Bueno! ¡Quitar del backlog y enviar mi información!"
         },
         "lists" : {
             "popularGames" : "Lo más popular",

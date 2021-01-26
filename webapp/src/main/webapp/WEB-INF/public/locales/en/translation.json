@@ -51,7 +51,11 @@
             "unreleased" : "Scores, runs and reviews are disabled for this game until it comes out on at least one platform",
             "runs" : "RUNS",
             "reviews" : "REVIEWS",
-            "myReviews" : "MY REVIEWS"
+            "myReviews" : "MY REVIEWS",
+            "removeFromBacklogPrompt": "Remove {{value}} from backlog?",
+            "removeFromBacklogPromptExplain": "This game is currently in your backlog. Since it looks like you've beaten it, would you like to remove it from your backlog?",
+            "keepInBacklogAndSend": "No, publish and keep it in my backlog",
+            "removeFromBacklogAndSend": "Sure! Publish and remove it from my backlog!"
         },
         "lists" : {
             "popularGames" : "Popular right now",

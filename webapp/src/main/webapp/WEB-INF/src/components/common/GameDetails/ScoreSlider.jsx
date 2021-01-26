@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import {Row, Col, Badge, Button, Container} from "react-bootstrap";
+import {Row, Col, Badge, Button, Container, Modal} from "react-bootstrap";
 import {Slider} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import withUser from '../../hoc/withUser';
 import ScoreService from "../../../services/api/scoreService";
+import BacklogService from "../../../services/api/backlogService";
 
 class ScoreSlider extends Component {
     state = {
-        game: this.props.game,
         userScore : this.props.userScore,
         published : false,
+        showModal: false,
     };
 
+    switchModal(){
+        this.setState({showModal: !this.state.showModal});
+    }
+
     getScore() {
-        if(this.state.game.votes > 0) {
-            return this.state.game.score;
+        if(this.props.game.votes > 0) {
+            return this.props.game.score;
         }
         else {
             return (<Translation>{t => t("score.notAvailable")}</Translation>);
@@ -27,20 +32,43 @@ class ScoreSlider extends Component {
         this.setState({userScore : newValue});
     }
 
-    publishScoreHandler(e) {
-        if(this.props.userIsLoggedIn) {
-            ScoreService.rateGame(this.state.game.id, this.state.userScore).then(data => {
-                                                                                            if(data.status == '201'){
-                                                                                                this.setState({published:true});
-                                                                                            }
-                                                                                            else{
-                                                                                                // TODO: Force login or try again
-                                                                                                console.log("Try again!");
-                                                                                            }
-                                                                                        });
+    publishScoreHandler() {
+        if(this.props.userIsLoggedIn)
+        {
+            if(this.props.game.in_backlog)
+                this.switchModal();
+            else
+                this.publishScore();
         }
         else
             window.location.href = `${process.env.PUBLIC_URL}/login`;
+    }
+
+    publishAndRemoveFromBacklog = () => {
+        this.props.onBacklogUpdate(false);
+        BacklogService.removeGameFromBacklog(this.props.game.id);
+        this.publishScore();
+        if(this.state.showModal)
+            this.switchModal();
+    }
+
+    publishAndKeepInBacklog = () => {
+        this.publishScore();
+        if(this.state.showModal)
+            this.switchModal();
+    }
+
+    publishScore = () => {
+        ScoreService.rateGame(this.props.game.id, this.state.userScore)
+        .then(data => {
+            if(data.status == '201'){
+                this.setState({published:true});
+            }
+            else{
+                // TODO: Force login or try again
+                console.log("Try again!");
+            }
+        });
     }
 
     getUserScore() {
@@ -90,6 +118,16 @@ class ScoreSlider extends Component {
                         </Col>
                     </Row>
                 </Col>
+                <Modal show={this.state.showModal} onHide={() => this.switchModal()}>
+                    <Modal.Header closeButton><Modal.Title><Translation>{t => t("games.profile.removeFromBacklogPrompt", {value: this.props.game.title})}</Translation></Modal.Title></Modal.Header>
+                    <Modal.Body>
+                        <Translation>{t => t("games.profile.removeFromBacklogPromptExplain")}</Translation>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="light" onClick={this.publishAndKeepInBacklog}><Translation>{t => t("games.profile.keepInBacklogAndSend")}</Translation></Button>
+                        <Button variant="danger" onClick={this.publishAndRemoveFromBacklog}><Translation>{t => t("games.profile.removeFromBacklogAndSend")}</Translation></Button>
+                    </Modal.Footer>
+                </Modal>
             </Row>
             </Container>
         )

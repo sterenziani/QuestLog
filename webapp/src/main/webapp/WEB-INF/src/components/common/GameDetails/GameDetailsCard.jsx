@@ -16,7 +16,6 @@ import Spinner from "react-bootstrap/Spinner";
 
 class GameDetailsCard extends Component {
     state = {
-        game: this.props.game,
         releaseDates: [],
         developers: [],
         publishers: [],
@@ -46,7 +45,7 @@ class GameDetailsCard extends Component {
     }
 
     render() {
-        let trailerAvailable = this.state.game.trailer;
+        let trailerAvailable = this.props.game.trailer;
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -56,9 +55,9 @@ class GameDetailsCard extends Component {
         }
         return (
             <Card className="m-3 d-flex bg-transparent" style={{width: '18rem', border: '0'}}>
-              <BacklogButton game={this.state.game}/>
-              <div className="d-flex flex-column flex-grow-1 text-white" href={`${process.env.PUBLIC_URL}/games/` + this.state.game.id}>
-                <GameCover cover={this.state.game.cover}/>
+              <BacklogButton game={this.props.game} onUpdate={this.props.onUpdate}/>
+              <div className="d-flex flex-column flex-grow-1 text-white" href={`${process.env.PUBLIC_URL}/games/` + this.props.game.id}>
+                <GameCover cover={this.props.game.cover}/>
 
                 <div className="card-body bg-primary flex-grow-1">
                     <dl>
@@ -88,7 +87,7 @@ class GameDetailsCard extends Component {
                     </dl>
 
                 </div>
-                { trailerAvailable? [<iframe width="286" height="161" src={'https://www.youtube.com/embed/' +this.state.game.trailer} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>] : []}
+                { trailerAvailable? [<iframe width="286" height="161" src={'https://www.youtube.com/embed/' +this.props.game.trailer} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>] : []}
               </div>
             </Card>
         )
