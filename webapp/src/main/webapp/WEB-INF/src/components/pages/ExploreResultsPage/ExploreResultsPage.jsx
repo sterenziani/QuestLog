@@ -37,9 +37,9 @@ class ExploreResultsPage extends Component {
                 loading: false,
                 content: responses[0].content,
                 pagination: responses[0].pagination,
+                pageCount : responses[0].pageCount,
                 data : responses[1].content,
-                page : page,
-                pageCount : responses[1].pageCount,
+                page : page
             });
         });
     }
