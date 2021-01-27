@@ -12,7 +12,7 @@ class ReviewCard extends Component {
         loggedIn: this.props.userIsLoggedIn,
     };
 
-    publishScoreHandler(e) {
+    deleteReviewHandler(e) {
         ReviewService.deleteReview(this.state.review.id);
         window.location.reload();
     }
@@ -50,7 +50,7 @@ class ReviewCard extends Component {
             	</Row>
                 {(this.state.loggedIn && (this.state.review.user.id === this.state.user.id || this.state.user.admin))? [
                     <Row className="mt-3 justify-content-center">
-                        <Button variant="danger" onClick={(e) => {this.publishScoreHandler(e)}}><Translation>{t => t("reviews.delete")}</Translation>{this.state.label}</Button>
+                        <Button variant="danger" onClick={(e) => {this.deleteReviewHandler(e)}}><Translation>{t => t("reviews.delete")}</Translation>{this.state.label}</Button>
                     </Row>] : []}
               </div>
             </div>

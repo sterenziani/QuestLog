@@ -106,7 +106,7 @@ const addRun = async(gameId, hours, mins, secs, ps, plat) => {
       "platform" : plat,
     }
     const response = await api.post(endpoint, newRun, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

@@ -67,7 +67,7 @@ const addReview = async(gameId, score, platform, body) => {
       "body" : body,
     }
     const response = await api.post(endpoint, newReview, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -81,7 +81,7 @@ const deleteReview = async(reviewId) => {
   try {
     const endpoint = `games/reviews/${reviewId}`;
     const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

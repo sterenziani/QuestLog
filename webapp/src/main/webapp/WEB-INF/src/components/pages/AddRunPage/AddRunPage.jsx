@@ -14,6 +14,8 @@ class AddRunPage extends Component {
         game: null,
         loading: true,
         userId: this.props.user ? this.props.user.id : null,
+        platforms: [],
+        playstyles: []
     };
 
     componentWillMount() {
