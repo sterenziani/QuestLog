@@ -26,6 +26,7 @@ import UserBacklogPage from "../../pages/UserBacklogPage/UserBacklogPage";
 import UserScoresPage from "../../pages/UserScoresPage/UserScoresPage";
 import UserReviewsPage from "../../pages/UserReviewsPage/UserReviewsPage";
 import UserRunsPage from "../../pages/UserRunsPage/UserRunsPage";
+import GameReviewsPage from "../../pages/GameReviewsPage/GameReviewsPage";
 
 
 class ContentSwitch extends Component {
@@ -158,6 +159,10 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/backlog"
                         component={ UserBacklogPage }
+                    />
+                    <Route
+                        exact path="/games/:id/reviews"
+                        component={ GameReviewsPage }
                     />
                 </Switch>
             </main>

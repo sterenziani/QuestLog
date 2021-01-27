@@ -10,8 +10,6 @@ class ReviewsTab extends Component {
     state = {
         game: this.props.game,
         reviews: this.props.reviews? this.props.reviews : [],
-        myReviews: [],
-        displayedReviews: [],
         pagination: this.props.pagination? this.props.pagination : [],
         label: this.props.label? this.props.label : "reviews.reviews",
         user: this.props.user ? this.props.user : null,
@@ -30,7 +28,7 @@ class ReviewsTab extends Component {
                         <h2 className="share-tech-mono"><Translation>{t => t(this.state.label)}</Translation></h2>
                     </div>
                     {
-                        this.state.pagination.next? [
+                        this.state.pagination.next && this.props.seeAll? [
                             <div className="ml-auto">
                                 <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/games/` +this.state.game.id +'/reviews'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
                             </div>

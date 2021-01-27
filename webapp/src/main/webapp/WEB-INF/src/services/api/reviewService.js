@@ -2,17 +2,17 @@ import api from './api';
 import AuthService from "./authService";
 import PaginationService from './paginationService';
 
-const getGameReviews = async(gameId) => {
-  return getGameReviewsPage(gameId, 1);
+const getGameReviews = async(gameId, limit) => {
+  return getGameReviewsPage(gameId, 1, limit);
 }
 
 const getUserReviews = async(userId, limit) => {
   return getUserReviewsPage(userId, 1, limit);
 }
 
-const getGameReviewsPage = async(gameId, page) => {
+const getGameReviewsPage = async(gameId, page, limit) => {
   try {
-    const endpoint = `games/${gameId}/reviews?page=${page}`;
+    const endpoint = `games/${gameId}/reviews?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
     return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
