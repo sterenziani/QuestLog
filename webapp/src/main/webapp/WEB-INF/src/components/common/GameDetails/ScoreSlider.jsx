@@ -125,7 +125,7 @@ class ScoreSlider extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="light" onClick={this.publishAndKeepInBacklog}><Translation>{t => t("games.profile.keepInBacklogAndSend")}</Translation></Button>
-                        <Button variant="danger" onClick={this.publishAndRemoveFromBacklog}><Translation>{t => t("games.profile.removeFromBacklogAndSend")}</Translation></Button>
+                        <Button variant="primary" onClick={this.publishAndRemoveFromBacklog}><Translation>{t => t("games.profile.removeFromBacklogAndSend")}</Translation></Button>
                     </Modal.Footer>
                 </Modal>
             </Row>

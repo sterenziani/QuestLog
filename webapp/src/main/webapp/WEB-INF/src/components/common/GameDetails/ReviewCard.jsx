@@ -36,7 +36,7 @@ class ReviewCard extends Component {
             			<a href={`${process.env.PUBLIC_URL}/games/` + this.state.review.game.id}>{this.state.review.game.title}</a> {"("+this.state.review.platform.shortName+")"}
             		</Col>
             	</Row>
-            	<Row>
+            	<Row className="containerFluid">
             		<Col className="col-10 text-left">
                         {this.state.review.body.map(l => (
                             <div>
