@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Tabs, Tab, Button} from "react-bootstrap";
+import {Card, Row, Col, Tabs, Tab, Button} from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
@@ -13,6 +13,8 @@ import withUser from '../../hoc/withUser';
 import ScoreService from "../../../services/api/scoreService";
 import ReviewService from "../../../services/api/reviewService";
 import RunService from "../../../services/api/runService";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, faGamepad } from '@fortawesome/free-solid-svg-icons';
 
 class UserProfile extends Component {
     state = {
@@ -61,26 +63,26 @@ class UserProfile extends Component {
                         {(this.state.loggedIn && this.state.user.id === this.state.visitedUser.id)? [<h5 class="align-middle">{this.state.visitedUser.email}</h5>] : []}
                     </div>
                     <div class="d-flex text-left flex-wrap">
-                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center">
-                            <div class="pl-3 d-flex justify-content-center flex-column">
-                                <i class="fa fa-4x fa-star d-block"></i>
+                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                            <div class="pl-3 py-3 d-flex justify-content-center flex-column">
+                                <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faStar }/>
                             </div>
-                            <div class="pt-5 pb-5 pr-5 pl-3">
+                            <Col className="py-3">
                                 <h5><Translation>{t => t("users.gamesRated", {value: this.state.visitedUser.score_total})}</Translation></h5>
                                 <h5><Translation>{t => t("users.scoreAverage", {value: this.state.visitedUser.score_average})}</Translation></h5>
-                            </div>
+                            </Col>
                         </div>
-                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center">
-                            <div class="pl-3 d-flex justify-content-center flex-column">
-                                <i class="fa fa-4x fa-gamepad d-block"></i>
+                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                            <div class="pl-3 py-3 d-flex justify-content-center flex-column">
+                                <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faGamepad }/>
                             </div>
-                            <div class="pt-5 pb-5 pr-5 pl-3">
+                            <Col className="py-3">
                                 <h5><Translation>{t => t("users.runsCreated", {value: this.state.visitedUser.runs_total})}</Translation></h5>
                                 <h5><Translation>{t => t("users.hoursPlayed", {value: this.state.visitedUser.runs_hours_played})}</Translation></h5>
-                            </div>
+                            </Col>
                         </div>
                         {this.state.visitedUser.favorite_game? [
-                            <div class="mb-0 m-3 py-3 px-5 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                            <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center py-3 px-5 ">
                                 <h5 class="pr-3"><Translation>{t => t("users.favoriteGame", {value: this.state.visitedUser.favorite_game})}</Translation></h5>
                                 <a href={`${process.env.PUBLIC_URL}/games/` + this.state.visitedUser.favorite_game.id} class="text-white">
                                     <div class="bg-primary d-flex flex-row align-items-center">

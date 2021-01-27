@@ -16,7 +16,7 @@ class GameDetailsPage extends Component {
         UserService.getUserById(this.props.match.params.id)
             .then((data) => {
                 this.setState({
-                    user: data,
+                    visitedUser: data,
                     loading: false,
                 });
             });
@@ -35,10 +35,10 @@ class GameDetailsPage extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.user.username} - QuestLog</title>
+                        <title>{this.state.visitedUser.username} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <UserProfile visitedUser={this.state.user}/>
+                <UserProfile visitedUser={this.state.visitedUser}/>
             </React.Fragment>
         );
     }
