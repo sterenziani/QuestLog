@@ -136,7 +136,14 @@
         "emailNotFound" : "No users registered with that email address were found",
         "send" : "Send",
         "emailSent": "We've sent you an email with instructions on what to do next. Please check your email inbox. The message may take a while to deliver, so be patient.",
-        "invalidToken": "The password reset token is invalid or has expired. If you asked to reset your password multiple times, make sure you've clicked the last email we sent you."
+        "invalidToken": "The password reset token is invalid or has expired. If you asked to reset your password multiple times, make sure you've clicked the last email we sent you.",
+        "changePassword" : "Change password",
+        "changePasswordSubtitle" : "Choose a new password to use with your account from now on.",
+        "passwordTooShort" : "The password should be at least 6 characters long",
+        "password" : "Password",
+        "repeatPassword" : "Repeat password",
+        "save" : "Save changes",
+        "passwordsDontMatch" : "The passwords don't match"
     },
     "genres" : {
         "Action" : "Action",

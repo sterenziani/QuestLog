@@ -115,6 +115,34 @@ const requestPasswordChangeToken = async(email) => {
     }
 }
 
+const getToken = async(token) => {
+    try {
+          const endpoint = `users/tokens/${token}`;
+          const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
+const changePassword = async(userId, token, newPassword) => {
+    try {
+          const endpoint = `users/${userId}/password`;
+          const response = await api.put(endpoint, {'token': token, 'password': newPassword}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
 const UserService = {
   register      : register,
   getUserById   : getUserById,
@@ -122,7 +150,9 @@ const UserService = {
   searchUsersPage : searchUsersPage,
   makeAdmin     : makeAdmin,
   removeAdmin   : removeAdmin,
-  requestPasswordChangeToken : requestPasswordChangeToken
+  requestPasswordChangeToken : requestPasswordChangeToken,
+  getToken : getToken,
+  changePassword : changePassword
 }
 
 export default UserService;

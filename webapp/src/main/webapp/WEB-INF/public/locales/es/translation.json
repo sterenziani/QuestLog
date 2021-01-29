@@ -136,7 +136,14 @@
         "emailNotFound" : "No se encontraron usuarios usando esa dirección de email",
         "send" : "Enviar",
         "emailSent": "Te hemos enviado un email con instrucciones de qué hacer ahora. Por favor revisa tu casilla de correo. El mensaje puede tardar un rato en llegar, así que se paciente.",
-        "invalidToken": "El token para reinicio de contraseña es inválido o expiró. Si pediste reiniciar tu contraseña varias veces, asegúrate de haber clickeado el link del último email que te enviamos"
+        "invalidToken": "El token para reinicio de contraseña es inválido o expiró. Si pediste reiniciar tu contraseña varias veces, asegúrate de haber clickeado el link del último email que te enviamos.",
+        "changePassword" : "Cambiar contraseña",
+        "changePasswordSubtitle" : "Elija una nueva contraseña para usar con su cuenta de aquí en adelante.",
+        "passwordTooShort" : "La contraseña debe tener al menos 6 caracteres",
+        "password" : "Contraseña",
+        "repeatPassword" : "Reingrese contraseña",
+        "save" : "Guardar cambios",
+        "passwordsDontMatch" : "Las contraseñas no coinciden"
     },
     "genres" : {
         "Action" : "Acción",
