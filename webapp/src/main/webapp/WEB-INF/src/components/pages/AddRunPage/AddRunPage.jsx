@@ -54,4 +54,4 @@ class AddRunPage extends Component {
     }
 }
 
-export default withTranslation() (withUser(AddRunPage));
+export default withTranslation() (withUser(AddRunPage,{visibility : "usersOnly"}));

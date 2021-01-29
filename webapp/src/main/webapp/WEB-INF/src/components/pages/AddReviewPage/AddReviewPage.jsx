@@ -48,4 +48,4 @@ class AddReviewPage extends Component {
     }
 }
 
-export default withTranslation() (withUser(AddReviewPage));
+export default withTranslation() (withUser(AddReviewPage,{visibility : "usersOnly"}));
