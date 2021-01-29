@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void createPasswordResetTokenForUser(User user, String token)
 	{
-	    PasswordResetToken myToken = new PasswordResetToken(token, user);
+	    PasswordResetToken myToken = new PasswordResetToken(token, user, LocalDate.now().plusDays(2));
 	    userDao.saveToken(myToken);
 	    emailService.sendAccountRecoveryEmail(user, token);
 	}
@@ -123,6 +123,16 @@ public class UserServiceImpl implements UserService{
 	    }
 	    LOGGER.debug("Token {} rejected because it is invalid", token);
 	    return "invalidToken";
+	}
+	
+	@Transactional
+	@Override
+	public PasswordResetToken getToken(String token)
+	{
+		final Optional<PasswordResetToken> opt = userDao.findTokenByToken(token);
+		if(opt.isPresent())
+			return opt.get();
+		return null;
 	}
 
 	@Transactional
