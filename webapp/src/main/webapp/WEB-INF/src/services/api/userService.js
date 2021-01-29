@@ -1,6 +1,6 @@
 import api from './api';
 import AuthService from "./authService";
-import { CONFLICT, TIMEOUT } from './apiConstants';
+import { CONFLICT, TIMEOUT, CREATED, OK } from './apiConstants';
 import PaginationService from './paginationService';
 
 const endpoint    = '/users'
@@ -75,7 +75,6 @@ const getUserById = async(userId) => {
 
 const makeAdmin = async(userId) => {
   try {
-        console.log("Haciendo admin a " +userId);
         const endpoint = `users/${userId}/admin`;
         const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
@@ -90,7 +89,6 @@ const makeAdmin = async(userId) => {
 
 const removeAdmin = async(userId) => {
   try {
-        console.log("Matando admin " +userId);
         const endpoint = `users/${userId}/admin`;
         const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
@@ -103,13 +101,58 @@ const removeAdmin = async(userId) => {
   }
 }
 
+const requestPasswordChangeToken = async(email) => {
+    try {
+          const endpoint = `users/tokens`;
+          const response = await api.post(endpoint, {'email': email}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
+const getToken = async(token) => {
+    try {
+          const endpoint = `users/tokens/${token}`;
+          const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
+const changePassword = async(userId, token, newPassword) => {
+    try {
+          const endpoint = `users/${userId}/password`;
+          const response = await api.put(endpoint, {'token': token, 'password': newPassword}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
 const UserService = {
   register      : register,
   getUserById   : getUserById,
   searchUsers   : searchUsers,
   searchUsersPage : searchUsersPage,
   makeAdmin     : makeAdmin,
-  removeAdmin   : removeAdmin
+  removeAdmin   : removeAdmin,
+  requestPasswordChangeToken : requestPasswordChangeToken,
+  getToken : getToken,
+  changePassword : changePassword
 }
 
 export default UserService;

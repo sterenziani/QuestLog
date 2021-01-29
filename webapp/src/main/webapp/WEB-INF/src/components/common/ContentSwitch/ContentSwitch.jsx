@@ -27,6 +27,8 @@ import UserScoresPage from "../../pages/UserScoresPage/UserScoresPage";
 import UserReviewsPage from "../../pages/UserReviewsPage/UserReviewsPage";
 import UserRunsPage from "../../pages/UserRunsPage/UserRunsPage";
 import GameReviewsPage from "../../pages/GameReviewsPage/GameReviewsPage";
+import ChangePasswordPage from "../../pages/ChangePasswordPage/ChangePasswordPage";
+import RequestTokenPage from "../../pages/RequestTokenPage/RequestTokenPage";
 
 
 class ContentSwitch extends Component {
@@ -163,6 +165,14 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/games/:id/reviews"
                         component={ GameReviewsPage }
+                    />
+                    <Route
+                        exact path="/forgotPassword"
+                        component={ RequestTokenPage }
+                    />
+                    <Route
+                        exact path="/changePassword"
+                        component={ ChangePasswordPage }
                     />
                 </Switch>
             </main>
