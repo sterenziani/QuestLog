@@ -241,5 +241,12 @@
         "maxTime" : "Story mode max length"
     },
     "submit" : "Submit",
-    "whoops" : "Whoops!"
+    "whoops" : "Whoops!",
+    "error" : {
+        "400" : "The server could not process your request.",
+        "401" : "Authorization denied.",
+        "403" : "Access denied.",
+        "404" :  "The requested page does not exist.",
+        "500" : "There has been a problem on our part. Please try again later."
+    }
 }
