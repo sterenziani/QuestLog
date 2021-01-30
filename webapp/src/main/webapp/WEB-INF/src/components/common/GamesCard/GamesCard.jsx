@@ -13,6 +13,11 @@ class GamesCard extends Component {
         seeAllLink: this.props.seeAllLink,
     };
 
+    componentWillReceiveProps(newProps) {
+        this.setState({ items: newProps.items? newProps.items : [],
+                        pagination: newProps.pagination? newProps.pagination : []});
+    }
+
     render() {
         let empty = !this.state.items.length;
         return (

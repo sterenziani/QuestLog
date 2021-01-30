@@ -5,7 +5,7 @@ import java.util.List;
 import ar.edu.itba.paw.model.entity.*;
 
 import javax.persistence.EntityManager;
-public class TestMethods
+public abstract class TestMethods
 {
 	public static int countRowsInTable(String table, EntityManager em){
 		return ((Number) em.createNativeQuery("SELECT COUNT(*) FROM " + table).getSingleResult()).intValue();
