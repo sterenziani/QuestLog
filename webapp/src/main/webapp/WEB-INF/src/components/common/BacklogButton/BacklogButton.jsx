@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Button, Col, Row, Modal} from 'react-bootstrap';
 import {Translation} from 'react-i18next';
 import withUser from '../../hoc/withUser';
+import withRedirect from '../../hoc/withRedirect';
 import BacklogService from "../../../services/api/backlogService";
 import GameService from "../../../services/api/gameService";
 
@@ -31,7 +32,12 @@ class BacklogButton extends Component {
 
     deleteHandler = () => {
         GameService.deleteGame(this.props.game.id);
-        window.location.reload();
+        if(this.props.onDelete){
+            this.props.onDelete();
+        }
+        else{
+            this.props.activateRedirect("home")
+        }
     }
 
     switchModal(){
@@ -96,4 +102,4 @@ class BacklogButton extends Component {
     }
 }
 
-export default withUser(BacklogButton);
+export default withUser(withRedirect(BacklogButton, { home : "/" }));
