@@ -6,6 +6,8 @@ import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
 class ExploreResultsPage extends Component {
@@ -17,6 +19,8 @@ class ExploreResultsPage extends Component {
         page : null,
         pageCount : null,
         loading : true,
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -31,16 +35,30 @@ class ExploreResultsPage extends Component {
         const fetchContent = PaginationService.getGenericContentPage(this.state.path + "/games", page);
         const fetchData = PaginationService.getGenericContent(this.state.path);
 
-        //TODO: Handle no response (404)
         Promise.all([ fetchContent, fetchData ]).then((responses) => {
-            this.setState({
-                loading: false,
-                content: responses[0].content,
-                pagination: responses[0].pagination,
-                pageCount : responses[0].pageCount,
-                data : responses[1].content,
-                page : page
-            });
+            let findError = null;
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                    findError = responses[i].status;
+                }
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    content: responses[0].content,
+                    pagination: responses[0].pagination,
+                    pageCount: responses[0].pageCount,
+                    data: responses[1].content,
+                    page: page
+                });
+            }
         });
     }
 
@@ -52,7 +70,9 @@ class ExploreResultsPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-        console.log(this.state);
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
+        }
 
         let category = this.state.path.split("/")[0];
         let label = "";

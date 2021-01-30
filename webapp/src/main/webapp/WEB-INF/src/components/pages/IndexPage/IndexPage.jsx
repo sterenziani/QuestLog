@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { OK } from '../../../services/api/apiConstants';
+import {CREATED, OK} from '../../../services/api/apiConstants';
 import { Container, Button } from 'react-bootstrap';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
@@ -8,6 +8,7 @@ import GamesCard from "../../common/GamesCard/GamesCard";
 import BacklogService from "../../../services/api/backlogService";
 import {Translation} from "react-i18next";
 import withUser from '../../hoc/withUser';
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 class IndexPage extends Component {
     state = {
@@ -18,6 +19,7 @@ class IndexPage extends Component {
         backlogPagination: [],
         loading : true,
         importing: false,
+        error : false,
     };
 
     eraseBacklogHandler = () => {
@@ -44,16 +46,30 @@ class IndexPage extends Component {
         const fetchPop = GameService.getPopularGames();
         const fetchUp = GameService.getUpcomingGames();
 
-        //TODO: Handle no response (404)
         Promise.all([ fetchBacklog, fetchPop, fetchUp ]).then((responses) => {
-            this.setState({
-                loading: false,
-                backlogGames: responses[0].content,
-                backlogPagination: responses[0].pagination,
-                popularGames: responses[1],
-                upcomingGames : responses[2],
-                anonBacklogEmpty: BacklogService.isAnonBacklogEmpty()
-            });
+            let findError = null;
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                    findError = responses[i].status;
+                }
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    backlogGames: responses[0].content,
+                    backlogPagination: responses[0].pagination,
+                    popularGames: responses[1],
+                    upcomingGames: responses[2],
+                    anonBacklogEmpty: BacklogService.isAnonBacklogEmpty()
+                });
+            }
         });
     }
 
@@ -64,6 +80,9 @@ class IndexPage extends Component {
                 transform: 'translate(-50%, -50%)'}}>
                     <Spinner animation="border" variant="primary" />
                 </div>
+        }
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
         return (
             <React.Fragment>

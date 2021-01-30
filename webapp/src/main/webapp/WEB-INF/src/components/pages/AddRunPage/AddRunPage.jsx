@@ -7,6 +7,8 @@ import RunService from "../../../services/api/runService";
 import RunCard from "../../common/GamesCard/RunCard";
 import withUser from '../../hoc/withUser';
 import { withTranslation } from 'react-i18next';
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
 class AddRunPage extends Component {
@@ -15,7 +17,9 @@ class AddRunPage extends Component {
         loading: true,
         userId: this.props.user ? this.props.user.id : null,
         platforms: [],
-        playstyles: []
+        playstyles: [],
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -23,12 +27,27 @@ class AddRunPage extends Component {
         const fetchPlat = PlatformService.getGamePlatforms(this.props.match.params.id);
         const fetchPlay = RunService.getAllPlaystyles();
         Promise.all([ fetchGame, fetchPlat, fetchPlay ]).then((responses) => {
-            this.setState({
-                loading: false,
-                game : responses[0],
-                platforms : responses[1],
-                playstyles : responses[2],
-            });
+            let findError = null;
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                    findError = responses[i].status;
+                }
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    game: responses[0],
+                    platforms: responses[1],
+                    playstyles: responses[2],
+                });
+            }
         });
     }
 
@@ -39,6 +58,9 @@ class AddRunPage extends Component {
                 transform: 'translate(-50%, -50%)'}}>
                 <Spinner animation="border" variant="primary" />
             </div>
+        }
+        if (this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
         const { t } = this.props
         return (
