@@ -203,7 +203,11 @@
         "delete" : "Eliminar",
         "addingReview" : "Escribiendo reseña para {{value}}",
         "platform": "Plataforma",
-        "body": "Tu reseña:"
+        "body": "Tu reseña:",
+        "deletingReview" : "Eliminando reseña",
+        "deleteSure": "¿Estás seguro de que deseas eliminar esta reseña?",
+        "deleteNo": "Cancelar",
+        "deleteYes": "Eliminar"
     },
     "users" : {
         "gamesRated" : "Juegos calificados: {{value}}",

@@ -6,6 +6,7 @@ import "../../../../src/index.scss";
 import RunService from "../../../services/api/runService";
 import Spinner from "react-bootstrap/Spinner";
 import withUser from '../../hoc/withUser';
+import AnyButton from "../AnyButton/AnyButton";
 
 class RunsTab extends Component {
     state = {
@@ -59,7 +60,7 @@ class RunsTab extends Component {
         return (
             <Grid>
                 <div className="text-center m-4">
-                    <Button variant={"success"}  href={`${process.env.PUBLIC_URL}/createRun/${this.state.game.id}`}> <Translation>{t => t("runs.addRun")}</Translation> </Button>
+                    <AnyButton variant="success"  href={`/createRun/${this.state.game.id}`} textKey="runs.addRun"/>
                 </div>
 
                 {

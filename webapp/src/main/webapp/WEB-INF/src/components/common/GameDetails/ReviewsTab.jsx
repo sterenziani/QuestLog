@@ -5,6 +5,7 @@ import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ReviewCard from "./ReviewCard";
 import withUser from '../../hoc/withUser';
+import AnyButton from "../AnyButton/AnyButton";
 
 class ReviewsTab extends Component {
     state = {
@@ -20,7 +21,7 @@ class ReviewsTab extends Component {
         return (
             <Grid>
                 <div className="text-center m-4">
-                    <Button variant={"success"} href={`${process.env.PUBLIC_URL}/reviews/create/${this.state.game.id}`}> <Translation>{t => t("reviews.addReview")}</Translation> </Button>
+                    <AnyButton variant={"success"} href={`/reviews/create/${this.state.game.id}`} textKey="reviews.addReview"/>
                 </div>
                 <Card className="m-5 text-center bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                     <Card.Header className="bg-very-dark text-white d-flex">
@@ -30,7 +31,7 @@ class ReviewsTab extends Component {
                     {
                         this.state.pagination.next && this.props.seeAll? [
                             <div className="ml-auto">
-                                <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/games/` +this.state.game.id +'/reviews'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                <AnyButton variant="link" className="text-white" href={`/games/` +this.state.game.id +'/reviews'} textKey="navigation.seeAll"/>
                             </div>
                         ] : []
                     }
