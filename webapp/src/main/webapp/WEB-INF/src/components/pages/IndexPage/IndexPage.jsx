@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { OK } from '../../../services/api/apiConstants';
 import { Container, Button } from 'react-bootstrap';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
@@ -14,7 +15,9 @@ class IndexPage extends Component {
         backlogGames: [],
         popularGames : [],
         upcomingGames : [],
+        backlogPagination: [],
         loading : true,
+        importing: false,
     };
 
     eraseBacklogHandler = () => {
@@ -23,13 +26,20 @@ class IndexPage extends Component {
     }
 
     importHandler = async () => {
-        await BacklogService.transferBacklog();
-        //this.setState({})
-        // TODO: Try to update state and put new games in backlog card. Could be async issues
-        window.location.reload();
+        this.setState({ importing: true });
+        let resp = await BacklogService.transferBacklog();
+        if(resp.status == OK){
+            this.setState({ backlogGames: [], anonBacklogEmpty: true });
+            BacklogService.getCurrentUserBacklogPreview(10).then((data) => {
+                this.setState({backlogGames: data.content, backlogPagination: data.pagination});
+            })
+        }
+        else{
+            this.setState({ importing: false });
+        }
     }
 
-    render() {
+    componentWillMount() {
         const fetchBacklog = BacklogService.getCurrentUserBacklogPreview(10);
         const fetchPop = GameService.getPopularGames();
         const fetchUp = GameService.getUpcomingGames();
@@ -45,7 +55,9 @@ class IndexPage extends Component {
                 anonBacklogEmpty: BacklogService.isAnonBacklogEmpty()
             });
         });
+    }
 
+    render() {
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -66,7 +78,7 @@ class IndexPage extends Component {
                                 <p><Translation>{t => t("index.anonBacklogWarning")}</Translation></p>
                                 <div class="">
                                     <Button variant="dark" className="m-1 px-3" onClick={this.eraseBacklogHandler}><Translation>{t => t("index.importNo")}</Translation></Button>
-                                    <Button variant="dark" className="m-1 px-3" onClick={this.importHandler}><Translation>{t => t("index.importYes")}</Translation></Button>
+                                    <Button variant="dark" disabled={this.state.importing} className="m-1 px-3" onClick={this.importHandler}><Translation>{t => t("index.importYes")}</Translation></Button>
                                 </div>
                                 <p class="my-1"><Translation>{t => t("index.ignoreThis")}</Translation></p>
                             </div>

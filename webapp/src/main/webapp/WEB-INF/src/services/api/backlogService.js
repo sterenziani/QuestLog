@@ -2,6 +2,7 @@ import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
 import PaginationService from './paginationService';
+import { OK } from './apiConstants';
 
 const getUserBacklog = async(userId, limit) => {
     return getUserBacklogPage(userId, 1, limit);
@@ -115,7 +116,9 @@ const transferBacklog = async () => {
     const currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
     const endpoint = `backlog?backlog=${currentBacklog}`;
     const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    cookies.set('backlog', '', {path: '/'});
+    if(response.status == OK)
+        cookies.set('backlog', '', {path: '/'});
+    return response;
 }
 
 const isAnonBacklogEmpty = () => {
