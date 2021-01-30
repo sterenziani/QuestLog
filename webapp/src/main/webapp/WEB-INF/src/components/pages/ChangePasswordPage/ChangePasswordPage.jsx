@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Button} from 'react-bootstrap';
+import {Form, Button, Container} from 'react-bootstrap';
 import {Translation} from 'react-i18next';
 import AuthForm from '../../common/Forms/AuthForm';
 import AnyButton from '../../common/AnyButton/AnyButton';
@@ -22,6 +22,13 @@ class ChangePasswordPage extends Component {
         bad_connection : false,
         invalid_token: false,
         token: null
+    }
+
+    onKeyUp = (e) => {
+        if (e.charCode === 13) {
+            this.submitHandler(e);
+            return false;
+        }
     }
 
     authenticate = async() => {
@@ -105,52 +112,57 @@ class ChangePasswordPage extends Component {
                     </Helmet>
                 </HelmetProvider>
 
-                <AuthForm titleKey="forgotPassword.changePassword">
-                {
-                    this.state.invalid_token? [
-                        <p className="mx-5 mt-4"><Translation>{t => t("forgotPassword.invalidToken")}</Translation></p>] : [
-                            <>
-                            <p><Translation>{t => t("forgotPassword.changePasswordSubtitle")}</Translation></p>
-                            {
-                                !this.state.correct &&
-                                    <p className="form-error my-3">
-                                        <Translation>{t => t("forgotPassword.passwordTooShort")}</Translation>
-                                    </p>
-                            }
-                            {
-                                !this.state.match &&
-                                    <p className="form-error my-3">
-                                        <Translation>{t => t("forgotPassword.passwordsDontMatch")}</Translation>
-                                    </p>
-                            }
-                            {
-                                this.state.bad_connection &&
-                                    <p className="form-error my-3">
-                                        <Translation>{t => t("login.bad_connection")}</Translation>
-                                    </p>
-                            }
-                            {
-                                this.state.unknown_error &&
-                                    <p className="form-error my-3">
-                                        <Translation>{t => t("AyuUUUUUda")}</Translation>
-                                    </p>
-                            }
-                            <Form.Group className="w-50 m-auto">
-                                <Form.Label><Translation>{t => t("forgotPassword.password")}</Translation></Form.Label>
-                                <Form.Control type="password" onChange={(e) => this.handleChange(e, 1)} placeholder={t => t("forgotPassword.password")} />
-                            </Form.Group>
-                            <div class="m-3"></div>
-                            <Form.Group className="w-50 m-auto">
-                                <Form.Label><Translation>{t => t("forgotPassword.repeatPassword")}</Translation></Form.Label>
-                                <Form.Control type="password" onChange={(e) => this.handleChange(e, 2)} placeholder={t => t("forgotPassword.repeatPassword")} />
-                            </Form.Group>
-                            <Button className="mt-4" variant="dark" onClick={(e) => this.submitHandler(e)} disabled={this.state.submitting? 'disabled' : ''}>
-                                <Translation>{t => t("forgotPassword.save")}</Translation>
-                            </Button>
-                            </>
-                        ]
-                }
-                </AuthForm>
+                <Container className="text-center align-middle">
+                    <div className="my-5 py-5 bg-light border-bottom border-primary rounded-lg">
+                        <h2 className="share-tech-mono">
+                            <Translation>{t => t("forgotPassword.changePassword")}</Translation>
+                        </h2>
+                        {
+                            this.state.invalid_token? [
+                                <p className="mx-5 mt-4"><Translation>{t => t("forgotPassword.invalidToken")}</Translation></p>] : [
+                                    <>
+                                    <p><Translation>{t => t("forgotPassword.changePasswordSubtitle")}</Translation></p>
+                                    {
+                                        !this.state.correct &&
+                                            <p className="form-error my-3">
+                                                <Translation>{t => t("forgotPassword.passwordTooShort")}</Translation>
+                                            </p>
+                                    }
+                                    {
+                                        !this.state.match &&
+                                            <p className="form-error my-3">
+                                                <Translation>{t => t("forgotPassword.passwordsDontMatch")}</Translation>
+                                            </p>
+                                    }
+                                    {
+                                        this.state.bad_connection &&
+                                            <p className="form-error my-3">
+                                                <Translation>{t => t("login.bad_connection")}</Translation>
+                                            </p>
+                                    }
+                                    {
+                                        this.state.unknown_error &&
+                                            <p className="form-error my-3">
+                                                <Translation>{t => t("AyuUUUUUda")}</Translation>
+                                            </p>
+                                    }
+                                    <Form.Group className="w-50 m-auto">
+                                        <Form.Label><Translation>{t => t("forgotPassword.password")}</Translation></Form.Label>
+                                        <Form.Control onKeyPress={this.onKeyUp.bind(this)} type="password" onChange={(e) => this.handleChange(e, 1)} placeholder={t => t("forgotPassword.password")} />
+                                    </Form.Group>
+                                    <div class="m-3"></div>
+                                    <Form.Group className="w-50 m-auto">
+                                        <Form.Label><Translation>{t => t("forgotPassword.repeatPassword")}</Translation></Form.Label>
+                                        <Form.Control onKeyPress={this.onKeyUp.bind(this)} type="password" onChange={(e) => this.handleChange(e, 2)} placeholder={t => t("forgotPassword.repeatPassword")} />
+                                    </Form.Group>
+                                    <Button className="mt-4" variant="dark" onClick={(e) => this.submitHandler(e)} disabled={this.state.submitting? 'disabled' : ''}>
+                                        <Translation>{t => t("forgotPassword.save")}</Translation>
+                                    </Button>
+                                    </>
+                                ]
+                        }
+                    </div>
+                </Container>
             </React.Fragment>
         );
     }

@@ -41,7 +41,7 @@ class Search extends Component {
         const { t } = this.props
         return (
             <Form className={ this.state.className } inline>
-                <FormControl type="text" placeholder={t('search.search')} className="mr-sm-2 flex-grow-1" onKeyPress={this.onKeyUp.bind(this)} onChange={e => this.setState({ searchTerm: e.target.value })}/>
+                <Form.Control type="text" placeholder={t('search.search')} className="mr-sm-2 flex-grow-1" onKeyPress={this.onKeyUp.bind(this)} onChange={e => this.setState({ searchTerm: e.target.value })}/>
                 <Form.Control className="btn btn-dark mr-sm-2" as="select" onChange={e => this.setState({ category: e.target.value })}>
                 {
                     this.state.searchTypes.map((s) =>
