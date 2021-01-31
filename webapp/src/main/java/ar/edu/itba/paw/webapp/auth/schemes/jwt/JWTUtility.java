@@ -14,7 +14,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
-// Basado en https://github.com/BHRother/spring-boot-security-jwt/tree/master/src/main/java/nl/palmapps/myawesomeproject/security/util
 public class JWTUtility {
 	
 	private static final int TOKEN_DURATION_MINUTES = 30;
