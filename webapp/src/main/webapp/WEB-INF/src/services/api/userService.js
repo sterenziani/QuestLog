@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
-import { CONFLICT, TIMEOUT } from './apiConstants';
+import { CONFLICT, TIMEOUT, CREATED, OK } from './apiConstants';
+import PaginationService from './paginationService';
 
 const endpoint    = '/users'
 
@@ -22,7 +23,7 @@ const register    = async(username, password, email, locale) => {
   } catch(e) {
     if (e.response){
       if(e.response.status === CONFLICT){
-        return { 
+        return {
           status    : CONFLICT,
           conflicts : e.response.data
         }
@@ -48,19 +49,7 @@ const searchUsersPage = async(term, page) => {
         }
         const endpoint = `users?page=${page}&searchTerm=${term}`;
         const response = await api.get(endpoint);
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        const ret = {};
-        ret['pagination'] = parsed_data;
-        ret['content'] = response.data;
-        ret['pageCount'] = response.headers["page-count"];
-        return ret;
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -86,7 +75,6 @@ const getUserById = async(userId) => {
 
 const makeAdmin = async(userId) => {
   try {
-        console.log("Haciendo admin a " +userId);
         const endpoint = `users/${userId}/admin`;
         const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
@@ -101,7 +89,6 @@ const makeAdmin = async(userId) => {
 
 const removeAdmin = async(userId) => {
   try {
-        console.log("Matando admin " +userId);
         const endpoint = `users/${userId}/admin`;
         const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
         return response.data;
@@ -114,13 +101,58 @@ const removeAdmin = async(userId) => {
   }
 }
 
+const requestPasswordChangeToken = async(email) => {
+    try {
+          const endpoint = `users/tokens`;
+          const response = await api.post(endpoint, {'email': email}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
+const getToken = async(token) => {
+    try {
+          const endpoint = `users/tokens/${token}`;
+          const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
+const changePassword = async(userId, token, newPassword) => {
+    try {
+          const endpoint = `users/${userId}/password`;
+          const response = await api.put(endpoint, {'token': token, 'password': newPassword}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+          return response;
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+}
+
 const UserService = {
   register      : register,
   getUserById   : getUserById,
   searchUsers   : searchUsers,
   searchUsersPage : searchUsersPage,
   makeAdmin     : makeAdmin,
-  removeAdmin   : removeAdmin
+  removeAdmin   : removeAdmin,
+  requestPasswordChangeToken : requestPasswordChangeToken,
+  getToken : getToken,
+  changePassword : changePassword
 }
 
 export default UserService;

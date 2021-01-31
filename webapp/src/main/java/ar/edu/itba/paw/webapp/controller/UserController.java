@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
@@ -31,6 +32,7 @@ import ar.edu.itba.paw.webapp.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -38,6 +40,7 @@ import ar.edu.itba.paw.interfaces.service.RunService;
 import ar.edu.itba.paw.interfaces.service.ScoreService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
 import ar.edu.itba.paw.model.entity.User;
 
 @Path("users")
@@ -151,23 +154,6 @@ public class UserController
 			return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
 		return Response.ok(UserDto.fromUser(u, uriInfo)).build();
 	}
-	
-    @PUT
-    @Path("/{userId}/password")
-    @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response updateUserPassword(@PathParam("userId") final long userId, @Valid EditUserPasswordDto editPasswordDto)
-    {
-        Set<ConstraintViolation<EditUserPasswordDto>> violations = validator.validate(editPasswordDto);
-        if(!violations.isEmpty())
-        	return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
-        if(!us.findById(userId).isPresent())
-        	return Response.status(Response.Status.NOT_FOUND).build();
-        User loggedUser = us.getLoggedUser();
-        if(loggedUser == null || loggedUser.getId() != userId)
-        	return Response.status(Response.Status.UNAUTHORIZED).build();
-        us.changeUserPassword(loggedUser, editPasswordDto.getPassword());
-        return Response.ok(UserDto.fromUser(loggedUser, uriInfo)).build();
-    }
     
     @PUT
     @Path("/{userId}/locale")
@@ -204,8 +190,10 @@ public class UserController
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response makeAdmin(@PathParam("userId")int userId) {
     	User u = us.findById(userId).orElse(null);
-    	if(u != null && !u.getAdminStatus())
+    	if(u != null)
     	{
+    		if(u.getAdminStatus())
+    			return Response.ok(UserDto.fromUser(u, uriInfo)).build();
             User loggedUser = us.getLoggedUser();
             if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -221,8 +209,10 @@ public class UserController
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response removeAdmin(@PathParam("userId")int userId) {
     	User u = us.findById(userId).orElse(null);
-    	if(u != null && u.getAdminStatus())
+    	if(u != null)
     	{
+    		if(!u.getAdminStatus())
+    			return Response.ok(UserDto.fromUser(u, uriInfo)).build();
             User loggedUser = us.getLoggedUser();
             if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -268,7 +258,6 @@ public class UserController
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		Optional<Score> maybeScore = scors.findScore(maybeUser.get(), maybeGame.get());
 		if(!maybeScore.isPresent()) {
-			Score score = new Score(maybeUser.get(), maybeGame.get(), -1);
 			return Response.ok(false).build();
 		}
 		return Response.ok(maybeScore.map(u -> ScoreDto.fromScore(u, uriInfo)).get()).build();
@@ -386,4 +375,51 @@ public class UserController
 			return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
 		return Response.ok(UserPrivilegesDto.fromUser(u)).build();
 	}
+	
+	@POST
+	@Path("/tokens")
+	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	public Response createPasswordChangeToken(@Valid RequestPasswordResetDto requestPasswordResetDto)
+	{
+		final Optional<User> maybeUser = us.findByEmail(requestPasswordResetDto.getEmail());
+		if(!maybeUser.isPresent())
+			return Response.status(Response.Status.NOT_FOUND).build();
+		String token = UUID.randomUUID().toString();
+		us.createPasswordResetTokenForUser(maybeUser.get(), token);
+		return Response.status(Response.Status.CREATED).build();
+	}
+	
+	@GET
+	@Path("/tokens/{token}")
+	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	public Response getToken(@PathParam("token") String token)
+	{
+		PasswordResetToken t = us.getToken(token);
+		if(t== null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+		String result = us.validatePasswordResetToken(token);
+		if(result != null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+		else
+			return Response.ok(PasswordTokenDto.fromToken(t, uriInfo)).build();
+	}
+	
+    @PUT
+    @Path("/{userId}/password")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response updateUserPassword(@PathParam("userId") final long userId, @Valid EditUserPasswordDto editPasswordDto)
+    {
+        Set<ConstraintViolation<EditUserPasswordDto>> violations = validator.validate(editPasswordDto);
+        if(!violations.isEmpty())
+        	return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
+        Optional<User> user = us.findById(userId);
+        if(!user.isPresent())
+        	return Response.status(Response.Status.NOT_FOUND).build();
+        PasswordResetToken token = us.getToken(editPasswordDto.getToken());
+        if(token == null || !token.getUser().equals(user.get()))
+        	return Response.status(Response.Status.FORBIDDEN).build();
+        us.changeUserPassword(user.get(), editPasswordDto.getPassword());
+        us.updateLocale(user.get(), LocaleContextHolder.getLocale());
+        return Response.ok(UserDto.fromUser(user.get(), uriInfo)).build();
+    }
 }

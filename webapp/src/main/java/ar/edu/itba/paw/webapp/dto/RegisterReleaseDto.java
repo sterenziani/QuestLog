@@ -2,9 +2,9 @@ package ar.edu.itba.paw.webapp.dto;
 
 public class RegisterReleaseDto {
     public RegisterReleaseDto() {}
-
-    Long locale;
-    String date;
+    
+    private Long locale;
+    private String date;
 
     public void setLocale(Long locale) {
         this.locale = locale;

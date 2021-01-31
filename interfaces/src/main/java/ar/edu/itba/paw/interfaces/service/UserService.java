@@ -2,6 +2,8 @@ package ar.edu.itba.paw.interfaces.service;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
 import ar.edu.itba.paw.model.entity.User;
 
 public interface UserService
@@ -57,5 +59,7 @@ public interface UserService
 	void changeAdminStatus(User u);
 
 	void deleteById(long id);
+
+	PasswordResetToken getToken(String token);
 	
 }

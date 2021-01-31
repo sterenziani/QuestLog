@@ -1,6 +1,7 @@
 import api from './api';
 import { TIMEOUT } from './apiConstants';
 
+import PaginationService from './paginationService';
 
 const getAllGenres       = async () => {
   try {
@@ -16,11 +17,15 @@ const getAllGenres       = async () => {
   }
 }
 
-const getEveryGenre = async () => {
+const getGenres = async() => {
+  return getGenresPage(1);
+}
+
+const getGenresPage = async(page) => {
   try {
-    const endpoint = `genres?page_size=9999`;
-    const response = await api.get(endpoint);
-    return response.data;
+        const endpoint = `genres?page=${page}`;
+        const response = await api.get(endpoint);
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -47,7 +52,8 @@ const getGameGenres     = async(gameId) => {
 const GenreService = {
   getAllGenres     : getAllGenres,
   getGameGenres   : getGameGenres,
-  getEveryGenre : getEveryGenre
+  getGenres : getGenres,
+  getGenresPage : getGenresPage
 }
 
 export default GenreService;

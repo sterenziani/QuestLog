@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import {
-    Form,
-    FormControl,
-    Button
-} from 'react-bootstrap';
+import { Form, FormControl, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { withTranslation } from 'react-i18next';
+import withRedirect from '../../hoc/withRedirect';
+import { LinkContainer } from 'react-router-bootstrap';
 
 class Search extends Component {
 
@@ -20,20 +18,23 @@ class Search extends Component {
         ]
     }
 
-    onSubmit = (e) => {
-        e.preventDefault();
+    componentWillMount() {
+        this.setState({searchTerm: ""});
+    }
+
+    getPath() {
         if(this.state.category === "1"){
-            window.location.href = `${process.env.PUBLIC_URL}/gameSearch?searchTerm=` +this.state.searchTerm;
+            return "/gameSearch?searchTerm="+this.state.searchTerm
         }
         else if(this.state.category === "2"){
-            window.location.href = `${process.env.PUBLIC_URL}/userSearch?searchTerm=` +this.state.searchTerm;
+            return "/userSearch?searchTerm="+this.state.searchTerm
         }
-    };
+    }
 
     onKeyUp = (e) => {
         if (e.charCode === 13) {
-            this.onSubmit(e);
-            return false;
+            e.preventDefault();
+            this.btn.click();
         }
     }
 
@@ -41,19 +42,21 @@ class Search extends Component {
         const { t } = this.props
         return (
             <Form className={ this.state.className } inline>
-                <FormControl type="text" placeholder="Search" className="mr-sm-2 flex-grow-1" onKeyPress={this.onKeyUp.bind(this)} onChange={e => this.setState({ searchTerm: e.target.value })}/>
+                <Form.Control type="text" placeholder={t('search.search')} className="mr-sm-2 flex-grow-1" onKeyPress={this.onKeyUp.bind(this)} onChange={e => this.setState({ searchTerm: e.target.value })}/>
                 <Form.Control className="btn btn-dark mr-sm-2" as="select" onChange={e => this.setState({ category: e.target.value })}>
                 {
                     this.state.searchTypes.map((s) =>
                         <option value={s.id} key={ s.id }>{t(`navigation.search.options.${s.trans}`)}</option>)
                 }
                 </Form.Control>
-                <Button variant="dark" onClick={this.onSubmit.bind(this)}>
-                    <FontAwesomeIcon className="mr-sm-2" icon={ faSearch }/>{t('navigation.search.btn')}
-                </Button>
+                <LinkContainer to={ this.getPath() }>
+                    <Button ref={node => (this.btn = node)} variant="dark">
+                        <FontAwesomeIcon className="mr-sm-2" icon={ faSearch }/>{t('navigation.search.btn')}
+                    </Button>
+                </LinkContainer>
             </Form>
         );
     }
 }
 
-export default withTranslation()(Search);
+export default withTranslation() (withRedirect(Search));

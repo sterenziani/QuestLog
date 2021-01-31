@@ -3,36 +3,16 @@ import {Card, Row, Col, Button, Container} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
-import ScoreService from "../../../services/api/scoreService";
-import Spinner from "react-bootstrap/Spinner";
+import AnyButton from "../AnyButton/AnyButton";
 
 class UserScoresTab extends Component {
     state = {
         visitedUser: this.props.visitedUser,
-        scoresDisplayed: [],
-        scoresPagination: [],
-        loading: true,
-    };
-
-    componentWillMount() {
-        ScoreService.getUserScores(this.props.visitedUser.id)
-              .then((data) => {
-                  this.setState({
-                      scoresDisplayed: data.content,
-                      scoresPagination: data.pagination,
-                      loading: false,
-                  });
-              }).then((data) =>  {});
+        scoresDisplayed: this.props.scoresDisplayed,
+        scoresPagination: this.props.scoresPagination,
     };
 
     render() {
-        if (this.state.loading === true) {
-            return <div style={{
-                position: 'absolute', left: '50%', top: '50%',
-                transform: 'translate(-50%, -50%)'}}>
-                <Spinner animation="border" variant="primary" />
-            </div>
-        }
         return (
             <Grid>
             {
@@ -40,9 +20,9 @@ class UserScoresTab extends Component {
                         <Card.Header className="bg-very-dark text-white d-flex">
                             <div><h2 className="share-tech-mono"><Translation>{t => t("users.userScores", {value: this.state.visitedUser.username})}</Translation></h2></div>
                             {
-                                this.state.scoresPagination.next? [
+                                this.state.scoresPagination.next && this.props.seeAll? [
                                     <div className="ml-auto">
-                                        <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/users/` +this.state.visitedUser.id +'/scores'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                        <AnyButton variant="link" className="text-white" href={`/users/` +this.state.visitedUser.id +'/scores'} textKey="navigation.seeAll"/>
                                     </div>
                                 ] : []
                             }
@@ -52,7 +32,9 @@ class UserScoresTab extends Component {
                             <Col>
                                 {this.state.scoresDisplayed.map(r => (
                                     <Row className="m-1">
-                                        <Col className="text-right"> <a href={`${process.env.PUBLIC_URL}/games/` + r.game.id}>{r.game.title}</a></Col>
+                                        <Col className="text-right">
+                                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/games/" +r.game.id } text={r.game.title}/>
+                                        </Col>
                                         <Col> {r.score} </Col>
                                     </Row>
                                 ))}

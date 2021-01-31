@@ -20,11 +20,27 @@
             "last"      : "Último"
         },
         "seeAll"    : "Ver todo >>",
-        "addGame"   : "Agregar Juego"
+        "addGame"   : "Agregar Juego",
+        "platforms" : "Plataformas",
+        "genres" : "Géneros",
+        "developers" : "Desarrolladores",
+        "publishers" : "Distribuidoras"
+    },
+    "index" : {
+        "anonBacklogWarning" : "Había juegos añadidos a tu backlog antes de iniciar sesión. ¿Deseas importarlos a tu cuenta?",
+        "importNo" : "Borrarlos",
+        "importYes" : "Importarlos",
+        "ignoreThis" : "Ignora este mensaje si quieres conservar tu lista anónima."
     },
     "games" : {
         "profile" : {
             "addToBacklog" : "Agregar al Backlog",
+            "edit" : "Editar",
+            "delete" : "Eliminar",
+            "deletingGame" : "Eliminando {{value}}",
+            "deleteSure" : "¿Estás seguro que deseas eliminar este juego?",
+            "deleteNo" : "No, cambié de opinión",
+            "deleteYes" : "Sí, deseo borrar este juego",
             "removeFromBacklog" : "Eliminar del Backlog",
             "releaseDates" : "Fechas de lanzamiento",
             "developers" : "Desarrollado por",
@@ -35,7 +51,11 @@
             "unreleased" : "Las calificaciones, runs y reseñas están deshabilitadas para este juego hasta que salga a la venta para alguna plataforma",
             "runs" : "RUNS",
             "reviews" : "RESEÑAS",
-            "myReviews" : "MIS RESEÑAS"
+            "myReviews" : "MIS RESEÑAS",
+            "removeFromBacklogPrompt": "¿Quitar {{value}} del backlog?",
+            "removeFromBacklogPromptExplain": "Este juego está actualmente en tu backlog. Ya que parece que lo has terminado, ¿Quieres además removerlo del backlog?",
+            "keepInBacklogAndSend": "No, quiero conservarlo y enviar mi información",
+            "removeFromBacklogAndSend": "¡Bueno! ¡Quitar del backlog y enviar mi información!"
         },
         "lists" : {
             "popularGames" : "Lo más popular",
@@ -107,6 +127,24 @@
         "login"           : "Ya tengo cuenta. Quiero iniciar sesión",
         "bad_connection"  : "No se pudo establecer una conexión. Chequee su conexión a internet y vuelva a intentar"
     },
+    "forgotPassword" : {
+        "helmet": "Recuperar contraseña",
+        "title" : "¿Olvidaste tu contraseña?",
+        "subtitle" : "¡Ingresa tu dirección de email y te ayudaremos a recuperar tu cuenta!",
+        "fieldName" : "Email:",
+        "wrongEmail" : "La dirección de email ingresada no es válida",
+        "emailNotFound" : "No se encontraron usuarios usando esa dirección de email",
+        "send" : "Enviar",
+        "emailSent": "Te hemos enviado un email con instrucciones de qué hacer ahora. Por favor revisa tu casilla de correo. El mensaje puede tardar un rato en llegar, así que se paciente.",
+        "invalidToken": "El token para reinicio de contraseña es inválido o expiró. Si pediste reiniciar tu contraseña varias veces, asegúrate de haber clickeado el link del último email que te enviamos.",
+        "changePassword" : "Cambiar contraseña",
+        "changePasswordSubtitle" : "Elija una nueva contraseña para usar con su cuenta de aquí en adelante.",
+        "passwordTooShort" : "La contraseña debe tener al menos 6 caracteres",
+        "password" : "Contraseña",
+        "repeatPassword" : "Reingrese contraseña",
+        "save" : "Guardar cambios",
+        "passwordsDontMatch" : "Las contraseñas no coinciden"
+    },
     "genres" : {
         "Action" : "Acción",
         "Adventure" : "Aventura",
@@ -165,7 +203,11 @@
         "delete" : "Eliminar",
         "addingReview" : "Escribiendo reseña para {{value}}",
         "platform": "Plataforma",
-        "body": "Tu reseña:"
+        "body": "Tu reseña:",
+        "deletingReview" : "Eliminando reseña",
+        "deleteSure": "¿Estás seguro de que deseas eliminar esta reseña?",
+        "deleteNo": "Cancelar",
+        "deleteYes": "Eliminar"
     },
     "users" : {
         "gamesRated" : "Juegos calificados: {{value}}",
@@ -188,14 +230,14 @@
     "search" : {
         "gameResults" : "Resultados de búsqueda para juego {{value}}",
         "userResults" : "Resultados de búsqueda para usuario {{value}}",
-        "resultsLabel" : "  resultados encontrados para tu búsqueda",
+        "resultsLabel" : "{{value}} resultados encontrados para tu búsqueda",
         "noResults" : "No se encontraron resultados",
         "makeAdmin" : "Hacer administrador",
         "removeAdmin" : "Quitar administrador",
         "filterResults" : "Filtrar resultados",
         "closeModal" : "Cerrar",
         "search" : "Buscar",
-        "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items",
+        "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items.",
         "scoreRange" : "Calificación",
         "hours" : "hs",
         "mins" : "mins",
@@ -206,5 +248,13 @@
     "createGame" : {
         "title" : "Agregar Juego",
         "add"   : "Agregar"
+    },
+    "whoops" : "¡Chanfle!",
+    "error" : {
+        "400" : "El servidor no pudo procesar tu pedido.",
+        "401" : "Autorización denegada.",
+        "403" : "Acceso denegado.",
+        "404" : "La página solicitada no existe.",
+        "500" : "Hubo un error de nuestra parte. Por favor intenta más tarde."
     }
 }

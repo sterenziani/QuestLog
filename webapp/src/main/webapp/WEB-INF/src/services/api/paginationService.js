@@ -7,21 +7,20 @@ const getGenericContent = async (endpoint) => {
         const cookies = new Cookies();
         let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
         const response = await api.get(endpoint + `?backlog=${currentBacklog}`, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        // Parse links
         const data = response.headers.link;
-        let parsed_data = {};
-        const ret = {};
-        if(data)
-        {
+        let ret = {};
+        if(data){
+            let parsed_data = {};
             let arrData = data.split(",");
             arrData.forEach(element => {
                 let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
                 parsed_data[linkInfo[2]]=linkInfo[1];
             });
+            ret['pagination'] = parsed_data;
         }
-        ret['pagination'] = parsed_data;
         ret['content'] = response.data;
         ret['pageCount'] = response.headers["page-count"];
+        ret['totalCount'] = response.headers["total-count"];
         return ret;
     } catch(err) {
         if(err.response) {
@@ -37,20 +36,20 @@ const getGenericContentPage = async (endpoint, page) => {
         const cookies = new Cookies();
         let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
         const response = await api.get(endpoint +"?page=" +page + `&backlog=${currentBacklog}`, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        // Parse links
         const data = response.headers.link;
-        let parsed_data = {};
-        const ret = {};
-        if(data)
-        {
+        let ret = {};
+        if(data){
+            let parsed_data = {};
             let arrData = data.split(",");
             arrData.forEach(element => {
                 let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
                 parsed_data[linkInfo[2]]=linkInfo[1];
             });
+            ret['pagination'] = parsed_data;
         }
-        ret['pagination'] = parsed_data;
         ret['content'] = response.data;
+        ret['pageCount'] = response.headers["page-count"];
+        ret['totalCount'] = response.headers["total-count"];
         return ret;
     } catch(err) {
         if(err.response) {
@@ -61,11 +60,29 @@ const getGenericContentPage = async (endpoint, page) => {
     }
 }
 
+const parseResponsePaginationHeaders = (response) => {
+    const data = response.headers.link;
+    let ret = {};
+    if(data){
+        let parsed_data = {};
+        let arrData = data.split(",");
+        arrData.forEach(element => {
+            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
+            parsed_data[linkInfo[2]]=linkInfo[1];
+        });
+                ret['pagination'] = parsed_data;
+    }
+    ret['content'] = response.data;
+    ret['pageCount'] = response.headers["page-count"];
+    ret['totalCount'] = response.headers["total-count"];
+    return ret;
+}
+
 
 const PaginationService = {
     getGenericContent     : getGenericContent,
-    getGenericContentPage : getGenericContentPage
-
+    getGenericContentPage : getGenericContentPage,
+    parseResponsePaginationHeaders : parseResponsePaginationHeaders
 }
 
 export default PaginationService;

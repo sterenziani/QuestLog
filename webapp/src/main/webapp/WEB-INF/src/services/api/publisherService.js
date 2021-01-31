@@ -1,12 +1,16 @@
 import api from './api';
 import { TIMEOUT } from './apiConstants';
+import PaginationService from './paginationService';
 
+const getPublishers = async() => {
+  return getPublishersPage(1);
+}
 
-const getAllPublishers       = async () => {
+const getPublishersPage = async(page) => {
   try {
-    const endpoint = `publishers`;
-    const response = await api.get(endpoint);
-    return response.data;
+        const endpoint = `publishers?page=${page}`;
+        const response = await api.get(endpoint);
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -30,7 +34,7 @@ const getEveryPublisher = async () => {
   }
 }
 
-const getBiggestPublishers       = async () => {
+const getBiggestPublishers = async () => {
   try {
     const endpoint = `publishers/biggest`;
     const response = await api.get(endpoint);
@@ -59,10 +63,11 @@ const getGamePublishers     = async(gameId) => {
 }
 
 const PublisherService = {
-  getAllPublishers     : getAllPublishers,
   getEveryPublisher    : getEveryPublisher,
   getGamePublishers    : getGamePublishers,
   getBiggestPublishers : getBiggestPublishers,
+  getPublishers     : getPublishers,
+  getPublishersPage : getPublishersPage
 }
 
 export default PublisherService;

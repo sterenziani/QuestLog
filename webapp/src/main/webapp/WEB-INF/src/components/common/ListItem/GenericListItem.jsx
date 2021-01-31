@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Image } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import ImageService from "../../../services/api/imageService";
 import {Translation} from "react-i18next";
 import Spinner from "react-bootstrap/Spinner";
@@ -42,12 +43,14 @@ class GenericListItem extends Component {
         let lower = this.state.category.toLowerCase();
         return (
             <Card className="m-3 d-flex bg-transparent" style={{width: '10rem'}}>
-                <a className="d-flex flex-column flex-grow-1 text-white text-center align-center" href={`${process.env.PUBLIC_URL}/${lower}/` + this.state.value}>
-                    { cover? [<div className="p-1" style={{height: '7rem'}}><Image className="list-card-icon" src={this.state.icon}  /></div>] : []}
-                    <div className="card-body bg-primary flex-grow-1">
-                        <h5 align={"center"}> {label} </h5>
-                    </div>
-                </a>
+                <LinkContainer to={`/${lower}/` + this.state.value}>
+                    <a className="d-flex flex-column flex-grow-1 text-white text-center align-center">
+                        { cover? [<div className="p-1" style={{height: '7rem'}}><Image className="list-card-icon" src={this.state.icon}  /></div>] : []}
+                        <div className="card-body bg-primary flex-grow-1">
+                            <h5 align={"center"}> {label} </h5>
+                        </div>
+                    </a>
+                </LinkContainer>
             </Card>
         )
     }

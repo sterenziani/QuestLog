@@ -1,30 +1,20 @@
 import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
+import PaginationService from './paginationService';
+import { OK } from './apiConstants';
 
-const getUserBacklog = async(userId) => {
-    return getUserBacklogPage(userId, 1);
+const getUserBacklog = async(userId, limit) => {
+    return getUserBacklogPage(userId, 1, limit);
 }
 
-const getUserBacklogPage = async(userId, page) => {
+const getUserBacklogPage = async(userId, page, limit) => {
   try {
         const cookies = new Cookies();
         let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
-        const endpoint = `users/${userId}/backlog?page=${page}&backlog=${currentBacklog}`;
+        const endpoint = `users/${userId}/backlog?page=${page}&backlog=${currentBacklog}&page_size=${limit}`;
         const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        const ret = {};
-        ret['pagination'] = parsed_data;
-        ret['content'] = response.data;
-        ret['pageCount'] = response.headers["page-count"];
-        return ret;
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -33,6 +23,22 @@ const getUserBacklogPage = async(userId, page) => {
     }
   }
 }
+
+const getCurrentUserBacklogPreview = async(page_size) => {
+    try {
+        const cookies = new Cookies();
+        let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+        const endpoint = `backlog?page_size=${page_size}&backlog=${currentBacklog}`;
+        const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+        return PaginationService.parseResponsePaginationHeaders(response);
+    } catch(err) {
+      if(err.response) {
+        return { status : err.response.status };
+      } else {
+        /* timeout */
+      }
+    }
+  }
 
 const getCurrentUserBacklog = async() => {
     return getCurrentUserBacklogPage(1);
@@ -44,19 +50,7 @@ const getCurrentUserBacklogPage = async(page) => {
       let currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
       const endpoint = `backlog?page=${page}&backlog=${currentBacklog}`;
       const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-      // Parse links
-      const data = response.headers.link;
-      let parsed_data = {};
-      let arrData = data.split(",");
-      arrData.forEach(element => {
-          let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-          parsed_data[linkInfo[2]]=linkInfo[1];
-      });
-      const ret = {};
-      ret['pagination'] = parsed_data;
-      ret['content'] = response.data;
-      ret['pageCount'] = response.headers["page-count"];
-      return ret;
+      return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -112,13 +106,38 @@ const removeGameFromBacklog = async(gameId) => {
   }
 }
 
+const wipeAnonBacklog = () => {
+    const cookies = new Cookies();
+    cookies.set('backlog', '', {path: '/'});
+}
+
+const transferBacklog = async () => {
+    const cookies = new Cookies();
+    const currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+    const endpoint = `backlog?backlog=${currentBacklog}`;
+    const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    if(response.status == OK)
+        cookies.set('backlog', '', {path: '/'});
+    return response;
+}
+
+const isAnonBacklogEmpty = () => {
+    const cookies = new Cookies();
+    const currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
+    return (currentBacklog.length > 0)? false:true;
+}
+
 const BacklogService = {
     getUserBacklog : getUserBacklog,
     getUserBacklogPage : getUserBacklogPage,
     addGameToBacklog : addGameToBacklog,
     removeGameFromBacklog : removeGameFromBacklog,
     getCurrentUserBacklog : getCurrentUserBacklog,
-    getCurrentUserBacklogPage : getCurrentUserBacklogPage
+    getCurrentUserBacklogPage : getCurrentUserBacklogPage,
+    wipeAnonBacklog : wipeAnonBacklog,
+    transferBacklog : transferBacklog,
+    isAnonBacklogEmpty : isAnonBacklogEmpty,
+    getCurrentUserBacklogPreview : getCurrentUserBacklogPreview
 }
 
 export default BacklogService;

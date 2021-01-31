@@ -5,12 +5,8 @@ import { Translation } from 'react-i18next';
 const AuthForm = props => {
     const { titleKey, children, ...other } = props
     return (
-        <div
-            className="container text-center align-middle"
-        >
-            <div
-                className="my-5 py-5 bg-light border-bottom border-primary rounded-lg"
-            >
+        <div className="container text-center align-middle">
+            <div className="my-5 py-5 bg-light border-bottom border-primary rounded-lg">
                 <Form.Group>
                     <h2 className="share-tech-mono">
                         <Translation>

@@ -37,7 +37,7 @@ public class UserJpaDaoTest
 	private	static final LocalDate DATE = LocalDate.of(1976,6, 25);
 
 	@PersistenceContext
-	EntityManager em;
+	private EntityManager em;
 	
 	@Autowired
 	private UserJpaDao userDao;

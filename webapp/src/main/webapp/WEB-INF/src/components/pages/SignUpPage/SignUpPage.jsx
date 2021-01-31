@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { 
-    Translation 
-} from 'react-i18next';
-import { 
-    Formik 
-} from 'formik';
+import { Translation } from 'react-i18next';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import FormikTextField from '../../common/Forms/FormikTextField';
@@ -22,7 +18,7 @@ import {Helmet, HelmetProvider} from "react-helmet-async";
 const SignUpSchema = Yup.object().shape({
     username        : Yup
         .string()
-        .matches(/^(\w|\d)*$/, 'signup.username.errors.illegal_characters')
+        .matches(/^[a-zA-Z0-9]+$/, 'signup.username.errors.illegal_characters')
         .min(6, 'signup.username.errors.required_length')
         .max(100, 'signup.username.errors.max_length')
         .required('login.username.errors.is_required'),
@@ -44,7 +40,7 @@ const SignUpSchema = Yup.object().shape({
         .string()
         .max(100, 'signup.email.errors.max_length')
         .email('signup.email.errors.invalid_email')
-        .required('signup.email.errors.is_required')      
+        .required('signup.email.errors.is_required')
 })
 
 class SignUpPage extends Component {
@@ -53,7 +49,7 @@ class SignUpPage extends Component {
     }
     register     = async (values, setSubmitting, setFieldError) => {
         const { status, conflicts } = await UserService.register(values.username, values.password, values.email, i18n.language)
-        
+
         switch(status){
 
             case CREATED:
@@ -128,7 +124,7 @@ class SignUpPage extends Component {
                     titleKey="signup.title"
                     onSubmit={ handleSubmit }
                 >
-                    { 
+                    {
                         this.state.bad_connection &&
                             <p className="form-error">
                                 <Translation>
@@ -138,7 +134,7 @@ class SignUpPage extends Component {
                                 </Translation>
                             </p>
                     }
-                    <FormikTextField 
+                    <FormikTextField
                         label="login.username.label"
                         name="username"
                         placeholder="login.username.placeholder"
@@ -146,9 +142,9 @@ class SignUpPage extends Component {
                         error={ errors.username }
                         touched={ touched.username }
                         onChange={ handleChange }
-                        onBlur={ handleBlur } 
+                        onBlur={ handleBlur }
                     />
-                    <FormikTextField 
+                    <FormikTextField
                         type="password"
                         label="login.password.label"
                         name="password"
@@ -157,9 +153,9 @@ class SignUpPage extends Component {
                         error={ errors.password }
                         touched={ touched.password }
                         onChange={ handleChange }
-                        onBlur={ handleBlur } 
+                        onBlur={ handleBlur }
                     />
-                    <FormikTextField 
+                    <FormikTextField
                         type="password"
                         label="signup.repeat_password.label"
                         name="repeat_password"
@@ -168,7 +164,7 @@ class SignUpPage extends Component {
                         error={ errors.repeat_password }
                         touched={ touched.repeat_password }
                         onChange={ handleChange }
-                        onBlur={ handleBlur } 
+                        onBlur={ handleBlur }
                     />
                     <FormikTextField
                         label="signup.email.label"
@@ -180,23 +176,23 @@ class SignUpPage extends Component {
                         onChange={ handleChange }
                         onBlur={ handleBlur }
                     />
-                    <AnyButton 
+                    <AnyButton
                         variant="dark"
                         type="submit"
                         textKey="signup.signup"
                         disabled={ isSubmitting }
                     />
-                    <AnyButton 
+                    <AnyButton
                         variant="dark"
                         textKey="signup.login"
                         href="/login"
                     />
                 </AuthForm>
-            )} 
+            )}
             </Formik>
             </React.Fragment>
         );
     }
 }
- 
+
 export default withTranslation() (withUser(withRedirect(SignUpPage, { login : "/login" }), { visibility : "anonymousOnly" }));

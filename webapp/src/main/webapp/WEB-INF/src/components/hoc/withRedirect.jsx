@@ -30,6 +30,15 @@ const withRedirect = (WrappedComponent, redirections) => {
                     goBack : true
                 })
         }
+        addRedirection = (key, value) => {
+            let newRedirect = {
+                ...this.state.redirect
+            }
+            newRedirect[key] = value
+            this.setState({
+                redirect: newRedirect
+            });
+        }
         render(){
             return this.state.active ? (
                 this.state.goBack ? (
@@ -38,7 +47,7 @@ const withRedirect = (WrappedComponent, redirections) => {
                     <Redirect to={ this.state.redirect[this.state.key] }/>
                 )
             ) : (
-                <WrappedComponent activateRedirect={ this.activateRedirect } activateGoBack={ this.activateGoBack } {...this.props} />
+                <WrappedComponent addRedirection={this.addRedirection} activateRedirect={ this.activateRedirect } activateGoBack={ this.activateGoBack } {...this.props} />
             )
         }
     }));

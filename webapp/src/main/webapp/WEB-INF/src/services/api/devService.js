@@ -1,11 +1,16 @@
 import api from './api';
+import PaginationService from './paginationService';
 import { TIMEOUT } from './apiConstants';
 
-const getAllDevelopers       = async () => {
+const getDevelopers = async() => {
+  return getDevelopersPage(1);
+}
+
+const getDevelopersPage = async(page) => {
   try {
-    const endpoint = `developers`;
-    const response = await api.get(endpoint);
-    return response.data;
+        const endpoint = `developers?page=${page}`;
+        const response = await api.get(endpoint);
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -58,10 +63,11 @@ const getGameDevelopers     = async(gameId) => {
 }
 
 const DeveloperService = {
-  getAllDevelopers     : getAllDevelopers,
-  getEveryDeveloper    : getEveryDeveloper,
-  getGameDevelopers    : getGameDevelopers,
-  getBiggestDevelopers : getBiggestDevelopers,
+    getEveryDeveloper    : getEveryDeveloper,
+    getGameDevelopers    : getGameDevelopers,
+    getBiggestDevelopers : getBiggestDevelopers,
+    getDevelopers       : getDevelopers,
+    getDevelopersPage   : getDevelopersPage
 }
 
 export default DeveloperService;

@@ -22,6 +22,13 @@ import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
 import SearchGameResults from '../../pages/SearchGameResults/SearchGameResults';
 import AddRunPage from "../../pages/AddRunPage/AddRunPage";
 import AddReviewPage from "../../pages/AddReviewPage/AddReviewPage";
+import UserBacklogPage from "../../pages/UserBacklogPage/UserBacklogPage";
+import UserScoresPage from "../../pages/UserScoresPage/UserScoresPage";
+import UserReviewsPage from "../../pages/UserReviewsPage/UserReviewsPage";
+import UserRunsPage from "../../pages/UserRunsPage/UserRunsPage";
+import GameReviewsPage from "../../pages/GameReviewsPage/GameReviewsPage";
+import ChangePasswordPage from "../../pages/ChangePasswordPage/ChangePasswordPage";
+import RequestTokenPage from "../../pages/RequestTokenPage/RequestTokenPage";
 
 
 class ContentSwitch extends Component {
@@ -134,6 +141,38 @@ class ContentSwitch extends Component {
                     <Route
                         exact path="/reviews/create/:id"
                         component={ AddReviewPage }
+                    />
+                    <Route
+                        exact path="/users/:id/backlog"
+                        component={ UserBacklogPage }
+                    />
+                    <Route
+                        exact path="/users/:id/scores"
+                        component={ UserScoresPage }
+                    />
+                    <Route
+                        exact path="/users/:id/runs"
+                        component={ UserRunsPage }
+                    />
+                    <Route
+                        exact path="/users/:id/reviews"
+                        component={ UserReviewsPage }
+                    />
+                    <Route
+                        exact path="/backlog"
+                        component={ UserBacklogPage }
+                    />
+                    <Route
+                        exact path="/games/:id/reviews"
+                        component={ GameReviewsPage }
+                    />
+                    <Route
+                        exact path="/forgotPassword"
+                        component={ RequestTokenPage }
+                    />
+                    <Route
+                        exact path="/changePassword"
+                        component={ ChangePasswordPage }
                     />
                 </Switch>
             </main>

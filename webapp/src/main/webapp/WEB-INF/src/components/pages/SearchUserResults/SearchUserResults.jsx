@@ -7,6 +7,7 @@ import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
 import {Translation} from "react-i18next";
 import withUser from '../../hoc/withUser';
+import { LinkContainer } from 'react-router-bootstrap';
 
 class SearchUserResults extends Component {
     state = {
@@ -20,12 +21,16 @@ class SearchUserResults extends Component {
     };
 
     componentWillMount() {
-        this.setPage()
+        this.setPage(this.props);
     }
 
-    setPage() {
-        let page = this.props.query.get("page");
-        let term = this.props.query.get("searchTerm");
+    componentWillReceiveProps(newProps) {
+        this.setPage(newProps);
+    }
+
+    setPage(props) {
+        let page = props.query.get("page");
+        let term = props.query.get("searchTerm");
         if(!page) {
             page = 1;
         }
@@ -44,14 +49,14 @@ class SearchUserResults extends Component {
         });
     }
 
-    makeAdminHandler = (userId) => {
-        UserService.makeAdmin(userId);
-        this.setState({});
+    makeAdminHandler = async (user) => {
+        await UserService.makeAdmin(user.id);
+        this.setPage(this.props)
     }
 
-    removeAdminHandler = (userId) => {
-        UserService.removeAdmin(userId);
-        this.setState({});
+    removeAdminHandler = async (user) => {
+        await UserService.removeAdmin(user.id);
+        this.setPage(this.props)
     }
 
     render() {
@@ -78,21 +83,28 @@ class SearchUserResults extends Component {
                     </Card.Header>
                     <Card.Body className="d-flex flex-wrap justify-content-center align-items-center align-items-stretch">
                         <Col>
-                             {this.state.content.length > 0? [this.state.content.map(u =>
+                             {this.state.content && this.state.content.length > 0? [this.state.content.map(u =>
                                 <Row>
                                     <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.props.userIsAdmin? 'text-right':'text-center'}>
-                                        <a href={"users/"+u.id} style={{fontSize: "25px"}}>{u.username}</a>
+                                        <div style={{fontSize: "25px"}}>
+                                            <LinkContainer to={ "/users/" +u.id }>
+                                                <a>{u.username}</a>
+                                            </LinkContainer>
+                                        </div>
                          			</Col>
                                     {
-                                        (this.props.userIsAdmin && u.id != this.props.user.id)? [
+                                        (this.props.userIsAdmin)?
+                                            u.id != this.props.user.id? [
                                             <Col style={{verticalAlign: "middle", padding:"10px"}}>
-                                                {u.admin? [
-                                                    <Button variant="danger" onClick={() => {this.removeAdminHandler(u.id)}}><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
-                                                    <Button variant="success" onClick={() => {this.makeAdminHandler(u.id)}}><Translation>{t => t("search.makeAdmin")}</Translation></Button>]}
+                                                {
+                                                    u.admin? [
+                                                        <Button variant="danger" onClick={() => {this.removeAdminHandler(u)}}><Translation>{t => t("search.removeAdmin")}</Translation></Button>] : [
+                                                        <Button variant="success" onClick={() => {this.makeAdminHandler(u)}}><Translation>{t => t("search.makeAdmin")}</Translation></Button>]
+                                                }
                                             </Col>] : [<Col></Col>]
+                                         : []
                                     }
-                     			</Row>
-                            )] : [<div class="text-center"><Translation>{t => t("search.noResults")}</Translation></div>] }
+                                </Row>)] : [<div class="text-center"><Translation>{t => t("search.noResults")}</Translation></div>] }
                         </Col>
                     </Card.Body>
                 </Card>

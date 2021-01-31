@@ -20,11 +20,27 @@
             "last"      : "Last"
         },
         "seeAll"    : "See all >>",
-        "addGame"   : "Add Game"
+        "addGame"   : "Add Game",
+        "platforms" : "Platforms",
+        "genres" : "Genres",
+        "developers" : "Developers",
+        "publishers" : "Publishers"
+    },
+    "index" : {
+        "anonBacklogWarning" : "You had games added to your backlog before logging in. Would you like to import them into your account?",
+        "importNo" : "Erase them",
+        "importYes" : "Import them",
+        "ignoreThis" : "Ignore this message if you want to keep your anonymous backlog."
     },
     "games" : {
         "profile" : {
             "addToBacklog" : "Add to Backlog",
+            "edit" : "Edit",
+            "delete" : "Delete",
+            "deletingGame" : "Deleting {{value}}",
+            "deleteSure" : "Are you sure you want to delete this game?",
+            "deleteNo" : "No, I changed my mind",
+            "deleteYes" : "Yes, delete it!",
             "removeFromBacklog" : "Remove from Backlog",
             "releaseDates" : "Release dates",
             "developers" : "Developers",
@@ -35,7 +51,11 @@
             "unreleased" : "Scores, runs and reviews are disabled for this game until it comes out on at least one platform",
             "runs" : "RUNS",
             "reviews" : "REVIEWS",
-            "myReviews" : "MY REVIEWS"
+            "myReviews" : "MY REVIEWS",
+            "removeFromBacklogPrompt": "Remove {{value}} from backlog?",
+            "removeFromBacklogPromptExplain": "This game is currently in your backlog. Since it looks like you've beaten it, would you like to remove it from your backlog?",
+            "keepInBacklogAndSend": "No, publish and keep it in my backlog",
+            "removeFromBacklogAndSend": "Sure! Publish and remove it from my backlog!"
         },
         "lists" : {
             "popularGames" : "Popular right now",
@@ -107,6 +127,24 @@
         "login"           : "I already have an account. I wish to Log in",
         "bad_connection"  : "Unable to connect. Check your internet connection and try again"
     },
+    "forgotPassword" : {
+        "helmet": "Recover password",
+        "title" : "Forgot your password?",
+        "subtitle" : "Enter your email address and we'll help you recover your account!",
+        "fieldName" : "Email:",
+        "wrongEmail" : "The entered email address is not a valid address",
+        "emailNotFound" : "No users registered with that email address were found",
+        "send" : "Send",
+        "emailSent": "We've sent you an email with instructions on what to do next. Please check your email inbox. The message may take a while to deliver, so be patient.",
+        "invalidToken": "The password reset token is invalid or has expired. If you asked to reset your password multiple times, make sure you've clicked the last email we sent you.",
+        "changePassword" : "Change password",
+        "changePasswordSubtitle" : "Choose a new password to use with your account from now on.",
+        "passwordTooShort" : "The password should be at least 6 characters long",
+        "password" : "Password",
+        "repeatPassword" : "Repeat password",
+        "save" : "Save changes",
+        "passwordsDontMatch" : "The passwords don't match"
+    },
     "genres" : {
         "Action" : "Action",
         "Adventure" : "Adventure",
@@ -165,7 +203,11 @@
         "delete" : "Delete",
         "addingReview" : "Writing review for {{value}}",
         "platform": "Platform",
-        "body": "Your review:"
+        "body": "Your review:",
+        "deletingReview" : "Deleting review",
+        "deleteSure": "Are you sure you want to delete this review?",
+        "deleteNo": "Cancel",
+        "deleteYes": "Delete"
     },
     "users" : {
         "gamesRated" : "Games rated: {{value}}",
@@ -188,14 +230,14 @@
     "search" : {
         "gameResults" : "Search results for game {{value}}",
         "userResults" : "Search results for user {{value}}",
-        "resultsLabel" : "  results found that match your search",
+        "resultsLabel" : "{{value}} results found that match your search",
         "noResults" : "No results Submitfound",
         "makeAdmin" : "Make admin",
         "removeAdmin" : "Remove admin",
         "filterResults" : "Filter results",
         "closeModal" : "Close",
         "search" : "Search",
-        "multipleSelectHint" : "Hold CTRL while clicking to select multiple items",
+        "multipleSelectHint" : "Hold CTRL while clicking to select multiple items.",
         "scoreRange" : "Score",
         "hours" : "hrs",
         "mins" : "mins",
@@ -205,6 +247,14 @@
     "submit" : "Submit",
     "createGame" : {
         "title" : "Add Game",
-        "add"   : "Add"
+        "add"   : "add"
+    },
+    "whoops" : "Whoops!",
+    "error" : {
+        "400" : "The server could not process your request.",
+        "401" : "Authorization denied.",
+        "403" : "Access denied.",
+        "404" :  "The requested page does not exist.",
+        "500" : "There has been a problem on our part. Please try again later."
     }
 }

@@ -1,9 +1,11 @@
 import api from './api';
 import { TIMEOUT } from './apiConstants';
 
-const getAllPlatforms       = async () => {
+import PaginationService from './paginationService';
+
+const getAllPlatforms = async () => {
   try {
-    const endpoint = `platforms`;
+    const endpoint = `platforms?page_size=9999`;
     const response = await api.get(endpoint);
     return response.data;
   } catch(err) {
@@ -15,11 +17,15 @@ const getAllPlatforms       = async () => {
   }
 }
 
-const getEveryPlatform = async () => {
+const getPlatforms = async() => {
+  return getPlatformsPage(1);
+}
+
+const getPlatformsPage = async(page) => {
   try {
-    const endpoint = `platforms?page_size=9999`;
-    const response = await api.get(endpoint);
-    return response.data;
+        const endpoint = `platforms?page=${page}`;
+        const response = await api.get(endpoint);
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -58,10 +64,11 @@ const getGamePlatforms     = async(gameId) => {
 }
 
 const PlatformService = {
-  getAllPlatforms     : getAllPlatforms,
-  getGamePlatforms   : getGamePlatforms,
-  getBiggestPlatforms : getBiggestPlatforms,
-  getEveryPlatform : getEveryPlatform
+  getAllPlatforms       : getAllPlatforms,
+  getGamePlatforms      : getGamePlatforms,
+  getBiggestPlatforms   : getBiggestPlatforms,
+  getPlatforms          : getPlatforms,
+  getPlatformsPage      : getPlatformsPage
 }
 
 export default PlatformService;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Tabs, Tab, Button} from "react-bootstrap";
+import {Card, Row, Col, Tabs, Tab, Button} from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
@@ -10,27 +10,44 @@ import UserRunsTab from "./UserRunsTab";
 import UserReviewsTab from "./UserReviewsTab";
 import GameListItem from "../ListItem/GameListItem";
 import withUser from '../../hoc/withUser';
+import ScoreService from "../../../services/api/scoreService";
+import ReviewService from "../../../services/api/reviewService";
+import RunService from "../../../services/api/runService";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import AnyButton from "../AnyButton/AnyButton";
+import { LinkContainer } from 'react-router-bootstrap';
 
 class UserProfile extends Component {
     state = {
         loading: true,
         visitedUser : this.props.visitedUser,
-        backlog: [],
-        backlogPagination: [],
         user: this.props.user ? this.props.user : null,
         loggedIn: this.props.userIsLoggedIn,
     };
 
     componentWillMount() {
-        BacklogService.getUserBacklog(this.props.visitedUser.id)
-              .then((data) => {
-                  this.setState({
-                      backlog: data.content,
-                      backlogPagination: data.pagination,
-                      loading: false,
-                  });
-              }).then((data) =>  {});
-    };
+        const fetchBacklog = BacklogService.getUserBacklog(this.props.visitedUser.id, 5);
+        const fetchScore = ScoreService.getUserScores(this.props.visitedUser.id, 10);
+        const fetchRev = ReviewService.getUserReviews(this.props.visitedUser.id, 5);
+        const fetchRun = RunService.getUserRuns(this.props.visitedUser.id, 10);
+
+        //TODO: Handle no response (404)
+        Promise.all([ fetchBacklog, fetchScore, fetchRev, fetchRun ]).then((responses) => {
+            this.setState({
+                loading: false,
+                backlog: responses[0].content,
+                backlogPagination: responses[0].pagination,
+                scoresDisplayed: responses[1].content,
+                scoresPagination: responses[1].pagination,
+                reviewsDisplayed: responses[2].content,
+                reviewsPagination: responses[2].pagination,
+                runsDisplayed: responses[3].content,
+                runsPagination: responses[3].pagination,
+
+            });
+        });
+    }
 
     render() {
         if (this.state.loading === true) {
@@ -48,32 +65,34 @@ class UserProfile extends Component {
                         {(this.state.loggedIn && this.state.user.id === this.state.visitedUser.id)? [<h5 class="align-middle">{this.state.visitedUser.email}</h5>] : []}
                     </div>
                     <div class="d-flex text-left flex-wrap">
-                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center">
-                            <div class="pl-3 d-flex justify-content-center flex-column">
-                                <i class="fa fa-4x fa-star d-block"></i>
+                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                            <div class="pl-3 py-3 d-flex justify-content-center flex-column">
+                                <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faStar }/>
                             </div>
-                            <div class="pt-5 pb-5 pr-5 pl-3">
+                            <Col className="py-3">
                                 <h5><Translation>{t => t("users.gamesRated", {value: this.state.visitedUser.score_total})}</Translation></h5>
                                 <h5><Translation>{t => t("users.scoreAverage", {value: this.state.visitedUser.score_average})}</Translation></h5>
-                            </div>
+                            </Col>
                         </div>
-                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center">
-                            <div class="pl-3 d-flex justify-content-center flex-column">
-                                <i class="fa fa-4x fa-gamepad d-block"></i>
+                        <div class="p-3 mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                            <div class="pl-3 py-3 d-flex justify-content-center flex-column">
+                                <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faGamepad }/>
                             </div>
-                            <div class="pt-5 pb-5 pr-5 pl-3">
+                            <Col className="py-3">
                                 <h5><Translation>{t => t("users.runsCreated", {value: this.state.visitedUser.runs_total})}</Translation></h5>
                                 <h5><Translation>{t => t("users.hoursPlayed", {value: this.state.visitedUser.runs_hours_played})}</Translation></h5>
-                            </div>
+                            </Col>
                         </div>
                         {this.state.visitedUser.favorite_game? [
-                            <div class="mb-0 m-3 py-3 px-5 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                            <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center py-3 px-5 ">
                                 <h5 class="pr-3"><Translation>{t => t("users.favoriteGame", {value: this.state.visitedUser.favorite_game})}</Translation></h5>
-                                <a href={`${process.env.PUBLIC_URL}/games/` + this.state.visitedUser.favorite_game.id} class="text-white">
-                                    <div class="bg-primary d-flex flex-row align-items-center">
-                                        <GameCover mini='true' cover={this.state.visitedUser.favorite_game.cover}/>
-                                    </div>
-                                </a>
+                                <LinkContainer to={`/games/` +this.state.visitedUser.favorite_game.id}>
+                                    <a class="text-white">
+                                        <div class="bg-primary d-flex flex-row align-items-center">
+                                            <GameCover mini='true' cover={this.state.visitedUser.favorite_game.cover}/>
+                                        </div>
+                                    </a>
+                                </LinkContainer>
                             </div>
                         ] : []}
                     </div>
@@ -88,7 +107,7 @@ class UserProfile extends Component {
                                 {
                                     this.state.backlogPagination.next? [
                                         <div className="ml-auto">
-                                            <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/users/` +this.state.visitedUser.id +'/backlog'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                            <AnyButton variant="link" className="text-white" href={`/users/` +this.state.visitedUser.id +'/backlog'} textKey="navigation.seeAll"/>
                                         </div>
                                     ] : []
                                 }
@@ -100,13 +119,13 @@ class UserProfile extends Component {
                             </div>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="scores" title={<Translation>{t => t("users.scores")}</Translation>}>
-                            <UserScoresTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
+                            <UserScoresTab seeAll={true} visitedUser={this.state.visitedUser} loggedUser={this.state.user} scoresDisplayed={this.state.scoresDisplayed} scoresPagination={this.state.scoresPagination}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="runs" title={<Translation>{t => t("users.runs")}</Translation>}>
-                            <UserRunsTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
+                            <UserRunsTab seeAll={true} visitedUser={this.state.visitedUser} loggedUser={this.state.user} runsDisplayed={this.state.runsDisplayed} runsPagination={this.state.runsPagination}/>
                         </Tab>
                         <Tab className="bg-very-light" eventKey="reviews" title={<Translation>{t => t("users.reviews")}</Translation>}>
-                            <UserReviewsTab visitedUser={this.state.visitedUser} loggedUser={this.state.user}/>
+                            <UserReviewsTab seeAll={true} visitedUser={this.state.visitedUser} loggedUser={this.state.user} reviewsDisplayed={this.state.reviewsDisplayed} reviewsPagination={this.state.reviewsPagination}/>
                         </Tab>
                     </Tabs>
                 </div>

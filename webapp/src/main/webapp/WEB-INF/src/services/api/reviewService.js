@@ -1,31 +1,20 @@
 import api from './api';
 import AuthService from "./authService";
+import PaginationService from './paginationService';
 
-const getGameReviews = async(gameId) => {
-  return getGameReviewsPage(gameId, 1);
+const getGameReviews = async(gameId, limit) => {
+  return getGameReviewsPage(gameId, 1, limit);
 }
 
-const getUserReviews = async(userId) => {
-  return getUserReviewsPage(userId, 1);
+const getUserReviews = async(userId, limit) => {
+  return getUserReviewsPage(userId, 1, limit);
 }
 
-const getGameReviewsPage = async(gameId, page) => {
+const getGameReviewsPage = async(gameId, page, limit) => {
   try {
-    const endpoint = `games/${gameId}/reviews?page=${page}`;
+    const endpoint = `games/${gameId}/reviews?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
-    // Parse links
-    const data = response.headers.link;
-    let parsed_data = {};
-    let arrData = data.split(",");
-    arrData.forEach(element => {
-        let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-        parsed_data[linkInfo[2]]=linkInfo[1];
-    });
-    const ret = {};
-    ret['pagination'] = parsed_data;
-    ret['content'] = response.data;
-    ret['pageCount'] = response.headers["page-count"];
-    return ret;
+    return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -35,26 +24,14 @@ const getGameReviewsPage = async(gameId, page) => {
   }
 }
 
-const getUserReviewsPage = async(userId, page) => {
+const getUserReviewsPage = async(userId, page, limit) => {
   if(userId == null) {
     return [];
   }
   try {
-    const endpoint = `users/${userId}/reviews?page=${page}`;
+    const endpoint = `users/${userId}/reviews?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
-    // Parse links
-    const data = response.headers.link;
-    let parsed_data = {};
-    let arrData = data.split(",");
-    arrData.forEach(element => {
-        let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-        parsed_data[linkInfo[2]]=linkInfo[1];
-    });
-    const ret = {};
-    ret['pagination'] = parsed_data;
-    ret['content'] = response.data;
-    ret['pageCount'] = response.headers["page-count"];
-    return ret;
+    return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -90,7 +67,7 @@ const addReview = async(gameId, score, platform, body) => {
       "body" : body,
     }
     const response = await api.post(endpoint, newReview, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -103,10 +80,8 @@ const addReview = async(gameId, score, platform, body) => {
 const deleteReview = async(reviewId) => {
   try {
     const endpoint = `games/reviews/${reviewId}`;
-    console.log("Deleting...");
     const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    console.log(response);
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

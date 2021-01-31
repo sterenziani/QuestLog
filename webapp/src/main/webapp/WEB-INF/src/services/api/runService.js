@@ -1,23 +1,12 @@
 import api from './api';
 import AuthService from "./authService";
+import PaginationService from './paginationService';
 
 const getGameRuns = async(gameId) => {
   try {
     const endpoint = `games/${gameId}/runs`;
     const response = await api.get(endpoint);
-    // Parse links
-    const data = response.headers.link;
-    let parsed_data = {};
-    let arrData = data.split(",");
-    arrData.forEach(element => {
-        let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-        parsed_data[linkInfo[2]]=linkInfo[1];
-    });
-    const ret = {};
-    ret['pagination'] = parsed_data;
-    ret['content'] = response.data;
-    ret['pageCount'] = response.headers["page-count"];
-    return ret;
+    return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -27,30 +16,18 @@ const getGameRuns = async(gameId) => {
   }
 }
 
-const getUserRuns = async(userId) => {
-  return getUserRunsPage(userId, 1);
+const getUserRuns = async(userId, limit) => {
+  return getUserRunsPage(userId, 1, limit);
 }
 
-const getUserRunsPage = async(userId, page) => {
+const getUserRunsPage = async(userId, page, limit) => {
   if(userId == null) {
     return [];
   }
   try {
-    const endpoint = `users/${userId}/runs?page=${page}`;
+    const endpoint = `users/${userId}/runs?page=${page}&page_size=${limit}`;
     const response = await api.get(endpoint);
-    // Parse links
-    const data = response.headers.link;
-    let parsed_data = {};
-    let arrData = data.split(",");
-    arrData.forEach(element => {
-        let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-        parsed_data[linkInfo[2]]=linkInfo[1];
-    });
-    const ret = {};
-    ret['pagination'] = parsed_data;
-    ret['content'] = response.data;
-    ret['pageCount'] = response.headers["page-count"];
-    return ret;
+    return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -129,7 +106,7 @@ const addRun = async(gameId, hours, mins, secs, ps, plat) => {
       "platform" : plat,
     }
     const response = await api.post(endpoint, newRun, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    return response.data;
+    return response;
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };

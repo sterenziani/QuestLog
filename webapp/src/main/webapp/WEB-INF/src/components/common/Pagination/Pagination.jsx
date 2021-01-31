@@ -25,6 +25,16 @@ class Pagination extends Component {
         });
     }
 
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            url: newProps.url, // para saber donde me lleva cada boton
+            currentPage : newProps.page, // para saber en cual estoy
+            totalPages: newProps.totalPages, // para saber hasta que pagina se puede acceder
+            queryParams: newProps.queryParams,
+            pages: []
+        })
+    }
+
     render() {
         const prev = parseInt(this.state.currentPage) - 1;
         const next = parseInt(this.state.currentPage) + 1;

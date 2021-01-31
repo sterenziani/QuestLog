@@ -3,20 +3,37 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
 import GameProfile from "../../common/GameDetails/GameProfile";
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 class GameDetailsPage extends Component {
     state = {
         game: null,
         loading: true,
+        status : null,
+        error : false,
     };
 
     componentWillMount() {
         GameService.getGameById(this.props.match.params.id)
             .then((data) => {
-                this.setState({
-                    game: data,
-                    loading: false,
-                });
+                let findError = null;
+                if (data.status && data.status != OK && data.status != CREATED) {
+                        findError = data.status;
+                }
+                if(findError) {
+                    this.setState({
+                        loading: false,
+                        error: true,
+                        status: findError,
+                    });
+                }
+                else {
+                    this.setState({
+                        game: data,
+                        loading: false,
+                    });
+                }
             });
     }
 
@@ -28,7 +45,9 @@ class GameDetailsPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
+        }
         return (
             <React.Fragment>
                 <HelmetProvider>

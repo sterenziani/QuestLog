@@ -6,23 +6,42 @@ import PlatformService from "../../../services/api/platformService";
 import { withTranslation } from 'react-i18next';
 import ReviewCard from "../../common/GamesCard/ReviewCard";
 import withUser from '../../hoc/withUser';
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 class AddReviewPage extends Component {
     state = {
         game: null,
         loading: true,
         userId: this.props.user ? this.props.user.id : null,
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
         const fetchGame = GameService.getGameById(this.props.match.params.id);
         const fetchPlat = PlatformService.getGamePlatforms(this.props.match.params.id);
         Promise.all([ fetchGame, fetchPlat ]).then((responses) => {
-            this.setState({
-                loading: false,
-                game : responses[0],
-                platforms : responses[1]
-            });
+            let findError = null;
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                    findError = responses[i].status;
+                }
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    game: responses[0],
+                    platforms: responses[1]
+                });
+            }
         });
     }
 
@@ -33,6 +52,9 @@ class AddReviewPage extends Component {
                 transform: 'translate(-50%, -50%)'}}>
                 <Spinner animation="border" variant="primary" />
             </div>
+        }
+        if (this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
         const { t } = this.props
         return (
@@ -48,4 +70,4 @@ class AddReviewPage extends Component {
     }
 }
 
-export default withTranslation() (withUser(AddReviewPage));
+export default withTranslation() (withUser(AddReviewPage,{visibility : "usersOnly"}));

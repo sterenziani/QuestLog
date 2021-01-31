@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
-import {Button, Card, Form, Row} from "react-bootstrap";
+import {Button, Card, Form, Row, Modal} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import GameCover from "../GameCover/GameCover";
 import NumericInput from "react-numeric-input";
 import withQuery from "../../hoc/withQuery";
+import withUser from "../../hoc/withUser";
 import RunService from "../../../services/api/runService";
+import BacklogService from "../../../services/api/backlogService";
 import { withTranslation } from 'react-i18next';
-
+import withRedirect from '../../hoc/withRedirect';
 
 class RunCard extends Component {
     state = {
         game : this.props.game,
         params : {hours: this.props.query.get("hours"), mins: this.props.query.get("mins"), secs: this.props.query.get("secs"),
-                    platform: this.props.platforms[0].id, playstyle: this.props.platforms[0].id},
+                    platform: this.props.platforms[0].id, playstyle: this.props.playstyles[0].id},
         platforms : this.props.platforms,
         playstyles: this.props.playstyles,
-
+        showModal: false,
+        published: false,
     };
 
     componentWillMount() {
@@ -29,6 +32,7 @@ class RunCard extends Component {
         if (!this.state.params.secs) {
             this.state.params.secs = 0;
         }
+        this.props.addRedirection("gameProfile", `/games/${this.state.game.id}`);
     }
 
     handleHourChange(e) {
@@ -66,16 +70,51 @@ class RunCard extends Component {
     onChangePlaystyles(e){
         this.state.params.playstyle = e.target.value;
         this.setState({});
-
     }
 
-    handleSubmit = () =>{
-        if(this.props.userId) {
-            RunService.addRun(this.state.game.id, this.state.params.hours, this.state.params.mins, this.state.params.secs, this.state.params.playstyle, this.state.params.platform);
-            window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.game.id}`;
+    switchModal(){
+        this.setState({showModal: !this.state.showModal});
+    }
+
+    publishRunHandler(){
+        if(this.props.userIsLoggedIn)
+        {
+            if(this.props.game.in_backlog){
+                this.switchModal();
+            }
+            else{
+                this.publishRun();
+            }
         }
         else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
+            this.props.activateRedirect("login");
+    }
+
+    publishAndRemoveFromBacklog = () => {
+        BacklogService.removeGameFromBacklog(this.props.game.id);
+        this.publishRun();
+        if(this.state.showModal)
+            this.switchModal();
+    }
+
+    publishAndKeepInBacklog = () => {
+        this.publishRun();
+        if(this.state.showModal)
+            this.switchModal();
+    }
+
+    publishRun = () => {
+        this.setState({published:true});
+        RunService.addRun(this.state.game.id, this.state.params.hours, this.state.params.mins, this.state.params.secs, this.state.params.playstyle, this.state.params.platform)
+        .then(data => {
+            if(data.status == '201'){
+                this.props.activateRedirect("gameProfile");
+            }
+            else{
+                // TODO: Force login or try again
+                this.setState({published: false});
+            }
+        });
     }
 
     render() {
@@ -92,7 +131,7 @@ class RunCard extends Component {
                         <GameCover cover={this.state.game.cover}/>
                     </div>
                     <div class="p-5">
-                        <Form onSubmit={this.handleSubmit}>
+                        <Form>
                             <Form.Group controlId="formPlatforms">
                                 <div className="text-center">
                                     <Form.Label className="text-center">
@@ -150,16 +189,26 @@ class RunCard extends Component {
                                     </Row>
                                 </Form.Group>
                             <div className="text-center">
-                            <Button className="btn btn-dark mt-3" onClick={this.handleSubmit}>
-                                <Translation>
-                                    {
-                                        t => t("submit")
-                                    }
-                                </Translation>
-                            </Button>
+                            {
+                                this.state.published? [<Button disabled className="btn btn-dark mt-3">
+                                                        <Translation>{t => t("submit")}</Translation>
+                                                    </Button>
+                                                ] : [<Button className="btn btn-dark mt-3" onClick={(e) => {this.publishRunHandler(e)}}>
+                                                        <Translation>{t => t("submit")}</Translation>
+                                                    </Button>]
+                            }
                             </div>
                         </Form>
-
+                        <Modal show={this.state.showModal} onHide={() => this.switchModal()}>
+                            <Modal.Header closeButton><Modal.Title><Translation>{t => t("games.profile.removeFromBacklogPrompt", {value: this.props.game.title})}</Translation></Modal.Title></Modal.Header>
+                            <Modal.Body>
+                                <Translation>{t => t("games.profile.removeFromBacklogPromptExplain")}</Translation>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="light" onClick={this.publishAndKeepInBacklog}><Translation>{t => t("games.profile.keepInBacklogAndSend")}</Translation></Button>
+                                <Button variant="primary" onClick={this.publishAndRemoveFromBacklog}><Translation>{t => t("games.profile.removeFromBacklogAndSend")}</Translation></Button>
+                            </Modal.Footer>
+                        </Modal>
                     </div>
                 </Card.Body>
             </Card>
@@ -169,4 +218,4 @@ class RunCard extends Component {
 
 
 
-export default withTranslation() (withQuery(RunCard));
+export default withTranslation() (withUser(withQuery(withRedirect(RunCard, {login: "/login"}))));

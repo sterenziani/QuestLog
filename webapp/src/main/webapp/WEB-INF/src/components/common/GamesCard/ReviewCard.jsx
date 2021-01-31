@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import {Button, Card, Form, Row, Col, Container} from "react-bootstrap";
+import {Button, Card, Form, Row, Col, Container, Modal} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import withQuery from "../../hoc/withQuery";
 import ReviewService from "../../../services/api/reviewService";
 import { withTranslation } from 'react-i18next';
 import ScoreService from "../../../services/api/scoreService";
+import withUser from "../../hoc/withUser";
+import BacklogService from "../../../services/api/backlogService";
 import {Slider} from '@material-ui/core';
-
+import withRedirect from '../../hoc/withRedirect';
 
 class ReviewCard extends Component {
     state = {
@@ -15,6 +17,8 @@ class ReviewCard extends Component {
         params : {score: null, platform: this.props.platforms[0].id, body: ""},
         platforms : this.props.platforms,
         userId : this.props.userId,
+        showModal: false,
+        published: false,
     };
 
     componentWillMount() {
@@ -25,6 +29,7 @@ class ReviewCard extends Component {
                 loading: false,
             });
         });
+        this.props.addRedirection("gameProfile", `/games/${this.state.game.id}`);
     }
 
     onChangePlatforms(e){
@@ -60,13 +65,49 @@ class ReviewCard extends Component {
         }
     }
 
-    handleSubmit = () =>{
-        if(this.props.userId) {
-            ReviewService.addReview(this.state.game.id, this.state.params.score, this.state.params.platform, this.state.params.body);
-            window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.game.id}`;
+    switchModal(){
+        this.setState({showModal: !this.state.showModal});
+    }
+
+    publishReviewHandler(){
+        if(this.props.userIsLoggedIn)
+        {
+            if(this.props.game.in_backlog){
+                this.switchModal();
+            }
+            else{
+                this.publishReview();
+            }
         }
         else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
+            this.props.activateRedirect("login");
+    }
+
+    publishAndRemoveFromBacklog = () => {
+        BacklogService.removeGameFromBacklog(this.props.game.id);
+        this.publishReview();
+        if(this.state.showModal)
+            this.switchModal();
+    }
+
+    publishAndKeepInBacklog = () => {
+        this.publishReview();
+        if(this.state.showModal)
+            this.switchModal();
+    }
+
+    publishReview = () => {
+        this.setState({published:true});
+        ReviewService.addReview(this.state.game.id, this.state.params.score, this.state.params.platform, this.state.params.body)
+        .then(data => {
+            if(data.status == '201'){
+                this.props.activateRedirect("gameProfile");
+            }
+            else{
+                // TODO: Force login or try again
+                this.setState({published: false});
+            }
+        });
     }
 
     render() {
@@ -79,7 +120,7 @@ class ReviewCard extends Component {
                 </Card.Header>
                 <Card.Body className="card-body d-flex flex-wrap justify-content-center align-items-center">
                     <Col class="p-5">
-                        <Form onSubmit={this.handleSubmit}>
+                        <Form>
                             <Form.Group controlId="formScore">
                                 <Form.Label className="text-center">
                                     <h5 className="text-center"><strong><Translation>{t => t("score.your")}</Translation></strong></h5>
@@ -125,11 +166,21 @@ class ReviewCard extends Component {
                             </Form.Group>
                             <div className="text-center">
                             {
-                                (this.state.params.score && this.state.params.body.length > 0)? [<Button className="btn btn-dark mt-3" onClick={this.handleSubmit}><Translation>{t => t("submit")}</Translation></Button>]
-                                : [<Button disabled className="btn btn-dark mt-3" onClick={this.handleSubmit}><Translation>{t => t("submit")}</Translation></Button>]
+                                (this.state.params.score && this.state.params.body.length > 0)? [<Button className="btn btn-dark mt-3" onClick={(e) => {this.publishReviewHandler(e)}}><Translation>{t => t("submit")}</Translation></Button>]
+                                : [<Button disabled className="btn btn-dark mt-3"><Translation>{t => t("submit")}</Translation></Button>]
                             }
                             </div>
                         </Form>
+                        <Modal show={this.state.showModal} onHide={() => this.switchModal()}>
+                            <Modal.Header closeButton><Modal.Title><Translation>{t => t("games.profile.removeFromBacklogPrompt", {value: this.props.game.title})}</Translation></Modal.Title></Modal.Header>
+                            <Modal.Body>
+                                <Translation>{t => t("games.profile.removeFromBacklogPromptExplain")}</Translation>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="light" onClick={this.publishAndKeepInBacklog}><Translation>{t => t("games.profile.keepInBacklogAndSend")}</Translation></Button>
+                                <Button variant="primary" onClick={this.publishAndRemoveFromBacklog}><Translation>{t => t("games.profile.removeFromBacklogAndSend")}</Translation></Button>
+                            </Modal.Footer>
+                        </Modal>
                     </Col>
                 </Card.Body>
             </Card>
@@ -139,4 +190,4 @@ class ReviewCard extends Component {
 
 
 
-export default withTranslation() (withQuery(ReviewCard));
+export default withTranslation() (withUser(withQuery(withRedirect(ReviewCard, {login: "/login"}))));

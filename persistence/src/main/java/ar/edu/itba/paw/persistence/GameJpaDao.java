@@ -365,6 +365,7 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> searchByTitle(String search, int page, int pageSize) {
+    	search = search.replace("%", "\\%").replace("_", "\\_");
         final TypedQuery<Game> query = em.createQuery("select g from Game as g where lower(g.title) like concat('%', lower(:search),'%')", Game.class);
         query.setParameter("search", search);
         query.setFirstResult((page - 1) * pageSize);
@@ -481,7 +482,8 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public List<Game> getFilteredGames(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight, int page, int pageSize) {
-        String genreFilter = "";
+    	searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
+    	String genreFilter = "";
         if(genres.size()>0)
             genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";
 
@@ -539,6 +541,7 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public int countSearchResults(String searchTerm) {
+    	searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
         final Query query = em.createNativeQuery("select * from games as g where lower(g.title) like '%' || lower(:searchTerm) || '%'");
         query.setParameter("searchTerm", searchTerm);
         return query.getResultList().size();
@@ -546,7 +549,8 @@ public class GameJpaDao implements GameDao {
 
     @Override
     public int countSearchResultsFiltered(String searchTerm, List<String> genres, List<String> platforms, int scoreLeft, int scoreRight, int timeLeft, int timeRight) {
-        String genreFilter = "";
+    	searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
+    	String genreFilter = "";
         if(genres.size()>0)
             genreFilter =  " NATURAL JOIN (SELECT DISTINCT game FROM (SELECT * FROM genres WHERE genre IN (" + String.join(", ", genres) + ")) AS gnrs NATURAL JOIN classifications) AS a";
 

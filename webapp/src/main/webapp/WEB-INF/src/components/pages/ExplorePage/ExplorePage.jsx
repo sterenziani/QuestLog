@@ -7,6 +7,8 @@ import PlatformService from "../../../services/api/platformService";
 import PublisherService from "../../../services/api/publisherService";
 import ContainerCard from "../../common/GamesCard/ContainerCard";
 import { withTranslation } from 'react-i18next';
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 class ExplorePage extends Component {
     state = {
@@ -15,7 +17,8 @@ class ExplorePage extends Component {
         platforms: [],
         developers: [],
         publishers: [],
-
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -24,15 +27,29 @@ class ExplorePage extends Component {
         const fetchPlat = PlatformService.getBiggestPlatforms();
         const fetchPub = PublisherService.getBiggestPublishers();
 
-        //TODO: Handle no response (404)
         Promise.all([ fetchDev, fetchGen, fetchPlat, fetchPub ]).then((responses) => {
-            this.setState({
-                loading: false,
-                developers: responses[0],
-                genres : responses[1],
-                platforms : responses[2],
-                publishers : responses[3],
-            });
+            let findError = null;
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                    findError = responses[i].status;
+                }
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    developers: responses[0],
+                    genres: responses[1],
+                    platforms: responses[2],
+                    publishers: responses[3],
+                });
+            }
         });
     }
 
@@ -43,6 +60,9 @@ class ExplorePage extends Component {
                     transform: 'translate(-50%, -50%)'}}>
                         <Spinner animation="border" variant="primary" />
                     </div>
+        }
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
         const { t } = this.props
         return (

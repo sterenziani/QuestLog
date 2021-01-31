@@ -60,7 +60,7 @@ public class WebConfig extends WebMvcConfigurerAdapter
 	@Value("classpath:add_games.sql")
 	private Resource addGamesSql;
 	
-	public static final int MAX_IMAGE_SIZE = -1;
+	private static final int MAX_IMAGE_SIZE = -1;
 	
     @Autowired
     private Environment environment;
@@ -87,16 +87,6 @@ public class WebConfig extends WebMvcConfigurerAdapter
         return dbp;
     }
 	
-	/*@Bean
-	public ViewResolver viewResolver()
-	{
-		final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();        
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/jsp/");
-		viewResolver.setSuffix(".jsp");
-		return viewResolver;
-	}*/
-	
 	@Bean
 	public PlatformTransactionManager transactionManager(final EntityManagerFactory emf)
 	{
@@ -116,10 +106,6 @@ public class WebConfig extends WebMvcConfigurerAdapter
 		final Properties properties = new Properties();
 		properties.setProperty("hibernate.hbm2ddl.auto", "update");
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-		
-		// ESTAS DOS SON SOLO PARA DEBUG. BORRAR ANTES DE DEPLOYAR
-		//properties.setProperty("hibernate.show_sql", "true");
-		//properties.setProperty("format_sql", "true");
 		
 		factoryBean.setJpaProperties(properties);
 		return factoryBean;

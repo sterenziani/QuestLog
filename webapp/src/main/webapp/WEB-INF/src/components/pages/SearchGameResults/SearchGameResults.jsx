@@ -4,6 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
+import withRedirect from '../../hoc/withRedirect';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import SearchModal from "../../common/SearchModal/SearchModal"
 
@@ -20,15 +21,19 @@ class SearchGameResults extends Component {
     };
 
     componentWillMount() {
-        this.setPage();
+        this.setPage(this.props);
     }
 
-    setPage() {
-        let page = this.props.query.get("page");
-        let searchParams = {hoursLeft: this.props.query.get("hoursLeft"), minsLeft: this.props.query.get("minsLeft"), secsLeft: this.props.query.get("secsLeft"),
-                            hoursRight: this.props.query.get("hoursRight"), minsRight: this.props.query.get("minsRight"), secsRight: this.props.query.get("secsRight"),
-                            scoreLeft: this.props.query.get("scoreLeft"), scoreRight: this.props.query.get("scoreRight"),
-                            platforms: this.props.query.getAll("platforms"), genres: this.props.query.getAll("genres"), searchTerm: this.props.query.get("searchTerm")}
+    componentWillReceiveProps(newProps) {
+        this.setPage(newProps);
+    }
+
+    setPage(props) {
+        let page = props.query.get("page");
+        let searchParams = {hoursLeft: props.query.get("hoursLeft"), minsLeft: props.query.get("minsLeft"), secsLeft: props.query.get("secsLeft"),
+                            hoursRight: props.query.get("hoursRight"), minsRight: props.query.get("minsRight"), secsRight: props.query.get("secsRight"),
+                            scoreLeft: props.query.get("scoreLeft"), scoreRight: props.query.get("scoreRight"),
+                            platforms: props.query.getAll("platforms"), genres: props.query.getAll("genres"), searchTerm: props.query.get("searchTerm")}
         if(!page) {
             page = 1;
         }
@@ -45,11 +50,11 @@ class SearchGameResults extends Component {
                 page : page,
                 searchParams : searchParams,
             });
-            if (this.state.totalCount === "1") {
-                window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
+            if (response.totalCount === "1") {
+                this.props.addRedirection("gameProfile", `/games/${response.content[0].id}`);
+                this.props.activateRedirect("gameProfile");
             }
         });
-
     }
 
     render() {
@@ -61,7 +66,6 @@ class SearchGameResults extends Component {
             </div>
         }
         let params = GameService.buildQueryParams(this.state.searchParams).replace(0,"?");
-
         return (
             <React.Fragment>
                 <HelmetProvider>
@@ -76,4 +80,4 @@ class SearchGameResults extends Component {
         );
     }
 }
-export default withQuery(SearchGameResults);
+export default withQuery(withRedirect(SearchGameResults));

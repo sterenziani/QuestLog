@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
+import PaginationService from './paginationService';
 
 const gameServiceEndpoint   = 'games';
 
@@ -80,20 +81,7 @@ const searchGamesPage = async(searchParams, page) => {
         let params = buildQueryParams(searchParams) + `&backlog=${currentBacklog}`;
         const endpoint = `${gameServiceEndpoint}?page=${page}`+params;
         const response = await api.get(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-        // Parse links
-        const data = response.headers.link;
-        let parsed_data = {};
-        let arrData = data.split(",");
-        arrData.forEach(element => {
-            let linkInfo = /<([^>]+)>;\s+rel="([^"]+)"/ig.exec(element);
-            parsed_data[linkInfo[2]]=linkInfo[1];
-        });
-        const ret = {};
-        ret['pagination'] = parsed_data;
-        ret['content'] = response.data;
-        ret['pageCount'] = response.headers["page-count"];
-        ret['totalCount'] = response.headers["total-count"];
-        return ret;
+        return PaginationService.parseResponsePaginationHeaders(response);
   } catch(err) {
     if(err.response) {
       return { status : err.response.status };
@@ -151,6 +139,20 @@ const getGameReleaseDates = async(gameId) => {
   }
 }
 
+const deleteGame = async(gameId) => {
+  try {
+    const endpoint = `games/${gameId}`;
+    const response = await api.delete(endpoint, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      /* timeout */
+    }
+  }
+}
+
 const GameService = {
     register            : register,
     getPopularGames     : getPopularGames,
@@ -159,7 +161,8 @@ const GameService = {
     getGameReleaseDates : getGameReleaseDates,
     searchGames         : searchGames,
     searchGamesPage     : searchGamesPage,
-    buildQueryParams    : buildQueryParams
+    buildQueryParams    : buildQueryParams,
+    deleteGame          : deleteGame
 }
 
 export default GameService;
