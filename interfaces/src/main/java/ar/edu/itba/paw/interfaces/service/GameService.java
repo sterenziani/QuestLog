@@ -76,7 +76,7 @@ public interface GameService
 	 * @return 				The registered game.
 	 */
 
-	Game register(String title, MultipartFile cover, String description, String trailer, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException;
+	Game register(String title, String cover, String description, String trailer, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException;
 	
 	/**
 	 * Get a list of all available games.
@@ -242,5 +242,5 @@ public interface GameService
 
 	void remove(Game g);
 
-	void update(long id, String title, MultipartFile cover, String description, String trailer, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException;
+	void update(long id, String title, String cover, String description, String trailer, List<Long> platforms, List<Long> developers, List<Long> publishers, List<Long> genres, Map<Long, LocalDate> releaseDates) throws BadFormatException;
 }

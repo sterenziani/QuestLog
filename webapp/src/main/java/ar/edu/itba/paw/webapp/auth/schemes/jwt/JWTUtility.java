@@ -34,8 +34,6 @@ public class JWTUtility {
     
 	public String createToken(String username, Set<Role> roles)
 	{
-	    System.out.println("Pizza Pizza");
-	    System.out.println(roles.toString());
 	    List<String> roleTypes = roles.stream().map(Role::getRoleName).collect(Collectors.toList());
 		String token = Jwts.builder()
             .setIssuer("QuestLog-API")
@@ -52,28 +50,21 @@ public class JWTUtility {
     @SuppressWarnings("unchecked")
 	public JwtUserDto parseToken(String token)
     {
-        System.out.println("111.");
         try
         {
-            System.out.println("222.");
             Claims body = Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(getJWTKey().getBytes())).build().parseClaimsJws(token).getBody();
             JwtUserDto u = new JwtUserDto();
             u.setUsername(body.getSubject());
-            System.out.println("223.");
-            System.out.println(body.get("roles", List.class));
-            System.out.println("224.");
             List<String> roleTypes = body.get("roles", List.class);
             u.setRoles(new HashSet<>(roleTypes));
             return u;
         }
         catch (ExpiredJwtException e)
         {
-            System.out.println("333.");
             throw new ExpiredTokenException();
         }
         catch (JwtException e)
         {
-            System.out.println("444.");
             return null;
         }
     }
