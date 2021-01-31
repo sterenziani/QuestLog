@@ -4,6 +4,7 @@ import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ReviewCard from "../GameDetails/ReviewCard";
+import AnyButton from "../AnyButton/AnyButton";
 
 class UserReviewsTab extends Component {
     state = {
@@ -22,7 +23,7 @@ class UserReviewsTab extends Component {
                         {
                             this.state.reviewsPagination.next && this.props.seeAll? [
                                 <div className="ml-auto">
-                                    <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/users/` +this.state.visitedUser.id +'/reviews'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                    <AnyButton variant="link" className="text-white" href={`/users/` +this.state.visitedUser.id +'/reviews'} textKey="navigation.seeAll"/>
                                 </div>
                             ] : []
                         }

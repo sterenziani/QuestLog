@@ -3,6 +3,7 @@ import {Card, Row, Col, Badge, Button, Container} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
+import AnyButton from "../AnyButton/AnyButton";
 
 class UserRunsTab extends Component {
     state = {
@@ -30,7 +31,7 @@ class UserRunsTab extends Component {
                             {
                                 this.state.runsPagination.next && this.props.seeAll? [
                                     <div className="ml-auto">
-                                        <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/users/` +this.state.visitedUser.id +'/runs'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                        <AnyButton variant="link" className="text-white" href={`/users/` +this.state.visitedUser.id +'/runs'} textKey="navigation.seeAll"/>
                                     </div>
                                 ] : []
                             }
@@ -47,7 +48,10 @@ class UserRunsTab extends Component {
 
                                         {this.state.runsDisplayed.map(r => (
                                             <Row className="m-1">
-                                                <Col className="text-right"> <a href={`${process.env.PUBLIC_URL}/games/` + r.game.id}>{r.game.title}</a> ({r.platform.shortName})</Col>
+                                                <Col className="text-right">
+                                                    <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/games/" +r.game.id } text={r.game.title}/>
+                                                    {" ("+r.platform.shortName+")"}
+                                                </Col>
                                                 <Col className="text-center"> <Translation>{t => t("runs.playstyles." +r.playstyle.name)}</Translation> </Col>
                                                 <Col> {this.convertTime(r.time)} </Col>
                                             </Row>

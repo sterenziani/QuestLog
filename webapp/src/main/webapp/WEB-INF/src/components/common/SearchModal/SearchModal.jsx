@@ -10,6 +10,7 @@ import NumericInput from 'react-numeric-input';
 import { withTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import AnyButton from "../AnyButton/AnyButton";
 
 
 class SearchModal extends Component {
@@ -56,6 +57,7 @@ class SearchModal extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
+            show: false,
             searchParams: newProps.searchParams,
             path : newProps.path
         })
@@ -198,7 +200,7 @@ class SearchModal extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="light" onClick={() => {this.switchModal()}}><Translation>{t => t("search.closeModal")}</Translation></Button>
-                        <Button variant="primary" href={this.state.path +"?page=1" +GameService.buildQueryParams(this.state.searchParams)}><Translation>{t => t("search.search")}</Translation></Button>
+                        <AnyButton variant="primary" href={"/" +this.state.path +"?page=1" +GameService.buildQueryParams(this.state.searchParams)} textKey={"search.search"}/>
                     </Modal.Footer>
                 </Modal>
             </div>

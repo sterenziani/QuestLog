@@ -15,6 +15,8 @@ import ReviewService from "../../../services/api/reviewService";
 import RunService from "../../../services/api/runService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import AnyButton from "../AnyButton/AnyButton";
+import { LinkContainer } from 'react-router-bootstrap';
 
 class UserProfile extends Component {
     state = {
@@ -84,11 +86,13 @@ class UserProfile extends Component {
                         {this.state.visitedUser.favorite_game? [
                             <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center py-3 px-5 ">
                                 <h5 class="pr-3"><Translation>{t => t("users.favoriteGame", {value: this.state.visitedUser.favorite_game})}</Translation></h5>
-                                <a href={`${process.env.PUBLIC_URL}/games/` + this.state.visitedUser.favorite_game.id} class="text-white">
-                                    <div class="bg-primary d-flex flex-row align-items-center">
-                                        <GameCover mini='true' cover={this.state.visitedUser.favorite_game.cover}/>
-                                    </div>
-                                </a>
+                                <LinkContainer to={`/games/` +this.state.visitedUser.favorite_game.id}>
+                                    <a class="text-white">
+                                        <div class="bg-primary d-flex flex-row align-items-center">
+                                            <GameCover mini='true' cover={this.state.visitedUser.favorite_game.cover}/>
+                                        </div>
+                                    </a>
+                                </LinkContainer>
                             </div>
                         ] : []}
                     </div>
@@ -103,7 +107,7 @@ class UserProfile extends Component {
                                 {
                                     this.state.backlogPagination.next? [
                                         <div className="ml-auto">
-                                            <Button variant="link" className="text-white" href={`${process.env.PUBLIC_URL}/users/` +this.state.visitedUser.id +'/backlog'}><Translation>{t => t("navigation.seeAll")}</Translation></Button>
+                                            <AnyButton variant="link" className="text-white" href={`/users/` +this.state.visitedUser.id +'/backlog'} textKey="navigation.seeAll"/>
                                         </div>
                                     ] : []
                                 }
