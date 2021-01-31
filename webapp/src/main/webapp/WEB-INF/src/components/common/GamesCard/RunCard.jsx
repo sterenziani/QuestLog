@@ -9,7 +9,7 @@ import withUser from "../../hoc/withUser";
 import RunService from "../../../services/api/runService";
 import BacklogService from "../../../services/api/backlogService";
 import { withTranslation } from 'react-i18next';
-
+import withRedirect from '../../hoc/withRedirect';
 
 class RunCard extends Component {
     state = {
@@ -32,6 +32,7 @@ class RunCard extends Component {
         if (!this.state.params.secs) {
             this.state.params.secs = 0;
         }
+        this.props.addRedirection("gameProfile", `/games/${this.state.game.id}`);
     }
 
     handleHourChange(e) {
@@ -86,7 +87,7 @@ class RunCard extends Component {
             }
         }
         else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
+            this.props.activateRedirect("login");
     }
 
     publishAndRemoveFromBacklog = () => {
@@ -107,7 +108,7 @@ class RunCard extends Component {
         RunService.addRun(this.state.game.id, this.state.params.hours, this.state.params.mins, this.state.params.secs, this.state.params.playstyle, this.state.params.platform)
         .then(data => {
             if(data.status == '201'){
-                window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.game.id}`;
+                this.props.activateRedirect("gameProfile");
             }
             else{
                 // TODO: Force login or try again
@@ -217,4 +218,4 @@ class RunCard extends Component {
 
 
 
-export default withTranslation() (withUser(withQuery(RunCard)));
+export default withTranslation() (withUser(withQuery(withRedirect(RunCard, {login: "/login"}))));

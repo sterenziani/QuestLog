@@ -7,6 +7,7 @@ import "../../../../src/index.scss";
 import withUser from '../../hoc/withUser';
 import ScoreService from "../../../services/api/scoreService";
 import BacklogService from "../../../services/api/backlogService";
+import withRedirect from '../../hoc/withRedirect';
 
 class ScoreSlider extends Component {
     state = {
@@ -40,8 +41,9 @@ class ScoreSlider extends Component {
             else
                 this.publishScore();
         }
-        else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
+        else{
+            this.props.activateRedirect("login")
+        }
     }
 
     publishAndRemoveFromBacklog = () => {
@@ -134,4 +136,4 @@ class ScoreSlider extends Component {
     }
 }
 
-export default withRouter(withUser(ScoreSlider));
+export default withRouter(withUser(withRedirect(ScoreSlider, {login: "/login"})));

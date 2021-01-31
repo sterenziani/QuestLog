@@ -9,7 +9,7 @@ import ScoreService from "../../../services/api/scoreService";
 import withUser from "../../hoc/withUser";
 import BacklogService from "../../../services/api/backlogService";
 import {Slider} from '@material-ui/core';
-
+import withRedirect from '../../hoc/withRedirect';
 
 class ReviewCard extends Component {
     state = {
@@ -29,6 +29,7 @@ class ReviewCard extends Component {
                 loading: false,
             });
         });
+        this.props.addRedirection("gameProfile", `/games/${this.state.game.id}`);
     }
 
     onChangePlatforms(e){
@@ -79,7 +80,7 @@ class ReviewCard extends Component {
             }
         }
         else
-            window.location.href = `${process.env.PUBLIC_URL}/login`;
+            this.props.activateRedirect("login");
     }
 
     publishAndRemoveFromBacklog = () => {
@@ -100,7 +101,7 @@ class ReviewCard extends Component {
         ReviewService.addReview(this.state.game.id, this.state.params.score, this.state.params.platform, this.state.params.body)
         .then(data => {
             if(data.status == '201'){
-                window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.game.id}`;
+                this.props.activateRedirect("gameProfile");
             }
             else{
                 // TODO: Force login or try again
@@ -189,4 +190,4 @@ class ReviewCard extends Component {
 
 
 
-export default withTranslation() (withUser(withQuery(ReviewCard)));
+export default withTranslation() (withUser(withQuery(withRedirect(ReviewCard, {login: "/login"}))));

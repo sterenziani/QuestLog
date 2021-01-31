@@ -3,6 +3,7 @@ import GameListItem from "../ListItem/GameListItem";
 import {Card, Row, Button} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
+import AnyButton from "../AnyButton/AnyButton";
 
 class GamesCard extends Component {
     state = {
@@ -31,9 +32,7 @@ class GamesCard extends Component {
                             this.state.pagination.next ?
                             [<div className="ml-auto">
                             <div className="ml-auto">
-                                <a className="btn btn-link text-white" href={`${process.env.PUBLIC_URL}/`+this.state.seeAllLink}>
-                                    <Translation>{t => t("navigation.seeAll")}</Translation>
-                                </a>
+                                <AnyButton variant="link" className="text-white" href={"/"+this.state.seeAllLink} textKey="navigation.seeAll"/>
                             </div>
                         </div>] : null}
                     </Row>

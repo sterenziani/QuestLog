@@ -60,7 +60,7 @@ class RunsTab extends Component {
         return (
             <Grid>
                 <div className="text-center m-4">
-                    <AnyButton variant="success"  href={`/createRun/${this.state.game.id}`} textKey="runs.addRun"/>
+                    <AnyButton variant="success" href={`/createRun/${this.state.game.id}`} textKey="runs.addRun"/>
                 </div>
 
                 {
@@ -121,7 +121,9 @@ class RunsTab extends Component {
                             {this.state.fastestRuns.length > 0 ? [
                                 this.state.fastestRuns.map(r => (
                                     <Row className="m-1">
-                                        <Col className="text-right"> <a href={`${process.env.PUBLIC_URL}/users/` + r.user.id}>{r.user.username}</a></Col>
+                                        <Col className="text-right">
+                                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/users/" +r.user.id } text={r.user.username}/>
+                                        </Col>
                                         <Col className="text-center"> {r.platform.shortName} </Col>
                                         <Col> {this.convertTime(r.time)} </Col>
                                     </Row>
