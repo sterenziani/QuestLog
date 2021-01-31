@@ -5,6 +5,34 @@ import PaginationService from './paginationService';
 
 const gameServiceEndpoint   = 'games';
 
+const register        = async (title, description, image, trailer, platforms, developers, publishers, genres, releaseDates) => {
+    try {
+        const new_game = {
+            'title'        : title,
+            'description'  : description,
+            'cover'        : image,
+            'trailer'      : trailer,
+            'platforms'    : platforms,
+            'developers'   : developers,
+            'publishers'   : publishers,
+            'genres'       : genres,
+            'releaseDates' : releaseDates
+        }
+        const endpoint = gameServiceEndpoint + '/new_game';
+        const response = await api.post(endpoint, new_game, {
+            headers : {
+                authorization  : AuthService.getToken(),
+                'Content-Type' : 'application/json'
+            }
+        })
+        return { status : response.status }
+    } catch(err){
+        if(err.response){
+            return { status : err.response.status }
+        }
+    }
+}
+
 const getPopularGames = async () => {
     try {
         const cookies = new Cookies();
@@ -126,6 +154,7 @@ const deleteGame = async(gameId) => {
 }
 
 const GameService = {
+    register            : register,
     getPopularGames     : getPopularGames,
     getUpcomingGames    : getUpcomingGames,
     getGameById         : getGameById,

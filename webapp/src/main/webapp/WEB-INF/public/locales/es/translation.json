@@ -245,6 +245,10 @@
         "maxTime" : "Duración máxima del modo historia"
     },
     "submit" : "Enviar",
+    "createGame" : {
+        "title" : "Agregar Juego",
+        "add"   : "Agregar"
+    },
     "whoops" : "¡Chanfle!",
     "error" : {
         "400" : "El servidor no pudo procesar tu pedido.",

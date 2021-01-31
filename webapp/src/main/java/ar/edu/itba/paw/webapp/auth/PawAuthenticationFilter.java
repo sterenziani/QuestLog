@@ -40,7 +40,6 @@ public class PawAuthenticationFilter extends AbstractAuthenticationProcessingFil
         else if(header.startsWith("Bearer "))
         {
             String bearer_token = header.substring(7);
-            System.out.println("bearer: " + bearer_token);
             return getAuthenticationManager().authenticate(new JWTToken(bearer_token));
         }
         else

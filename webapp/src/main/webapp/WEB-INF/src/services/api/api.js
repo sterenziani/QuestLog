@@ -1,7 +1,8 @@
 import { create } from 'axios';
 
 let api = create({
-    baseURL : `${process.env.PUBLIC_URL}/api/`
+    baseURL : `${process.env.PUBLIC_URL}/api/`,
+    timeout : 10000
 })
 
 const errorHandler = (error) => {

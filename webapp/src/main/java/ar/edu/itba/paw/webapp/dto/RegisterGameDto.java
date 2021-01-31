@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import ar.edu.itba.paw.webapp.validators.anotation.Base64Image;
+
 import java.util.List;
 
 import javax.validation.constraints.Size;
@@ -14,8 +16,8 @@ public class RegisterGameDto {
     @Size(max = 15000)
     private String              description;
 
-    //@ImageSize(max=256000)
-    //private MultiparlongtFile       cover;
+	@Base64Image
+    private String      		cover;
 
     private String              trailer;
     private List<Long>          platforms;
@@ -40,16 +42,14 @@ public class RegisterGameDto {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	/*
-	public MultipartFile getCover() {
+
+	public String getCover() {
 		return cover;
 	}
-	public void setCover(MultipartFile cover) {
+
+	public void setCover(String cover) {
 		this.cover = cover;
 	}
-	
-	*/
 
 	public String getTrailer() {
 		return trailer;

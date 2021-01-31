@@ -22,8 +22,13 @@ class RunsTab extends Component {
     convertTime(seconds) {
         const hours = Math.floor(seconds / 3600);
         seconds = seconds % 3600;
-        const minutes = ("0" + seconds/60).slice(-2);
-        seconds = ("0" + seconds%60).slice(-2);
+
+        let minutes = Math.floor(seconds/60);
+        if(minutes < 10)
+            minutes = "0" + minutes;
+        seconds = seconds % 60;
+        if(seconds < 10)
+            seconds = "0" + seconds;
         return "" +hours + " : " +minutes +" : " +seconds;
     };
 

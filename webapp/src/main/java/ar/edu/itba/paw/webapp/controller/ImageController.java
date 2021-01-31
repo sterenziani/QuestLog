@@ -8,6 +8,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.model.entity.Image;
@@ -24,11 +25,11 @@ public class ImageController {
 	private UriInfo uriInfo;
     
     @GET
-    @Produces(value = {"image/png"})
-    @Path("/{filename}")
-    public Response getPicture(@PathParam("filename") String filename) throws ImageNotFoundException
+    @Produces(value = { MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE })
+    @Path("/{category}/{filename}")
+    public Response getPicture(@PathParam("filename") String filename, @PathParam("category") String category) throws ImageNotFoundException
     {
-        Optional<Image> maybeImage = is.findByImageName(filename);
+        Optional<Image> maybeImage = is.findByImageName(category + "/" + filename);
         if(!maybeImage.isPresent())
         	return Response.status(Response.Status.NOT_FOUND).entity("").build();
         return Response.ok(maybeImage.get().getImageData()).build();

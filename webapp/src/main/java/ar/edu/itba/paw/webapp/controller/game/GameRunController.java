@@ -80,7 +80,7 @@ public class GameRunController
 		final Optional<Playstyle> playstyle = runs.findPlaystyleById(registerRunDto.getPlaystyle());
 		if(!playstyle.isPresent())
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-		
+		LOGGER.debug("Publishing run by user {} for game {} with time {}", loggedUser.getUsername(), game.get().getTitle(), registerRunDto.getTime());
 		Run run = runs.register(loggedUser, game.get(), platform.get(), playstyle.get(), registerRunDto.getTime());
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(run.getId())).build();
 		return Response.created(uri).build();

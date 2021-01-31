@@ -245,6 +245,10 @@
         "maxTime" : "Story mode max length"
     },
     "submit" : "Submit",
+    "createGame" : {
+        "title" : "Add Game",
+        "add"   : "add"
+    },
     "whoops" : "Whoops!",
     "error" : {
         "400" : "The server could not process your request.",
