@@ -1,3 +1,7 @@
+@import "~bootstrap";
+@import "~font-awesome";
+@import "~tempusdominus-bootstrap/src/sass/tempusdominus-bootstrap-build.scss";
+
 $theme-colors: (
   "blue": #2196f3,
   "indigo": #607d8b,
@@ -70,11 +74,19 @@ $theme-colors: (
 }
 
 .color-primary {
-    color: #607d8b;
+  color: #607d8b;
 }
 
 .color-white {
   color: white !important;
+}
+
+.padding-left-wave {
+  padding-left: 4em !important;
+}
+
+.padding-right-wave {
+  padding-right: 4em !important;
 }
 
 @import "~bootstrap/scss/bootstrap.scss";

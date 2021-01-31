@@ -22,12 +22,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +55,7 @@ import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Path("games")
 @Component
@@ -105,7 +103,7 @@ public class GameDetailController {
 	
 	@POST
 	@Path("/new_game")
-	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public Response createGame(@Valid RegisterGameDto registerGameDto) throws BadFormatException
 	{
 		User loggedUser = us.getLoggedUser();
@@ -117,11 +115,10 @@ public class GameDetailController {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
 		if(gs.findByTitle(registerGameDto.getTitle()).isPresent())
 			return Response.status(Response.Status.CONFLICT).entity(new FormErrorDto("title", "TitleUnique.gameForm")).build();
-
 		Map<Long, LocalDate> dates = convertDates(registerGameDto.getReleaseDates());
 		if(dates == null)
 			return Response.status(Response.Status.BAD_REQUEST).entity(new FormErrorDto("releaseDates", "Invalid date format")).build();
-		final Game createdGame = gs.register(registerGameDto.getTitle(), null, registerGameDto.getDescription(),
+		final Game createdGame = gs.register(registerGameDto.getTitle(), registerGameDto.getCover(), registerGameDto.getDescription(),
 				registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
 				registerGameDto.getPublishers(), registerGameDto.getGenres(), dates);
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(createdGame.getId())).build();
@@ -190,7 +187,6 @@ public class GameDetailController {
 	public Response addScore(@Valid RegisterScoreDto registerScoreDto, @PathParam("gameId") long gameId) throws BadFormatException
 	{
 		User loggedUser = us.getLoggedUser();
-		System.out.println(loggedUser);
 		if(loggedUser == null)
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		Set<ConstraintViolation<RegisterScoreDto>> violations = validator.validate(registerScoreDto);

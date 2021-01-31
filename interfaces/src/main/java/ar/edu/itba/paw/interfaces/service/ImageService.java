@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.entity.Image;
 
+import java.io.InputStream;
 import java.util.Optional;
 
 public interface ImageService {
@@ -28,4 +29,10 @@ public interface ImageService {
      */
 
     void            removeByName(String image_name);
+
+    boolean         isImage(String base64image);
+
+    Optional<String> getImageExtension(String base64image);
+
+    byte[]          getImage(String base64image);
 }

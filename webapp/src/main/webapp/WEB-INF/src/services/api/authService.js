@@ -113,6 +113,7 @@ const logInWithStore = async () => {
 
         return { status: OK }
     } catch(e) {
+        logOut();
         if (e.response) {
             return { status: e.response.status }
         } else {

@@ -1,5 +1,6 @@
 import api from './api';
 import PaginationService from './paginationService';
+import { TIMEOUT } from './apiConstants';
 
 const getDevelopers = async() => {
   return getDevelopersPage(1);
@@ -15,6 +16,20 @@ const getDevelopersPage = async(page) => {
       return { status : err.response.status };
     } else {
       /* timeout */
+    }
+  }
+}
+
+const getEveryDeveloper = async () => {
+  try {
+    const endpoint = `developers?page_size=9999`;
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch(err) {
+    if(err.response) {
+      return { status : err.response.status };
+    } else {
+      return { status : TIMEOUT }
     }
   }
 }
@@ -48,10 +63,11 @@ const getGameDevelopers     = async(gameId) => {
 }
 
 const DeveloperService = {
-    getDevelopers       : getDevelopers,
-    getDevelopersPage   : getDevelopersPage,
-    getGameDevelopers   : getGameDevelopers,
+    getEveryDeveloper    : getEveryDeveloper,
+    getGameDevelopers    : getGameDevelopers,
     getBiggestDevelopers : getBiggestDevelopers,
+    getDevelopers       : getDevelopers,
+    getDevelopersPage   : getDevelopersPage
 }
 
 export default DeveloperService;

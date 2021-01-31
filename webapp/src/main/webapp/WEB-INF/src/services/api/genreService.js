@@ -1,4 +1,6 @@
 import api from './api';
+import { TIMEOUT } from './apiConstants';
+
 import PaginationService from './paginationService';
 
 const getAllGenres       = async () => {
@@ -28,7 +30,7 @@ const getGenresPage = async(page) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
