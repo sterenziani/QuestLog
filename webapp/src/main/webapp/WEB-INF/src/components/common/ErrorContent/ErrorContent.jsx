@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import {Col, Container} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import skull from './images/skull.png';
 
@@ -18,14 +19,16 @@ class ErrorContent extends Component {
                         <title>Error - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <div className="col justify-content-center align-items-center text-center">
-                    <h1 style={{fontSize: "8em"}} className="share-tech-mono text-center">
-                        {this.state.status}
-                    </h1>
-                    <img src={ skull } alt="Skull logo" className="text-center" style={{height: "30em", width:"30em", margin: "auto"}}/>
-                    <h1 style={{fontSize: "4em"}} className="share-tech-mono text-center">
-                        <Translation>{t => t(body)}</Translation>
-                    </h1>
+                <div className="container text-center align-middle">
+                    <div className="my-5 p-5 bg-light border-bottom border-primary rounded-lg">
+                        <h2 style={{fontSize: "8em"}} className="share-tech-mono text-center">
+                            {this.state.status}
+                        </h2>
+                        <img src={ skull } alt="Skull logo" className="text-center" style={{height: "10em", width:"10em", margin: "auto"}}/>
+                        <h3 className="share-tech-mono text-center">
+                            <Translation>{t => t(body)}</Translation>
+                        </h3>
+                    </div>
                 </div>
             </React.Fragment>
         );
