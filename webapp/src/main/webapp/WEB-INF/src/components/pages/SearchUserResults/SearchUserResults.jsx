@@ -20,12 +20,16 @@ class SearchUserResults extends Component {
     };
 
     componentWillMount() {
-        this.setPage();
+        this.setPage(this.props);
     }
 
-    setPage() {
-        let page = this.props.query.get("page");
-        let term = this.props.query.get("searchTerm");
+    componentWillReceiveProps(newProps) {
+        this.setPage(newProps);
+    }
+
+    setPage(props) {
+        let page = props.query.get("page");
+        let term = props.query.get("searchTerm");
         if(!page) {
             page = 1;
         }
@@ -78,7 +82,7 @@ class SearchUserResults extends Component {
                     </Card.Header>
                     <Card.Body className="d-flex flex-wrap justify-content-center align-items-center align-items-stretch">
                         <Col>
-                             {this.state.content.length > 0? [this.state.content.map(u =>
+                             {this.state.content && this.state.content.length > 0? [this.state.content.map(u =>
                                 <Row>
                                     <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.props.userIsAdmin? 'text-right':'text-center'}>
                                         <a href={"users/"+u.id} style={{fontSize: "25px"}}>{u.username}</a>

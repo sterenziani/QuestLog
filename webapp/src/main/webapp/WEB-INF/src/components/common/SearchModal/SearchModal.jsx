@@ -54,6 +54,13 @@ class SearchModal extends Component {
         }
     }
 
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            searchParams: newProps.searchParams,
+            path : newProps.path
+        })
+    }
+
     switchModal(){
         this.setState({show: !this.state.show});
     }
@@ -122,7 +129,7 @@ class SearchModal extends Component {
         }
         const { t } = this.props
         return (
-            <div class="text-center mt-5">
+            <div className="text-center mt-5">
                 <Button variant="outline-secondary" className="w-25" onClick={() => {this.switchModal()}}>
                     <FontAwesomeIcon className="mr-sm-2" icon={ faCog }/>{t("search.filterResults")}
                 </Button>
