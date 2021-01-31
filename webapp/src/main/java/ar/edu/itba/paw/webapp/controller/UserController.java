@@ -407,7 +407,7 @@ public class UserController
     @PUT
     @Path("/{userId}/password")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response updateUserPassword(@PathParam("userId") final long userId, @Valid EditUserPasswordDto editPasswordDto)
+    public Response updateUserPassword(@PathParam("userId") final long userId, @Valid EditUserPasswordDto editPasswordDto, @Context HttpServletRequest request)
     {
         Set<ConstraintViolation<EditUserPasswordDto>> violations = validator.validate(editPasswordDto);
         if(!violations.isEmpty())
@@ -419,7 +419,7 @@ public class UserController
         if(token == null || !token.getUser().equals(user.get()))
         	return Response.status(Response.Status.FORBIDDEN).build();
         us.changeUserPassword(user.get(), editPasswordDto.getPassword());
-        us.updateLocale(user.get(), LocaleContextHolder.getLocale());
+        us.updateLocale(user.get(), request.getLocale());
         return Response.ok(UserDto.fromUser(user.get(), uriInfo)).build();
     }
 }
