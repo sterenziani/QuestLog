@@ -74,7 +74,7 @@ class UserProfile extends Component {
                                 <h5><Translation>{t => t("users.scoreAverage", {value: this.state.visitedUser.score_average})}</Translation></h5>
                             </Col>
                         </div>
-                        <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
+                        <div class="p-3 mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
                             <div class="pl-3 py-3 d-flex justify-content-center flex-column">
                                 <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faGamepad }/>
                             </div>

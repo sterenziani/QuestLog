@@ -35,7 +35,7 @@ class ChangePasswordPage extends Component {
         const { status } = await AuthService.logIn(this.state.token.user.username, this.state.pass1)
         switch(status){
             case OK:
-                window.location.href = "";
+                this.props.activateRedirect("home")
                 break;
 
             case UNAUTHORIZED:

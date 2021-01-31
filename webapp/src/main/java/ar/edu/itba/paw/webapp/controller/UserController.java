@@ -190,8 +190,10 @@ public class UserController
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response makeAdmin(@PathParam("userId")int userId) {
     	User u = us.findById(userId).orElse(null);
-    	if(u != null && !u.getAdminStatus())
+    	if(u != null)
     	{
+    		if(u.getAdminStatus())
+    			return Response.ok(UserDto.fromUser(u, uriInfo)).build();
             User loggedUser = us.getLoggedUser();
             if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -207,8 +209,10 @@ public class UserController
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response removeAdmin(@PathParam("userId")int userId) {
     	User u = us.findById(userId).orElse(null);
-    	if(u != null && u.getAdminStatus())
+    	if(u != null)
     	{
+    		if(!u.getAdminStatus())
+    			return Response.ok(UserDto.fromUser(u, uriInfo)).build();
             User loggedUser = us.getLoggedUser();
             if(loggedUser == null || !loggedUser.getAdminStatus())
             	return Response.status(Response.Status.UNAUTHORIZED).build();

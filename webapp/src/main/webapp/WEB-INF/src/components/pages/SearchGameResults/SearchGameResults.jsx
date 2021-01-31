@@ -4,6 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
+import withRedirect from '../../hoc/withRedirect';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import SearchModal from "../../common/SearchModal/SearchModal"
 
@@ -49,8 +50,9 @@ class SearchGameResults extends Component {
                 page : page,
                 searchParams : searchParams,
             });
-            if (this.state.totalCount === "1") {
-                window.location.href = `${process.env.PUBLIC_URL}/games/${this.state.content[0].id}`;
+            if (response.totalCount === "1") {
+                this.props.addRedirection("gameProfile", `/games/${response.content[0].id}`);
+                this.props.activateRedirect("gameProfile");
             }
         });
     }
@@ -78,4 +80,4 @@ class SearchGameResults extends Component {
         );
     }
 }
-export default withQuery(SearchGameResults);
+export default withQuery(withRedirect(SearchGameResults));

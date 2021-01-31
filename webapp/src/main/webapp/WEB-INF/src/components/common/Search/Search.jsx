@@ -35,7 +35,6 @@ class Search extends Component {
         if (e.charCode === 13) {
             e.preventDefault();
             this.btn.click();
-            //return false;
         }
     }
 

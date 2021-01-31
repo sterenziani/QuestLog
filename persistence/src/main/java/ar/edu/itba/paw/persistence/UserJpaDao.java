@@ -104,6 +104,7 @@ public class UserJpaDao implements UserDao
 	@Override
 	public int countUserSearchResults(String searchTerm)
 	{
+		searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
 		Query nativeQuery = em.createNativeQuery("SELECT COUNT(user_id) FROM users WHERE LOWER(username) LIKE CONCAT('%', :searchTerm, '%')");
 		nativeQuery.setParameter("searchTerm", searchTerm);
 		return ((Number) nativeQuery.getSingleResult()).intValue();
@@ -112,6 +113,7 @@ public class UserJpaDao implements UserDao
 	@Override
 	public List<User> searchByUsernamePaged(String searchTerm, int page, int pageSize)
 	{
+		searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
 		Query nativeQuery = em.createNativeQuery("SELECT user_id FROM users WHERE LOWER(username) LIKE CONCAT('%', :searchTerm, '%') ORDER BY username asc");
 		nativeQuery.setParameter("searchTerm", searchTerm);
 		nativeQuery.setFirstResult((page-1) * pageSize);
