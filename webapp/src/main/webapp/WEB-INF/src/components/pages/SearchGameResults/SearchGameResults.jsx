@@ -7,6 +7,8 @@ import withQuery from '../../hoc/withQuery';
 import withRedirect from '../../hoc/withRedirect';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import SearchModal from "../../common/SearchModal/SearchModal"
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 class SearchGameResults extends Component {
     state = {
@@ -18,6 +20,8 @@ class SearchGameResults extends Component {
         searchParams: {},
         pageCount : null,
         loading : true,
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -41,18 +45,31 @@ class SearchGameResults extends Component {
             searchParams.searchTerm = '';
         }
         GameService.searchGamesPage(searchParams, page).then((response) => {
-            this.setState({
-                loading: false,
-                content: response.content,
-                pagination: response.pagination,
-                pageCount : response.pageCount,
-                totalCount : response.totalCount,
-                page : page,
-                searchParams : searchParams,
-            });
-            if (response.totalCount === "1") {
-                this.props.addRedirection("gameProfile", `/games/${response.content[0].id}`);
-                this.props.activateRedirect("gameProfile");
+            let findError = null;
+            if (response.status && response.status != OK && response.status != CREATED) {
+                findError = response.status;
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    content: response.content,
+                    pagination: response.pagination,
+                    pageCount: response.pageCount,
+                    totalCount: response.totalCount,
+                    page: page,
+                    searchParams: searchParams,
+                });
+                if (response.totalCount === "1") {
+                    this.props.addRedirection("gameProfile", `/games/${response.content[0].id}`);
+                    this.props.activateRedirect("gameProfile");
+                }
             }
         });
     }
@@ -64,6 +81,9 @@ class SearchGameResults extends Component {
                 transform: 'translate(-50%, -50%)'}}>
                 <Spinner animation="border" variant="primary" />
             </div>
+        }
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
         let params = GameService.buildQueryParams(this.state.searchParams).replace(0,"?");
         return (

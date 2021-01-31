@@ -8,6 +8,8 @@ import { withTranslation } from 'react-i18next';
 import Pagination from "../../common/Pagination/Pagination";
 import ScoreService from "../../../services/api/scoreService";
 import UserScoresTab from "../../common/UserDetails/UserScoresTab";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
+import {CREATED, OK} from "../../../services/api/apiConstants";
 
 
 class UserScoresPage extends Component {
@@ -20,6 +22,8 @@ class UserScoresPage extends Component {
         content : [],
         pageCount : null,
         page : null,
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -31,22 +35,48 @@ class UserScoresPage extends Component {
         if(!page) {
             page = 1;
         }
+        let findError = null;
+
         if(this.props.match.params.id != this.state.userId)
         {
             UserService.getUserById(this.props.match.params.id).then((response) => {
-                this.setState({
-                    visitedUser : response,
-                })
+                if (response.status && response.status != OK && response.status != CREATED) {
+                    findError = response.status;
+                }
+                if(findError) {
+                    this.setState({
+                        loading: false,
+                        error: true,
+                        status: findError,
+                    });
+                }
+                else {
+                    this.setState({
+                        visitedUser: response,
+                    })
+                }
             });
         }
         ScoreService.getUserScoresPage(this.props.match.params.id, page, 25).then((response) => {
+            if (response.status && response.status != OK && response.status != CREATED) {
+                findError = response.status;
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
                 this.setState({
                     loading: false,
                     content: response.content,
                     pagination: response.pagination,
-                    pageCount : response.pageCount,
-                    page : page,
+                    pageCount: response.pageCount,
+                    page: page,
                 });
+            }
             });
     }
 
@@ -58,7 +88,9 @@ class UserScoresPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-        console.log(this.state.pagination)
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
+        }
         const { t } = this.props;
         return (
             <React.Fragment>

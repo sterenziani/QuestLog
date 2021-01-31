@@ -8,6 +8,8 @@ import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import Pagination from "../../common/Pagination/Pagination";
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
 class UserBacklogPage extends Component {
@@ -18,7 +20,9 @@ class UserBacklogPage extends Component {
         pagination: [],
         content : [],
         page : null,
-        pageCount : null
+        pageCount : null,
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -30,35 +34,77 @@ class UserBacklogPage extends Component {
         if(!page) {
             page = 1;
         }
+
+        let findError = null;
+
         if(this.props.match.params.id)
         {
             // Visiting specified user
             UserService.getUserById(this.props.match.params.id).then((response) => {
-                this.setState({
-                    backlogOwner : response,
-                })
+                if (response.status && response.status != OK && response.status != CREATED) {
+                    findError = response.status;
+                }
+                if(findError) {
+                    this.setState({
+                        loading: false,
+                        error: true,
+                        status: findError,
+                    });
+                    return;
+                }
+                else {
+                    this.setState({
+                        backlogOwner: response,
+                    })
+                }
             });
             BacklogService.getUserBacklogPage(this.props.match.params.id, page, 15).then((response) => {
-                this.setState({
-                    loading: false,
-                    content: response.content,
-                    pagination: response.pagination,
-                    pageCount : response.pageCount,
-                    page : page,
-                });
+                if (response.status && response.status != OK && response.status != CREATED) {
+                    findError = response.status;
+                }
+                if(findError) {
+                    this.setState({
+                        loading: false,
+                        error: true,
+                        status: findError,
+                    });
+                    return;
+                }
+                else {
+                    this.setState({
+                        loading: false,
+                        content: response.content,
+                        pagination: response.pagination,
+                        pageCount: response.pageCount,
+                        page: page,
+                    });
+                }
             });
         }
         else
         {
             // Own backlog
             BacklogService.getCurrentUserBacklogPage(page).then((response) => {
-                this.setState({
-                    loading: false,
-                    content: response.content,
-                    pagination: response.pagination,
-                    pageCount : response.pageCount,
-                    page : page,
-                });
+                if (response.status && response.status != OK && response.status != CREATED) {
+                    findError = response.status;
+                }
+                if(findError) {
+                    this.setState({
+                        loading: false,
+                        error: true,
+                        status: findError,
+                    });
+                    return;
+                }
+                else {
+                    this.setState({
+                        loading: false,
+                        content: response.content,
+                        pagination: response.pagination,
+                        pageCount: response.pageCount,
+                        page: page,
+                    });
+                }
             });
         }
     }
@@ -78,6 +124,9 @@ class UserBacklogPage extends Component {
             param = {value: this.state.backlogOwner.username};
         }
 
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
+        }
         const { t } = this.props
         return (
             <React.Fragment>

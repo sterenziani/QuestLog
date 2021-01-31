@@ -8,6 +8,8 @@ import withQuery from '../../hoc/withQuery';
 import {Translation} from "react-i18next";
 import withUser from '../../hoc/withUser';
 import { LinkContainer } from 'react-router-bootstrap';
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
+import {CREATED, OK} from "../../../services/api/apiConstants";
 
 class SearchUserResults extends Component {
     state = {
@@ -17,7 +19,9 @@ class SearchUserResults extends Component {
         content : [],
         page : null,
         term: null,
-        pageCount : null
+        pageCount : null,
+        error : false,
+        status : null
     };
 
     componentWillMount() {
@@ -38,14 +42,27 @@ class SearchUserResults extends Component {
             term = '';
         }
         UserService.searchUsersPage(term, page).then((response) => {
-            this.setState({
-                loading: false,
-                content: response.content,
-                pagination: response.pagination,
-                pageCount : response.pageCount,
-                page : page,
-                term : term,
-            });
+            let findError = null;
+            if (response.status && response.status != OK && response.status != CREATED) {
+                findError = response.status;
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    loading: false,
+                    content: response.content,
+                    pagination: response.pagination,
+                    pageCount: response.pageCount,
+                    page: page,
+                    term: term,
+                });
+            }
         });
     }
 
@@ -66,6 +83,9 @@ class SearchUserResults extends Component {
                 transform: 'translate(-50%, -50%)'}}>
                 <Spinner animation="border" variant="primary" />
             </div>
+        }
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
 
         return (

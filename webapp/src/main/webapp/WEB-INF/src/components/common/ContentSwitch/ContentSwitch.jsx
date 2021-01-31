@@ -29,6 +29,7 @@ import UserRunsPage from "../../pages/UserRunsPage/UserRunsPage";
 import GameReviewsPage from "../../pages/GameReviewsPage/GameReviewsPage";
 import ChangePasswordPage from "../../pages/ChangePasswordPage/ChangePasswordPage";
 import RequestTokenPage from "../../pages/RequestTokenPage/RequestTokenPage";
+import ErrorContent from "../ErrorContent/ErrorContent";
 
 
 class ContentSwitch extends Component {
@@ -174,6 +175,7 @@ class ContentSwitch extends Component {
                         exact path="/changePassword"
                         component={ ChangePasswordPage }
                     />
+                    <Route component={ ErrorContent } />
                 </Switch>
             </main>
         );

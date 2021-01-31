@@ -6,6 +6,8 @@ import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
 class SeeAllPage extends Component {
@@ -15,6 +17,8 @@ class SeeAllPage extends Component {
         page : null,
         pageCount : null,
         loading: true,
+        error : false,
+        status : null,
     };
 
     componentWillMount() {
@@ -26,14 +30,27 @@ class SeeAllPage extends Component {
         if(!page) {
             page = 1;
         }
-        PaginationService.getGenericContentPage(this.state.path, page)
+        PaginationService.getGenericContentPage(this.state.path + "coca", page)
             .then((data) => {
-                this.setState({
-                    loading: false,
-                    content: data.content,
-                    page : page,
-                    pageCount : data.pageCount,
-            });
+                let findError = null;
+                if (data.status && data.status != OK && data.status != CREATED) {
+                    findError = data.status;
+                }
+                if(findError) {
+                    this.setState({
+                        loading: false,
+                        error: true,
+                        status: findError,
+                    });
+                }
+                else {
+                    this.setState({
+                        loading: false,
+                        content: data.content,
+                        page: page,
+                        pageCount: data.pageCount,
+                    });
+                }
         });
     }
 
@@ -45,6 +62,9 @@ class SeeAllPage extends Component {
                 transform: 'translate(-50%, -50%)'}}>
                 <Spinner animation="border" variant="primary" />
             </div>
+        }
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
         }
         const { t } = this.props
         return (

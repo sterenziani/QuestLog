@@ -9,6 +9,8 @@ import Pagination from "../../common/Pagination/Pagination";
 import ReviewService from "../../../services/api/reviewService";
 import ReviewsTab from "../../common/GameDetails/ReviewsTab";
 import GameService from "../../../services/api/gameService";
+import {CREATED, OK} from "../../../services/api/apiConstants";
+import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
 class GameReviewsPage extends Component {
@@ -20,6 +22,8 @@ class GameReviewsPage extends Component {
         content : [],
         pageCount : null,
         page : null,
+        error : false,
+        status: null,
     };
 
     componentWillMount() {
@@ -34,16 +38,30 @@ class GameReviewsPage extends Component {
         console.log(page)
         const fetchReviews = ReviewService.getGameReviewsPage(this.props.match.params.id, page,10);
         const fetchGame = GameService.getGameById(this.props.match.params.id);
-        //TODO: Handle no response (404)
         Promise.all([ fetchReviews, fetchGame ]).then((responses) => {
-            this.setState({
-                content: responses[0].content,
-                pagination: responses[0].pagination,
-                pageCount: responses[0].pageCount,
-                page: page,
-                game : responses[1],
-                loading: false,
-            });
+            let findError = null;
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                    findError = responses[i].status;
+                }
+            }
+            if(findError) {
+                this.setState({
+                    loading: false,
+                    error: true,
+                    status: findError,
+                });
+            }
+            else {
+                this.setState({
+                    content: responses[0].content,
+                    pagination: responses[0].pagination,
+                    pageCount: responses[0].pageCount,
+                    page: page,
+                    game: responses[1],
+                    loading: false,
+                });
+            }
         });
     }
 
@@ -55,7 +73,9 @@ class GameReviewsPage extends Component {
                 <Spinner animation="border" variant="primary" />
             </div>
         }
-        console.log(this.state.content)
+        if(this.state.error) {
+            return <ErrorContent status={this.state.status}/>
+        }
         const { t } = this.props;
         return (
             <React.Fragment>

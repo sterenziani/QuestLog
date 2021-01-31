@@ -7,7 +7,7 @@ import skull from './images/skull.png';
 
 class ErrorContent extends Component {
     state = {
-        status: this.props.status,
+        status: this.props.status ? this.props.status : 404,
     };
 
     render() {
