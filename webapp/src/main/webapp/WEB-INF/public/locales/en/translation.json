@@ -202,5 +202,9 @@
         "minTime" : "Story mode min length",
         "maxTime" : "Story mode max length"
     },
-    "submit" : "Submit"
+    "submit" : "Submit",
+    "createGame" : {
+        "title" : "Add Game",
+        "add"   : "Add"
+    }
 }

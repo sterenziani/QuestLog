@@ -202,5 +202,9 @@
         "minTime" : "Duración mínima del modo historia",
         "maxTime" : "Duración máxima del modo historia"
     },
-    "submit" : "Enviar"
+    "submit" : "Enviar",
+    "createGame" : {
+        "title" : "Agregar Juego",
+        "add"   : "Agregar"
+    }
 }

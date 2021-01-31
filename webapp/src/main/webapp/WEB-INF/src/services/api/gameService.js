@@ -4,6 +4,30 @@ import Cookies from 'universal-cookie';
 
 const gameServiceEndpoint   = 'games';
 
+const register        = async (title, description, image, trailer, releaseDates) => {
+    try {
+        const new_game = {
+            'title'        : title,
+            'description'  : description,
+            'cover'        : image,
+            'trailer'      : trailer,
+            'releaseDates' : releaseDates
+        }
+        const endpoint = gameServiceEndpoint + '/new_game';
+        const response = await api.post(endpoint, new_game, {
+            headers : {
+                authorization  : AuthService.getToken(),
+                'Content-Type' : 'application/json'
+            }
+        })
+        return { status : response.status }
+    } catch(err){
+        if(err.response){
+            return { status : err.response.status }
+        }
+    }
+}
+
 const getPopularGames = async () => {
     try {
         const cookies = new Cookies();
@@ -124,6 +148,7 @@ const getGameReleaseDates = async(gameId) => {
 }
 
 const GameService = {
+    register            : register,
     getPopularGames     : getPopularGames,
     getUpcomingGames    : getUpcomingGames,
     getGameById         : getGameById,

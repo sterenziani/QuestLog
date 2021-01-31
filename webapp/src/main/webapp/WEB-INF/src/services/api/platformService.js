@@ -1,5 +1,5 @@
 import api from './api';
-
+import { TIMEOUT } from './apiConstants';
 
 const getAllPlatforms       = async () => {
   try {
@@ -10,7 +10,7 @@ const getAllPlatforms       = async () => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -24,7 +24,7 @@ const getEveryPlatform = async () => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
