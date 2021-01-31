@@ -4,13 +4,17 @@ import Cookies from 'universal-cookie';
 
 const gameServiceEndpoint   = 'games';
 
-const register        = async (title, description, image, trailer, releaseDates) => {
+const register        = async (title, description, image, trailer, platforms, developers, publishers, genres, releaseDates) => {
     try {
         const new_game = {
             'title'        : title,
             'description'  : description,
             'cover'        : image,
             'trailer'      : trailer,
+            'platforms'    : platforms,
+            'developers'   : developers,
+            'publishers'   : publishers,
+            'genres'       : genres,
             'releaseDates' : releaseDates
         }
         const endpoint = gameServiceEndpoint + '/new_game';

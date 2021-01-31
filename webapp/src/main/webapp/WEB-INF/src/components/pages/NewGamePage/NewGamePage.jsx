@@ -160,9 +160,13 @@ class NewGamePage extends Component {
             reader.onerror = error => reject(error);
         });
 
-        const cover = values.cover.file ? await toBase64(values.cover.file) : null;
+        const cover         = values.cover.file ? await toBase64(values.cover.file) : null;
+        const platforms     = values.platforms ? values.platforms.map(p => p.value) : [];
+        const developers    = values.developers ? values.developers.map(d => d.value) : [];
+        const publishers    = values.publishers ? values.publishers.map(p => p.value) : [];
+        const genres        = values.genres ? values.genres.map(g => g.value) : [];
 
-        await GameService.register(values.title, values.description, cover, values.trailer, releases);
+        await GameService.register(values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
     }
 
     onSubmit = (values, { setSubmitting }) => {
