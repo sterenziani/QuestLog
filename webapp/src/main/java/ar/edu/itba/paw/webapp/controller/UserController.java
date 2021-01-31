@@ -419,6 +419,7 @@ public class UserController
         if(token == null || !token.getUser().equals(user.get()))
         	return Response.status(Response.Status.FORBIDDEN).build();
         us.changeUserPassword(user.get(), editPasswordDto.getPassword());
+        LOGGER.debug("Updating locale for user {} from {} to {}", user.get().getUsername(), user.get().getLocale().toLanguageTag(), request.getLocale().toLanguageTag());
         us.updateLocale(user.get(), request.getLocale());
         return Response.ok(UserDto.fromUser(user.get(), uriInfo)).build();
     }

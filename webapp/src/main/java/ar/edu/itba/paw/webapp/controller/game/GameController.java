@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.webapp.controller.AnonBacklogHelper;
-import ar.edu.itba.paw.webapp.controller.BacklogController;
 import ar.edu.itba.paw.webapp.dto.GameDto;
 
 @Path("games")

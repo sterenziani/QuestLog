@@ -162,6 +162,7 @@ public class GameDetailController {
         if(loggedUser == null || !loggedUser.getAdminStatus())
         	return Response.status(Response.Status.UNAUTHORIZED).build();
 		gs.removeById(gameId);
+		LOGGER.debug("Removing game of ID {}", gameId);
 		return Response.noContent().build(); // Da código 204 en vez de 404
 	}
 	

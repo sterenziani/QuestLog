@@ -17,6 +17,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
@@ -59,6 +62,8 @@ public class GameReviewController
     @Autowired
     private ReviewService revs;
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameReviewController.class);
+    
 	@POST
 	@Path("/{gameId}/new_review")
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
@@ -87,6 +92,7 @@ public class GameReviewController
 		else
 			ss.register(loggedUser, game.get(), registerReviewDto.getScore());
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(game.get().getId())).build();
+		LOGGER.debug("Publishing review by {} for game {}", loggedUser.getUsername(), game.get().getId());
 		revs.register(loggedUser, game.get(), platform.get(), registerReviewDto.getScore(), registerReviewDto.getBody(), LocalDate.now());
 		return Response.created(uri).build();
 	}
@@ -104,6 +110,7 @@ public class GameReviewController
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		if(!loggedUser.getAdminStatus() && !review.get().getUser().equals(loggedUser))
 			return Response.status(Response.Status.UNAUTHORIZED).build();
+		LOGGER.debug("Deleting review of ID {}", review.get().getId());
 		revs.deleteReview(review.get());
 		return Response.noContent().build();
 	}
