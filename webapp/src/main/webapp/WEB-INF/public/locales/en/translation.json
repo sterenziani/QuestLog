@@ -246,8 +246,49 @@
     },
     "submit" : "Submit",
     "createGame" : {
-        "title" : "Add Game",
-        "add"   : "add"
+        "title"  : "Add Game",
+        "fields" : {
+            "title"         : {
+                "label"         : "Title",
+                "placeholder"   : "Title"
+            },
+            "description"   : {
+                "label"         : "Description",
+                "placeholder"   : "Description"
+            },
+            "cover"         : {
+                "label"         : "Cover",
+                "placeholder"   : "Choose a file...",
+                "browse"        : "Browse"
+            },
+            "trailer"       : {
+                "label"         : "Trailer",
+                "placeholder"   : "YouTube video ID"
+            },
+            "preview"       : {
+                "label"         : "Preview"
+            },
+            "platforms"     : {
+                "label"         : "Platforms",
+                "placeholder"   : "Select platforms"
+            },
+            "developers"    : {
+                "label"         : "Developers",
+                "placeholder"   : "Select developers"
+            },
+            "publishers"    : {
+                "label"         : "Publishers",
+                "placeholder"   : "Select publishers"
+            },
+            "genres"        : {
+                "label"         : "Genres",
+                "placeholder"   : "Select genres"
+            },
+            "releaseDates"  : {
+                "label"         : "Release Date"
+            }
+        },
+        "add"    : "add"
     },
     "whoops" : "Whoops!",
     "error" : {
