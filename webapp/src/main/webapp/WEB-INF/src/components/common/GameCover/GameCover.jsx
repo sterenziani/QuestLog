@@ -39,7 +39,7 @@ class GameCover extends Component {
         }
         return (
             <div>
-            {mini? [<Image className={'cover-mini'} src={this.state.cover}/>] : [<Card.Img className={resize? 'cover' : ''} variant="top" src={this.state.cover} />]}
+            {mini? [<Image key={this.props.code} className={'cover-mini'} src={this.state.cover}/>] : [<Card.Img key={this.props.code} className={resize? 'cover' : ''} variant="top" src={this.state.cover} />]}
             </div>
         )
     }

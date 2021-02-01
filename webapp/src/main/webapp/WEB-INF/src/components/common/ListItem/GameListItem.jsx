@@ -26,7 +26,7 @@ class GameListItem extends Component {
                     <BacklogButton game={this.state.game} onUpdate={this.updateGameBacklogStatus} onDelete={this.deleteGame}/>
                     <LinkContainer to={`/games/` + this.state.game.id}>
                         <a className="d-flex flex-column flex-grow-1 text-white">
-                            <GameCover cover={this.state.game.cover} resize='true'/>
+                            <GameCover code={"cover-"+this.state.game.id} cover={this.state.game.cover} resize='true'/>
                             <div className="card-body bg-primary flex-grow-1">
                                 <h5>{this.state.game.title}</h5>
                             </div>

@@ -12,7 +12,7 @@ class ReviewCard extends Component {
         review: this.props.review,
         user: this.props.user,
         loggedIn: this.props.userIsLoggedIn,
-        enabled: true,
+        enabled: this.props.review.enabled,
         showModal: false,
     };
 
@@ -48,14 +48,14 @@ class ReviewCard extends Component {
                     </Row>
                     <Row className="container-fluid">
                         <Col className="col-10 text-left">
-                            {this.state.review.body.map(l => (
-                                <div>
+                            {this.state.review.body.map((l, index) => (
+                                <div key={index}>
                                     <p>{l}</p>
                                 </div>
                             ))}
                         </Col>
                         <Col className="col-2 container">
-                            <div className="score-display text-center px-5"> <p class="badge badge-primary">{this.state.review.score}</p></div>
+                            <div className="score-display text-center px-5"> <p className="badge badge-primary">{this.state.review.score}</p></div>
                         </Col>
                     </Row>
                     {(this.state.loggedIn && (this.state.review.user.id === this.state.user.id || this.state.user.admin))? [
