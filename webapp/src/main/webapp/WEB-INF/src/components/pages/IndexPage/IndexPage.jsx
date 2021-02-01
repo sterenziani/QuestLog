@@ -54,6 +54,8 @@ class IndexPage extends Component {
                 }
             }
             if(findError) {
+                if(findError == 404)
+                    findError = "whoops";
                 this.setState({
                     loading: false,
                     error: true,

@@ -7,8 +7,7 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    Form,
-    Spinner
+    Form
 } from 'react-bootstrap';
 import { 
     Helmet, 
@@ -41,7 +40,8 @@ class NewGamePage extends Component {
         platforms  : [],
         developers : [],
         publishers : [],
-        genres     : []
+        genres     : [],
+        cover      : undefined
     }
 
     componentDidMount = () => {
@@ -179,10 +179,20 @@ class NewGamePage extends Component {
             if(event.target.files[0].size > 4000000){
                 //TODO: Show error message
                 console.log('File too big')
+                this.setState({
+                    cover : undefined
+                })
             } else {
                 setFieldValue('cover.file', event.target.files[0])
                 setFieldValue('cover.fileName', event.target.files[0].name)
+                this.setState({
+                    cover : event.target.files[0].name
+                })
             }
+        } else {
+            this.setState({
+                cover : undefined
+            })
         }
     }
 
@@ -231,10 +241,10 @@ class NewGamePage extends Component {
                         onSubmit={ handleSubmit }
                     >
                         <Form.Group controlId="formGameTitle">
-                            <Form.Label><strong>Title</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.title.label')}</strong></Form.Label>
                             <Form.Control 
                                 type="text" 
-                                placeholder="Title" 
+                                placeholder={t('createGame.fields.title.placeholder')}
                                 name="title"
                                 value={ values.title }
                                 error={ errors.title }
@@ -244,11 +254,11 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group controlId="formGameDescription">
-                            <Form.Label><strong>Description</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.description.label')}</strong></Form.Label>
                             <Form.Control 
                                 as="textarea" 
                                 rows={8} 
-                                placeholder="Description"
+                                placeholder={t('createGame.fields.description.placeholder')}
                                 name="description"
                                 value={ values.description }
                                 error={ errors.description }
@@ -258,12 +268,12 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label><strong>Cover</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.cover.label')}</strong></Form.Label>
                             <Form.File 
                                 id="cover"
                                 name="cover"
-                                label={ values.cover.fileName || "Choose a file..." }
-                                data-browse="Browse"
+                                label={ this.state.cover || t('createGame.fields.cover.placeholder') }
+                                data-browse={t('createGame.fields.cover.browse')}
                                 accept="image/*"
                                 onChange={ e => this.onFileChanged(e, setFieldValue) }
                                 onBlur={ handleBlur } 
@@ -271,10 +281,10 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group controlId="formGameTrailer">
-                            <Form.Label><strong>Trailer</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.trailer.label')}</strong></Form.Label>
                             <Form.Control 
                                 type="text" 
-                                placeholder="YouTube video ID" 
+                                placeholder={t('createGame.fields.trailer.placeholder')}
                                 name="trailer"
                                 value={ values.trailer }
                                 error={ errors.trailer }
@@ -284,12 +294,13 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label><strong>Preview</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.preview.label')}</strong></Form.Label>
                             <div>
                                 <iframe 
                                     id="preview" 
                                     width="286" 
                                     height="161" 
+                                    title={`${t('createGame.fields.preview.label')}`}
                                     src={`https://www.youtube.com/embed/${values.trailer}`} 
                                     frameBorder="0" 
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
@@ -298,11 +309,11 @@ class NewGamePage extends Component {
                             </div>
                         </Form.Group>
                         <Form.Group controlId="formGamePlatforms">
-                            <Form.Label><strong>Platforms</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.platforms.label')}</strong></Form.Label>
                             <FormikMultiSelect
                                 id="platforms"
                                 name="platforms"
-                                placeholder="Select platforms"
+                                placeholder={t('createGame.fields.platforms.placeholder')}
                                 options={this.state.platforms}
                                 value={values.platforms}
                                 isMulti={true}
@@ -316,11 +327,11 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group controlId="formGameDevelopers">
-                            <Form.Label><strong>Developers</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.developers.label')}</strong></Form.Label>
                             <FormikMultiSelect
                                 id="developers"
                                 name="developers"
-                                placeholder="Select developers"
+                                placeholder={t('createGame.fields.developers.placeholder')}
                                 options={this.state.developers}
                                 value={values.developers}
                                 isMulti={true}
@@ -334,11 +345,11 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group controlId="formGamePublishers">
-                            <Form.Label><strong>Publishers</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.publishers.label')}</strong></Form.Label>
                             <FormikMultiSelect
                                 id="publishers"
                                 name="publishers"
-                                placeholder="Select publishers"
+                                placeholder={t('createGame.fields.publishers.placeholder')}
                                 options={this.state.publishers}
                                 value={values.publishers}
                                 isMulti={true}
@@ -352,11 +363,11 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group controlId="formGameGenres">
-                            <Form.Label><strong>Genres</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.genres.label')}</strong></Form.Label>
                             <FormikMultiSelect
                                 id="genres"
                                 name="genres"
-                                placeholder="Select genres"
+                                placeholder={t('createGame.fields.genres.placeholder')}
                                 options={this.state.genres}
                                 value={values.genres}
                                 isMulti={true}
@@ -370,7 +381,7 @@ class NewGamePage extends Component {
                             />
                         </Form.Group>
                         <Form.Group controlId="formGameReleaseDate">
-                            <Form.Label><strong>Release Date</strong></Form.Label>
+                            <Form.Label><strong>{t('createGame.fields.releaseDates.label')}</strong></Form.Label>
                             <div>
                             {
                                 this.state.releases.map(release => (

@@ -247,6 +247,47 @@
     "submit" : "Enviar",
     "createGame" : {
         "title" : "Agregar Juego",
+        "fields" : {
+            "title"         : {
+                "label"         : "Título",
+                "placeholder"   : "Título"
+            },
+            "description"   : {
+                "label"         : "Descripción",
+                "placeholder"   : "Descripción"
+            },
+            "cover"         : {
+                "label"         : "Portada",
+                "placeholder"   : "Elija un archivo...",
+                "browse"        : "Buscar"
+            },
+            "trailer"       : {
+                "label"         : "Trailer",
+                "placeholder"   : "ID del video de YouTube"
+            },
+            "preview"       : {
+                "label"         : "Vista Previa"
+            },
+            "platforms"     : {
+                "label"         : "Plataformas",
+                "placeholder"   : "Elija plataformas"
+            },
+            "developers"    : {
+                "label"         : "Desarrolladores",
+                "placeholder"   : "Elija desarrolladores"
+            },
+            "publishers"    : {
+                "label"         : "Distribuidoras",
+                "placeholder"   : "Elija distribuidoras"
+            },
+            "genres"        : {
+                "label"         : "Géneros",
+                "placeholder"   : "Elija géneros"
+            },
+            "releaseDates"  : {
+                "label"         : "Lanzamiento"
+            }
+        },
         "add"   : "Agregar"
     },
     "whoops" : "¡Chanfle!",
@@ -255,6 +296,7 @@
         "401" : "Autorización denegada.",
         "403" : "Acceso denegado.",
         "404" : "La página solicitada no existe.",
-        "500" : "Hubo un error de nuestra parte. Por favor intenta más tarde."
+        "500" : "Hubo un error de nuestra parte. Por favor intenta más tarde.",
+        "whoops" : "El servicio no se encuentra disponible en este momento. Por favor chequea tu conección intenta más tarde."
     }
 }
