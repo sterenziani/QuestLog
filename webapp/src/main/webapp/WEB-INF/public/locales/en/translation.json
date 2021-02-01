@@ -231,7 +231,7 @@
         "gameResults" : "Search results for game {{value}}",
         "userResults" : "Search results for user {{value}}",
         "resultsLabel" : "{{value}} results found that match your search",
-        "noResults" : "No results Submitfound",
+        "noResults" : "No results found",
         "makeAdmin" : "Make admin",
         "removeAdmin" : "Remove admin",
         "filterResults" : "Filter results",
@@ -255,6 +255,7 @@
         "401" : "Authorization denied.",
         "403" : "Access denied.",
         "404" :  "The requested page does not exist.",
-        "500" : "There has been a problem on our part. Please try again later."
+        "500" : "There has been a problem on our part. Please try again later.",
+        "whoops" : "The server is momentarily unavailable. Please check your connection and try again later."
     }
 }
