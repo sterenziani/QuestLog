@@ -30,13 +30,15 @@ class SeeAllPage extends Component {
         if(!page) {
             page = 1;
         }
-        PaginationService.getGenericContentPage(this.state.path + "coca", page)
+        PaginationService.getGenericContentPage(this.state.path, page)
             .then((data) => {
                 let findError = null;
                 if (data.status && data.status != OK && data.status != CREATED) {
                     findError = data.status;
                 }
                 if(findError) {
+                    if(findError == 404)
+                        findError = "whoops";
                     this.setState({
                         loading: false,
                         error: true,

@@ -296,6 +296,7 @@
         "401" : "Autorización denegada.",
         "403" : "Acceso denegado.",
         "404" : "La página solicitada no existe.",
-        "500" : "Hubo un error de nuestra parte. Por favor intenta más tarde."
+        "500" : "Hubo un error de nuestra parte. Por favor intenta más tarde.",
+        "whoops" : "El servicio no se encuentra disponible en este momento. Por favor chequea tu conección intenta más tarde."
     }
 }
