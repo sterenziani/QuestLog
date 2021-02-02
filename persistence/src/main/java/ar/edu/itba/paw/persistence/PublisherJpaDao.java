@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
 import ar.edu.itba.paw.model.entity.Publisher;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.PublisherDao;
@@ -99,5 +98,31 @@ public class PublisherJpaDao implements PublisherDao
 		final TypedQuery<Publisher> query = em.createQuery("from Publisher where publisher IN :filteredIds ORDER BY name", Publisher.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
+	}
+	
+	@Override
+	public List<Publisher> searchByName(String searchTerm, int page, int pageSize)
+	{
+		searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
+		Query nativeQuery = em.createNativeQuery("SELECT publisher FROM publishers WHERE LOWER(publisher_name) LIKE CONCAT(:searchTerm, '%') ORDER BY publisher_name asc");
+		nativeQuery.setParameter("searchTerm", searchTerm);
+		nativeQuery.setFirstResult((page-1) * pageSize);
+		nativeQuery.setMaxResults(pageSize);
+		@SuppressWarnings("unchecked")
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
+		final TypedQuery<Publisher> query = em.createQuery("from Publisher where publisher IN :filteredIds ORDER BY publisher_name asc", Publisher.class);
+		query.setParameter("filteredIds", filteredIds);
+		return query.getResultList();
+	}
+	
+	@Override
+	public int countByName(String searchTerm, int page, int pageSize)
+	{
+		searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
+		Query nativeQuery = em.createNativeQuery("SELECT count(*) FROM publishers WHERE LOWER(publisher_name) LIKE CONCAT(:searchTerm, '%') ORDER BY publisher_name asc");
+		nativeQuery.setParameter("searchTerm", searchTerm);
+		return nativeQuery.getFirstResult();
 	}
 }

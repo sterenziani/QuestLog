@@ -44,10 +44,10 @@ public class DeveloperController {
 
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response listDevelopers(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("30") int page_size)
+	public Response listDevelopers(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("30") int page_size, @QueryParam("searchTerm") @DefaultValue("") String searchTerm)
 	{
-		final List<DeveloperDto> devs = ds.getDevelopers(page, page_size).stream().map(u -> DeveloperDto.fromDeveloper(u, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = (ds.countDevelopers() + page_size - 1) / page_size;
+		final List<DeveloperDto> devs = ds.searchByName(searchTerm, page, page_size).stream().map(u -> DeveloperDto.fromDeveloper(u, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (ds.countByName(searchTerm, page, page_size) + page_size - 1) / page_size;
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<DeveloperDto>>(devs) {});

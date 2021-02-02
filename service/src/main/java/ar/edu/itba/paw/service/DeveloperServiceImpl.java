@@ -87,4 +87,17 @@ public class DeveloperServiceImpl implements DeveloperService
 	{
 		return developerDao.getBiggestDevelopers(amount);
 	}
+	
+	@Transactional
+	@Override
+	public List<Developer> searchByName(String searchTerm, int page, int pageSize)
+	{
+		return developerDao.searchByName(searchTerm, page, pageSize);
+	}
+	
+	@Override
+	public int countByName(String searchTerm, int page, int pageSize)
+	{
+		return developerDao.countByName(searchTerm, page, pageSize);
+	}
 }

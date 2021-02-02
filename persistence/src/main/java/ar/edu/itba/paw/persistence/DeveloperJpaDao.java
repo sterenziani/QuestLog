@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
 import ar.edu.itba.paw.model.entity.Developer;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.dao.DeveloperDao;
@@ -98,5 +97,31 @@ public class DeveloperJpaDao implements DeveloperDao
 		final TypedQuery<Developer> query = em.createQuery("from Developer where developer IN :filteredIds ORDER BY name", Developer.class);
 		query.setParameter("filteredIds", filteredIds);
 		return query.getResultList();
+	}
+	
+	@Override
+	public List<Developer> searchByName(String searchTerm, int page, int pageSize)
+	{
+		searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
+		Query nativeQuery = em.createNativeQuery("SELECT developer FROM developers WHERE LOWER(developer_name) LIKE CONCAT(:searchTerm, '%') ORDER BY developer_name asc");
+		nativeQuery.setParameter("searchTerm", searchTerm);
+		nativeQuery.setFirstResult((page-1) * pageSize);
+		nativeQuery.setMaxResults(pageSize);
+		@SuppressWarnings("unchecked")
+		List<Long> filteredIds = (List<Long>) nativeQuery.getResultList();
+		if(filteredIds.isEmpty())
+			return Collections.emptyList();
+		final TypedQuery<Developer> query = em.createQuery("from Developer where developer IN :filteredIds ORDER BY developer_name asc", Developer.class);
+		query.setParameter("filteredIds", filteredIds);
+		return query.getResultList();
+	}
+	
+	@Override
+	public int countByName(String searchTerm, int page, int pageSize)
+	{
+		searchTerm = searchTerm.replace("%", "\\%").replace("_", "\\_");
+		Query nativeQuery = em.createNativeQuery("SELECT count(*) FROM developers WHERE LOWER(developer_name) LIKE CONCAT(:searchTerm, '%') ORDER BY developer_name asc");
+		nativeQuery.setParameter("searchTerm", searchTerm);
+		return nativeQuery.getFirstResult();
 	}
 }

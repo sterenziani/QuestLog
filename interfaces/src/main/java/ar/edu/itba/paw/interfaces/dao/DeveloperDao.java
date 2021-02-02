@@ -54,4 +54,7 @@ public interface DeveloperDao
 	int countDevelopers();
 	
 	List<Developer> getBiggestDevelopers(int amount);
+
+	List<Developer> searchByName(String searchTerm, int page, int pageSize);
+	int countByName(String searchTerm, int page, int pageSize);
 }

@@ -55,4 +55,7 @@ public interface PublisherDao {
 	List<Publisher> getBiggestPublishers(int amount);
 	
 	int countPublishers();
+
+	int countByName(String searchTerm, int page, int pageSize);
+	List<Publisher> searchByName(String searchTerm, int page, int pageSize);
 }

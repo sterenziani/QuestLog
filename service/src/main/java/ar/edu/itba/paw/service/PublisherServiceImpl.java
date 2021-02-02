@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 import java.util.List;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +84,18 @@ public class PublisherServiceImpl implements PublisherService
 	public int countPublishers()
 	{
 		return publisherDao.countPublishers();
+	}
+	
+	@Transactional
+	@Override
+	public List<Publisher> searchByName(String searchTerm, int page, int pageSize)
+	{
+		return publisherDao.searchByName(searchTerm, page, pageSize);
+	}
+	
+	@Override
+	public int countByName(String searchTerm, int page, int pageSize)
+	{
+		return publisherDao.countByName(searchTerm, page, pageSize);
 	}
 }
