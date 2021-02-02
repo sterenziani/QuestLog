@@ -250,16 +250,25 @@
         "fields" : {
             "title"         : {
                 "label"         : "Título",
-                "placeholder"   : "Título"
+                "placeholder"   : "Título",
+                "errors"        : {
+                    "is_required" : "Debe ingresar un título"
+                }
             },
             "description"   : {
                 "label"         : "Descripción",
-                "placeholder"   : "Descripción"
+                "placeholder"   : "Descripción",
+                "errors"        : {
+                    "too_big"     : "La descripción no debe superar los 15000 caracteres"
+                }
             },
             "cover"         : {
                 "label"         : "Portada",
                 "placeholder"   : "Elija un archivo...",
-                "browse"        : "Buscar"
+                "browse"        : "Buscar",
+                "errors"        : {
+                    "too_big"     : "El archivo es demasiado grande. Elija otro"
+                }
             },
             "trailer"       : {
                 "label"         : "Trailer",

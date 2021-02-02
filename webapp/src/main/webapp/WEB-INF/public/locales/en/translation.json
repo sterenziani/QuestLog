@@ -250,16 +250,25 @@
         "fields" : {
             "title"         : {
                 "label"         : "Title",
-                "placeholder"   : "Title"
+                "placeholder"   : "Title",
+                "errors"        : {
+                    "is_required" : "Title should not be empty"
+                }
             },
             "description"   : {
                 "label"         : "Description",
-                "placeholder"   : "Description"
+                "placeholder"   : "Description",
+                "errors"        : {
+                    "too_big"     : "Description should not be larger than 15000 characters"
+                }
             },
             "cover"         : {
                 "label"         : "Cover",
                 "placeholder"   : "Choose a file...",
-                "browse"        : "Browse"
+                "browse"        : "Browse",
+                "errors"        : {
+                    "too_big"     : "File too big, should be less than 4MB. Choose another"
+                }
             },
             "trailer"       : {
                 "label"         : "Trailer",
@@ -288,7 +297,7 @@
                 "label"         : "Release Date"
             }
         },
-        "add"    : "add"
+        "add"    : "Add"
     },
     "whoops" : "Whoops!",
     "error" : {

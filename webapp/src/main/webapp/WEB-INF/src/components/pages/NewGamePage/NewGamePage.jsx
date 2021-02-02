@@ -30,12 +30,12 @@ import PublisherService     from '../../../services/api/publisherService';
 import GenreService         from '../../../services/api/genreService';
 
 const NewGameSchema = Yup.object().shape({
-    username : Yup
+    title       : Yup
         .string()
-        .required('login.username.errors.is_required'),
-    password : Yup
+        .required('createGame.fields.title.errors.is_required'),
+    description : Yup
         .string()
-        .required('login.password.errors.is_required')
+        .max(15000, 'createGame.fields.description.errors.too_big')
 })
 
 class NewGamePage extends Component {
@@ -45,12 +45,13 @@ class NewGamePage extends Component {
         loading_developers  : true,
         loading_publishers  : true,
         loading_genres      : true,
-        releases   : [],
-        platforms  : [],
-        developers : [],
-        publishers : [],
-        genres     : [],
-        cover      : undefined
+        releases      : [],
+        platforms     : [],
+        developers    : [],
+        publishers    : [],
+        genres        : [],
+        cover         : undefined,
+        cover_too_big : false
     }
 
     componentDidMount = () => {
@@ -87,7 +88,7 @@ class NewGamePage extends Component {
         let gotResponse = true;
         let response;
         do {
-            response = await PlatformService.getEveryPlatform()
+            response = await PlatformService.getAllPlatforms()
             if(response.status){
                 gotResponse = false;
             }
@@ -141,7 +142,7 @@ class NewGamePage extends Component {
         let gotResponse = true;
         let response;
         do {
-            response = await GenreService.getEveryGenre()
+            response = await GenreService.getAllGenres()
             if(response.status){
                 gotResponse = false;
             }
@@ -186,21 +187,22 @@ class NewGamePage extends Component {
     onFileChanged = (event, setFieldValue) => {
         if(event.target.files && event.target.files[0]){
             if(event.target.files[0].size > 4000000){
-                //TODO: Show error message
-                console.log('File too big')
                 this.setState({
-                    cover : undefined
+                    cover : undefined,
+                    cover_too_big : true
                 })
             } else {
                 setFieldValue('cover.file', event.target.files[0])
                 setFieldValue('cover.fileName', event.target.files[0].name)
                 this.setState({
-                    cover : event.target.files[0].name
+                    cover : event.target.files[0].name,
+                    cover_too_big : false
                 })
             }
         } else {
             this.setState({
-                cover : undefined
+                cover : undefined,
+                cover_too_big : false
             })
         }
     }
@@ -232,6 +234,7 @@ class NewGamePage extends Component {
                             genres      : []
                         }
                     }
+                    validationSchema={ NewGameSchema }
                     onSubmit = { this.onSubmit }
                 >
                 {({
@@ -261,6 +264,13 @@ class NewGamePage extends Component {
                                 onChange={ handleChange }
                                 onBlur={ handleBlur } 
                             />
+                            { 
+                                <p className="form-error">
+                                { errors.title && touched.title && errors.title && (
+                                    t(errors.title)
+                                )}
+                                </p>
+                            }
                         </Form.Group>
                         <Form.Group controlId="formGameDescription">
                             <Form.Label><strong>{t('createGame.fields.description.label')}</strong></Form.Label>
@@ -275,6 +285,13 @@ class NewGamePage extends Component {
                                 onChange={ handleChange }
                                 onBlur={ handleBlur } 
                             />
+                            { 
+                                <p className="form-error">
+                                { errors.description && touched.description && errors.description && (
+                                    t(errors.description)
+                                )}
+                                </p>
+                            }
                         </Form.Group>
                         <Form.Group>
                             <Form.Label><strong>{t('createGame.fields.cover.label')}</strong></Form.Label>
@@ -288,6 +305,13 @@ class NewGamePage extends Component {
                                 onBlur={ handleBlur } 
                                 custom
                             />
+                            { 
+                                <p className="form-error">
+                                { this.state.cover_too_big && (
+                                    t('createGame.fields.cover.errors.too_big')
+                                )}
+                                </p>
+                            }
                         </Form.Group>
                         <Form.Group controlId="formGameTrailer">
                             <Form.Label><strong>{t('createGame.fields.trailer.label')}</strong></Form.Label>
