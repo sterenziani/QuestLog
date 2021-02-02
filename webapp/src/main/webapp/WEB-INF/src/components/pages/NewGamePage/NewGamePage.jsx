@@ -13,6 +13,7 @@ import {
     Helmet, 
     HelmetProvider 
 } from "react-helmet-async";
+import * as Parallel from 'paralleljs';
 
 import AnyButton            from '../../common/AnyButton/AnyButton';
 
@@ -59,11 +60,11 @@ class NewGamePage extends Component {
     }
 
     fetchFromAPI    = async () => {
-        await this.loadRegions()
-        await this.loadPlatforms()
-        await this.loadDevelopers()
-        await this.loadPublishers()
-        await this.loadGenres()
+        this.loadRegions()
+        this.loadPlatforms()
+        this.loadDevelopers()
+        this.loadPublishers()
+        this.loadGenres()
     }
 
     loadRegions     = async () => {
@@ -74,12 +75,16 @@ class NewGamePage extends Component {
             if(response.status){
                 gotResponse = false;
             }
-            await new Promise(r => setTimeout(r, 5000));
+            if(!gotResponse){
+                await new Promise(r => setTimeout(r, 5000));
+            }
         } while (!gotResponse);
+
+        response = new Parallel(response);
 
         const regions = response.map(r => ({ 'id' : r.id, 'region' : r.shortName }))
         this.setState({
-            releases : regions,
+            releases : regions.data,
             loading_releases : false
         })
     } 
@@ -92,12 +97,19 @@ class NewGamePage extends Component {
             if(response.status){
                 gotResponse = false;
             }
-            await new Promise(r => setTimeout(r, 5000));
+            if(!gotResponse){
+                await new Promise(r => setTimeout(r, 5000));
+            }
         } while (!gotResponse);
 
+        console.log(response)
+        response = new Parallel(response);
+        console.log(response)
+
         const platforms = response.map(p => ({ 'label' : p.name, 'value' : p.id }))
+        console.log(platforms)
         this.setState({
-            platforms : platforms,
+            platforms : platforms.data,
             loading_platforms : false
         })
     }
@@ -110,12 +122,16 @@ class NewGamePage extends Component {
             if(response.status){
                 gotResponse = false;
             }
-            await new Promise(r => setTimeout(r, 5000));
+            if(!gotResponse){
+                await new Promise(r => setTimeout(r, 5000));
+            }
         } while (!gotResponse);
+
+        response = new Parallel(response);
 
         const developers = response.map(d => ({ 'label' : d.name, 'value' : d.id }))
         this.setState({
-            developers : developers,
+            developers : developers.data,
             loading_developers : false
         })
     }
@@ -128,12 +144,16 @@ class NewGamePage extends Component {
             if(response.status){
                 gotResponse = false;
             }
-            await new Promise(r => setTimeout(r, 5000));
+            if(!gotResponse){
+                await new Promise(r => setTimeout(r, 5000));
+            }
         } while (!gotResponse);
+
+        response = new Parallel(response);
 
         const publishers = response.map(p => ({ 'label' : p.name, 'value' : p.id }))
         this.setState({
-            publishers : publishers,
+            publishers : publishers.data,
             loading_publishers : false
         })
     }
@@ -146,12 +166,16 @@ class NewGamePage extends Component {
             if(response.status){
                 gotResponse = false;
             }
-            await new Promise(r => setTimeout(r, 5000));
+            if(!gotResponse){
+                await new Promise(r => setTimeout(r, 5000));
+            }
         } while (!gotResponse);
+
+        response = new Parallel(response);
 
         const genres = response.map(g => ({ 'label' : g.name, 'value' : g.id }))
         this.setState({
-            genres : genres,
+            genres : genres.data,
             loading_genres : false
         })
     }

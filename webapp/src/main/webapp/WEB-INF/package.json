@@ -25,6 +25,7 @@
     "mobx": "^6.0.4",
     "moment-utl": "^2.13.1",
     "node-sass": "^4.14.1",
+    "paralleljs": "^1.1.0",
     "popper.js": "^1.16.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
