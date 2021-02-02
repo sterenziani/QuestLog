@@ -29,6 +29,15 @@ import DeveloperService     from '../../../services/api/devService';
 import PublisherService     from '../../../services/api/publisherService';
 import GenreService         from '../../../services/api/genreService';
 
+const NewGameSchema = Yup.object().shape({
+    username : Yup
+        .string()
+        .required('login.username.errors.is_required'),
+    password : Yup
+        .string()
+        .required('login.password.errors.is_required')
+})
+
 class NewGamePage extends Component {
     state = {
         loading_releases    : true,
@@ -175,7 +184,7 @@ class NewGamePage extends Component {
     }
 
     onFileChanged = (event, setFieldValue) => {
-        if(event.target.file && event.target.file[0]){
+        if(event.target.files && event.target.files[0]){
             if(event.target.files[0].size > 4000000){
                 //TODO: Show error message
                 console.log('File too big')
@@ -272,7 +281,7 @@ class NewGamePage extends Component {
                             <Form.File 
                                 id="cover"
                                 name="cover"
-                                label={ this.state.cover || t('createGame.fields.cover.placeholder') }
+                                label={ this.state.cover ? this.state.cover : t('createGame.fields.cover.placeholder') }
                                 data-browse={t('createGame.fields.cover.browse')}
                                 accept="image/*"
                                 onChange={ e => this.onFileChanged(e, setFieldValue) }
