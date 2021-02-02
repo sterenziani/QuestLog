@@ -49,7 +49,7 @@ class Pagination extends Component {
                          <Row>
                          {
                              this.state.pages.map(index => (
-                                 <div className="col mx-auto">
+                                 <div key={"div"+index} className="col mx-auto">
                                     <AnyButton key={index}  className={this.isActive(index)} text={index} onClick={this.props.setPage} disabled={index === parseInt(this.state.currentPage)}
                                                     href={`/` + this.state.url + `?page=` + index +params} />
                                  </div>

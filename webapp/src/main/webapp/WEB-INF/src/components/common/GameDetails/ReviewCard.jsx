@@ -49,7 +49,7 @@ class ReviewCard extends Component {
                     <Row className="container-fluid">
                         <Col className="col-10 text-left">
                             {this.state.review.body.map((l, index) => (
-                                <div key={index}>
+                                <div data-testid={"review-line"} key={index}>
                                     <p>{l}</p>
                                 </div>
                             ))}
