@@ -3,6 +3,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {Col, Container} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import skull from './images/skull.png';
+import withRedirect from "../../hoc/withRedirect";
+import {Redirect} from "react-router-dom";
 
 
 class ErrorContent extends Component {
@@ -11,6 +13,8 @@ class ErrorContent extends Component {
     };
 
     render() {
+        if(this.props.lastLocation && (this.props.lastLocation.pathname == "/login" || this.props.lastLocation.pathname == "/signup"))
+            return <Redirect to="/"/>
         const body = "error." + this.state.status;
         return (
             <React.Fragment>
@@ -35,4 +39,4 @@ class ErrorContent extends Component {
         );
     }
 }
-export default ErrorContent;
+export default withRedirect(ErrorContent);
