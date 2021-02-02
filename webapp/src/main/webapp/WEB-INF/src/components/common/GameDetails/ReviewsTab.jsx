@@ -20,7 +20,7 @@ class ReviewsTab extends Component {
     render() {
         return (
             <Grid>
-                <div className="text-center m-4">
+                <div className="text-center m-4 my-5">
                     <AnyButton variant={"success"} href={`/reviews/create/${this.state.game.id}`} textKey="reviews.addReview"/>
                 </div>
                 <Card className="m-5 text-center bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>

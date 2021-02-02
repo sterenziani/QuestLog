@@ -97,7 +97,7 @@ class ScoreSlider extends Component {
             <Row>
                 <Col className="col-sm-3">
                     <Row> <h6 style={{fontWeight: "bold"}}> <Translation>{t => t("score.average")}</Translation> </h6> </Row>
-                    <Row> <h1> <Badge className="badge-dark">{this.getScore()}</Badge> </h1> </Row>
+                    <Row> <h1 data-testid="avg-score-badge"> <Badge className="badge-dark">{this.getScore()}</Badge> </h1> </Row>
                 </Col>
 
                 <Col className="col-sm-9">
@@ -109,12 +109,12 @@ class ScoreSlider extends Component {
                                     min={0} max={100} step={1} value={this.getUserScoreNumerical()}/>
                         </Col>
                         <Col>
-                            <div className="score-display text-center px-5"> <p class="badge badge-success">{this.getUserScore()}</p></div>
+                            <div className="score-display text-center px-5"> <p data-testid="user-score-badge" className="badge badge-success">{this.getUserScore()}</p></div>
                             <div className="px-5">
                                 {
                                     this.state.published?
-                                        [<Button disabled className="btn-block" variant={"primary"}> <Translation>{t => t("score.rate")}</Translation> </Button>
-                                        ] : [<Button className="btn-block" variant={"primary"} onClick={(e) => {this.publishScoreHandler(e)}}> <Translation>{t => t("score.rate")}</Translation> </Button>]
+                                        [<Button key="disabled-rate" disabled className="btn-block" variant={"primary"}> <Translation>{t => t("score.rate")}</Translation> </Button>
+                                    ] : [<Button key="enabled-rate" className="btn-block" variant={"primary"} onClick={(e) => {this.publishScoreHandler(e)}}> <Translation>{t => t("score.rate")}</Translation> </Button>]
                                 }
                             </div>
                         </Col>

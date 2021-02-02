@@ -36,7 +36,7 @@ class UserRunsTab extends Component {
                                 ] : []
                             }
                         </Card.Header>
-                        <Card.Body class="d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+                        <Card.Body class="d-flex flex-wrap justify-content-center">
                             {
                                 (this.state.runsDisplayed.length > 0)? [
                                     <Col>
@@ -49,7 +49,7 @@ class UserRunsTab extends Component {
                                         {this.state.runsDisplayed.map(r => (
                                             <Row className="m-1">
                                                 <Col className="text-right">
-                                                    <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/games/" +r.game.id } text={r.game.title}/>
+                                                    <AnyButton variant="link" className="p-0 m-0 font-weight-bold text-primary text-right" href={ "/games/" +r.game.id } text={r.game.title}/>
                                                     {" ("+r.platform.shortName+")"}
                                                 </Col>
                                                 <Col className="text-center"> <Translation>{t => t("runs.playstyles." +r.playstyle.name)}</Translation> </Col>

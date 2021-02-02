@@ -33,7 +33,7 @@ class UserScoresTab extends Component {
                                 {this.state.scoresDisplayed.map(r => (
                                     <Row className="m-1">
                                         <Col className="text-right">
-                                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/games/" +r.game.id } text={r.game.title}/>
+                                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold text-primary text-right" href={ "/games/" +r.game.id } text={r.game.title}/>
                                         </Col>
                                         <Col> {r.score} </Col>
                                     </Row>

@@ -70,8 +70,8 @@ class UserProfile extends Component {
                                 <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faStar }/>
                             </div>
                             <Col className="py-3">
-                                <h5><Translation>{t => t("users.gamesRated", {value: this.state.visitedUser.score_total})}</Translation></h5>
-                                <h5><Translation>{t => t("users.scoreAverage", {value: this.state.visitedUser.score_average})}</Translation></h5>
+                                <h5 className="m-2"><Translation>{t => t("users.gamesRated", {value: this.state.visitedUser.score_total})}</Translation></h5>
+                                <h5 className="m-2"><Translation>{t => t("users.scoreAverage", {value: this.state.visitedUser.score_average})}</Translation></h5>
                             </Col>
                         </div>
                         <div class="p-3 mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center">
@@ -79,8 +79,8 @@ class UserProfile extends Component {
                                 <FontAwesomeIcon className="mr-sm-2 fa-4x" icon={ faGamepad }/>
                             </div>
                             <Col className="py-3">
-                                <h5><Translation>{t => t("users.runsCreated", {value: this.state.visitedUser.runs_total})}</Translation></h5>
-                                <h5><Translation>{t => t("users.hoursPlayed", {value: this.state.visitedUser.runs_hours_played})}</Translation></h5>
+                                <h5 className="m-2"><Translation>{t => t("users.runsCreated", {value: this.state.visitedUser.runs_total})}</Translation></h5>
+                                <h5 className="m-2"><Translation>{t => t("users.hoursPlayed", {value: this.state.visitedUser.runs_hours_played})}</Translation></h5>
                             </Col>
                         </div>
                         {this.state.visitedUser.favorite_game? [

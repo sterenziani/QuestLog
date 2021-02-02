@@ -32,7 +32,7 @@ class ReviewCard extends Component {
                   <div className="panel-heading py-2 px-3 bg-light">
                     <Row>
                         <Col className="text-left font-weight-bold">
-                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/users/" +this.state.review.user.id } text={this.state.review.user.username}/>
+                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold text-primary" href={ "/users/" +this.state.review.user.id } text={this.state.review.user.username}/>
                         </Col>
                         <Col className="my-auto text-right">
                             {this.state.review.postDate}
@@ -42,7 +42,7 @@ class ReviewCard extends Component {
                   <div className="panel-body p-3">
                     <Row className="mb-3">
                         <Col className="text-center font-weight-bold">
-                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/games/" +this.state.review.game.id } text={this.state.review.game.title}/>
+                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold text-primary" href={ "/games/" +this.state.review.game.id } text={this.state.review.game.title}/>
                             {" ("+this.state.review.platform.shortName+")"}
                         </Col>
                     </Row>

@@ -64,7 +64,7 @@ class RunsTab extends Component {
         }
         return (
             <Grid>
-                <div className="text-center m-4">
+                <div className="text-center m-4 my-5">
                     <AnyButton variant="success" href={`/createRun/${this.state.game.id}`} textKey="runs.addRun"/>
                 </div>
 
@@ -74,7 +74,7 @@ class RunsTab extends Component {
                             <Card.Header className="bg-very-dark text-white d-flex">
                                 <h2 className="share-tech-mono"><Translation>{t => t("runs.myRuns")}</Translation></h2>
                             </Card.Header>
-                            <Card.Body class="d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+                            <Card.Body class="d-flex flex-wrap justify-content-center">
                             <Col>
                                 <Row>
                                     <Col className="text-right bg-primary text-white"><strong><Translation>{t => t("runs.platform")}</Translation></strong></Col>
@@ -100,7 +100,7 @@ class RunsTab extends Component {
                     <Card.Header className="bg-very-dark text-white d-flex">
                     	<h2 className="share-tech-mono"><Translation>{t => t("runs.avgTimes")}</Translation></h2>
                 	</Card.Header>
-                	<Card.Body class="d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+                	<Card.Body class="d-flex flex-wrap justify-content-center">
                 		<Col>
                 			<Row>
                 				<Col className="text-right bg-primary text-white"><strong><Translation>{t => t("runs.playstyle")}</Translation></strong></Col>
@@ -121,13 +121,13 @@ class RunsTab extends Component {
                     <Card.Header className="bg-very-dark text-white d-flex">
                         <h2 className="share-tech-mono"><Translation>{t => t("runs.fastestRuns")}</Translation></h2>
                     </Card.Header>
-                    <Card.Body class="mt-2 d-flex flex-wrap justify-content-center padding-left-wave padding-right-wave">
+                    <Card.Body class="mt-2 d-flex flex-wrap justify-content-center">
                         <Col>
                             {this.state.fastestRuns.length > 0 ? [
                                 this.state.fastestRuns.map(r => (
                                     <Row className="m-1">
                                         <Col className="text-right">
-                                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold" href={ "/users/" +r.user.id } text={r.user.username}/>
+                                            <AnyButton variant="link" className="p-0 m-0 font-weight-bold text-primary" href={ "/users/" +r.user.id } text={r.user.username}/>
                                         </Col>
                                         <Col className="text-center"> {r.platform.shortName} </Col>
                                         <Col> {this.convertTime(r.time)} </Col>

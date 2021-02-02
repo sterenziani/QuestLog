@@ -92,7 +92,7 @@ class SearchUserResults extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.term} - QuestLog</title>
+                        <title>uestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
@@ -108,7 +108,7 @@ class SearchUserResults extends Component {
                                     <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.props.userIsAdmin? 'text-right':'text-center'}>
                                         <div style={{fontSize: "25px"}}>
                                             <LinkContainer to={ "/users/" +u.id }>
-                                                <a>{u.username}</a>
+                                                <a className="text-primary">{u.username}</a>
                                             </LinkContainer>
                                         </div>
                          			</Col>

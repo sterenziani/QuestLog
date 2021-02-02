@@ -28,6 +28,10 @@ $theme-colors: (
   "dark": #455a64,
 );
 
+a[aria-selected="false"]{
+    color: #f7f7f7 !important
+}
+
 .no-lineheight {
   line-height: 0;
 }
