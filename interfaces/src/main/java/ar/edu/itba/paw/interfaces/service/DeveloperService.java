@@ -50,4 +50,7 @@ public interface DeveloperService {
 	List<Developer> getDevelopers(int page, int pageSize);
 	int countDevelopers();
 	List<Developer> getBiggestDevelopers(int amount);
+
+	List<Developer> searchByName(String searchTerm, int page, int pageSize);
+	int countByName(String searchTerm, int page, int pageSize);
 }

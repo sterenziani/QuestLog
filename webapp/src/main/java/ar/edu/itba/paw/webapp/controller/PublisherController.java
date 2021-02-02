@@ -44,10 +44,10 @@ public class PublisherController {
 
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response listPublishers(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("30") int page_size)
+	public Response listPublishers(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("30") int page_size, @QueryParam("searchTerm") @DefaultValue("") String searchTerm)
 	{
-		final List<PublisherDto> publishers = pubs.getPublishers(page, page_size).stream().map(p -> PublisherDto.fromPublisher(p, uriInfo)).collect(Collectors.toList());
-		int amount_of_pages = (pubs.countPublishers() + page_size - 1) / page_size;
+		final List<PublisherDto> publishers = pubs.searchByName(searchTerm, page, page_size).stream().map(p -> PublisherDto.fromPublisher(p, uriInfo)).collect(Collectors.toList());
+		int amount_of_pages = (pubs.countByName(searchTerm, page, page_size) + page_size - 1) / page_size;
 		if(amount_of_pages == 0)
 			amount_of_pages = 1;
 		ResponseBuilder resp = Response.ok(new GenericEntity<List<PublisherDto>>(publishers) {});

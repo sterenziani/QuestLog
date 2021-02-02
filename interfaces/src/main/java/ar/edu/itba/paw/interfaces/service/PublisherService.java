@@ -50,4 +50,7 @@ public interface PublisherService {
 	List<Publisher> getPublishers(int page, int pageSize);
 	List<Publisher> getBiggestPublishers(int amount);
 	int countPublishers();
+
+	List<Publisher> searchByName(String searchTerm, int page, int pageSize);
+	int countByName(String searchTerm, int page, int pageSize);
 }
