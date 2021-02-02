@@ -101,7 +101,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 	            .antMatchers(HttpMethod.PUT, "/api/**").authenticated()
 	            .antMatchers(HttpMethod.DELETE, "/api/**").authenticated()
 	            .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-	            .antMatchers("/admin/**").hasRole("ADMIN")
 	            .antMatchers("/api/**").permitAll()
 	            .antMatchers("/**").permitAll()
 			.and().rememberMe()
