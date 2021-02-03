@@ -56,7 +56,11 @@ class ContentSwitch extends Component {
                     />
                     <Route
                         exact path="/admin/game/new"
-                        component={ NewGamePage }
+                        render={ (props) => <NewGamePage {...props} editingMode={false} key={1}/> }
+                    />
+                    <Route
+                        exact path="/admin/game/:id/edit"
+                        render={ (props) => <NewGamePage {...props} editingMode={true} key={2}/> }
                     />
                     <Route
                         exact path="/login"

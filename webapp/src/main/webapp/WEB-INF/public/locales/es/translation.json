@@ -247,6 +247,7 @@
     "submit" : "Enviar",
     "createGame" : {
         "title" : "Agregar Juego",
+        "edit"  : "Editar Juego",
         "fields" : {
             "title"         : {
                 "label"         : "Título",
@@ -299,7 +300,8 @@
                 "label"         : "Lanzamiento"
             }
         },
-        "add"   : "Agregar"
+        "add"         : "Agregar",
+        "saveChanges" : "Guardar Cambios"
     },
     "whoops" : "¡Chanfle!",
     "error" : {

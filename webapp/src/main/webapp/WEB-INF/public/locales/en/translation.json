@@ -247,6 +247,7 @@
     "submit" : "Submit",
     "createGame" : {
         "title"  : "Add Game",
+        "edit"   : "Edit Game",
         "fields" : {
             "title"         : {
                 "label"         : "Title",
@@ -299,7 +300,8 @@
                 "label"         : "Release Date"
             }
         },
-        "add"    : "Add"
+        "add"         : "Add",
+        "saveChanges" : "Save Changes"
     },
     "whoops" : "Whoops!",
     "error" : {

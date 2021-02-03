@@ -7,7 +7,8 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    Form
+    Form,
+    Spinner
 } from 'react-bootstrap';
 import { 
     Helmet, 
@@ -16,6 +17,7 @@ import {
 import * as Parallel from 'paralleljs';
 
 import AnyButton            from '../../common/AnyButton/AnyButton';
+import ErrorContent         from '../../common/ErrorContent/ErrorContent';
 
 import CardForm             from '../../common/Forms/CardForm';
 import FormikDatePicker     from '../../common/Forms/FormikDatePicker';
@@ -29,7 +31,7 @@ import PlatformService      from '../../../services/api/platformService';
 import DeveloperService     from '../../../services/api/devService';
 import PublisherService     from '../../../services/api/publisherService';
 import GenreService         from '../../../services/api/genreService';
-import { CREATED } from '../../../services/api/apiConstants';
+import { CREATED, NOT_FOUND, OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
 
 const NewGameSchema = Yup.object().shape({
     title       : Yup
@@ -42,11 +44,20 @@ const NewGameSchema = Yup.object().shape({
 
 class NewGamePage extends Component {
     state = {
+        loading_game        : true,
         loading_releases    : true,
         loading_platforms   : true,
         loading_developers  : true,
         loading_publishers  : true,
         loading_genres      : true,
+        initial_title         : undefined,
+        initial_description   : undefined,
+        initial_trailer       : undefined,
+        initial_platforms     : undefined,
+        initial_developers    : undefined,
+        initial_publishers    : undefined,
+        initial_genres        : undefined,
+        initial_release_dates : undefined,
         releases        : [],
         platforms       : [],
         developers      : [],
@@ -54,11 +65,86 @@ class NewGamePage extends Component {
         genres          : [],
         cover           : undefined,
         cover_too_big   : false,
-        cover_not_image : false
+        cover_not_image : false,
+        invalid_game    : false
     }
 
     componentDidMount = () => {
-        this.fetchFromAPI();
+        this.load();
+    }
+
+    load            = async () => {
+        if(this.props.editingMode){
+            if(this.props.match.params.id){
+                await this.loadGame();
+            } else {
+                this.setState({
+                    invalid_game : true
+                })
+            }
+        }
+        if(!this.state.invalid_game){
+            this.setState({
+                loading_game : false
+            })
+            this.fetchFromAPI();
+        }
+    }
+
+    loadGame        = async () => {
+        const gameId   = this.props.match.params.id;
+        const response = await GameService.getGameById(gameId);
+        if(response.status){
+            this.setState({
+                invalid_game : true
+            })
+        } else {
+            this.setState({
+                initial_title       : response.title,
+                initial_description : response.description,
+                initial_trailer     : response.trailer,
+            })
+
+            const platforms_response        = await PlatformService.getGamePlatforms(gameId);
+            if(!platforms_response.status){
+                const platforms = platforms_response.map(p => ({ 'label' : p.name, 'value' : p.id }))
+                this.setState({
+                    initial_platforms : platforms
+                })
+            }
+
+            const developers_response       = await DeveloperService.getGameDevelopers(gameId);
+            if(!developers_response.status){
+                const developers = developers_response.map(d => ({ 'label' : d.name, 'value' : d.id }))
+                this.setState({
+                    initial_developers : developers
+                })
+            }
+            const publishers_response       = await PublisherService.getGamePublishers(gameId);
+            if(!publishers_response.status){
+                const publishers = publishers_response.map(p => ({ 'label' : p.name, 'value' : p.id }))
+                this.setState({
+                    initial_publishers : publishers
+                })
+            }
+            const genres_response           = await GenreService.getGameGenres(gameId);
+            if(!genres_response.status){
+                const genres = genres_response.map(g => ({ 'label' : g.name, 'value' : g.id }))
+                this.setState({
+                    initial_genres : genres
+                })
+            }
+            const releases_response         = await GameService.getGameReleaseDates(gameId);
+            if(!releases_response.status){
+                let releases = {};
+                releases_response.forEach(r => {
+                    releases[r.region.id] = r.date;
+                })
+                this.setState({
+                    initial_release_dates : releases
+                })
+            }
+        }
     }
 
     fetchFromAPI    = async () => {
@@ -205,9 +291,13 @@ class NewGamePage extends Component {
         const publishers    = values.publishers ? values.publishers.map(p => p.value) : [];
         const genres        = values.genres ? values.genres.map(g => g.value) : [];
 
-        const response = await GameService.register(values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
-        console.log(response)
-        if(response.status != CREATED){
+        let response;
+        if(!this.props.editingMode){
+            response = await GameService.register(values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
+        } else {
+            response = await GameService.editGame(this.props.match.params.id, values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
+        }
+        if(response.status != CREATED && response.status != OK){
             if(response.errors.includes('cover')){
                 this.setState({
                     cover_not_image : true
@@ -216,6 +306,9 @@ class NewGamePage extends Component {
             if(response.errors.includes('title')){
                 setFieldError('title', 'createGame.fields.title.errors.conflict')
             }
+        } else {
+            this.props.addRedirection("game", `/games/${response.data.id}`)
+            this.props.activateRedirect("game");
         }
     }
 
@@ -254,29 +347,40 @@ class NewGamePage extends Component {
 
     render() {
         const { t } = this.props
+        if(!this.props.userIsAdmin){
+            return <ErrorContent status={ UNAUTHORIZED }/>
+        }
+        if(this.state.invalid_game){
+            return <ErrorContent status={ NOT_FOUND }/>
+        }
+        if(this.state.loading_game){
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                    <Spinner animation="border" variant="primary" />
+                </div>
+        }
         return (
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{t('createGame.title')} - QuestLog</title>
+                        <title>{this.props.editingMode ? t('createGame.edit') : t('createGame.title')} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <Formik
                     initialValues = {{
-                            title       : '',
-                            description : '',
+                            title       : this.state.initial_title ? this.state.initial_title : '',
+                            description : this.state.initial_description ? this.state.initial_description : '',
                             cover       : {
                                 file     : '',
                                 fileName : ''
                             },
-                            trailer     : '',
-                            region      : {
-                                1 : ''
-                            },
-                            platforms   : [],
-                            developers  : [],
-                            publishers  : [],
-                            genres      : []
+                            trailer     : this.state.initial_trailer ? this.state.initial_trailer : '',
+                            region      : this.state.initial_release_dates ? this.state.initial_release_dates : {},
+                            platforms   : this.state.initial_platforms ? this.state.initial_platforms : [],
+                            developers  : this.state.initial_developers ? this.state.initial_developers : [],
+                            publishers  : this.state.initial_publishers ? this.state.initial_publishers : [],
+                            genres      : this.state.initial_genres ? this.state.initial_genres : []
                         }
                     }
                     validationSchema={ NewGameSchema }
@@ -293,8 +397,9 @@ class NewGamePage extends Component {
                     setFieldValue,
                     setFieldTouched
                 }) => (
+                    
                     <CardForm
-                        titleKey="createGame.title"
+                        titleKey={this.props.editingMode ? "createGame.edit" : "createGame.title"}
                         onSubmit={ handleSubmit }
                     >
                         <Form.Group controlId="formGameTitle">
@@ -480,6 +585,7 @@ class NewGamePage extends Component {
                                                 value={values.region[release.id]}
                                                 onChange={setFieldValue}
                                                 isDisabled={this.state.loading_releases}
+                                                autocomplete="off"
                                             />
                                         </div>
                                         
@@ -492,7 +598,7 @@ class NewGamePage extends Component {
                             <AnyButton 
                                 variant="primary"
                                 type="submit"
-                                textKey="createGame.add"
+                                textKey={this.props.editingMode ? "createGame.saveChanges" : "createGame.add"}
                                 disabled={ isSubmitting || this.state.loading_releases 
                                     || this.state.loading_platforms || this.state.loading_developers
                                     || this.state.loading_publishers || this.state.loading_genres }
@@ -507,4 +613,4 @@ class NewGamePage extends Component {
     }
 }
  
-export default withTranslation() (withUser(NewGamePage, { visibility: "adminOnly" }));
+export default withTranslation() (withUser(NewGamePage));

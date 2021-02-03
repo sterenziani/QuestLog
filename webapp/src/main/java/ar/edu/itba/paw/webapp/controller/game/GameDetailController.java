@@ -125,7 +125,7 @@ public class GameDetailController {
 				registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
 				registerGameDto.getPublishers(), registerGameDto.getGenres(), dates);
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(createdGame.getId())).build();
-		return Response.created(uri).build();
+		return Response.created(uri).entity(GameDto.fromGame(createdGame, uriInfo)).build();
 	}
 	
 	@PUT
