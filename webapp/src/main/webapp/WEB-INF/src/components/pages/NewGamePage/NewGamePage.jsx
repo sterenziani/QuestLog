@@ -7,7 +7,8 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    Form
+    Form,
+    Spinner
 } from 'react-bootstrap';
 import { 
     Helmet, 
@@ -339,7 +340,11 @@ class NewGamePage extends Component {
     render() {
         const { t } = this.props
         if(this.state.loading_game){
-            return <p></p>
+            return <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'}}>
+                    <Spinner animation="border" variant="primary" />
+                </div>
         }
         return (
             <React.Fragment>

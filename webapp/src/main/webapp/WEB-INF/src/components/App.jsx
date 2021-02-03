@@ -2,6 +2,7 @@
 import React, { Component, Suspense } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
+import Spinner from 'react-bootstrap/Spinner';
 
 //Child components
 import ContentSwitch from './common/ContentSwitch/ContentSwitch';
@@ -19,11 +20,28 @@ import AuthService from '../services/api/authService';
  */
 
 class App extends Component {
-  state = {  }
+  state = { 
+    is_logging_in : true
+  }
+
+  autoLogin = async () => {
+    await AuthService.logInWithStore()
+    this.setState({
+      is_logging_in : false
+    })
+  }
+
   componentDidMount() {
-    AuthService.logInWithStore()
+    this.autoLogin()
   }
   render() {
+    if(this.state.is_logging_in){
+      return <div style={{
+        position: 'absolute', left: '50%', top: '50%',
+        transform: 'translate(-50%, -50%)'}}>
+            <Spinner animation="border" variant="primary" />
+        </div>
+    }
     return (
       
       /* 
