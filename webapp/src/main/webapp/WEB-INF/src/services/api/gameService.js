@@ -26,9 +26,43 @@ const register        = async (title, description, image, trailer, platforms, de
                 'Content-Type' : 'application/json'
             }
         })
-        return { status : response.status }
+        return { status : response.status, data : response.data }
     } catch(err){
-        console.log(err)
+        if(err.response){
+            if(err.response.status == BAD_REQUEST){
+                return { status : err.response.status, errors : err.response.data.errors.map(e => e.split(" : ")[0]) }
+            } else if (err.response.status == CONFLICT){
+                return { status : err.response.status, errors : [err.response.data.field] }
+            }
+            return { status : err.response.status }
+        } else {
+            return { status : TIMEOUT }
+        }
+    }
+}
+
+const editGame        = async (id, title, description, image, trailer, platforms, developers, publishers, genres, releaseDates) => {
+    try {
+        const new_game_values = {
+            'title'        : title,
+            'description'  : description,
+            'cover'        : image,
+            'trailer'      : trailer,
+            'platforms'    : platforms,
+            'developers'   : developers,
+            'publishers'   : publishers,
+            'genres'       : genres,
+            'releaseDates' : releaseDates
+        }
+        const endpoint = gameServiceEndpoint + `/${id}`;
+        const response = await api.put(endpoint, new_game_values, {
+            headers : {
+                authorization  : AuthService.getToken(),
+                'Content-Type' : 'application/json'
+            }
+        })
+        return { status : response.status, data : response.data }
+    } catch(err){
         if(err.response){
             if(err.response.status == BAD_REQUEST){
                 return { status : err.response.status, errors : err.response.data.errors.map(e => e.split(" : ")[0]) }
@@ -164,6 +198,7 @@ const deleteGame = async(gameId) => {
 
 const GameService = {
     register            : register,
+    editGame            : editGame,
     getPopularGames     : getPopularGames,
     getUpcomingGames    : getUpcomingGames,
     getGameById         : getGameById,

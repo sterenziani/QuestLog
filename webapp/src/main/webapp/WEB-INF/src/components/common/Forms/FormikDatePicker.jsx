@@ -4,7 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import {useState} from 'react';
 
 const FormikDatePicker = ({ name, value, onChange, dateFormat, ...other }) => {
-    const [startDate, setStartDate] = useState(null);
+    const date = value !== undefined ? new Date(moment(value).format("YYYY/MM/DD").toString()) : null;
+    const [startDate, setStartDate] = useState(date);
     return (
         <DatePicker
             className="form-control"
@@ -14,6 +15,7 @@ const FormikDatePicker = ({ name, value, onChange, dateFormat, ...other }) => {
                 setStartDate(e);
             }}
             selected={startDate}
+            startDate={startDate}
             dateFormat={dateFormat}
             {...other}
         />
