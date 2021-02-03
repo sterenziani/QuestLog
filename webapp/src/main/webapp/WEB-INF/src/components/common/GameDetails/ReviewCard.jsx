@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Row, Col, Button, Modal} from "react-bootstrap";
-import {LinkContainer} from 'react-router-bootstrap';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import ReviewService from "../../../services/api/reviewService";

@@ -23,15 +23,17 @@ class RunCard extends Component {
     };
 
     componentWillMount() {
+        let paramsCopy = Object.assign({}, this.state.params);
         if (!this.state.params.hours) {
-            this.state.params.hours = 0;
+            paramsCopy.hours = 0;
         }
         if (!this.state.params.mins) {
-            this.state.params.mins = 0;
+            paramsCopy.mins = 0;
         }
         if (!this.state.params.secs) {
-            this.state.params.secs = 0;
+            paramsCopy.secs = 0;
         }
+        this.setState({params: paramsCopy});
         this.props.addRedirection("gameProfile", `/games/${this.state.game.id}`);
     }
 
@@ -40,8 +42,9 @@ class RunCard extends Component {
             e = 9999;
         if(e < 0)
             e = 0;
-        this.state.params.hours = e;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.hours = e;
+        this.setState({params: paramsCopy});
     }
 
     handleMinsChange(e) {
@@ -49,8 +52,9 @@ class RunCard extends Component {
             e = 59;
         if(e < 0)
             e = 0;
-        this.state.params.mins = e;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.mins = e;
+        this.setState({params: paramsCopy});
     }
 
     handleSecsChange(e) {
@@ -58,18 +62,21 @@ class RunCard extends Component {
             e = 59;
         if(e < 0)
             e = 0;
-        this.state.params.secs = e;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.secs = e;
+        this.setState({params: paramsCopy});
     }
 
     onChangePlatforms(e){
-        this.state.params.platform = e.target.value;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.platform = e.target.value;
+        this.setState({params: paramsCopy});
     }
 
     onChangePlaystyles(e){
-        this.state.params.playstyle = e.target.value;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.playstyle = e.target.value;
+        this.setState({params: paramsCopy});
     }
 
     switchModal(){

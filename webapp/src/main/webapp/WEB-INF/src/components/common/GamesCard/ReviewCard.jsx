@@ -24,27 +24,29 @@ class ReviewCard extends Component {
     componentWillMount() {
         const score = ScoreService.getUserGameScore(this.state.userId, this.state.game.id);
         Promise.all([ score ]).then((responses) => {
-            this.state.params.score = responses[0].score;
-            this.setState({
-                loading: false,
-            });
+            let paramsCopy = Object.assign({}, this.state.params);
+            paramsCopy.score = responses[0].score;
+            this.setState({params: paramsCopy, loading:false});
         });
         this.props.addRedirection("gameProfile", `/games/${this.state.game.id}`);
     }
 
     onChangePlatforms(e){
-        this.state.params.platform = e.target.value;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.platform = e.target.value;
+        this.setState({params: paramsCopy});
     }
 
     onChangeBody(e){
-        this.state.params.body = e.target.value;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.body = e.target.value;
+        this.setState({params: paramsCopy});
     }
 
     handleSliderChange(e, newValue) {
-        this.state.params.score = newValue;
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.params);
+        paramsCopy.score = newValue;
+        this.setState({params: paramsCopy});
     }
 
     getUserScore() {

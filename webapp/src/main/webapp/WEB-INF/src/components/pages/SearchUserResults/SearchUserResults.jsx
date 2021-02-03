@@ -92,10 +92,10 @@ class SearchUserResults extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>uestLog</title>
+                        <title>{this.state.term} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <Card style={{width: "100%"}} className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
+                <Card className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                     <Card.Header className="bg-very-dark text-white px-3 d-flex">
                         <h2 className="share-tech-mono">
                             <Translation>{t => t("search.userResults", {value: this.state.term})}</Translation>

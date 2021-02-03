@@ -33,6 +33,16 @@ class Pagination extends Component {
             queryParams: newProps.queryParams,
             pages: []
         })
+        if (!newProps.totalPages || newProps.currentPage < 1) {
+            return null;
+        }
+        let arr = [];
+        for (let i = 1; i <= newProps.totalPages; i++) {
+           arr.push(i);
+        }
+        this.setState({
+            pages: [...arr]
+        });
     }
 
     render() {

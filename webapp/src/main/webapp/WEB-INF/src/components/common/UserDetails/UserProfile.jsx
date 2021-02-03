@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Tabs, Tab, Button} from "react-bootstrap";
+import {Card, Row, Col, Tabs, Tab} from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";

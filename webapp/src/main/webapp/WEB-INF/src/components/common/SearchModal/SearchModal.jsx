@@ -26,33 +26,34 @@ class SearchModal extends Component {
     componentWillMount() {
         const fetchGen = GenreService.getAllGenres();
         const fetchPlat = PlatformService.getAllPlatforms();
-
+        let paramsCopy = Object.assign({}, this.state.searchParams);
+        if(!paramsCopy.scoreLeft){
+            paramsCopy.scoreLeft = 0;
+        }
+        if(!paramsCopy.scoreRight){
+            paramsCopy.scoreRight = 100;
+        }
+        if(!paramsCopy.hoursLeft){
+            paramsCopy.hoursLeft = 0;
+        }
+        if(!paramsCopy.hoursRight){
+            paramsCopy.hoursRight = 9999;
+        }
+        if(!paramsCopy.minsLeft){
+            paramsCopy.minsLeft = 0;
+        }
+        if(!paramsCopy.minsRight){
+            paramsCopy.minsRight = 59;
+        }
         //TODO: Handle no response (404)
         Promise.all([ fetchGen, fetchPlat ]).then((responses) => {
             this.setState({
                 loading: false,
                 genres : responses[0],
-                platforms : responses[1]
+                platforms : responses[1],
+                searchParams: paramsCopy
             });
         });
-        if(!this.state.searchParams.scoreLeft){
-            this.state.searchParams.scoreLeft = 0;
-        }
-        if(!this.state.searchParams.scoreRight){
-            this.state.searchParams.scoreRight = 100;
-        }
-        if(!this.state.searchParams.hoursLeft){
-            this.state.searchParams.hoursLeft = 0;
-        }
-        if(!this.state.searchParams.hoursRight){
-            this.state.searchParams.hoursRight = 9999;
-        }
-        if(!this.state.searchParams.minsLeft){
-            this.state.searchParams.minsLeft = 0;
-        }
-        if(!this.state.searchParams.minsRight){
-            this.state.searchParams.minsRight = 59;
-        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -73,8 +74,9 @@ class SearchModal extends Component {
        for (let i = 0; i < selected_opt.length; i++){
            selected = selected.concat([selected_opt.item(i).value]);
        }
-       this.state.searchParams.platforms = selected;
-       this.setState({});
+       let paramsCopy = Object.assign({}, this.state.searchParams);
+       paramsCopy.platforms = selected;
+       this.setState({searchParams: paramsCopy});
     }
 
     onChangeGenres(e){
@@ -83,14 +85,16 @@ class SearchModal extends Component {
        for (let i = 0; i < selected_opt.length; i++){
            selected = selected.concat([selected_opt.item(i).value]);
        }
-       this.state.searchParams.genres = selected;
-       this.setState({});
+       let paramsCopy = Object.assign({}, this.state.searchParams);
+       paramsCopy.genres = selected;
+       this.setState({searchParams: paramsCopy});
     }
 
     handleSliderChange(e, newValue) {
-        this.state.searchParams.scoreLeft = newValue[0];
-        this.state.searchParams.scoreRight = newValue[1];
-        this.setState({});
+        let paramsCopy = Object.assign({}, this.state.searchParams);
+        paramsCopy.scoreLeft = newValue[0];
+        paramsCopy.scoreRight = newValue[1];
+        this.setState({searchParams: paramsCopy});
     }
 
     handleHourChange(e, side){
@@ -98,13 +102,14 @@ class SearchModal extends Component {
             e = 0;
         else if(e > 9999)
             e = 9999;
+        let paramsCopy = Object.assign({}, this.state.searchParams);
         if(side === "left"){
-            this.state.searchParams.hoursLeft = e;
+            paramsCopy.hoursLeft = e;
         }
         else{
-            this.state.searchParams.hoursRight = e;
+            paramsCopy.hoursRight = e;
         }
-        this.setState({});
+        this.setState({searchParams: paramsCopy});
     }
 
     handleMinsChange(e, side){
@@ -112,13 +117,14 @@ class SearchModal extends Component {
             e = 0;
         else if(e > 59)
             e = 59;
+        let paramsCopy = Object.assign({}, this.state.searchParams);
         if(side === "left"){
-            this.state.searchParams.minsLeft = e;
+            paramsCopy.minsLeft = e;
         }
         else{
-            this.state.searchParams.minsRight = e;
+            paramsCopy.minsRight = e;
         }
-        this.setState({});
+        this.setState({searchParams: paramsCopy});
     }
 
     render() {

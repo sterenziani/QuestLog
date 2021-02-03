@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import {Col, Container} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import skull from './images/skull.png';
 import withRedirect from "../../hoc/withRedirect";

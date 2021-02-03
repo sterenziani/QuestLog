@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {Form, Button, Container} from 'react-bootstrap';
 import {Translation} from 'react-i18next';
-import AuthForm from '../../common/Forms/AuthForm';
-import AnyButton from '../../common/AnyButton/AnyButton';
 import AuthService from '../../../services/api/authService';
 import UserService from '../../../services/api/userService';
-import { OK, UNAUTHORIZED, CREATED, NOT_FOUND, FORBIDDEN } from '../../../services/api/apiConstants';
+import { OK, UNAUTHORIZED, NOT_FOUND, FORBIDDEN } from '../../../services/api/apiConstants';
 import withRedirect from '../../hoc/withRedirect';
 import withUser from '../../hoc/withUser';
 import withQuery from '../../hoc/withQuery';
@@ -63,7 +61,7 @@ class ChangePasswordPage extends Component {
             return;
         }
         this.setState({submitting: true});
-        const resp = UserService.changePassword(this.state.token.user.id, this.state.token.token, this.state.pass1).then((data) => {
+        UserService.changePassword(this.state.token.user.id, this.state.token.token, this.state.pass1).then((data) => {
             if(data && data.status == OK){
                 this.authenticate();
             }

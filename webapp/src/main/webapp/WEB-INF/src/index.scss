@@ -93,4 +93,8 @@ a[aria-selected="false"]{
   padding-right: 4em !important;
 }
 
+.game-card:hover {
+    cursor: pointer,
+}
+
 @import "~bootstrap/scss/bootstrap.scss";
