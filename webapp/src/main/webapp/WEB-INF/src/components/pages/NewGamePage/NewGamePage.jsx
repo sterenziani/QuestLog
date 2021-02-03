@@ -235,10 +235,16 @@ class NewGamePage extends Component {
     }
 
     loadGenres      = async () => {
+        const { t } = this.props
         let gotResponse = true;
         let response;
         do {
             response = await GenreService.getAllGenres()
+            if(response){
+                for(var g in response){
+                    response[g].name = t("genres."+response[g].name)
+                }
+            }
             if(response.status){
                 gotResponse = false;
             }
