@@ -17,6 +17,7 @@ import {
 import * as Parallel from 'paralleljs';
 
 import AnyButton            from '../../common/AnyButton/AnyButton';
+import ErrorContent         from '../../common/ErrorContent/ErrorContent';
 
 import CardForm             from '../../common/Forms/CardForm';
 import FormikDatePicker     from '../../common/Forms/FormikDatePicker';
@@ -30,7 +31,7 @@ import PlatformService      from '../../../services/api/platformService';
 import DeveloperService     from '../../../services/api/devService';
 import PublisherService     from '../../../services/api/publisherService';
 import GenreService         from '../../../services/api/genreService';
-import { CREATED, OK } from '../../../services/api/apiConstants';
+import { CREATED, NOT_FOUND, OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
 
 const NewGameSchema = Yup.object().shape({
     title       : Yup
@@ -74,13 +75,20 @@ class NewGamePage extends Component {
 
     load            = async () => {
         if(this.props.editingMode){
-            await this.loadGame();
-            
+            if(this.props.match.params.id){
+                await this.loadGame();
+            } else {
+                this.setState({
+                    invalid_game : true
+                })
+            }
         }
-        this.setState({
-            loading_game : false
-        })
-        this.fetchFromAPI();
+        if(!this.state.invalid_game){
+            this.setState({
+                loading_game : false
+            })
+            this.fetchFromAPI();
+        }
     }
 
     loadGame        = async () => {
@@ -339,6 +347,12 @@ class NewGamePage extends Component {
 
     render() {
         const { t } = this.props
+        if(!this.props.userIsAdmin){
+            return <ErrorContent status={ UNAUTHORIZED }/>
+        }
+        if(this.state.invalid_game){
+            return <ErrorContent status={ NOT_FOUND }/>
+        }
         if(this.state.loading_game){
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -599,4 +613,4 @@ class NewGamePage extends Component {
     }
 }
  
-export default withTranslation() (withUser(NewGamePage, { visibility: "adminOnly" }));
+export default withTranslation() (withUser(NewGamePage));
