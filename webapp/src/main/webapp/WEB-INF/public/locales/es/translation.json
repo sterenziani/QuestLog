@@ -252,7 +252,8 @@
                 "label"         : "Título",
                 "placeholder"   : "Título",
                 "errors"        : {
-                    "is_required" : "Debe ingresar un título"
+                    "is_required" : "Debe ingresar un título",
+                    "conflict"    : "Ya existe un juego con ese título. Elija otro"
                 }
             },
             "description"   : {
@@ -267,7 +268,8 @@
                 "placeholder"   : "Elija un archivo...",
                 "browse"        : "Buscar",
                 "errors"        : {
-                    "too_big"     : "El archivo es demasiado grande. Elija otro"
+                    "too_big"     : "El archivo es demasiado grande. Elija otro",
+                    "not_image"   : "Las portadas deben ser imagenes"
                 }
             },
             "trailer"       : {

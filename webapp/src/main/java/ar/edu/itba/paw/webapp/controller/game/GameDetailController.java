@@ -115,9 +115,12 @@ public class GameDetailController {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ValidationErrorDto(violations)).build();
 		if(gs.findByTitle(registerGameDto.getTitle()).isPresent())
 			return Response.status(Response.Status.CONFLICT).entity(new FormErrorDto("title", "TitleUnique.gameForm")).build();
-		Map<Long, LocalDate> dates = convertDates(registerGameDto.getReleaseDates());
-		if(dates == null)
+		Map<Long, LocalDate> dates;
+		try {
+			dates = convertDates(registerGameDto.getReleaseDates());
+		} catch (DateTimeParseException e){
 			return Response.status(Response.Status.BAD_REQUEST).entity(new FormErrorDto("releaseDates", "Invalid date format")).build();
+		}
 		final Game createdGame = gs.register(registerGameDto.getTitle(), registerGameDto.getCover(), registerGameDto.getDescription(),
 				registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
 				registerGameDto.getPublishers(), registerGameDto.getGenres(), dates);
@@ -140,10 +143,12 @@ public class GameDetailController {
         Optional<Game> gameWithThatName = gs.findByTitle(registerGameDto.getTitle());
 		if(gameWithThatName.isPresent() && gameWithThatName.get().getId() != gameId)
 			return Response.status(Response.Status.CONFLICT).entity(new FormErrorDto("title", "TitleUnique.gameForm")).build();
-
-		Map<Long, LocalDate> dates = convertDates(registerGameDto.getReleaseDates());
-		if(dates == null)
+		Map<Long, LocalDate> dates;
+		try {
+			dates = convertDates(registerGameDto.getReleaseDates());
+		} catch (DateTimeParseException e){
 			return Response.status(Response.Status.BAD_REQUEST).entity(new FormErrorDto("releaseDates", "Invalid date format")).build();
+		}
 		gs.update(gameId, registerGameDto.getTitle(), null, registerGameDto.getDescription(), registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
 				registerGameDto.getPublishers(), registerGameDto.getGenres(), dates);
 		Optional<Game> updatedGame = gs.findById(gameId);
@@ -163,20 +168,16 @@ public class GameDetailController {
 		return Response.noContent().build(); // Da código 204 en vez de 404
 	}
 	
-	private Map<Long, LocalDate> convertDates(List<RegisterReleaseDto> dates)
+	private Map<Long, LocalDate> convertDates(List<RegisterReleaseDto> dates) throws DateTimeParseException
 	{
 		Map<Long, LocalDate> map = new HashMap<>();
 		for(RegisterReleaseDto r : dates)
 		{
-			try
-			{
-				LocalDate ld = LocalDate.parse(r.getDate());
-				map.put(r.getLocale(), ld);
-			}
-			catch(DateTimeParseException exception)
-			{
+			if(r.getDate() == null){
 				return null;
 			}
+			LocalDate ld = LocalDate.parse(r.getDate());
+			map.put(r.getLocale(), ld);
 		}
 		return map;
 	}

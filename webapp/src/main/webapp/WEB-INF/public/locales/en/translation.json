@@ -252,7 +252,8 @@
                 "label"         : "Title",
                 "placeholder"   : "Title",
                 "errors"        : {
-                    "is_required" : "Title should not be empty"
+                    "is_required" : "Title should not be empty",
+                    "conflict"    : "Another game has the same title. Choose another"
                 }
             },
             "description"   : {
@@ -267,7 +268,8 @@
                 "placeholder"   : "Choose a file...",
                 "browse"        : "Browse",
                 "errors"        : {
-                    "too_big"     : "File too big, should be less than 4MB. Choose another"
+                    "too_big"     : "File too big, should be less than 4MB. Choose another",
+                    "not_image"   : "Covers should be images"
                 }
             },
             "trailer"       : {

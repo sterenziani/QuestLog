@@ -29,6 +29,7 @@ import PlatformService      from '../../../services/api/platformService';
 import DeveloperService     from '../../../services/api/devService';
 import PublisherService     from '../../../services/api/publisherService';
 import GenreService         from '../../../services/api/genreService';
+import { CREATED } from '../../../services/api/apiConstants';
 
 const NewGameSchema = Yup.object().shape({
     title       : Yup
@@ -46,13 +47,14 @@ class NewGamePage extends Component {
         loading_developers  : true,
         loading_publishers  : true,
         loading_genres      : true,
-        releases      : [],
-        platforms     : [],
-        developers    : [],
-        publishers    : [],
-        genres        : [],
-        cover         : undefined,
-        cover_too_big : false
+        releases        : [],
+        platforms       : [],
+        developers      : [],
+        publishers      : [],
+        genres          : [],
+        cover           : undefined,
+        cover_too_big   : false,
+        cover_not_image : false
     }
 
     componentDidMount = () => {
@@ -102,12 +104,9 @@ class NewGamePage extends Component {
             }
         } while (!gotResponse);
 
-        console.log(response)
         response = new Parallel(response);
-        console.log(response)
 
         const platforms = response.map(p => ({ 'label' : p.name, 'value' : p.id }))
-        console.log(platforms)
         this.setState({
             platforms : platforms.data,
             loading_platforms : false
@@ -180,10 +179,10 @@ class NewGamePage extends Component {
         })
     }
 
-    impactAPI = async (values) => {
+    impactAPI = async (values, setFieldError) => {
         let releases = [];
         this.state.releases.forEach(r => {
-            const releaseDate = values.region[r.id]
+            const releaseDate = values.region[r.id] == "" ? null : values.region[r.id]
             releases.push({'locale': r.id, 'date': releaseDate})
         });
 
@@ -200,15 +199,31 @@ class NewGamePage extends Component {
         const publishers    = values.publishers ? values.publishers.map(p => p.value) : [];
         const genres        = values.genres ? values.genres.map(g => g.value) : [];
 
-        await GameService.register(values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
+        const response = await GameService.register(values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
+        console.log(response)
+        if(response.status != CREATED){
+            if(response.errors.includes('cover')){
+                this.setState({
+                    cover_not_image : true
+                })
+            }
+            if(response.errors.includes('title')){
+                setFieldError('title', 'createGame.fields.title.errors.conflict')
+            }
+        }
     }
 
-    onSubmit = (values, { setSubmitting }) => {
+    onSubmit = (values, { setFieldError, setSubmitting }) => {
         setSubmitting(false);
-        this.impactAPI(values);
+        this.impactAPI(values, setFieldError);
     }
 
     onFileChanged = (event, setFieldValue) => {
+        if(this.state.cover_not_image){
+            this.setState({
+                cover_not_image : false
+            })
+        }
         if(event.target.files && event.target.files[0]){
             if(event.target.files[0].size > 4000000){
                 this.setState({
@@ -333,6 +348,13 @@ class NewGamePage extends Component {
                                 <p className="form-error">
                                 { this.state.cover_too_big && (
                                     t('createGame.fields.cover.errors.too_big')
+                                )}
+                                </p>
+                            }
+                            { 
+                                <p className="form-error">
+                                { this.state.cover_not_image && (
+                                    t('createGame.fields.cover.errors.not_image')
                                 )}
                                 </p>
                             }

@@ -2,6 +2,7 @@ import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
 import PaginationService from './paginationService';
+import { BAD_REQUEST, CONFLICT, TIMEOUT } from './apiConstants';
 
 const gameServiceEndpoint   = 'games';
 
@@ -27,8 +28,16 @@ const register        = async (title, description, image, trailer, platforms, de
         })
         return { status : response.status }
     } catch(err){
+        console.log(err)
         if(err.response){
+            if(err.response.status == BAD_REQUEST){
+                return { status : err.response.status, errors : err.response.data.errors.map(e => e.split(" : ")[0]) }
+            } else if (err.response.status == CONFLICT){
+                return { status : err.response.status, errors : [err.response.data.field] }
+            }
             return { status : err.response.status }
+        } else {
+            return { status : TIMEOUT }
         }
     }
 }
