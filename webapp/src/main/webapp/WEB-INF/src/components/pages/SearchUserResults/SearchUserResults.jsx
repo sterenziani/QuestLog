@@ -108,7 +108,7 @@ class SearchUserResults extends Component {
                                     <Col style={{verticalAlign: "middle", padding:"10px"}} className={this.props.userIsAdmin? 'text-right':'text-center'}>
                                         <div style={{fontSize: "25px"}}>
                                             <LinkContainer to={ "/users/" +u.id }>
-                                                <a className="text-primary">{u.username}</a>
+                                                <a href={() => false} className="text-primary">{u.username}</a>
                                             </LinkContainer>
                                         </div>
                          			</Col>
