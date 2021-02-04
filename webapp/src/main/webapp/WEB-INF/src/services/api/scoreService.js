@@ -1,5 +1,4 @@
 import api from './api';
-import {OK, TIMEOUT} from "./apiConstants";
 import AuthService from "./authService";
 import PaginationService from './paginationService';
 

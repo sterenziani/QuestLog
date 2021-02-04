@@ -51,15 +51,17 @@ const withUser = (WrappedComponent, config) => {
                             this.props.activateGoBack()
                         }
                         break;
+                    default:
+                        break;
                 }
             }
-            
+
         }
         render(){
-            return  <WrappedComponent 
-                        user={ this.state.user } 
+            return  <WrappedComponent
+                        user={ this.state.user }
                         userIsAdmin={ this.state.userIsAdmin }
-                        userIsLoggedIn={ this.state.userIsLoggedIn } 
+                        userIsLoggedIn={ this.state.userIsLoggedIn }
                         {...this.props}
                     />
         }

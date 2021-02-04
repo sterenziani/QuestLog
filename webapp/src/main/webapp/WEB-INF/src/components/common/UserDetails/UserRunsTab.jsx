@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Badge, Button, Container} from "react-bootstrap";
+import {Card, Row, Col, Container} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";

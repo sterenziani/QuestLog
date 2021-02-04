@@ -51,8 +51,9 @@ class GameProfile extends Component {
     };
 
     updateGameBacklogStatus = status => {
-        this.state.game.in_backlog = status;
-        this.setState({game: this.state.game});
+        let gameCopy = Object.assign({}, this.state.game);
+        gameCopy.in_backlog = status;
+        this.setState({game: gameCopy});
     };
 
     render() {

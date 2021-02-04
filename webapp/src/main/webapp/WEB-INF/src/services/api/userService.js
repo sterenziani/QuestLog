@@ -1,6 +1,6 @@
 import api from './api';
 import AuthService from "./authService";
-import { CONFLICT, TIMEOUT, CREATED, OK } from './apiConstants';
+import { CONFLICT, TIMEOUT } from './apiConstants';
 import PaginationService from './paginationService';
 
 const endpoint    = '/users'

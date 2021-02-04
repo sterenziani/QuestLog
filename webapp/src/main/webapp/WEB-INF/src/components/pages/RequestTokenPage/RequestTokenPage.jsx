@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {Form, Button, Container} from 'react-bootstrap';
 import {Translation} from 'react-i18next';
-import AuthForm from '../../common/Forms/AuthForm';
-import AnyButton from '../../common/AnyButton/AnyButton';
-import AuthService from '../../../services/api/authService';
 import UserService from '../../../services/api/userService';
-import { OK, UNAUTHORIZED, CREATED, NOT_FOUND } from '../../../services/api/apiConstants';
+import { CREATED, NOT_FOUND } from '../../../services/api/apiConstants';
 import withRedirect from '../../hoc/withRedirect';
 import withUser from '../../hoc/withUser';
 import { withTranslation } from 'react-i18next';
@@ -28,13 +25,13 @@ class RequestTokenPage extends Component {
     }
 
     submitHandler = (e) => {
-        const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const res = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if(!res.test(String(this.state.email).toLowerCase())) {
             this.setState({correct: false});
             return;
         }
         this.setState({correct: true, submitting: true, email_not_found: false, bad_connection : false});
-        const resp = UserService.requestPasswordChangeToken(this.state.email).then((data) => {
+        UserService.requestPasswordChangeToken(this.state.email).then((data) => {
             if(data && data.status == CREATED){
                 this.setState({correct: true, submitting: true, email_not_found: false, bad_connection : false, finished: true});
             }

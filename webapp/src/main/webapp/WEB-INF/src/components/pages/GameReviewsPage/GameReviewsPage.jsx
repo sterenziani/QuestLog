@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Spinner from 'react-bootstrap/Spinner';
-import UserService from "../../../services/api/userService";
 import withUser from '../../hoc/withUser';
 import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';

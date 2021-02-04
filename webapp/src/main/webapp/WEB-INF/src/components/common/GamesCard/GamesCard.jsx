@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GameListItem from "../ListItem/GameListItem";
-import {Card, Row, Button} from "react-bootstrap";
+import {Card, Row} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import AnyButton from "../AnyButton/AnyButton";

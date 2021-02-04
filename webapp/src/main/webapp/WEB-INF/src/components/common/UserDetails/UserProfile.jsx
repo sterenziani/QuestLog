@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Row, Col, Tabs, Tab, Button} from "react-bootstrap";
+import {Card, Row, Col, Tabs, Tab} from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
@@ -87,7 +87,7 @@ class UserProfile extends Component {
                             <div class="mb-0 m-3 bg-dark border-bottom border-primary rounded-lg text-white flex-grow-1 d-flex justify-content-center align-items-center py-3 px-5 ">
                                 <h5 class="pr-3"><Translation>{t => t("users.favoriteGame", {value: this.state.visitedUser.favorite_game})}</Translation></h5>
                                 <LinkContainer to={`/games/` +this.state.visitedUser.favorite_game.id}>
-                                    <a class="text-white">
+                                    <a href={() => false} class="text-white">
                                         <div class="bg-primary d-flex flex-row align-items-center">
                                             <GameCover mini='true' cover={this.state.visitedUser.favorite_game.cover}/>
                                         </div>

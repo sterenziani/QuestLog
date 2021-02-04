@@ -33,6 +33,8 @@ class SearchGameResults extends Component {
     }
 
     setPage(props) {
+        if(!props)
+            props = this.props;
         let page = props.query.get("page");
         let searchParams = {hoursLeft: props.query.get("hoursLeft"), minsLeft: props.query.get("minsLeft"), secsLeft: props.query.get("secsLeft"),
                             hoursRight: props.query.get("hoursRight"), minsRight: props.query.get("minsRight"), secsRight: props.query.get("secsRight"),
@@ -85,7 +87,6 @@ class SearchGameResults extends Component {
         if(this.state.error) {
             return <ErrorContent status={this.state.status}/>
         }
-        let params = GameService.buildQueryParams(this.state.searchParams).replace(0,"?");
         return (
             <React.Fragment>
                 <HelmetProvider>
