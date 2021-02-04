@@ -34,13 +34,12 @@ class GameReviewsPage extends Component {
         if(!page) {
             page = 1;
         }
-        console.log(page)
         const fetchReviews = ReviewService.getGameReviewsPage(this.props.match.params.id, page,10);
         const fetchGame = GameService.getGameById(this.props.match.params.id);
         Promise.all([ fetchReviews, fetchGame ]).then((responses) => {
             let findError = null;
             for(let i = 0; i < responses.length; i++) {
-                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                if (responses[i].status && responses[i].status !== OK && responses[i].status !== CREATED) {
                     findError = responses[i].status;
                 }
             }

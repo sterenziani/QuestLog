@@ -8,7 +8,7 @@ import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';
 import GamesCard from "../../common/GamesCard/GamesCard";
 import Pagination from "../../common/Pagination/Pagination";
-import {CREATED, OK} from "../../../services/api/apiConstants";
+import {CREATED, OK, NOT_FOUND} from "../../../services/api/apiConstants";
 import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
@@ -41,7 +41,7 @@ class UserBacklogPage extends Component {
         {
             // Visiting specified user
             UserService.getUserById(this.props.match.params.id).then((response) => {
-                if (response.status && response.status != OK && response.status != CREATED) {
+                if (response.status && response.status !== OK && response.status !== CREATED) {
                     findError = response.status;
                 }
                 if(findError) {
@@ -59,7 +59,7 @@ class UserBacklogPage extends Component {
                 }
             });
             BacklogService.getUserBacklogPage(this.props.match.params.id, page, 15).then((response) => {
-                if (response.status && response.status != OK && response.status != CREATED) {
+                if (response.status && response.status !== OK && response.status !== CREATED) {
                     findError = response.status;
                 }
                 if(findError) {
@@ -85,11 +85,11 @@ class UserBacklogPage extends Component {
         {
             // Own backlog
             BacklogService.getCurrentUserBacklogPage(page).then((response) => {
-                if (response.status && response.status != OK && response.status != CREATED) {
+                if (response.status && response.status !== OK && response.status !== CREATED) {
                     findError = response.status;
                 }
                 if(findError) {
-                    if(findError == 404)
+                    if(findError === NOT_FOUND)
                         findError = "whoops";
                     this.setState({
                         loading: false,

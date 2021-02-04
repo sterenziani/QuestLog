@@ -56,19 +56,19 @@ class ChangePasswordPage extends Component {
             this.setState({correct: false});
             return;
         }
-        if(this.state.pass1 != this.state.pass2) {
+        if(this.state.pass1 !== this.state.pass2) {
             this.setState({match: false});
             return;
         }
         this.setState({submitting: true});
         UserService.changePassword(this.state.token.user.id, this.state.token.token, this.state.pass1).then((data) => {
-            if(data && data.status == OK){
+            if(data && data.status === OK){
                 this.authenticate();
             }
-            else if(data && data.status == NOT_FOUND){
+            else if(data && data.status === NOT_FOUND){
                 this.setState({correct: true, submitting: false, invalid_token: true, bad_connection : false});
             }
-            else if(data && data.status == FORBIDDEN){
+            else if(data && data.status === FORBIDDEN){
                 this.setState({correct: true, submitting: false, invalid_token: true, bad_connection : false});
             }
             else{
@@ -78,7 +78,7 @@ class ChangePasswordPage extends Component {
     }
 
     handleChange = (e, field) => {
-        if(field == 1)
+        if(field === 1)
             this.setState({pass1: e.target.value});
         else
             this.setState({pass2: e.target.value});
@@ -91,7 +91,7 @@ class ChangePasswordPage extends Component {
             return;
         }
         UserService.getToken(token).then((resp) => {
-            if(resp.status != OK){
+            if(resp.status !== OK){
                 this.setState({token: resp.data, invalid_token: true});
             }
             else{

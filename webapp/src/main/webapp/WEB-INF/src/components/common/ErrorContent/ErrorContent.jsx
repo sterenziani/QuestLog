@@ -12,7 +12,7 @@ class ErrorContent extends Component {
     };
 
     render() {
-        if(this.props.lastLocation && (this.props.lastLocation.pathname == "/login" || this.props.lastLocation.pathname == "/signup"))
+        if(this.props.lastLocation && (this.props.lastLocation.pathname === "/login" || this.props.lastLocation.pathname === "/signup"))
             return <Redirect to="/"/>
         const body = "error." + this.state.status;
         return (

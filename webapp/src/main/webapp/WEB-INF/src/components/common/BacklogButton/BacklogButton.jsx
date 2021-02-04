@@ -27,7 +27,6 @@ class BacklogButton extends Component {
     }
 
     editHandler = () => {
-        //console.log("Implementame");
         this.props.addRedirection("game", `/admin/game/${this.props.game.id}/edit`)
         this.props.activateRedirect("game");
     }

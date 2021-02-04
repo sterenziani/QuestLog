@@ -18,7 +18,7 @@ class GameDetailsPage extends Component {
         GameService.getGameById(this.props.match.params.id)
             .then((data) => {
                 let findError = null;
-                if (data.status && data.status != OK && data.status != CREATED) {
+                if (data.status && data.status !== OK && data.status !== CREATED) {
                         findError = data.status;
                 }
                 if(findError) {

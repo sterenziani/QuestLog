@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Button, Card, Form, Row, Col, Container, Modal} from "react-bootstrap";
+import { CREATED } from '../../../services/api/apiConstants';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import withQuery from "../../hoc/withQuery";
@@ -102,7 +103,7 @@ class ReviewCard extends Component {
         this.setState({published:true});
         ReviewService.addReview(this.state.game.id, this.state.params.score, this.state.params.platform, this.state.params.body)
         .then(data => {
-            if(data.status == '201'){
+            if(data.status === CREATED){
                 this.props.activateRedirect("gameProfile");
             }
             else{

@@ -6,7 +6,7 @@ import PaginationService from "../../../services/api/paginationService";
 import Pagination from "../../common/Pagination/Pagination";
 import withQuery from '../../hoc/withQuery';
 import { withTranslation } from 'react-i18next';
-import {CREATED, OK} from "../../../services/api/apiConstants";
+import {CREATED, OK, NOT_FOUND} from "../../../services/api/apiConstants";
 import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 
@@ -33,11 +33,11 @@ class SeeAllPage extends Component {
         PaginationService.getGenericContentPage(this.state.path, page)
             .then((data) => {
                 let findError = null;
-                if (data.status && data.status != OK && data.status != CREATED) {
+                if (data.status && data.status !== OK && data.status !== CREATED) {
                     findError = data.status;
                 }
                 if(findError) {
-                    if(findError == 404)
+                    if(findError === NOT_FOUND)
                         findError = "whoops";
                     this.setState({
                         loading: false,

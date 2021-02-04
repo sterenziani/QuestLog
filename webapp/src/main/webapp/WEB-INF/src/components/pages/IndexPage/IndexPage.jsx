@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {CREATED, OK} from '../../../services/api/apiConstants';
+import {CREATED, OK, NOT_FOUND} from '../../../services/api/apiConstants';
 import { Container, Button } from 'react-bootstrap';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import GameService from "../../../services/api/gameService";
@@ -30,7 +30,7 @@ class IndexPage extends Component {
     importHandler = async () => {
         this.setState({ importing: true });
         let resp = await BacklogService.transferBacklog();
-        if(resp.status == OK){
+        if(resp.status === OK){
             this.setState({ backlogGames: [], anonBacklogEmpty: true });
             BacklogService.getCurrentUserBacklogPreview(10).then((data) => {
                 this.setState({backlogGames: data.content, backlogPagination: data.pagination});
@@ -49,12 +49,12 @@ class IndexPage extends Component {
         Promise.all([ fetchBacklog, fetchPop, fetchUp ]).then((responses) => {
             let findError = null;
             for(let i = 0; i < responses.length; i++) {
-                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                if (responses[i].status && responses[i].status !== OK && responses[i].status !== CREATED) {
                     findError = responses[i].status;
                 }
             }
             if(findError) {
-                if(findError == 404)
+                if(findError === NOT_FOUND)
                     findError = "whoops";
                 this.setState({
                     loading: false,

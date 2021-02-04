@@ -38,10 +38,10 @@ class UserReviewsPage extends Component {
 
         let findError = null;
 
-        if(this.props.match.params.id != this.state.userId)
+        if(this.props.match.params.id !== this.state.userId)
         {
             UserService.getUserById(this.props.match.params.id).then((response) => {
-                if (response.status && response.status != OK && response.status != CREATED) {
+                if (response.status && response.status !== OK && response.status !== CREATED) {
                     findError = response.status;
                 }
                 if(findError) {
@@ -60,7 +60,7 @@ class UserReviewsPage extends Component {
             });
         }
         ReviewService.getUserReviewsPage(this.props.match.params.id, page, 10).then((response) => {
-            if (response.status && response.status != OK && response.status != CREATED) {
+            if (response.status && response.status !== OK && response.status !== CREATED) {
                 findError = response.status;
             }
             if(findError) {
