@@ -170,11 +170,13 @@ class NewGamePage extends Component {
 
         response = new Parallel(response);
 
-        const regions = response.map(r => ({ 'id' : r.id, 'region' : r.shortName }))
-        this.setState({
-            releases : regions.data,
-            loading_releases : false
-        })
+        response.map(r => ({ 'id' : r.id, 'region' : r.shortName })).then(
+            regions => this.setState({
+                releases : regions,
+                loading_releases : false
+            })
+        );
+        
     } 
 
     loadPlatforms   = async () => {
@@ -192,11 +194,13 @@ class NewGamePage extends Component {
 
         response = new Parallel(response);
 
-        const platforms = response.map(p => ({ 'label' : p.name, 'value' : p.id }))
-        this.setState({
-            platforms : platforms.data,
-            loading_platforms : false
-        })
+        response.map(p => ({ 'label' : p.name, 'value' : p.id })).then(
+            platforms => this.setState({
+                platforms : platforms,
+                loading_platforms : false
+            })
+        );
+        
     }
 
     loadDevelopers  = async () => {
@@ -214,11 +218,12 @@ class NewGamePage extends Component {
 
         response = new Parallel(response);
 
-        const developers = response.map(d => ({ 'label' : d.name, 'value' : d.id }))
-        this.setState({
-            developers : developers.data,
-            loading_developers : false
-        })
+        response.map(d => ({ 'label' : d.name, 'value' : d.id })).then(
+            developers => this.setState({
+                developers : developers,
+                loading_developers : false
+            })
+        );
     }
 
     loadPublishers  = async () => {
@@ -236,11 +241,12 @@ class NewGamePage extends Component {
 
         response = new Parallel(response);
 
-        const publishers = response.map(p => ({ 'label' : p.name, 'value' : p.id }))
-        this.setState({
-            publishers : publishers.data,
-            loading_publishers : false
-        })
+        response.map(p => ({ 'label' : p.name, 'value' : p.id })).then(
+            publishers => this.setState({
+                publishers : publishers,
+                loading_publishers : false
+            })
+        );
     }
 
     loadGenres      = async () => {
@@ -264,11 +270,12 @@ class NewGamePage extends Component {
 
         response = new Parallel(response);
 
-        const genres = response.map(g => ({ 'label' : g.name, 'value' : g.id }))
-        this.setState({
-            genres : genres.data,
-            loading_genres : false
-        })
+        response.map(g => ({ 'label' : g.name, 'value' : g.id })).then(
+            genres => this.setState({
+                genres : genres,
+                loading_genres : false
+            })
+        );
     }
 
     impactAPI = async (values, setFieldError) => {
