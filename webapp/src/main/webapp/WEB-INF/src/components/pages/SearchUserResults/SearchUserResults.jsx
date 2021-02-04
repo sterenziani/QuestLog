@@ -43,7 +43,7 @@ class SearchUserResults extends Component {
         }
         UserService.searchUsersPage(term, page).then((response) => {
             let findError = null;
-            if (response.status && response.status != OK && response.status != CREATED) {
+            if (response.status && response.status !== OK && response.status !== CREATED) {
                 findError = response.status;
             }
             if(findError) {
@@ -114,7 +114,7 @@ class SearchUserResults extends Component {
                          			</Col>
                                     {
                                         (this.props.userIsAdmin)?
-                                            u.id != this.props.user.id? [
+                                            u.id !== this.props.user.id? [
                                             <Col style={{verticalAlign: "middle", padding:"10px"}}>
                                                 {
                                                     u.admin? [

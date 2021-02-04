@@ -7,7 +7,7 @@ import PlatformService from "../../../services/api/platformService";
 import PublisherService from "../../../services/api/publisherService";
 import ContainerCard from "../../common/GamesCard/ContainerCard";
 import { withTranslation } from 'react-i18next';
-import {CREATED, OK} from "../../../services/api/apiConstants";
+import {CREATED, OK, NOT_FOUND} from "../../../services/api/apiConstants";
 import ErrorContent from "../../common/ErrorContent/ErrorContent";
 
 class ExplorePage extends Component {
@@ -30,12 +30,12 @@ class ExplorePage extends Component {
         Promise.all([ fetchDev, fetchGen, fetchPlat, fetchPub ]).then((responses) => {
             let findError = null;
             for(let i = 0; i < responses.length; i++) {
-                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                if (responses[i].status && responses[i].status !== OK && responses[i].status !== CREATED) {
                     findError = responses[i].status;
                 }
             }
             if(findError) {
-                if(findError == 404)
+                if(findError === NOT_FOUND)
                     findError = "whoops";
                 this.setState({
                     loading: false,

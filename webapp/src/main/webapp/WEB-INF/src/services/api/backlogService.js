@@ -116,7 +116,7 @@ const transferBacklog = async () => {
     const currentBacklog = cookies.get('backlog')? cookies.get('backlog') : '';
     const endpoint = `backlog?backlog=${currentBacklog}`;
     const response = await api.put(endpoint, {}, { headers: { 'Content-Type': 'application/json' , authorization: AuthService.getToken()}});
-    if(response.status == OK)
+    if(response.status === OK)
         cookies.set('backlog', '', {path: '/'});
     return response;
 }

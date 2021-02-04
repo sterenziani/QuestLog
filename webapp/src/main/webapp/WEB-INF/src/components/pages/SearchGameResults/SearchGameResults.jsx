@@ -48,7 +48,7 @@ class SearchGameResults extends Component {
         }
         GameService.searchGamesPage(searchParams, page).then((response) => {
             let findError = null;
-            if (response.status && response.status != OK && response.status != CREATED) {
+            if (response.status && response.status !== OK && response.status !== CREATED) {
                 findError = response.status;
             }
             if(findError) {

@@ -32,10 +32,10 @@ class RequestTokenPage extends Component {
         }
         this.setState({correct: true, submitting: true, email_not_found: false, bad_connection : false});
         UserService.requestPasswordChangeToken(this.state.email).then((data) => {
-            if(data && data.status == CREATED){
+            if(data && data.status === CREATED){
                 this.setState({correct: true, submitting: true, email_not_found: false, bad_connection : false, finished: true});
             }
-            else if(data && data.status == NOT_FOUND){
+            else if(data && data.status === NOT_FOUND){
                 this.setState({correct: true, submitting: false, email_not_found: true, bad_connection : false});
             }
             else{

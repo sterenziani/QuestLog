@@ -29,7 +29,7 @@ class AddRunPage extends Component {
         Promise.all([ fetchGame, fetchPlat, fetchPlay ]).then((responses) => {
             let findError = null;
             for(let i = 0; i < responses.length; i++) {
-                if (responses[i].status && responses[i].status != OK && responses[i].status != CREATED) {
+                if (responses[i].status && responses[i].status !== OK && responses[i].status !== CREATED) {
                     findError = responses[i].status;
                 }
             }

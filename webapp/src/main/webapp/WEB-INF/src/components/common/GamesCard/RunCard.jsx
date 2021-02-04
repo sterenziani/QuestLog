@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Button, Card, Form, Row, Modal} from "react-bootstrap";
+import { CREATED } from '../../../services/api/apiConstants';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import GameCover from "../GameCover/GameCover";
@@ -114,7 +115,7 @@ class RunCard extends Component {
         this.setState({published:true});
         RunService.addRun(this.state.game.id, this.state.params.hours, this.state.params.mins, this.state.params.secs, this.state.params.playstyle, this.state.params.platform)
         .then(data => {
-            if(data.status == '201'){
+            if(data.status === CREATED){
                 this.props.activateRedirect("gameProfile");
             }
             else{

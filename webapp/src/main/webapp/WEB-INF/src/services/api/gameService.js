@@ -29,9 +29,9 @@ const register        = async (title, description, image, trailer, platforms, de
         return { status : response.status, data : response.data }
     } catch(err){
         if(err.response){
-            if(err.response.status == BAD_REQUEST){
+            if(err.response.status === BAD_REQUEST){
                 return { status : err.response.status, errors : err.response.data.errors.map(e => e.split(" : ")[0]) }
-            } else if (err.response.status == CONFLICT){
+            } else if (err.response.status === CONFLICT){
                 return { status : err.response.status, errors : [err.response.data.field] }
             }
             return { status : err.response.status }
@@ -64,9 +64,9 @@ const editGame        = async (id, title, description, image, trailer, platforms
         return { status : response.status, data : response.data }
     } catch(err){
         if(err.response){
-            if(err.response.status == BAD_REQUEST){
+            if(err.response.status === BAD_REQUEST){
                 return { status : err.response.status, errors : err.response.data.errors.map(e => e.split(" : ")[0]) }
-            } else if (err.response.status == CONFLICT){
+            } else if (err.response.status === CONFLICT){
                 return { status : err.response.status, errors : [err.response.data.field] }
             }
             return { status : err.response.status }
@@ -101,7 +101,7 @@ const buildQueryParams = (searchParams) => {
     // Parse searchParams
     if(searchParams){
         for (var key of Object.keys(searchParams)) {
-            if((key == "platforms" || key == "genres") && searchParams[key]){
+            if((key === "platforms" || key === "genres") && searchParams[key]){
                 for(var item of searchParams[key]){
                     params += "&"+key+"="+item;
                 }

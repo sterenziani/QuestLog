@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
-import { 
-    withTranslation 
-} from 'react-i18next';
-import { 
-    Formik 
-} from 'formik';
+import { withTranslation } from 'react-i18next';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {
-    Form,
-    Spinner
-} from 'react-bootstrap';
-import { 
-    Helmet, 
-    HelmetProvider 
-} from "react-helmet-async";
+import { Form, Spinner } from 'react-bootstrap';
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import * as Parallel from 'paralleljs';
 
 import AnyButton            from '../../common/AnyButton/AnyButton';
@@ -175,7 +165,7 @@ class NewGamePage extends Component {
             releases : regions.data,
             loading_releases : false
         })
-    } 
+    }
 
     loadPlatforms   = async () => {
         let gotResponse = true;
@@ -274,7 +264,7 @@ class NewGamePage extends Component {
     impactAPI = async (values, setFieldError) => {
         let releases = [];
         this.state.releases.forEach(r => {
-            const releaseDate = values.region[r.id] == "" ? null : values.region[r.id]
+            const releaseDate = values.region[r.id] === "" ? null : values.region[r.id]
             releases.push({'locale': r.id, 'date': releaseDate})
         });
 
@@ -297,7 +287,7 @@ class NewGamePage extends Component {
         } else {
             response = await GameService.editGame(this.props.match.params.id, values.title, values.description, cover, values.trailer, platforms, developers, publishers, genres, releases);
         }
-        if(response.status != CREATED && response.status != OK){
+        if(response.status !== CREATED && response.status !== OK){
             if(response.errors.includes('cover')){
                 this.setState({
                     cover_not_image : true
@@ -397,24 +387,24 @@ class NewGamePage extends Component {
                     setFieldValue,
                     setFieldTouched
                 }) => (
-                    
+
                     <CardForm
                         titleKey={this.props.editingMode ? "createGame.edit" : "createGame.title"}
                         onSubmit={ handleSubmit }
                     >
                         <Form.Group controlId="formGameTitle">
                             <Form.Label><strong>{t('createGame.fields.title.label')}</strong></Form.Label>
-                            <Form.Control 
-                                type="text" 
+                            <Form.Control
+                                type="text"
                                 placeholder={t('createGame.fields.title.placeholder')}
                                 name="title"
                                 value={ values.title }
                                 error={ errors.title }
                                 touched={ touched.title }
                                 onChange={ handleChange }
-                                onBlur={ handleBlur } 
+                                onBlur={ handleBlur }
                             />
-                            { 
+                            {
                                 <p className="form-error">
                                 { errors.title && touched.title && errors.title && (
                                     t(errors.title)
@@ -424,18 +414,18 @@ class NewGamePage extends Component {
                         </Form.Group>
                         <Form.Group controlId="formGameDescription">
                             <Form.Label><strong>{t('createGame.fields.description.label')}</strong></Form.Label>
-                            <Form.Control 
-                                as="textarea" 
-                                rows={8} 
+                            <Form.Control
+                                as="textarea"
+                                rows={8}
                                 placeholder={t('createGame.fields.description.placeholder')}
                                 name="description"
                                 value={ values.description }
                                 error={ errors.description }
                                 touched={ touched.description }
                                 onChange={ handleChange }
-                                onBlur={ handleBlur } 
+                                onBlur={ handleBlur }
                             />
-                            { 
+                            {
                                 <p className="form-error">
                                 { errors.description && touched.description && errors.description && (
                                     t(errors.description)
@@ -445,24 +435,24 @@ class NewGamePage extends Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label><strong>{t('createGame.fields.cover.label')}</strong></Form.Label>
-                            <Form.File 
+                            <Form.File
                                 id="cover"
                                 name="cover"
                                 label={ this.state.cover ? this.state.cover : t('createGame.fields.cover.placeholder') }
                                 data-browse={t('createGame.fields.cover.browse')}
                                 accept="image/*"
                                 onChange={ e => this.onFileChanged(e, setFieldValue) }
-                                onBlur={ handleBlur } 
+                                onBlur={ handleBlur }
                                 custom
                             />
-                            { 
+                            {
                                 <p className="form-error">
                                 { this.state.cover_too_big && (
                                     t('createGame.fields.cover.errors.too_big')
                                 )}
                                 </p>
                             }
-                            { 
+                            {
                                 <p className="form-error">
                                 { this.state.cover_not_image && (
                                     t('createGame.fields.cover.errors.not_image')
@@ -472,29 +462,29 @@ class NewGamePage extends Component {
                         </Form.Group>
                         <Form.Group controlId="formGameTrailer">
                             <Form.Label><strong>{t('createGame.fields.trailer.label')}</strong></Form.Label>
-                            <Form.Control 
-                                type="text" 
+                            <Form.Control
+                                type="text"
                                 placeholder={t('createGame.fields.trailer.placeholder')}
                                 name="trailer"
                                 value={ values.trailer }
                                 error={ errors.trailer }
                                 touched={ touched.trailer }
                                 onChange={ handleChange }
-                                onBlur={ handleBlur } 
+                                onBlur={ handleBlur }
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label><strong>{t('createGame.fields.preview.label')}</strong></Form.Label>
                             <div>
-                                <iframe 
-                                    id="preview" 
-                                    width="286" 
-                                    height="161" 
+                                <iframe
+                                    id="preview"
+                                    width="286"
+                                    height="161"
                                     title={`${t('createGame.fields.preview.label')}`}
-                                    src={`https://www.youtube.com/embed/${values.trailer}`} 
-                                    frameBorder="0" 
-                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowFullScreen="">    
+                                    src={`https://www.youtube.com/embed/${values.trailer}`}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen="">
                                 </iframe>
                             </div>
                         </Form.Group>
@@ -588,29 +578,29 @@ class NewGamePage extends Component {
                                                 autocomplete="off"
                                             />
                                         </div>
-                                        
+
                                     </Form.Group>
                                 ))
                             }
                             </div>
                         </Form.Group>
                         <Form.Group>
-                            <AnyButton 
+                            <AnyButton
                                 variant="primary"
                                 type="submit"
                                 textKey={this.props.editingMode ? "createGame.saveChanges" : "createGame.add"}
-                                disabled={ isSubmitting || this.state.loading_releases 
+                                disabled={ isSubmitting || this.state.loading_releases
                                     || this.state.loading_platforms || this.state.loading_developers
                                     || this.state.loading_publishers || this.state.loading_genres }
                                 block={true}
                             />
                         </Form.Group>
                     </CardForm>
-                )} 
+                )}
                 </Formik>
             </React.Fragment>
         );
     }
 }
- 
+
 export default withTranslation() (withUser(NewGamePage));

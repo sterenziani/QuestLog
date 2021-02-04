@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
+import { CREATED } from '../../../services/api/apiConstants';
 import {Row, Col, Badge, Button, Container, Modal} from "react-bootstrap";
 import {Slider} from '@material-ui/core';
 import {Translation} from "react-i18next";
@@ -42,6 +43,7 @@ class ScoreSlider extends Component {
                 this.publishScore();
         }
         else{
+            this.props.history.push('/games/'+this.props.game.id)
             this.props.activateRedirect("login")
         }
     }
@@ -63,7 +65,7 @@ class ScoreSlider extends Component {
     publishScore = () => {
         ScoreService.rateGame(this.props.game.id, this.state.userScore)
         .then(data => {
-            if(data.status == '201'){
+            if(data.status === CREATED){
                 this.setState({published:true});
             }
             else{
@@ -74,7 +76,7 @@ class ScoreSlider extends Component {
     }
 
     getUserScore() {
-        if(this.state.userScore || this.state.userScore == 0) {
+        if(this.state.userScore || parseInt(this.state.userScore) === 0) {
             return parseInt(this.state.userScore);
         }
         else {
@@ -83,7 +85,7 @@ class ScoreSlider extends Component {
     }
 
     getUserScoreNumerical() {
-        if(this.state.userScore || this.state.userScore == 0) {
+        if(this.state.userScore || parseInt(this.state.userScore) === 0) {
             return parseInt(this.state.userScore);
         }
         else {
