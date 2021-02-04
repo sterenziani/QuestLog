@@ -27,7 +27,8 @@ class BacklogButton extends Component {
     }
 
     editHandler = () => {
-        this.props.addRedirection("game", `/admin/game/${this.props.game.id}/edit`)
+        this.props.addCurrentLocationToHistory();
+        this.props.addRedirection("game", `/admin/game/${this.props.game.id}/edit`);
         this.props.activateRedirect("game");
     }
 
