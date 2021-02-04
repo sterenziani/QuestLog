@@ -53,34 +53,31 @@ class Pagination extends Component {
             <div className="col mb-5">
                  <div className="row text-center">
                      <Col>
-                        <AnyButton className={prev <= 0? 'disabled' : ''} key={'prev'} href={`/` + this.state.url + `?page=` + prev +params} onClick={this.props.setPage} textKey="navigation.pagination.prev"/>
+                        <AnyButton variant={prev <= 0? 'light' : 'dark'} className={prev <= 0? 'disabled' : ''} key={'prev'} href={`/` + this.state.url + `?page=` + prev +params} onClick={this.props.setPage} textKey="navigation.pagination.prev"/>
                      </Col>
-                     <Col>
-                         <Row>
+                     <Col className="row">
                          {
                              this.state.pages.map(index => (
-                                 <div key={"div"+index} className="col mx-auto">
-                                    <AnyButton key={index}  className={this.isActive(index)} text={index} onClick={this.props.setPage} disabled={index === parseInt(this.state.currentPage)}
+                                 <div key={"div"+index} className="col-xs mx-auto">
+                                    <AnyButton key={index} variant={this.getButtonVariant(index)} text={index} onClick={this.props.setPage} disabled={index === parseInt(this.state.currentPage)}
                                                     href={`/` + this.state.url + `?page=` + index +params} />
                                  </div>
                             ))
                         }
-                        </Row>
                     </Col>
                     <Col>
-                        <AnyButton className={next <= parseInt(this.state.totalPages)? '':'disabled'} key={'prev'}  href={`/` + this.state.url + `?page=` + next +params} onClick={this.props.setPage} textKey="navigation.pagination.next"/>
+                        <AnyButton variant={next <= parseInt(this.state.totalPages)? 'dark':'light'} className={next <= parseInt(this.state.totalPages)? '':'disabled'} key={'prev'}  href={`/` + this.state.url + `?page=` + next +params} onClick={this.props.setPage} textKey="navigation.pagination.next"/>
                     </Col>
                 </div>
             </div>
         );
     }
 
-
-    isActive(index) {
+    getButtonVariant(index) {
         if(index === this.state.currentPage) {
-            return "page-item active bg-primary"
+            return "light"
         }
-        return "page-item bg-primary"
+        return "dark"
     }
 
 }

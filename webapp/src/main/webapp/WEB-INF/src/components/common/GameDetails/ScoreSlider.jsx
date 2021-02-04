@@ -68,10 +68,6 @@ class ScoreSlider extends Component {
             if(data.status === CREATED){
                 this.setState({published:true});
             }
-            else{
-                // TODO: Force login or try again
-                console.log("Try again!");
-            }
         });
     }
 

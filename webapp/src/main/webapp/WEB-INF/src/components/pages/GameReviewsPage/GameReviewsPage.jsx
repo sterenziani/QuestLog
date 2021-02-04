@@ -34,7 +34,6 @@ class GameReviewsPage extends Component {
         if(!page) {
             page = 1;
         }
-        console.log(page)
         const fetchReviews = ReviewService.getGameReviewsPage(this.props.match.params.id, page,10);
         const fetchGame = GameService.getGameById(this.props.match.params.id);
         Promise.all([ fetchReviews, fetchGame ]).then((responses) => {
