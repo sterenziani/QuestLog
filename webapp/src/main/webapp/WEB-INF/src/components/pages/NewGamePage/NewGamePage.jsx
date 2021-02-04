@@ -271,9 +271,7 @@ class NewGamePage extends Component {
     impactAPI = async (values, setFieldError) => {
         let releases = [];
         this.state.releases.forEach(r => {
-            console.log(r)
             const releaseDate = !values.region[r.id] ? null : values.region[r.id]
-            console.log(releaseDate)
             releases.push({'locale': r.id, 'date': releaseDate})
         });
 

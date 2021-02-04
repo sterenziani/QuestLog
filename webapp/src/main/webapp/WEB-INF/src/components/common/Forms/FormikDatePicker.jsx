@@ -11,8 +11,13 @@ const FormikDatePicker = ({ name, value, onChange, dateFormat, ...other }) => {
             className="form-control"
             placeholderText="YYYY-MM-DD"
             onChange={e => {
-                onChange(name, moment(e).format("YYYY-MM-DD"));
-                setStartDate(e);
+                if(e === null){
+                    onChange(name, null);
+                    setStartDate(null);
+                } else {
+                    onChange(name, moment(e).format("YYYY-MM-DD"));
+                    setStartDate(e);
+                }
             }}
             selected={startDate}
             startDate={startDate}
