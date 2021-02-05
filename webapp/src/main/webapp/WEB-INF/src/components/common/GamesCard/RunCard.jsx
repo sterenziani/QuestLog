@@ -11,7 +11,7 @@ import { withTranslation } from 'react-i18next';
 import BacklogService from "../../../services/api/backlogService";
 import RunService from "../../../services/api/runService";
 import Spinner from "react-bootstrap/Spinner";
-const GameCover = lazy(() => import("../GameCover/GameCover"));
+import GameCover from "../GameCover/GameCover";
 
 class RunCard extends Component {
     state = {
@@ -137,13 +137,7 @@ class RunCard extends Component {
                 </Card.Header>
                 <Card.Body className="card-body d-flex flex-wrap justify-content-center align-items-center">
                     <div>
-                        <Suspense fallback={<div style={{
-                            position: 'absolute', left: '50%', top: '50%',
-                            transform: 'translate(-50%, -50%)'}}>
-                            <Spinner animation="border" variant="primary" />
-                        </div>}>
-                            <GameCover cover={this.state.game.cover}/>
-                        </Suspense>
+                        <GameCover cover={this.state.game.cover}/>
                     </div>
                     <div class="p-5">
                         <Form>

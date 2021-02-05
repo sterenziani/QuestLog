@@ -1,23 +1,16 @@
 //Libraries
-import React, {
-    Component
-} from 'react';
-import {
-    Route,
-    Switch
-} from 'react-router-dom';
+import React, { Component, lazy, Suspense } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 //Child components
 import IndexPage from '../../pages/IndexPage/IndexPage';
 import GameDetailsPage from '../../pages/GameDetailsPage/GameDetailsPage';
-import NewGamePage from '../../pages/NewGamePage/NewGamePage';
 import LogInPage from '../../pages/LogInPage/LogInPage';
 import SignUpPage from '../../pages/SignUpPage/SignUpPage';
 import ExplorePage from '../../pages/ExplorePage/ExplorePage';
 import ExploreResultsPage from '../../pages/ExploreResultsPage/ExploreResultsPage';
 import LogOutPage from '../../pages/LogOutPage/LogOutPage';
 import SeeAllPage from "../../pages/SeeAllPage/SeeAllPage";
-import UserProfilePage from '../../pages/UserProfilePage/UserProfilePage';
 import SearchUserResults from '../../pages/SearchUserResults/SearchUserResults';
 import SearchGameResults from '../../pages/SearchGameResults/SearchGameResults';
 import AddRunPage from "../../pages/AddRunPage/AddRunPage";
@@ -30,6 +23,9 @@ import GameReviewsPage from "../../pages/GameReviewsPage/GameReviewsPage";
 import ChangePasswordPage from "../../pages/ChangePasswordPage/ChangePasswordPage";
 import RequestTokenPage from "../../pages/RequestTokenPage/RequestTokenPage";
 import ErrorContent from "../ErrorContent/ErrorContent";
+import Spinner from "react-bootstrap/Spinner";
+const NewGamePage = lazy(() => import("../../pages/NewGamePage/NewGamePage"));
+const UserProfilePage = lazy(() => import("../../pages/UserProfilePage/UserProfilePage"));
 
 
 class ContentSwitch extends Component {
@@ -56,7 +52,11 @@ class ContentSwitch extends Component {
                     />
                     <Route
                         exact path="/admin/game/new"
-                        render={ (props) => <NewGamePage {...props} editingMode={false} key={1}/> }
+                        render={(props) => <Suspense fallback={<div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
+                                                                    <Spinner animation="border" variant="primary" />
+                                                                </div>}>
+                                                                <NewGamePage {...props} editingMode={false} key={1}/>
+                                            </Suspense> }
                     />
                     <Route
                         exact path="/admin/game/:id/edit"
@@ -129,7 +129,11 @@ class ContentSwitch extends Component {
                     />
                     <Route
                         exact path="/users/:id"
-                        component={ UserProfilePage }
+                        render={(props) => <Suspense fallback={<div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
+                                                                    <Spinner animation="border" variant="primary" />
+                                                                </div>}>
+                                                                <UserProfilePage {...props}/>
+                                            </Suspense> }
                     />
                     <Route
                         exact path="/gameSearch"
