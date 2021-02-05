@@ -91,6 +91,12 @@ class SignUpPage extends Component {
         setSubmitting(true);
         this.register(values, setSubmitting, setFieldError);
     }
+
+    componentDidMount() {
+        const { t } = this.props
+        document.title = t(`signup.title`) +" - QuestLog";
+    }
+
     render() {
         const { t } = this.props
         return (
