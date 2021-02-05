@@ -147,7 +147,7 @@ public class GameDetailController {
 		} catch (DateTimeParseException e){
 			return Response.status(Response.Status.BAD_REQUEST).entity(new FormErrorDto("releaseDates", "Invalid date format")).build();
 		}
-		gs.update(gameId, registerGameDto.getTitle(), null, registerGameDto.getDescription(), registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
+		gs.update(gameId, registerGameDto.getTitle(), registerGameDto.getCover(), registerGameDto.getDescription(), registerGameDto.getTrailer(), registerGameDto.getPlatforms(), registerGameDto.getDevelopers(),
 				registerGameDto.getPublishers(), registerGameDto.getGenres(), dates);
 		Optional<Game> updatedGame = gs.findById(gameId);
 		return Response.ok(updatedGame.map(u -> GameDto.fromGame(u, uriInfo)).get()).build();

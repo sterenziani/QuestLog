@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.URLConnection;
+import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.Optional;
 
 @Service
 public class ImageServiceImpl implements ImageService {
+
+    public static final String MD5 = "md5";
 
     @Autowired
     private ImageDao imageDao;
@@ -94,6 +98,32 @@ public class ImageServiceImpl implements ImageService {
         }
         String imageBase64 = parts[1];
         return Base64.getDecoder().decode(imageBase64);
+    }
+
+    @Override
+    public Optional<String> getImageContentHash(String base64image) {
+        Optional<InputStream> imageStream = getBase64ImageAsInputStream(base64image);
+        if(!imageStream.isPresent()){
+            return Optional.empty();
+        }
+        byte[] bytesBuffer = new byte[1024];
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(MD5);
+            int bytesRead = -1;
+            while ((bytesRead = imageStream.get().read(bytesBuffer)) != -1) {
+                messageDigest.update(bytesBuffer, 0, bytesRead);
+            }
+            byte[] digest = messageDigest.digest();
+            String contentHash = getHexaString(digest);
+            return Optional.of(contentHash);
+        } catch (Exception e){
+            return Optional.empty();
+        }
+    }
+
+    private static String getHexaString(byte[] data) {
+        String result = new BigInteger(1, data).toString(16);
+        return result;
     }
 
     private Optional<InputStream> getBase64ImageAsInputStream(String base64image){

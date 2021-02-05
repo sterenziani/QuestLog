@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.entity.Image;
 
+import javax.swing.text.html.Option;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -35,4 +36,6 @@ public interface ImageService {
     Optional<String> getImageExtension(String base64image);
 
     byte[]          getImage(String base64image);
+
+    Optional<String> getImageContentHash(String base64image);
 }

@@ -125,8 +125,13 @@ public class GameServiceImpl implements GameService
 			if(!fileExtension.isPresent() || fileExtension.get().isEmpty()){
 				g.setCover(null);
 			} else {
-				g.setCover(getCoverName(g.getId(), fileExtension.get()));
-				is.uploadImage(g.getCover(), is.getImage(cover));
+				Optional<String> contentHash = is.getImageContentHash(cover);
+				if(!contentHash.isPresent()){
+					g.setCover(null);
+				} else {
+					g.setCover(getCoverName(g.getId(), fileExtension.get(), contentHash.get()));
+					is.uploadImage(g.getCover(), is.getImage(cover));
+				}
 			}
 		} else {
 			g.setCover(null);
@@ -516,22 +521,29 @@ public class GameServiceImpl implements GameService
 			if(!fileExtension.isPresent() || fileExtension.get().isEmpty()){
 				g.setCover(null);
 			} else {
-				String coverName = getCoverName(id, fileExtension.get());
-				is.removeByName(g.getCover());
-				if(is.isImage(cover)){
-					g.setCover(coverName);
-					is.uploadImage(coverName, is.getImage(cover));
-				} else {
+				Optional<String> contentHash = is.getImageContentHash(cover);
+				if(!contentHash.isPresent()){
 					g.setCover(null);
+				} else {
+					String coverName = getCoverName(id, fileExtension.get(), contentHash.get());
+					System.out.println("Funciona?");
+					System.out.println(g.getCover());
+					is.removeByName(g.getCover());
+					if(is.isImage(cover)){
+						g.setCover(coverName);
+						is.uploadImage(coverName, is.getImage(cover));
+					} else {
+						g.setCover(null);
+					}
 				}
 			}
 		}
 		gameDao.update(g);
 	}
 
-	private String getCoverName(long id, String fileExtension){
+	private String getCoverName(long id, String fileExtension, String contentHash){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("games/").append("cover-game-").append(id).append('.').append(fileExtension);
+		stringBuilder.append("games/").append("cover-game-").append(id).append('.').append(contentHash).append('.').append(fileExtension);
 		return stringBuilder.toString();
 	}
 }
