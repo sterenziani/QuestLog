@@ -103,7 +103,7 @@ class LogInPage extends Component {
                     titleKey="login.title"
                     onSubmit={ handleSubmit }
                 >
-                    { 
+                    {
                         !this.state.correct &&
                             <p className="form-error">
                                 <Translation>
@@ -113,7 +113,7 @@ class LogInPage extends Component {
                                 </Translation>
                             </p>
                     }
-                    { 
+                    {
                         this.state.bad_connection &&
                             <p className="form-error">
                                 <Translation>
@@ -123,7 +123,7 @@ class LogInPage extends Component {
                                 </Translation>
                             </p>
                     }
-                    { 
+                    {
                         this.state.failed_external_login &&
                             <p className="form-error">
                                 <Translation>
@@ -133,7 +133,7 @@ class LogInPage extends Component {
                                 </Translation>
                             </p>
                     }
-                    <FormikTextField 
+                    <FormikTextField
                         label="login.username.label"
                         name="username"
                         placeholder="login.username.placeholder"
@@ -141,9 +141,9 @@ class LogInPage extends Component {
                         error={ errors.username }
                         touched={ touched.username }
                         onChange={ handleChange }
-                        onBlur={ handleBlur } 
+                        onBlur={ handleBlur }
                     />
-                    <FormikTextField 
+                    <FormikTextField
                         type="password"
                         label="login.password.label"
                         name="password"
@@ -152,31 +152,26 @@ class LogInPage extends Component {
                         error={ errors.password }
                         touched={ touched.password }
                         onChange={ handleChange }
-                        onBlur={ handleBlur } 
+                        onBlur={ handleBlur }
                     />
-                    <Translation>
-                    {
-                        t => <Form.Check type="checkbox" label={t('login.remember-me')} />
-                    }
-                    </Translation>
-                    <AnyButton 
+                    <AnyButton
                         variant="dark"
                         type="submit"
                         textKey="login.login"
                         disabled={ isSubmitting }
                     />
-                    <AnyButton 
+                    <AnyButton
                         variant="dark"
                         textKey="login.signup"
                         href="/signup"
                     />
-                    <AnyButton 
+                    <AnyButton
                         variant="link"
                         textKey="login.forgot"
                         href="/forgotPassword"
                     />
                 </AuthForm>
-            )} 
+            )}
             </Formik>
             </React.Fragment>
         );

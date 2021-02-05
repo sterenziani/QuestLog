@@ -237,7 +237,7 @@
         "filterResults" : "Filtrar resultados",
         "closeModal" : "Cerrar",
         "search" : "Buscar",
-        "helmet" : "Búsqueda - {{value}}",
+        "helmet" : "Buscando {{value}}",
         "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items.",
         "scoreRange" : "Calificación",
         "hours" : "hs",
@@ -308,7 +308,7 @@
     "whoops" : "¡Chanfle!",
     "error" : {
         "400" : "El servidor no pudo procesar tu pedido.",
-        "401" : "Autorización denegada.",
+        "401" : "Autorización denegada. Puede que no tengas privilegios para acceder a esta página o que tu sesión haya expirado.\nIntenta cerrar sesión e iniciarla de nuevo.",
         "403" : "Acceso denegado.",
         "404" : "La página solicitada no existe.",
         "500" : "Hubo un error de nuestra parte. Por favor intenta más tarde.",

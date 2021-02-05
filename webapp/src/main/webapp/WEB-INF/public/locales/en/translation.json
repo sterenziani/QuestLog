@@ -237,7 +237,7 @@
         "filterResults" : "Filter results",
         "closeModal" : "Close",
         "search" : "Search",
-        "helmet" : "Search - {{value}}",
+        "helmet" : "Searching {{value}}",
         "multipleSelectHint" : "Hold CTRL while clicking to select multiple items.",
         "scoreRange" : "Score",
         "hours" : "hrs",
@@ -308,7 +308,7 @@
     "whoops" : "Whoops!",
     "error" : {
         "400" : "The server could not process your request.",
-        "401" : "Authorization denied.",
+        "401" : "Authorization denied. You may not have privileges to access this page or your session expired.\nTry logging out and logging in again.",
         "403" : "Access denied.",
         "404" :  "The requested page does not exist.",
         "500" : "There has been a problem on our part. Please try again later.",
