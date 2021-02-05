@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AnyButton from "../AnyButton/AnyButton";
-import { Row, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import GameService from "../../../services/api/gameService";
 
 class Pagination extends Component {

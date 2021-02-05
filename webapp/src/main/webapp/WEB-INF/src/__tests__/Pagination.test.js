@@ -16,8 +16,8 @@ test('Pagination Current Page Test', () => {
       const page2 = screen.getByText('2')
       const page3 = screen.getByText('3')
       const page4 = screen.getByText('4')
-      expect(page2.className).toBe('page-item bg-primary btn btn-primary')
-      expect(page3.className).toBe('page-item active bg-primary btn btn-primary disabled')
+      expect(page2.className).toBe('btn btn-dark')
+      expect(page3.className).toBe('btn btn-light disabled')
       expect(page4.className).toEqual(page2.className)
 });
 
@@ -46,8 +46,8 @@ test('Pagination Button Blocking Test', () => {
       const prevPage = screen.getByText('navigation.pagination.prev')
       const page1 = screen.getByText('1')
       const nextPage = screen.getByText('navigation.pagination.next')
-      expect(prevPage.className).toBe('disabled btn btn-primary')
-      expect(page1.className).toBe('page-item active bg-primary btn btn-primary disabled')
+      expect(prevPage.className).toBe('disabled btn btn-light')
+      expect(page1.className).toBe('btn btn-light disabled')
       expect(nextPage.className).toEqual(prevPage.className)
 });
 
@@ -60,7 +60,7 @@ test('Pagination Button Enabling Test', () => {
       const prevPage = screen.getByText('navigation.pagination.prev')
       const page1 = screen.getByText('1')
       const nextPage = screen.getByText('navigation.pagination.next')
-      expect(prevPage.className).toBe('disabled btn btn-primary')
-      expect(page1.className).toBe('page-item active bg-primary btn btn-primary disabled')
-      expect(nextPage.className).toBe('btn btn-primary')
+      expect(prevPage.className).toBe('disabled btn btn-light')
+      expect(page1.className).toBe('btn btn-light disabled')
+      expect(nextPage.className).toBe('btn btn-dark')
 });
