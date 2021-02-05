@@ -24,7 +24,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,6 @@ import ar.edu.itba.paw.webapp.dto.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.RunDto;
 import ar.edu.itba.paw.webapp.dto.ScoreDto;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDto;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Path("games")
 @Component
@@ -173,11 +171,13 @@ public class GameDetailController {
 		Map<Long, LocalDate> map = new HashMap<>();
 		for(RegisterReleaseDto r : dates)
 		{
-			if(r.getDate() == null){
-				return null;
+			if(r.getDate() != null){
+				LocalDate ld = LocalDate.parse(r.getDate());
+				map.put(r.getLocale(), ld);
 			}
-			LocalDate ld = LocalDate.parse(r.getDate());
-			map.put(r.getLocale(), ld);
+			else {
+				map.put(r.getLocale(), null);
+			}
 		}
 		return map;
 	}
