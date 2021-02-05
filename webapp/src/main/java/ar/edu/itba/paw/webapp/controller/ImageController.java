@@ -32,6 +32,6 @@ public class ImageController {
         Optional<Image> maybeImage = is.findByImageName(category + "/" + filename);
         if(!maybeImage.isPresent())
         	return Response.status(Response.Status.NOT_FOUND).entity("").build();
-        return Response.ok(maybeImage.get().getImageData()).build();
+        return Response.ok(maybeImage.get().getImageData()).header("Cache-Control", "max-age=31536000").build();
     }
 }

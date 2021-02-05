@@ -89,6 +89,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter
 		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
 		encodingFilter.setEncoding("UTF-8");
 		encodingFilter.setForceEncoding(true);
+		http.headers().cacheControl().disable();
 		http.addFilterBefore(encodingFilter, CsrfFilter.class);
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().authorizeRequests()

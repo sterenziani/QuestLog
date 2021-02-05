@@ -16,7 +16,7 @@ import io.jsonwebtoken.security.Keys;
 
 public class JWTUtility {
 	
-	private static final int TOKEN_DURATION_MINUTES = 130000; //130k = About 90 days
+	private static final long TOKEN_DURATION_MINUTES = 130000; //130k = About 90 days
 
     private String getJWTKey()
     {

@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.config;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import javax.validation.Validator;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
@@ -113,7 +116,18 @@ public class WebConfig extends WebMvcConfigurerAdapter
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**").addResourceLocations("/");
+		registry.addResourceHandler("/favicon/**")
+				.addResourceLocations("/favicon/")
+				.setCacheControl(CacheControl.maxAge(90, TimeUnit.DAYS));
+		registry.addResourceHandler("/locales/**")
+				.addResourceLocations("/locales/")
+				.setCacheControl(CacheControl.maxAge(90, TimeUnit.DAYS));
+		registry.addResourceHandler("/api/**")
+				.addResourceLocations("/api/")
+				.setCacheControl(CacheControl.maxAge(0, TimeUnit.DAYS).mustRevalidate());
+		registry.addResourceHandler("/**")
+				.addResourceLocations("/")
+				.setCacheControl(CacheControl.maxAge(90, TimeUnit.DAYS));
 	}
 	
 	@Bean
