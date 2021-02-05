@@ -25,7 +25,7 @@ class UserRunsTab extends Component {
         return (
             <Grid>
                 {
-                    <Card className="m-5 bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
+                    <Card className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                         <Card.Header className="bg-very-dark text-white d-flex">
                             <div><h2 className="share-tech-mono"><Translation>{t => t("users.userRuns", {value: this.state.visitedUser.username})}</Translation></h2></div>
                             {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { withTranslation } from 'react-i18next';
 import Spinner from 'react-bootstrap/Spinner';
 import GameService from "../../../services/api/gameService";
 import Pagination from "../../common/Pagination/Pagination";
@@ -77,6 +78,7 @@ class SearchGameResults extends Component {
     }
 
     render() {
+        const { t } = this.props
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -91,7 +93,7 @@ class SearchGameResults extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.searchParams.searchTerm} - QuestLog</title>
+                        <title>{t("search.helmet", {value: this.state.searchParams.searchTerm})} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <SearchModal searchParams={this.state.searchParams} path={this.state.path}/>
@@ -101,4 +103,4 @@ class SearchGameResults extends Component {
         );
     }
 }
-export default withQuery(withRedirect(SearchGameResults));
+export default withTranslation() (withQuery(withRedirect(SearchGameResults)));

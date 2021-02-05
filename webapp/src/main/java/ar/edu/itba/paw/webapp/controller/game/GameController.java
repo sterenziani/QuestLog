@@ -44,7 +44,7 @@ public class GameController {
 
 	@GET
 	@Produces(value = { MediaType.APPLICATION_JSON })
-	public Response listUsers(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page,
+	public Response searchGames(@Context HttpServletRequest request, @QueryParam("page") @DefaultValue("1") int page,
 							@QueryParam("searchTerm") @DefaultValue("") String searchTerm,
 							@QueryParam("hoursRight") @DefaultValue("9999") int hoursRight,
 							@QueryParam("minsRight") @DefaultValue("59") int minsRight, 

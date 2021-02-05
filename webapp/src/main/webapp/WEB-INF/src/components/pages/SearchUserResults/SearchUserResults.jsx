@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { withTranslation } from 'react-i18next';
 import Spinner from 'react-bootstrap/Spinner';
 import {Card, Row, Col, Button} from "react-bootstrap";
 import UserService from "../../../services/api/userService";
@@ -77,6 +78,7 @@ class SearchUserResults extends Component {
     }
 
     render() {
+        const { t } = this.props
         if (this.state.loading === true) {
             return <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -92,7 +94,7 @@ class SearchUserResults extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{this.state.term} - QuestLog</title>
+                        <title>{t("search.helmet", {value: this.state.term})} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
                 <Card className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
@@ -134,4 +136,4 @@ class SearchUserResults extends Component {
     }
 }
 
-export default withUser(withQuery(SearchUserResults));
+export default withTranslation() (withUser(withQuery(SearchUserResults)));

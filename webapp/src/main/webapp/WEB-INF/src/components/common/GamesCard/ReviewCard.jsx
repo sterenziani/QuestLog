@@ -3,14 +3,14 @@ import {Button, Card, Form, Row, Col, Container, Modal} from "react-bootstrap";
 import { CREATED } from '../../../services/api/apiConstants';
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
-import withQuery from "../../hoc/withQuery";
-import ReviewService from "../../../services/api/reviewService";
 import { withTranslation } from 'react-i18next';
-import ScoreService from "../../../services/api/scoreService";
-import withUser from "../../hoc/withUser";
-import BacklogService from "../../../services/api/backlogService";
-import {Slider} from '@material-ui/core';
+import withQuery from "../../hoc/withQuery";
 import withRedirect from '../../hoc/withRedirect';
+import withUser from "../../hoc/withUser";
+import {Slider} from '@material-ui/core';
+import BacklogService from "../../../services/api/backlogService";
+import ReviewService from "../../../services/api/reviewService";
+import ScoreService from "../../../services/api/scoreService";
 
 class ReviewCard extends Component {
     state = {

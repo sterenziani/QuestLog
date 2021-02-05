@@ -237,6 +237,7 @@
         "filterResults" : "Filtrar resultados",
         "closeModal" : "Cerrar",
         "search" : "Buscar",
+        "helmet" : "Búsqueda - {{value}}",
         "multipleSelectHint" : "Mantén presionado CTRL al clickear para seleccionar varios items.",
         "scoreRange" : "Calificación",
         "hours" : "hs",
@@ -301,7 +302,8 @@
             }
         },
         "add"         : "Agregar",
-        "saveChanges" : "Guardar Cambios"
+        "saveChanges" : "Guardar Cambios",
+        "errorNotice" : "Algunos campos no han sido completados correctamente. Revise el formulario antes de enviarlo de nuevo"
     },
     "whoops" : "¡Chanfle!",
     "error" : {

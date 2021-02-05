@@ -60,6 +60,7 @@ class NewGamePage extends Component {
     }
 
     componentDidMount = () => {
+        window.scrollTo(0,0);
         this.load();
     }
 
@@ -591,6 +592,13 @@ class NewGamePage extends Component {
                             }
                             </div>
                         </Form.Group>
+                        {
+                            <p className="text-center form-error">
+                            { (errors.title || errors.description || this.state.cover_too_big || this.state.cover_not_image) && (
+                                t('createGame.errorNotice')
+                            )}
+                            </p>
+                        }
                         <Form.Group>
                             <AnyButton
                                 variant="primary"

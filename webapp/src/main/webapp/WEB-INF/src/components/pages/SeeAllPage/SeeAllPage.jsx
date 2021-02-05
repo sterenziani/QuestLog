@@ -73,7 +73,7 @@ class SeeAllPage extends Component {
             <React.Fragment>
                 <HelmetProvider>
                     <Helmet>
-                        <title>{t(`games.profile.${this.state.path}`)} - Questlog</title>
+                        <title>{t(`navigation.${this.state.path}`)} - Questlog</title>
                     </Helmet>
                 </HelmetProvider>
                 <ContainerCard items={this.state.content} label={label} limit={this.state.content.length}/>

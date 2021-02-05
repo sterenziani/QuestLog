@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { 
-    Form 
-} from 'react-bootstrap'; 
-import { 
-    Translation 
-} from 'react-i18next';
-import { 
-    Formik 
-} from 'formik';
+import {Helmet, HelmetProvider} from "react-helmet-async";
+import { Form } from 'react-bootstrap';
+import { Translation } from 'react-i18next';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import FormikTextField from '../../common/Forms/FormikTextField';
@@ -18,7 +13,7 @@ import { OK, UNAUTHORIZED } from '../../../services/api/apiConstants';
 import withRedirect from '../../hoc/withRedirect';
 import withUser from '../../hoc/withUser';
 import { withTranslation } from 'react-i18next';
-import {Helmet, HelmetProvider} from "react-helmet-async";
+
 
 const LogInSchema = Yup.object().shape({
     username : Yup
@@ -71,6 +66,12 @@ class LogInPage extends Component {
         setSubmitting(true);
         this.authenticate(values, setSubmitting);
     }
+
+    componentDidMount() {
+        const { t } = this.props
+        document.title = t(`login.title`) +" - QuestLog";
+    }
+
     render() {
         const { t } = this.props
         return (

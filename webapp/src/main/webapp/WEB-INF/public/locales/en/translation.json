@@ -237,6 +237,7 @@
         "filterResults" : "Filter results",
         "closeModal" : "Close",
         "search" : "Search",
+        "helmet" : "Search - {{value}}",
         "multipleSelectHint" : "Hold CTRL while clicking to select multiple items.",
         "scoreRange" : "Score",
         "hours" : "hrs",
@@ -301,7 +302,8 @@
             }
         },
         "add"         : "Add",
-        "saveChanges" : "Save Changes"
+        "saveChanges" : "Save Changes",
+        "errorNotice" : "Some fields have not been filled in properly. Please review the form before submitting again"
     },
     "whoops" : "Whoops!",
     "error" : {
