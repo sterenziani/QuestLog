@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import GameListItem from "../ListItem/GameListItem";
+import React, { Component, lazy, Suspense } from 'react';
 import {Card, Row} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import AnyButton from "../AnyButton/AnyButton";
+import Spinner from "react-bootstrap/Spinner";
+const GameListItem = lazy(() => import("../ListItem/GameListItem"));
 
 class GamesCard extends Component {
     state = {
@@ -47,7 +48,13 @@ class GamesCard extends Component {
                     {empty? [<Translation>{t => t("games.lists.emptyList")}</Translation>]
                                 :
                     [<Row className="justify-content-center">{this.state.items.map(g =>
-                        <GameListItem key={g.id} value={g.id} game={g}/>)}</Row>]
+                        <Suspense fallback={<div style={{
+                            position: 'absolute', left: '50%', top: '50%',
+                            transform: 'translate(-50%, -50%)'}}>
+                            <Spinner animation="border" variant="primary" />
+                        </div>}>
+                            <GameListItem key={g.id} value={g.id} game={g}/>
+                        </Suspense>)}</Row>]
                     }
                 </Card.Body>
             </Card>
