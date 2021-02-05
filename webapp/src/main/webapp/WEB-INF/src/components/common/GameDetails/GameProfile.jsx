@@ -65,7 +65,7 @@ class GameProfile extends Component {
             </div>
         }
         return (
-            <Card className="m-5 bg-very-light right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
+            <Card className="m-5 bg-light-grey right-wave left-wave" bordered style={{ borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <div className="card-header bg-very-dark text-white">
                     <h2 className="share-tech-mono"> {this.state.game.title} </h2>
                 </div>
