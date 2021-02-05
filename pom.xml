@@ -358,7 +358,7 @@
 						<version>1.11.0</version>
 						<executions>
 							<execution>
-								<id>Install node and npm ...</id>
+								<id>Install node and npm</id>
 								<goals>
 									<goal>install-node-and-npm</goal>
 								</goals>
@@ -370,7 +370,7 @@
 							</execution>
 
 							<execution>
-								<id>npm install all of our dependencies</id>
+								<id>npm install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -381,7 +381,7 @@
 							</execution>
 
 							<execution>
-								<id>npm build our react application</id>
+								<id>npm build</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -402,7 +402,7 @@
 						<executions>
 
 							<execution>
-								<id>copy react frontend to spring static target foulder</id>
+								<id>copy to static folder</id>
 								<phase>process-resources</phase>
 								<goals>
 									<goal>copy-resources</goal>
