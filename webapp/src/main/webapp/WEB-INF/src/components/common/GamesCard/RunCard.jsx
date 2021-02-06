@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component } from 'react';
 import {Button, Card, Form, Row, Modal} from "react-bootstrap";
 import { CREATED } from '../../../services/api/apiConstants';
 import {Translation} from "react-i18next";
@@ -10,7 +10,6 @@ import withUser from "../../hoc/withUser";
 import { withTranslation } from 'react-i18next';
 import BacklogService from "../../../services/api/backlogService";
 import RunService from "../../../services/api/runService";
-import Spinner from "react-bootstrap/Spinner";
 import GameCover from "../GameCover/GameCover";
 
 class RunCard extends Component {

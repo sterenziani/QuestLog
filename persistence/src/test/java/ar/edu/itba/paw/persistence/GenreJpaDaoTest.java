@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GenreJpaDaoTest
 {
-	private static final String GAME_TABLE = "games";
 	private	static final String GENRE_TABLE = "genres";
 	private	static final String GENRE_NAME = "Adventure";
 	private	static final String GENRE_LOGO = "https://example/icon.jpg";

@@ -28,7 +28,6 @@ public class ScoreJpaDaoTest {
 	private static final String SCORE_TABLE = "scores";
 	private static final String GAME_TABLE = "games";
 	private	static final String USER_TABLE = "users";
-	private static final String ROLES_TABLE = "roles";
 	private static final int SCORE = 87;
 	private static final String GAME_TITLE = "Example Game";
 	private static final String GAME_COVER = "http://sega.com/game.jpg";

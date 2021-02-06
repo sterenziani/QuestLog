@@ -2,9 +2,7 @@ package ar.edu.itba.paw.service;
 import java.time.LocalDate;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.model.exception.BadFormatException;
-
 import java.util.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +18,10 @@ import ar.edu.itba.paw.model.entity.Platform;
 import ar.edu.itba.paw.model.entity.Publisher;
 import ar.edu.itba.paw.model.entity.Release;
 import ar.edu.itba.paw.model.entity.User;
-import sun.misc.BASE64Decoder;
-
-import javax.swing.text.html.Option;
 
 @Service
 public class GameServiceImpl implements GameService
 {
-
-
 	@Autowired
 	private GameDao gameDao;
 
@@ -526,8 +519,6 @@ public class GameServiceImpl implements GameService
 					g.setCover(null);
 				} else {
 					String coverName = getCoverName(id, fileExtension.get(), contentHash.get());
-					System.out.println("Funciona?");
-					System.out.println(g.getCover());
 					is.removeByName(g.getCover());
 					if(is.isImage(cover)){
 						g.setCover(coverName);

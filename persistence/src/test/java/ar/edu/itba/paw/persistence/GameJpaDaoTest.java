@@ -1,26 +1,29 @@
 package ar.edu.itba.paw.persistence;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
-
-import ar.edu.itba.paw.model.entity.*;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+import ar.edu.itba.paw.model.entity.Developer;
+import ar.edu.itba.paw.model.entity.Game;
+import ar.edu.itba.paw.model.entity.Genre;
+import ar.edu.itba.paw.model.entity.Platform;
+import ar.edu.itba.paw.model.entity.Publisher;
+import ar.edu.itba.paw.model.entity.Region;
+import ar.edu.itba.paw.model.entity.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -155,7 +158,6 @@ public class GameJpaDaoTest
         Game g 							= TestMethods.addGame(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER, em);
         Region region 					= TestMethods.addRegion(REGION_NAME, REGION_SHORT, em);
         TestMethods.addRelease(g, region, RELEASE_DATE, em);
-        System.out.println(g.getId());
         Optional<Game> maybeGame 	= gameDao.findByIdWithDetails(g.getId());
         Assert.assertTrue(maybeGame.isPresent());
         Assert.assertTrue(maybeGame.get().getReleaseDates().stream().findFirst().isPresent());
@@ -281,7 +283,7 @@ public class GameJpaDaoTest
 
     public void testRegister()
     {
-        Game g = gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER);
+        gameDao.register(GAME_TITLE, GAME_COVER, GAME_DESC, GAME_TRAILER);
         Assert.assertEquals(1, TestMethods.countRowsInTableWhere(GAME_TABLE,"title ='" + GAME_TITLE +"' AND cover = '"
                 + GAME_COVER + "' AND description = '" + GAME_DESC + "'" + " AND trailer = '" + GAME_TRAILER + "'", em));
     }
@@ -591,7 +593,6 @@ public class GameJpaDaoTest
 
     private static final String ANOTHER_ALTERNATIVE_GAME_TITLE = "Pokemon Sword";
     private static final String ANOTHER_ALTERNATIVE_GAME_COVER = "pkmn-sword.jpg";
-    private static final String ANOTHER_ALTERNATIVE_GAME_DESC  = "Throw yourself into the Galar Region! A region where Pokemon Battles take place in a huge stadium and Pokemon become as huge.";
 
     @Test
     public void testGetGamesInBacklog(){

@@ -72,7 +72,7 @@ public class PlatformJpaDaoTest
 	@Test
 	public void	testFindPlatformByNameExists()
 	{
-		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
+		TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		Optional<Platform> maybePlatform = platformDao.findByName(PLATFORM_NAME);
 		Assert.assertTrue(maybePlatform.isPresent());
 		Assert.assertEquals(PLATFORM_NAME, maybePlatform.get().getName());
@@ -165,7 +165,7 @@ public class PlatformJpaDaoTest
 	@Test
 	public void testCountPlatforms()
 	{
-		Platform p = TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
+		TestMethods.addPlatform(PLATFORM_NAME, PLATFORM_SHORT_NAME, PLATFORM_LOGO, em);
 		platformDao.register("Nintendo Switch", "NS", "http://nintendo.com/switch.png");
 		platformDao.register("Super Nintendo", "SNES", "http://nintendo.com/snes.png");
 		int count = platformDao.countPlatforms();

@@ -1,14 +1,9 @@
 package ar.edu.itba.paw.webapp.auth.schemes.jwt;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import ar.edu.itba.paw.interfaces.service.GameService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import ar.edu.itba.paw.model.entity.User;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 public class JWTToken extends UsernamePasswordAuthenticationToken {
 

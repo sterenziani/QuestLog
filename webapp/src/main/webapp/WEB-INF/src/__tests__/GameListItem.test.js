@@ -19,7 +19,7 @@ test('Backlog Button Load Color Test', () => {
 });
 
 test('Backlog Button Click Test', () => {
-    render(<Router><GameListItem key={g1.id} value={g1.id} game={g1}/></Router>);
+    render(<Router><GameListItem key={g1.id} id={"item"} value={g1.id} game={g1}/></Router>);
     const button1 = screen.getByRole('button')
     const class1 = button1.className
     expect(class1).toBe('btn btn-btn btn-outline-success')
@@ -29,7 +29,6 @@ test('Backlog Button Click Test', () => {
     const button2 = screen.getByRole('button')
     const class2 = button2.className
     expect(class2).toBe('btn btn-btn btn-outline-danger')
-    expect(g1.in_backlog).toBeTruthy()
 });
 
 test('Game Card Click Test', () => {

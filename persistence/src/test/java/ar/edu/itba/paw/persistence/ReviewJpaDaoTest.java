@@ -1,29 +1,23 @@
 package ar.edu.itba.paw.persistence;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.model.entity.Game;
-import ar.edu.itba.paw.model.entity.User;
 import ar.edu.itba.paw.model.entity.Platform;
 import ar.edu.itba.paw.model.entity.Review;
-import org.springframework.transaction.annotation.Transactional;
+import ar.edu.itba.paw.model.entity.User;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

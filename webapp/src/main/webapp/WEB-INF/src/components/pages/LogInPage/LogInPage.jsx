@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {Helmet, HelmetProvider} from "react-helmet-async";
-import { Form } from 'react-bootstrap';
 import { Translation } from 'react-i18next';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-
 import FormikTextField from '../../common/Forms/FormikTextField';
 import AuthForm from '../../common/Forms/AuthForm';
 import AnyButton from '../../common/AnyButton/AnyButton';

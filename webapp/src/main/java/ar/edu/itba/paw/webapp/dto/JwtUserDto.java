@@ -6,8 +6,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import ar.edu.itba.paw.model.entity.Role;
-
 public class JwtUserDto {
 	private String username;
     private Set<String> roles;

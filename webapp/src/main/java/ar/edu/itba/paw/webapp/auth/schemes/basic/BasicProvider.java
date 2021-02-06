@@ -41,8 +41,6 @@ public class BasicProvider extends AbstractUserDetailsAuthenticationProvider {
         String[] uspass = new String(Base64.getDecoder().decode(basic_token.getToken())).split(":");
         if(uspass.length != 2)
             throw new WrongPasswordException("Invalid username or password");
-        
-        //System.out.println("Userpass es " +uspass[0] +":" +uspass[1]);
         User user = us.findByUsername(uspass[0]).orElse(null);
         if(user == null || !encoder.matches(uspass[1], user.getPassword()))
             throw new WrongPasswordException("Invalid username or password");

@@ -3,7 +3,6 @@ import {Card, Row} from "react-bootstrap";
 import {Translation} from "react-i18next";
 import "../../../../src/index.scss";
 import AnyButton from "../AnyButton/AnyButton";
-import Spinner from "react-bootstrap/Spinner";
 import GameListItem from "../ListItem/GameListItem";
 
 class GamesCard extends Component {

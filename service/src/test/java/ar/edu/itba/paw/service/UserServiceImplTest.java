@@ -33,6 +33,7 @@ public class UserServiceImplTest
 	@Mock
 	private PasswordEncoder encoder;
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testCreateUser()
 	{

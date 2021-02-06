@@ -7,8 +7,9 @@ import java.util.Objects;
 
 @Embeddable
 public class ReleaseKey implements Serializable {
-
-    @Column(name = "game")
+	private static final long serialVersionUID = 1L;
+	
+	@Column(name = "game")
     private Long gameId;
     @Column(name = "region")
     private Long regionId;

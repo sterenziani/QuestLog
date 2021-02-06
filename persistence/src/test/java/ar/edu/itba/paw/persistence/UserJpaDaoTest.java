@@ -1,7 +1,4 @@
 package ar.edu.itba.paw.persistence;
-import ar.edu.itba.paw.model.entity.Role;
-import org.junit.Test;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +7,15 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import ar.edu.itba.paw.model.entity.PasswordResetToken;
-import ar.edu.itba.paw.model.entity.User;
 import org.springframework.transaction.annotation.Transactional;
+import ar.edu.itba.paw.model.entity.PasswordResetToken;
+import ar.edu.itba.paw.model.entity.Role;
+import ar.edu.itba.paw.model.entity.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -29,10 +27,7 @@ public class UserJpaDaoTest
 	private	static final String EMAIL = "email@example.com";
 	private static final String LOCALE = "en";
 	private static final Locale LOCALE_LOC = Locale.FRANCE;
-	private static final String ROLES_TABLE = "roles";
 	private	static final String USER_TABLE = "users";
-	private	static final String ASSIGN_TABLE = "role_assignments";
-	private	static final String TOKEN_TABLE = "tokens";
 	private	static final String TOKEN = "token";
 	private	static final LocalDate DATE = LocalDate.of(1976,6, 25);
 
@@ -191,7 +186,7 @@ public class UserJpaDaoTest
 	@Test
 	public void testAddAdmin()
 	{
-		Role role = TestMethods.addRole("Admin", em);
+		TestMethods.addRole("Admin", em);
 		User u = TestMethods.addUser(USERNAME, PASSWORD, EMAIL, LOCALE, em);
 		userDao.addAdmin(u);
 		Optional<User> user = userDao.findById(u.getId());
@@ -266,9 +261,6 @@ public class UserJpaDaoTest
 		Assert.assertEquals(3, users3.size());
 
 		Assert.assertTrue(myList.subList(1, 3).containsAll(users1));
-
-        System.out.println(myList.subList(1, 2));
-        System.out.println(users2);
 		Assert.assertTrue(myList.subList(1, 2).containsAll(users2));
 
 
