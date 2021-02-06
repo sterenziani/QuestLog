@@ -26,6 +26,17 @@ class UserProfile extends Component {
         loggedIn: this.props.userIsLoggedIn,
     };
 
+    updateBacklog = () => {
+        const fetchBacklog = BacklogService.getUserBacklog(this.props.visitedUser.id, 5);
+
+        Promise.all([ fetchBacklog ]).then((responses) => {
+            this.setState({
+                backlog: responses[0].content,
+                backlogPagination: responses[0].pagination
+            });
+        });
+    }
+
     componentWillMount() {
         const fetchBacklog = BacklogService.getUserBacklog(this.props.visitedUser.id, 5);
         const fetchScore = ScoreService.getUserScores(this.props.visitedUser.id, 10);
@@ -113,7 +124,7 @@ class UserProfile extends Component {
                                 }
                                 </Card.Header>
                                 <Card.Body className="card-body d-flex flex-wrap justify-content-center">
-                                    {this.state.backlog.length === 0? [<Translation>{t => t("games.lists.emptyList")}</Translation>] : [<Row className="justify-content-center">{this.state.backlog.map(g => <GameListItem value={g.id} game={g}/>)}</Row>]}
+                                    {this.state.backlog.length === 0? [<Translation>{t => t("games.lists.emptyList")}</Translation>] : [<Row className="justify-content-center">{this.state.backlog.map(g => <GameListItem value={g.id} game={g} updateBacklog={ (this.state.loggedIn && this.state.user.id === this.state.visitedUser.id)? this.updateBacklog : undefined }/>)}</Row>]}
                                 </Card.Body>
                             </Card>
                             </div>
