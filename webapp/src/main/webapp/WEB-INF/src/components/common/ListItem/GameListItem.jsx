@@ -11,9 +11,11 @@ class GameListItem extends Component {
     };
 
     updateGameBacklogStatus = status => {
-        let gameCopy = Object.assign({}, this.state.game);
-        gameCopy.in_backlog = status;
-        this.setState({game: gameCopy});
+        if(!this.props.updateBacklog){
+            let gameCopy = Object.assign({}, this.state.game);
+            gameCopy.in_backlog = status;
+            this.setState({game: gameCopy});
+        }
     };
 
     deleteGame = status => {
@@ -24,7 +26,7 @@ class GameListItem extends Component {
         if(this.state.enabled){
             return (
                 <Card className="m-3 d-flex bg-transparent" style={{width: '250px', border: '0'}}>
-                    <BacklogButton game={this.state.game} onUpdate={this.updateGameBacklogStatus} onDelete={this.deleteGame}/>
+                    <BacklogButton game={this.state.game} onUpdate={this.updateGameBacklogStatus} onDelete={this.deleteGame} updateBacklog={ this.props.updateBacklog ? this.props.updateBacklog : undefined }/>
                     <LinkContainer to={`/games/` + this.state.game.id}>
                         <a href={() => false} className="d-flex flex-column flex-grow-1 text-white game-card">
                             <GameCover code={"cover-"+this.state.game.id} cover={this.state.game.cover} resize='true'/>

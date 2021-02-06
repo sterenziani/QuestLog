@@ -47,7 +47,7 @@ class GamesCard extends Component {
                     {empty? [<Translation>{t => t("games.lists.emptyList")}</Translation>]
                                 :
                     [<Row className="justify-content-center">{this.state.items.map(g =>
-                        <GameListItem key={g.id} value={g.id} game={g}/>)}</Row>]
+                        <GameListItem key={g.id} value={g.id} game={g} updateBacklog={ this.props.updateBacklog ? this.props.updateBacklog : undefined }/>)}</Row>]
                     }
                 </Card.Body>
             </Card>

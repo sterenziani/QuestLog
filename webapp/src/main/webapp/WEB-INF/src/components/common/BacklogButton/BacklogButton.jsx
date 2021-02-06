@@ -14,12 +14,18 @@ class BacklogButton extends Component {
 
     backlogHandler = () => {
         if(this.state.added){
-            BacklogService.removeGameFromBacklog(this.props.game.id);
+            BacklogService.removeGameFromBacklog(this.props.game.id).then(() => {
+                if(this.props.updateBacklog){
+                    this.props.updateBacklog();
+            }});
             if(this.props.onUpdate)
                 this.props.onUpdate(false);
         }
         else{
-            BacklogService.addGameToBacklog(this.props.game.id);
+            BacklogService.addGameToBacklog(this.props.game.id).then(() => {
+                if(this.props.updateBacklog){
+                    this.props.updateBacklog();
+            }});;
             if(this.props.onUpdate)
                 this.props.onUpdate(true);
         }
