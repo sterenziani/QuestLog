@@ -1,12 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
-
-import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.RegionService;
-import ar.edu.itba.paw.webapp.dto.GenreDto;
 import ar.edu.itba.paw.webapp.dto.RegionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;

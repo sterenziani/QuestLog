@@ -26,13 +26,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
-
 import ar.edu.itba.paw.model.entity.Score;
 import ar.edu.itba.paw.webapp.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.service.GameService;
 import ar.edu.itba.paw.interfaces.service.ReviewService;
@@ -158,6 +156,7 @@ public class UserController
     @PUT
     @Path("/{userId}/locale")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response updateUserLocale(@PathParam("userId") final long userId, @Valid EditUserLocaleDto editLocaleDto)
     {   	
         Set<ConstraintViolation<EditUserLocaleDto>> violations = validator.validate(editLocaleDto);
@@ -225,6 +224,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/scores")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listScoresByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("25") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -248,6 +248,7 @@ public class UserController
 
 	@GET
 	@Path("{userId}/scores/{gameId}")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response getUserGameScore(@PathParam("userId") long userId, @PathParam("gameId") long gameId)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -265,6 +266,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/runs")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listRunsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("25") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -288,6 +290,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/runs/{gameId}")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listGameRunsByUser(@PathParam("userId") long userId, @PathParam("gameId") long gameId)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -303,6 +306,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/reviews")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listReviewsByUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("10") int page_size)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -326,6 +330,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/reviews/{gameId}")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listGameReviewsByUser(@PathParam("userId") long userId, @PathParam("gameId") long gameId)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -341,6 +346,7 @@ public class UserController
 	
 	@GET
 	@Path("{userId}/backlog")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listBacklogForUser(@PathParam("userId") long userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size, @QueryParam("backlog") @DefaultValue("") String backlog)
 	{
 		final Optional<User> maybeUser = us.findById(userId);
@@ -392,6 +398,7 @@ public class UserController
 	@GET
 	@Path("/tokens/{token}")
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response getToken(@PathParam("token") String token)
 	{
 		PasswordResetToken t = us.getToken(token);
@@ -407,6 +414,7 @@ public class UserController
     @PUT
     @Path("/{userId}/password")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response updateUserPassword(@PathParam("userId") final long userId, @Valid EditUserPasswordDto editPasswordDto, @Context HttpServletRequest request)
     {
         Set<ConstraintViolation<EditUserPasswordDto>> violations = validator.validate(editPasswordDto);

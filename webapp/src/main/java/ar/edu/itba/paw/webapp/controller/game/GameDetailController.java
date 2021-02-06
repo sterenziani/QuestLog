@@ -102,6 +102,7 @@ public class GameDetailController {
 	@POST
 	@Path("/new_game")
 	@Consumes(value = { MediaType.APPLICATION_JSON })
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response createGame(@Valid RegisterGameDto registerGameDto) throws BadFormatException
 	{
 		User loggedUser = us.getLoggedUser();
@@ -129,6 +130,7 @@ public class GameDetailController {
 	@PUT
 	@Path("/{gameId}")
 	@Consumes(value = { MediaType.APPLICATION_JSON, })
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response editGame(@PathParam("gameId") long gameId, @Valid RegisterGameDto registerGameDto) throws BadFormatException
 	{
 		User loggedUser = us.getLoggedUser();
@@ -268,6 +270,7 @@ public class GameDetailController {
 	
 	@GET
 	@Path("{gameId}/scores")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listScoresByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("20") int page_size)
 	{
 		final Optional<Game> maybeGame = gs.findById(gameId);
@@ -291,6 +294,7 @@ public class GameDetailController {
 	
 	@GET
 	@Path("{gameId}/runs")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listRunsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("20") int page_size)
 	{
 		final Optional<Game> maybeGame = gs.findById(gameId);
@@ -343,6 +347,7 @@ public class GameDetailController {
 	
 	@GET
 	@Path("{gameId}/reviews")
+	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response listReviewsByGame(@PathParam("gameId") long gameId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("5") int page_size)
 	{
 		final Optional<Game> maybeGame = gs.findById(gameId);

@@ -36,7 +36,6 @@ public class GameController {
     private UserService us;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
-    
 	private static final String PAGINATION_CURR_PAGE_HEADER = "Current-Page";
 	private static final String PAGINATION_PAGE_COUNT_HEADER = "Page-Count";
 	private static final String PAGINATION_TOTAL_COUNT_HEADER = "Total-Count";

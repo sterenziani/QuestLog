@@ -97,6 +97,7 @@ public class BacklogController {
     }
     
     @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response readBacklog(@QueryParam("backlog") @DefaultValue("") String backlog, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("page_size") @DefaultValue("15") int page_size)
     {
     	User loggedUser = us.getLoggedUser();
