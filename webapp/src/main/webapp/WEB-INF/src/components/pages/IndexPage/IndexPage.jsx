@@ -32,9 +32,7 @@ class IndexPage extends Component {
         let resp = await BacklogService.transferBacklog();
         if(resp.status === OK){
             this.setState({ backlogGames: [], anonBacklogEmpty: true });
-            BacklogService.getCurrentUserBacklogPreview(10).then((data) => {
-                this.setState({backlogGames: data.content, backlogPagination: data.pagination});
-            })
+            this.updateBacklog();
         }
         else{
             this.setState({ importing: false });

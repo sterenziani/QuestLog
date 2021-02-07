@@ -477,7 +477,9 @@ public class GameJpaDao implements GameDao {
                 "having count(u) >= :min_amount_for_popular order by count(u)", Game.class);
         query.setParameter("min_amount_for_popular", MIN_AMOUNT_FOR_POPULAR);
         query.setMaxResults(MAX_RESULT_FOR_SHOWCASE);
-        return query.getResultList();
+        List<Game> resp = query.getResultList();
+        resp.sort((a,b) -> a.getTitle().compareTo(b.getTitle()));;
+        return resp;
     }
 
     @Override
