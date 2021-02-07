@@ -22,6 +22,12 @@ class GameListItem extends Component {
         this.setState({enabled: false});
     };
 
+    componentWillReceiveProps(newProps) {
+        this.setState({ 
+            game: newProps.game
+        });
+    }
+
     render() {
         if(this.state.enabled){
             return (

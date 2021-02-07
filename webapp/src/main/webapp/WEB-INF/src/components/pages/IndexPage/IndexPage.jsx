@@ -43,7 +43,10 @@ class IndexPage extends Component {
 
     updateBacklog = () => {
         const fetchBacklog = BacklogService.getCurrentUserBacklogPreview(10);
-        Promise.all([ fetchBacklog ]).then((responses) => {
+        const fetchPop = GameService.getPopularGames();
+        const fetchUp = GameService.getUpcomingGames();
+
+        Promise.all([ fetchBacklog, fetchPop, fetchUp ]).then((responses) => {
             let findError = null;
             for(let i = 0; i < responses.length; i++) {
                 if (responses[i].status && responses[i].status !== OK && responses[i].status !== CREATED) {
@@ -60,32 +63,12 @@ class IndexPage extends Component {
                 });
             }
             else {
-                let upcomingGames = [...this.state.upcomingGames];
-                let popularGames = [...this.state.popularGames];
-                let backlogGamesIds = new Set();
-                responses[0].content.forEach(g => {
-                    backlogGamesIds.add(g.id)
-                });
-                for(let i=0; i < upcomingGames.length; i++){
-                    if(backlogGamesIds.has(upcomingGames[i].id)){
-                        upcomingGames[i].in_backlog = true;
-                    } else {
-                        upcomingGames[i].in_backlog = false;
-                    }
-                }
-                for(let i=0; i < popularGames.length; i++){
-                    if(backlogGamesIds.has(popularGames[i].id)){
-                        popularGames[i].in_backlog = true;
-                    } else {
-                        popularGames[i].in_backlog = false;
-                    }
-                }
                 this.setState({
                     loading: false,
                     backlogGames: responses[0].content,
-                    upcomingGames : upcomingGames,
-                    popularGames : popularGames,
                     backlogPagination: responses[0].pagination,
+                    popularGames: responses[1],
+                    upcomingGames: responses[2],
                     anonBacklogEmpty: BacklogService.isAnonBacklogEmpty()
                 });
             }
@@ -157,13 +140,13 @@ class IndexPage extends Component {
                         </Container>] : []
                 }
                 <div>
-                    <GamesCard items={this.state.backlogGames} label={"games.lists.backlogGames"} search={false} pagination={this.state.backlogPagination} seeAllLink="backlog" updateBacklog={ this.updateBacklog }/>
+                    <GamesCard items={this.state.backlogGames} label={"games.lists.backlogGames"} search={false} pagination={this.state.backlogPagination} seeAllLink="backlog" updateBacklog={ this.updateBacklog } key={1}/>
                 </div>
                 <div>
-                    <GamesCard items={this.state.popularGames} label={"games.lists.popularGames"} search={false} updateBacklog={ this.updateBacklog }/>
+                    <GamesCard items={this.state.popularGames} label={"games.lists.popularGames"} search={false} updateBacklog={ this.updateBacklog } key={2}/>
                 </div>
                 <div>
-                    <GamesCard items={this.state.upcomingGames} label={"games.lists.upcomingGames"} search={false} updateBacklog={ this.updateBacklog }/>
+                    <GamesCard items={this.state.upcomingGames} label={"games.lists.upcomingGames"} search={false} updateBacklog={ this.updateBacklog } key={3}/>
                 </div>
             </React.Fragment>
         );
