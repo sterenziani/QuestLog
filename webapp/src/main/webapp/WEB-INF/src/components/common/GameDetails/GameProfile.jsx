@@ -96,6 +96,13 @@ class GameProfile extends Component {
                                                         <ReviewsTab className="p-5" key="2" game={this.state.game} reviews={this.state.myReviews} label="reviews.myReviews" seeAll={false}/>
                                                     </Tab>] : []
                                                 }
+                                                {this.state.game.description ? [
+                                                    <Tab className="bg-very-light" eventKey="desc" title={<Translation>{t => t("games.profile.description")}</Translation>}>
+                                                        <div className="text-center m-5 p-2" style={{"white-space": "pre-wrap"}}>
+                                                            {this.state.game.description}
+                                                        </div>
+                                                    </Tab>] : []
+                                                }
                                             </Tabs>
                                         </div>
                                     ] : [ <Container className="text-center mt-2"> <p> <Translation>{t => t("games.profile.unreleased")}</Translation> </p> </Container> ]}
