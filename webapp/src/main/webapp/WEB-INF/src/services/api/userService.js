@@ -54,7 +54,7 @@ const searchUsersPage = async(term, page) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -68,7 +68,7 @@ const getUserById = async(userId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -82,7 +82,7 @@ const makeAdmin = async(userId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -96,7 +96,7 @@ const removeAdmin = async(userId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -110,7 +110,7 @@ const requestPasswordChangeToken = async(email) => {
       if(err.response) {
         return { status : err.response.status };
       } else {
-        /* timeout */
+        return { status : TIMEOUT }
       }
     }
 }
@@ -124,7 +124,7 @@ const getToken = async(token) => {
       if(err.response) {
         return { status : err.response.status };
       } else {
-        /* timeout */
+        return { status : TIMEOUT }
       }
     }
 }
@@ -138,7 +138,7 @@ const changePassword = async(userId, token, newPassword) => {
       if(err.response) {
         return { status : err.response.status };
       } else {
-        /* timeout */
+        return { status : TIMEOUT }
       }
     }
 }

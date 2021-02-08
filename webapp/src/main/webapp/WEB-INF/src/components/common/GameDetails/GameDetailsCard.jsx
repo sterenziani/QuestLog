@@ -29,7 +29,6 @@ class GameDetailsCard extends Component {
         const fetchPlat = PlatformService.getGamePlatforms(this.props.game.id);
         const fetchPub = PublisherService.getGamePublishers(this.props.game.id);
 
-        //TODO: Handle no response (404)
         Promise.all([ fetchDates, fetchDev, fetchGen, fetchPlat, fetchPub ]).then((responses) => {
             this.setState({
                 loading: false,

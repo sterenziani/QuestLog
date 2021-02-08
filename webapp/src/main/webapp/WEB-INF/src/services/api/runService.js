@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
 import PaginationService from './paginationService';
+import {TIMEOUT} from './apiConstants';
 
 const getGameRuns = async(gameId) => {
   try {
@@ -11,7 +12,7 @@ const getGameRuns = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -32,7 +33,7 @@ const getUserRunsPage = async(userId, page, limit) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -46,7 +47,7 @@ const getGameTimes = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -60,7 +61,7 @@ const getGameTopRuns = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -77,7 +78,7 @@ const getUserGameRuns = async(userId, gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -91,7 +92,7 @@ const getAllPlaystyles       = async () => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -111,7 +112,7 @@ const addRun = async(gameId, hours, mins, secs, ps, plat) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }

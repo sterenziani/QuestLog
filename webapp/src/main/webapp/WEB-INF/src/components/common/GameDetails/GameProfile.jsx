@@ -29,8 +29,6 @@ class GameProfile extends Component {
         {
             const userReviews = ReviewService.getUserGameReviews(this.state.user.id, this.state.game.id);
             const score = ScoreService.getUserGameScore(this.state.user.id, this.state.game.id);
-
-            //TODO: Handle no response (404)
             Promise.all([ userReviews, score ]).then((responses) => {
                 this.setState({
                     myReviews: responses[0],
@@ -40,7 +38,6 @@ class GameProfile extends Component {
             });
         }
         const gameReviews = ReviewService.getGameReviews(this.state.game.id, 5);
-        //TODO: Handle no response (404)
         Promise.all([gameReviews]).then((responses) => {
             this.setState({
                 displayedReviews: responses[0].content,

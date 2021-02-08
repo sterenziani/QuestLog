@@ -87,7 +87,7 @@ const getPopularGames = async () => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }
@@ -129,7 +129,7 @@ const searchGamesPage = async(searchParams, page) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -145,7 +145,7 @@ const getUpcomingGames = async() => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }
@@ -161,7 +161,7 @@ const getGameById = async(gameId)  => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }
@@ -177,7 +177,7 @@ const getGameReleaseDates = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -191,7 +191,7 @@ const deleteGame = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }

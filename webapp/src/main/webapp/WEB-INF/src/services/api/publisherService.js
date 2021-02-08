@@ -15,7 +15,7 @@ const getPublishersPage = async(page) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -43,7 +43,7 @@ const getBiggestPublishers = async () => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -57,7 +57,7 @@ const getGamePublishers     = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }

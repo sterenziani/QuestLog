@@ -1,4 +1,5 @@
 import api from './api';
+import {TIMEOUT} from './apiConstants';
 import AuthService from "./authService";
 import PaginationService from './paginationService';
 
@@ -12,7 +13,7 @@ const rateGame = async(gameId, score) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -29,7 +30,7 @@ const getUserGameScore       = async (userId, gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -51,7 +52,7 @@ const getGameScoresPage = async(gameId, page) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -65,7 +66,7 @@ const getUserScoresPage = async(userId, page, limit) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }

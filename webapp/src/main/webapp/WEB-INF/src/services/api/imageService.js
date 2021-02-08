@@ -1,4 +1,5 @@
 import api from './api';
+import {TIMEOUT} from './apiConstants';
 
 const imageServiceEndpoint   = 'images';
 
@@ -11,7 +12,7 @@ const getImage = async(imageName)  => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }
@@ -24,7 +25,7 @@ const getImageLink = async(imageName)  => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }

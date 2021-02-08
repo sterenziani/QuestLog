@@ -44,7 +44,7 @@ const getBiggestPlatforms       = async () => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -58,7 +58,7 @@ const getGamePlatforms     = async(gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }

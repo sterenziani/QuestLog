@@ -107,7 +107,6 @@ class ReviewCard extends Component {
                 this.props.activateRedirect("gameProfile");
             }
             else{
-                // TODO: Force login or try again
                 this.setState({published: false});
             }
         });

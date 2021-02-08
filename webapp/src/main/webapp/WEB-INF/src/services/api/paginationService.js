@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
+import {TIMEOUT} from './apiConstants';
 
 const getGenericContent = async (endpoint) => {
     try {
@@ -26,7 +27,7 @@ const getGenericContent = async (endpoint) => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }
@@ -55,7 +56,7 @@ const getGenericContentPage = async (endpoint, page) => {
         if(err.response) {
             return { status : err.response.status };
         } else {
-            /* timeout */
+            return { status : TIMEOUT }
         }
     }
 }

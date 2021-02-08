@@ -35,7 +35,7 @@ class RunsTab extends Component {
     componentWillMount() {
         if(this.state.user){
             const fetchUsers = RunService.getUserGameRuns(this.state.user.id, this.props.game.id);
-            //TODO: Handle no response (404)
+            
             Promise.all([ fetchUsers ]).then((responses) => {
                 this.setState({
                     myRuns : responses[0],
@@ -44,7 +44,7 @@ class RunsTab extends Component {
         }
         const fetchAvg = RunService.getGameTimes(this.props.game.id);
         const fetchFastest = RunService.getGameTopRuns(this.props.game.id);
-        //TODO: Handle no response (404)
+
         Promise.all([ fetchAvg, fetchFastest ]).then((responses) => {
             this.setState({
                 loading: false,

@@ -1,6 +1,7 @@
 import api from './api';
 import AuthService from "./authService";
 import PaginationService from './paginationService';
+import {TIMEOUT} from './apiConstants';
 
 const getGameReviews = async(gameId, limit) => {
   return getGameReviewsPage(gameId, 1, limit);
@@ -19,7 +20,7 @@ const getGameReviewsPage = async(gameId, page, limit) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -36,7 +37,7 @@ const getUserReviewsPage = async(userId, page, limit) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -53,7 +54,7 @@ const getUserGameReviews = async(userId, gameId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -72,7 +73,7 @@ const addReview = async(gameId, score, platform, body) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }
@@ -86,7 +87,7 @@ const deleteReview = async(reviewId) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT }
     }
   }
 }

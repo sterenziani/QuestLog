@@ -2,7 +2,7 @@ import api from './api';
 import AuthService from "./authService";
 import Cookies from 'universal-cookie';
 import PaginationService from './paginationService';
-import { OK } from './apiConstants';
+import { OK, TIMEOUT } from './apiConstants';
 
 const getUserBacklog = async(userId, limit) => {
     return getUserBacklogPage(userId, 1, limit);
@@ -19,7 +19,7 @@ const getUserBacklogPage = async(userId, page, limit) => {
     if(err.response) {
       return { status : err.response.status };
     } else {
-      /* timeout */
+      return { status : TIMEOUT };
     }
   }
 }
