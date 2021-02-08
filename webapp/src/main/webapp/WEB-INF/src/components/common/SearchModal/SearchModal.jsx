@@ -45,7 +45,7 @@ class SearchModal extends Component {
         if(!paramsCopy.minsRight){
             paramsCopy.minsRight = 59;
         }
-        //TODO: Handle no response (404)
+        
         Promise.all([ fetchGen, fetchPlat ]).then((responses) => {
             this.setState({
                 loading: false,

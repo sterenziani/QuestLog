@@ -43,7 +43,6 @@ class UserProfile extends Component {
         const fetchRev = ReviewService.getUserReviews(this.props.visitedUser.id, 5);
         const fetchRun = RunService.getUserRuns(this.props.visitedUser.id, 10);
 
-        //TODO: Handle no response (404)
         Promise.all([ fetchBacklog, fetchScore, fetchRev, fetchRun ]).then((responses) => {
             this.setState({
                 loading: false,

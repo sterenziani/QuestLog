@@ -57,6 +57,12 @@ class GameProfile extends Component {
         this.setState({ 
             game : newProps.game
         });
+        const score = ScoreService.getUserGameScore(this.state.user.id, this.state.game.id);
+        Promise.all([ score ]).then((responses) => {
+            this.setState({
+                userScore : responses[0].score
+            });
+        });
     }
 
     render() {

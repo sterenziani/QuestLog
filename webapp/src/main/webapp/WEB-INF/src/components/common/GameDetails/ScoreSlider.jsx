@@ -17,6 +17,12 @@ class ScoreSlider extends Component {
         showModal: false,
     };
 
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            userScore : newProps.userScore
+        })
+    }
+
     switchModal(){
         this.setState({showModal: !this.state.showModal});
     }
