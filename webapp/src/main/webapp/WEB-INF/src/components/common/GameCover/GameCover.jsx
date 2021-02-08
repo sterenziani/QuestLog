@@ -27,6 +27,22 @@ class GameCover extends Component {
               }).then((data) =>  {});
     }
 
+    componentWillReceiveProps(newProps) {
+        if(newProps.cover == null) {
+            this.setState(
+                {cover: defaultGameCover,
+                    loading: false,});
+        }
+        else
+          ImageService.getImageLink(newProps.cover)
+                .then((data) => {
+                    this.setState({
+                        cover: data,
+                        loading: false,
+                    });
+                }).then((data) =>  {});
+    }
+
     render() {
         let resize = this.props.resize;
         let mini = this.props.mini;
