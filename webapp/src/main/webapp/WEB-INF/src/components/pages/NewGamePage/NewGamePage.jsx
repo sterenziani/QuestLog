@@ -246,11 +246,6 @@ class NewGamePage extends Component {
         let response;
         do {
             response = await GenreService.getAllGenres()
-            if(response){
-                for(var g in response){
-                    response[g].name = t("genres."+response[g].name)
-                }
-            }
             if(response.status){
                 gotResponse = false;
             }
@@ -258,6 +253,12 @@ class NewGamePage extends Component {
                 await new Promise(r => setTimeout(r, 5000));
             }
         } while (!gotResponse);
+
+        if(response){
+            for(var g in response){
+                response[g].name = t("genres."+response[g].name)
+            }
+        }
 
         response = new Parallel(response);
 

@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {Translation} from "react-i18next";
 import skull from './images/skull.png';
+import withUser from "../../hoc/withUser";
 import withRedirect from "../../hoc/withRedirect";
+import withHistory from "../../hoc/withRedirect";
 import {Redirect} from "react-router-dom";
 
+import AnyButton from '../AnyButton/AnyButton';
+import { UNAUTHORIZED } from '../../../services/api/apiConstants';
 
 class ErrorContent extends Component {
     state = {
@@ -32,10 +36,30 @@ class ErrorContent extends Component {
                         <h3 className="share-tech-mono text-center">
                             <Translation>{t => t(body)}</Translation>
                         </h3>
+                        {
+                            this.props.location ? this.props.location.pathname !== "/" ? (
+                            <AnyButton 
+                                textKey="error.go_back"
+                                onClick={this.props.activateGoBack}
+                            />) : undefined : undefined
+                        }
+                        {
+                            !this.props.userIsLoggedIn ? parseInt(this.state.status) === UNAUTHORIZED ? (
+                                <AnyButton
+                                    textKey="error.login"
+                                    className="ml-3"
+                                    onClick={() => {
+                                        this.props.addCurrentLocationToHistory();
+                                        this.props.addRedirection("login", "/login");
+                                        this.props.activateRedirect("login");
+                                    }}
+                                />
+                            ) : undefined : undefined
+                        }
                     </div>
                 </div>
             </React.Fragment>
         );
     }
 }
-export default withRedirect(ErrorContent);
+export default withUser(withHistory(withRedirect(ErrorContent)));
