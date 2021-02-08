@@ -13,7 +13,7 @@ import withRedirect from '../../hoc/withRedirect';
 class ScoreSlider extends Component {
     state = {
         userScore : this.props.userScore,
-        published : false,
+        published : true,
         showModal: false,
     };
 
@@ -31,7 +31,10 @@ class ScoreSlider extends Component {
     }
 
     handleSliderChange(e, newValue) {
-        this.setState({userScore : newValue});
+        this.setState({
+            userScore : newValue,
+            published : false
+        });
     }
 
     publishScoreHandler() {
@@ -68,6 +71,7 @@ class ScoreSlider extends Component {
             if(data.status === CREATED){
                 this.setState({published:true});
             }
+            this.props.updateGame();
         });
     }
 

@@ -15,6 +15,10 @@ class GameDetailsPage extends Component {
     };
 
     componentWillMount() {
+        this.updateGame();
+    }
+    
+    updateGame = () => {
         GameService.getGameById(this.props.match.params.id)
             .then((data) => {
                 let findError = null;
@@ -55,7 +59,7 @@ class GameDetailsPage extends Component {
                         <title>{this.state.game.title} - QuestLog</title>
                     </Helmet>
                 </HelmetProvider>
-                <GameProfile game={this.state.game} />
+                <GameProfile game={this.state.game} updateGame={this.updateGame} />
             </React.Fragment>
         );
     }
