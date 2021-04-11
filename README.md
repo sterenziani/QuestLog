@@ -27,7 +27,7 @@ This web application requires having the following dependencies:
 
 1. Clone this repository and go into the `QuestLog` directory:
 ```bash
-git clone https://github.com/prausela/QuestLog.git
+git clone https://github.com/sterenziani/QuestLog.git
 cd QuestLog/
 ```
 2. Run the following command to create a Maven webapp.war for Tomcat:
@@ -62,11 +62,11 @@ http://localhost:8080/webapp_war/
 ### v1.0.2
 
 #### Features
-* Create accounts to be used anywhere anytime
-* Browse games base on their genres, developers or publishers
-* Get game recommendations based on games you have interest in
+* Create accounts to be used anywhere, anytime
+* Browse games based on their genres, developers or publishers
+* Get game recommendations based on games you have shown interest in
 * Rate games
-* Log the time it took to beat a game
+* Log the time it took you to beat a game
 * Look at the average score given by users
 * Look at the average time it took users to beat the game
 
@@ -138,5 +138,5 @@ http://localhost:8080/webapp_war/
 #### Implementation details
 * Migrate Backend to REST API made with Jersey
 * Migrate Frontend to SPA made with React
-* Inconditional cache and file revving
+* Unconditional cache and file revving
 * Frontend unit tests with React Testing Library
