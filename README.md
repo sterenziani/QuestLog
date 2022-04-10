@@ -1,6 +1,7 @@
 # QuestLog
 
-This web application aims to help people chose the games they want to play. It does it by providing several features described bellow.
+This web application aims to help people chose the games they want to play by providing several features described bellow.
+Official release: http://pawserver.it.itba.edu.ar/paw-2020a-4/
 
 ## What was it built on?
 
